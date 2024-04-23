@@ -14,3 +14,4 @@ jobs:
         server: gianmd.ftp.tb-hosting.com
         username: gianmarcobisciniit@gianmarcobisciniit
         password: ${{ secrets.ftp_password }}
+        local-dir: ./www/
