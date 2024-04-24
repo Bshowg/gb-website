@@ -13,7 +13,19 @@ window.addEventListener('load', () => {
                 throw new Error('Network response was not ok');
             }
             console.log("done")
-            return response;
+            return response.text();
+        }).then(function(html) {
+            // Initialize the DOM parser
+            var parser = new DOMParser();
+    
+            // Parse the text
+            var doc = parser.parseFromString(html, "text/html");
+    
+            // You can now even select part of that html as you would in the regular DOM 
+            // Example:
+            // var docArticle = doc.querySelector('article').innerHTML;
+    
+            return doc;
         });
         console.log(dirListingHTML);
         const listItems = dirListingHTML.querySelectorAll('ul li');
