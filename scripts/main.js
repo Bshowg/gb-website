@@ -58,7 +58,7 @@ function articleLoader() {
         async loadArticles() {
             const articles =await parseDirectoryListing(); // Add more as needed
             console.log(articles);
-            articles.slice(1).forEach(article => {
+            articles.slice(1).reverse().forEach(article => {
                 fetch(`${article.file}`)
                     .then(response => response.text())
                     .then(html => {
