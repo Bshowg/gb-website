@@ -12,7 +12,7 @@ window.addEventListener('load', () => {
                 throw new Error('Network response was not ok');
             }
             console.log("done")
-            return response.text();
+            return response;
         });
         const listItems = dirListingHTML.querySelectorAll('ul li');
         const routes = {};
