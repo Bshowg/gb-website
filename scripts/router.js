@@ -8,13 +8,14 @@ window.addEventListener('load', () => {
     const parseDirectoryListing= async () => {
         // Get all the <li> elements in the HTML document
         let dirListingHTML=await fetch("./metadata/articles.html").then(response => {
-            console.log(dirListingHTML);
+            
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
             console.log("done")
             return response;
         });
+        console.log(dirListingHTML);
         const listItems = dirListingHTML.querySelectorAll('ul li');
         const routes = {};
     
