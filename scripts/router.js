@@ -1,5 +1,5 @@
 // router.js
-window.addEventListener('load', () => {
+window.addEventListener('load', async () => {
     const navigateTo = (pathname) => {
         console.log(pathname);
         window.history.pushState({}, pathname, window.location.origin + pathname);
@@ -44,7 +44,7 @@ window.addEventListener('load', () => {
         return routes;
     }
     
-    const routes = parseDirectoryListing();
+    const routes = await parseDirectoryListing();
     console.log(routes);
     const router = async () => {
     const path = window.location.pathname;
