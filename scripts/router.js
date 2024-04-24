@@ -7,7 +7,7 @@ window.addEventListener('load', () => {
     };
     const parseDirectoryListing= async () => {
         // Get all the <li> elements in the HTML document
-        let dirListingHTML=await fetch("metadata/articles.html").then(response => {
+        let dirListingHTML=await fetch("./metadata/articles.html").then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
