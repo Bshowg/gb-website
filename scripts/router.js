@@ -41,7 +41,7 @@ window.addEventListener('load', () => {
         });
     
         // Return the resultList array containing all the data objects
-        return resultList;
+        return routes;
     }
     
     const routes = parseDirectoryListing();
