@@ -1,0 +1,21 @@
+[{
+    "src":"/",
+    "file": "home.html",
+    "date":"2024-01-01"
+},
+{
+    "src":"/timo",
+    "file": "timo.html",
+    "date":"2024-01-01"
+},
+{
+    "src":"/vento",
+    "file": "vento.html",
+    "date":"2024-01-01"
+},
+{
+    "src":"/fede",
+    "file": "fede.html",
+    "date":"2024-01-01"
+}
+]
