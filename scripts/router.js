@@ -15,23 +15,15 @@ window.addEventListener('load', () => {
             return response.text();
         });
         const listItems = dirListingHTML.querySelectorAll('ul li');
-        const resultList = [];
+        const routes = {};
     
         // Loop through each <li> element
         listItems.forEach(item => {
-            const src = item.querySelector('.src').textContent;
-            const file = item.querySelector('.file').textContent;
-            const date = item.querySelector('.date').textContent;
+            const route = item.querySelector('.src').textContent;
+            const path = item.querySelector('.file').textContent;
     
             // Construct an object with the data from the <span> elements
-            const dataObject = {
-                src: src,
-                file: file,
-                date: date
-            };
-    
-            // Add the object to the resultList array
-            resultList.push(dataObject);
+            routes[route]=path;
         });
     
         // Return the resultList array containing all the data objects
@@ -39,7 +31,7 @@ window.addEventListener('load', () => {
     }
     
     const routes = parseDirectoryListing();
-
+    console.log(routes);
     const router = async () => {
     const path = window.location.pathname;
     const route = routes[path] || routes['/'];
