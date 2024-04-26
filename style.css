@@ -20,6 +20,11 @@ body {
     width:100%;
   }
 
+  #map {
+    width: 100%;
+    height: 500px;
+}
+
   .gradient-border {
     display: flex;
     justify-content: center;
