@@ -63,7 +63,6 @@ window.addEventListener('load', async () => {
             console.log("done")
             return response.text();
         });  
-        document=
     }
     try {
         const html = await fetch(route).then(response => {
