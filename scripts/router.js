@@ -58,6 +58,10 @@ window.addEventListener('load', async () => {
             return response.text();
         });
         document.querySelector('#app').innerHTML = html;
+        if(route=="home.html"){
+            appendMap();
+        }
+        
     } catch (error) {
         console.error('Failed to fetch page: ', error);
     }
