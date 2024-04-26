@@ -72,8 +72,8 @@ function articleLoader() {
 
                                 <img src=${img} alt=${img} class="w-full h-auto mb-8 img_hero">
                                 <div class=" p-6">
-                                    <h3 class="text-xl font-bold mb-4">${title}</h3>
-                                    <p class="mb-4">${excerpt}</p>
+                                    <h3 class="text-xl font-bold mb-4 text-white">${title}</h3>
+                                    <p class="mb-4 text-white">${excerpt}</p>
                                     <div class="flex flex-row justify-between">
                                     <button onclick="location.href='${article.src}'" class="bg-white text-black px-3 py-1 font-bold">READ MORE</button>
                                     <span class="align-baseline font-bold">${article.date}<span>
