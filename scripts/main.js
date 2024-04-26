@@ -68,7 +68,6 @@ function articleLoader() {
                         const excerpt = doc.querySelector('p') ? doc.querySelector('p').innerText : 'No excerpt available';
                         const img = doc.querySelector('img') ? doc.querySelector('img').src : 'No img available';
                         const articleHTML = `
-                        <div class="gradient-border">
                             <article class="bg-black">
 
                                 <img src=${img} alt=${img} class="w-full h-auto mb-8 img_hero">
@@ -81,7 +80,6 @@ function articleLoader() {
                                     </div>
                                 </div>
                            </article>
-                        <div>
                         `;
                         document.getElementById('articlesContainer').innerHTML += articleHTML;
                     })

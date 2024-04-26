@@ -10,7 +10,8 @@
     <script defer src="scripts/router.js"></script> <!-- Simple router script -->
     <script defer src="scripts/main.js"></script> <!-- Main JavaScript for handling articles -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    
+    <script src="scripts/d3.v7.min.js"></script>
+    <script defer src="scripts/dashboard.js"></script>
 </head>
 <body class="notebook">
 
@@ -30,15 +31,15 @@
     </div>
     </header>
     <header class=" max-w-4xl mx-auto pb-8 flex items-center flex-col text-center py-12  bg-white">
-        <h1 class="text-5xl font-bold " id="subtitle">IPERSPAZIO</h1>
-        <p class="text-center"> A personal backlog</p>
+        <h1 class="text-5xl font-bold " id="subtitle">CONTATTI</h1>
+        <p class="text-center"> Contacts for the people</p>
 
         
     </header>
     
-    <main class="max-w-4xl mx-auto pb-8" id="app">
-        <!-- Router Outlet -->
-        <div x-data="routerOutlet"></div>
+    <main class="max-w-4xl mx-auto pb-8">
+        <svg id="map" class="my-5"></svg>
+        Email: g.biscini@gmail.com
     </main>
 
     <footer class="text-center py-4 text-white bg-black">

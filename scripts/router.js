@@ -48,7 +48,23 @@ window.addEventListener('load', async () => {
     console.log(routes);
     const router = async () => {
     const path = window.location.pathname;
-    const route = routes[path] || routes['/'];
+
+    if (path === '/contacts') {
+        // This path is handled by the server directly.
+        window.location.href = '/contacts.html';
+        return;
+    }
+    const route = routes[path] || null;
+    if(route==null){
+        const html = await fetch(route).then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            console.log("done")
+            return response.text();
+        });  
+        document=
+    }
     try {
         const html = await fetch(route).then(response => {
             if (!response.ok) {
@@ -58,9 +74,7 @@ window.addEventListener('load', async () => {
             return response.text();
         });
         document.querySelector('#app').innerHTML = html;
-        if(route=="home.html"){
-            appendMap();
-        }
+
         
     } catch (error) {
         console.error('Failed to fetch page: ', error);
