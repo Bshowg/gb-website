@@ -76,7 +76,7 @@ function articleLoader() {
                                     <p class="mb-4 text-white">${excerpt}</p>
                                     <div class="flex flex-row justify-between">
                                     <button onclick="location.href='${article.src}'" class="bg-white text-black px-3 py-1 font-bold">READ MORE</button>
-                                    <span class="align-baseline font-bold">${article.date}<span>
+                                    <span class="align-baseline font-bold text-white">${article.date}<span>
                                     </div>
                                 </div>
                            </article>
