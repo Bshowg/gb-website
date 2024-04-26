@@ -63,7 +63,7 @@ window.addEventListener('load', async () => {
             console.log("done")
             return response.text();
         });  
-    }
+    }else{
     try {
         const html = await fetch(route).then(response => {
             if (!response.ok) {
@@ -78,6 +78,7 @@ window.addEventListener('load', async () => {
     } catch (error) {
         console.error('Failed to fetch page: ', error);
     }
+}   
 };
 
     window.onpopstate = router;
