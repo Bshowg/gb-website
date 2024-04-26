@@ -54,16 +54,7 @@ window.addEventListener('load', async () => {
         window.location.href = '/contacts.html';
         return;
     }
-    const route = routes[path] || null;
-    if(route==null){
-        const html = await fetch(route).then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            console.log("done")
-            return response.text();
-        });  
-    }else{
+    const route = routes[path] || routes["/"];
     try {
         const html = await fetch(route).then(response => {
             if (!response.ok) {
@@ -78,7 +69,7 @@ window.addEventListener('load', async () => {
     } catch (error) {
         console.error('Failed to fetch page: ', error);
     }
-}   
+
 };
 
     window.onpopstate = router;
