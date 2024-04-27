@@ -1,9 +1,9 @@
 <?php
 // Database connection parameters
-$host = 'gianmd-articles.db.tb-hosting.com'; // or other host
-$dbname = 'gianmd_articles';
-$username = 'gianmd_gb';
-$password = 'malleolo92';
+$host = ''; // or other host
+$dbname = '';
+$username = '';
+$password = '';
 
 // Create connection
 $conn = new mysqli($host, $username, $password, $dbname);
