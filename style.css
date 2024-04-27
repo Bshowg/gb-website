@@ -4,7 +4,7 @@ body {
 
 .hero{
     background:  
-    url("imgs/hero.png");
+    url("imgs/hero_header.webp");
     position: relative;
     height: 300px;
 }
