@@ -59,7 +59,7 @@ window.addEventListener('load', async () => {
         json.forEach(item => {
     
             // Construct an object with the data from the <span> elements
-            routes[item.route]=item.path;
+            routes[item.src]=item.file;
         });
     
         // Return the resultList array containing all the data objects
