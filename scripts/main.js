@@ -18,20 +18,8 @@ async function getArticlesPhp() {
         console.log("done")
         return response.json();
     })
-    const resultList = [];
-    json.forEach(item => {
-
-        // Construct an object with the data from the <span> elements
-        const dataObject = {
-            src: item.src,
-            file: item.file,
-            date: item.date
-        };
-
-        // Add the object to the resultList array
-        resultList.push(dataObject);
-    });
-    return resultList;
+    
+    return json;
 }
 function articleLoader() {
     return {

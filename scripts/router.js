@@ -53,7 +53,17 @@ window.addEventListener('load', async () => {
             console.log("done")
             return response.json();
         })
-        return json;
+        const routes = {};
+    
+        // Loop through each <li> element
+        json.forEach(item => {
+    
+            // Construct an object with the data from the <span> elements
+            routes[item.route]=item.path;
+        });
+    
+        // Return the resultList array containing all the data objects
+        return routes;
     }
     const routes = await getArticlesPhp();
     console.log(routes);
