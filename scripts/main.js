@@ -53,10 +53,36 @@ async function parseDirectoryListing() {
     // Return the resultList array containing all the data objects
     return resultList;
 }
+
+async function getArticlesPhp() {
+    
+    let json=await fetch("./php/get_articles.php").then(response => {
+            
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        console.log("done")
+        return response.json();
+    })
+    const resultList = [];
+    json.forEach(item => {
+
+        // Construct an object with the data from the <span> elements
+        const dataObject = {
+            src: item.src,
+            file: item.file,
+            date: item.date
+        };
+
+        // Add the object to the resultList array
+        resultList.push(dataObject);
+    });
+    return resultList;
+}
 function articleLoader() {
     return {
         async loadArticles() {
-            const articles =await parseDirectoryListing(); // Add more as needed
+            const articles =await getArticlesPhp(); // Add more as needed
             console.log(articles);
             articles.slice(1).reverse().forEach(article => {
                 fetch(`${article.file}`)
