@@ -4,11 +4,10 @@ body {
 
 .hero{
     background:  
-    url("imgs/hero_header.webp");
+    url("imgs/hero_contacts.webp");
     position: relative;
     height: 300px;
 }
-
 .hero:after {
     content: '';
     position: absolute;
