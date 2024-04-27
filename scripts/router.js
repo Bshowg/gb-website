@@ -69,12 +69,6 @@ window.addEventListener('load', async () => {
     console.log(routes);
     const router = async () => {
     const path = window.location.pathname;
-
-    if (path === '/contacts') {
-        // This path is handled by the server directly.
-        window.location.href = '/contacts.html';
-        return;
-    }
     const route = routes[path] || routes["/"];
     try {
         const html = await fetch(route).then(response => {
