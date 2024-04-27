@@ -43,8 +43,19 @@ window.addEventListener('load', async () => {
         // Return the resultList array containing all the data objects
         return routes;
     }
+    async function getArticlesPhp() {
     
-    const routes = await parseDirectoryListing();
+        let json=await fetch("./php/get_articles.php").then(response => {
+                
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            console.log("done")
+            return response.json();
+        })
+        return json;
+    }
+    const routes = await getArticlesPhp();
     console.log(routes);
     const router = async () => {
     const path = window.location.pathname;

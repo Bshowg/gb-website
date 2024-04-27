@@ -7,52 +7,6 @@ document.addEventListener('alpine:init', () => {
         }
     }));
 });
-async function parseDirectoryListing() {
-
-    let dirListingHTML=await fetch("./metadata/articles.html").then(response => {
-            
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        console.log("done")
-        return response.text();
-    }).then(function(html) {
-        // Initialize the DOM parser
-        var parser = new DOMParser();
-
-        // Parse the text
-        var doc = parser.parseFromString(html, "text/html");
-
-        // You can now even select part of that html as you would in the regular DOM 
-        // Example:
-        // var docArticle = doc.querySelector('article').innerHTML;
-
-        return doc;
-    });
-    // Get all the <li> elements in the HTML document
-    const listItems = dirListingHTML.querySelectorAll('ul li');
-    const resultList = [];
-
-    // Loop through each <li> element
-    listItems.forEach(item => {
-        const src = item.querySelector('.src').textContent;
-        const file = item.querySelector('.file').textContent;
-        const date = item.querySelector('.date').textContent;
-
-        // Construct an object with the data from the <span> elements
-        const dataObject = {
-            src: src,
-            file: file,
-            date: date
-        };
-
-        // Add the object to the resultList array
-        resultList.push(dataObject);
-    });
-
-    // Return the resultList array containing all the data objects
-    return resultList;
-}
 
 async function getArticlesPhp() {
     
