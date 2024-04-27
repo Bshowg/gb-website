@@ -90,4 +90,6 @@ const drag = d3.drag()
 svg.call(drag);
 }
 
-window.appendMap =appendMap
+document.addEventListener("DOMContentLoaded", (event) => {
+    appendMap();
+  });
