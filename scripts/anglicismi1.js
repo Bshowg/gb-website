@@ -48,7 +48,7 @@ svg.append("g")
     .attr("x", x(0) )
     .attr("y", function(d) { return y(d.anno); })
     .attr("width", function(d) { return x(d.numero); })
-    .attr("height", y.bandwidth() )
+    .attr("height", y.bandwidth() -40 )
     .style("margin-top", "40px")
     .attr("fill", "white")
   }
