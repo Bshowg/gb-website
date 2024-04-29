@@ -53,6 +53,13 @@ svg.append("g")
     .attr("height", 80 )
     .style("margin-top", "40px")
     .attr("fill", "white")
+
+    svg.append("text")
+   .attr("text-anchor", "middle")
+   .attr("y", -radius - 20)
+   .style("font-size", "16px")
+   .style("text-decoration", "underline")
+   .text("Numero di anglicismi nel Devoto Oli per anno");
   }
 
   function addNeologismi(){
@@ -98,4 +105,33 @@ svg
   .style("stroke-width", "2px")
   .style("opacity", 0.7)
 
+   // Add a title
+   svg.append("text")
+   .attr("text-anchor", "middle")
+   .attr("y", -radius - 20)
+   .style("font-size", "16px")
+   .style("text-decoration", "underline")
+   .text("Distribuzione dei neologismi in italiano");
+
+ // Add a legend
+ const legend_labels=["Direttamente in inglese","Altro"]
+ var legend = svg.append("g")
+   .attr("transform", "translate(" + (-radius) + "," + (radius + 30) + ")");
+
+ Object.entries(data).forEach(([key, value], index) => {
+     var legendRow = legend.append("g")
+         .attr("transform", "translate(0, " + (index * 20) + ")");
+
+     legendRow.append("rect")
+         .attr("width", 10)
+         .attr("height", 10)
+         .attr("fill", color(key));
+
+     legendRow.append("text")
+         .attr("x", 20)
+         .attr("y", 10)
+         .attr("text-anchor", "start")
+         .style("text-transform", "capitalize")
+         .text(legend_labels[index]);
+ });
   }
