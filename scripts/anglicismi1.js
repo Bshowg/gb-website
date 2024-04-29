@@ -56,7 +56,6 @@ svg.append("g")
 
     svg.append("text")
    .attr("text-anchor", "middle")
-   .attr("y", -height - 20)
    .style("font-size", "16px")
    .style("text-decoration", "underline")
    .text("Numero di anglicismi nel Devoto Oli per anno");
@@ -65,7 +64,7 @@ svg.append("g")
   function addNeologismi(){
     var width = 400
     height = 400
-    margin = 50
+    margin = 10
 
 // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
 var radius = Math.min(width, height) / 2 - margin
@@ -110,7 +109,6 @@ svg
    .attr("text-anchor", "middle")
    .attr("y", -radius - 20)
    .style("font-size", "16px")
-   .style("text-decoration", "underline")
    .text("Distribuzione dei neologismi in italiano");
 
  // Add a legend
