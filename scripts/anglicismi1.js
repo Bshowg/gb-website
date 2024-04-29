@@ -1,7 +1,12 @@
 
-document.addEventListener("DOMContentLoaded", (event) => {
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", (event) => {
+        barAnglicismi();
+    });
+} else {
+    // DOMContentLoaded has already fired
     barAnglicismi();
-  });
+}
 
   function barAnglicismi(){
     console.log("eccomi")
