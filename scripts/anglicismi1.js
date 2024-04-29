@@ -57,6 +57,7 @@ svg.append("g")
     svg.append("text")
    .attr("text-anchor", "middle")
    .style("font-size", "16px")
+   .style("color","white")
    .style("text-decoration", "underline")
    .text("Numero di anglicismi nel Devoto Oli per anno");
   }
@@ -109,6 +110,8 @@ svg
    .attr("text-anchor", "middle")
    .attr("y", -radius - 20)
    .style("font-size", "16px")
+   
+   .style("color","white")
    .text("Distribuzione dei neologismi in italiano");
 
  // Add a legend
@@ -130,6 +133,7 @@ svg
          .attr("y", 10)
          .attr("text-anchor", "start")
          .style("text-transform", "capitalize")
+         .style("color","white")
          .text(legend_labels[index]);
  });
   }
