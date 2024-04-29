@@ -76,7 +76,6 @@ var data = {crudi:51.7,altro:48.3}
 
 // set the color scale
 var color = d3.scaleOrdinal()
-  .domain(data)
   .range(["#fff","#666"])
 
 // Compute the position of each group on the pie:
