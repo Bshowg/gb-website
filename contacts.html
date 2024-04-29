@@ -30,14 +30,21 @@
     </header>
     <header class=" max-w-4xl mx-auto pb-8 flex items-center flex-col text-center py-12  bg-white">
         <h1 class="text-5xl font-bold " id="subtitle">CONTATTI</h1>
-        <p class="text-center"> Contacts for the people</p>
+        <p class="text-center">g.biscini@gmail.com</p>
 
         
     </header>
 
     <main class="max-w-4xl mx-auto py-8 bg-black text-white text-center mb-5">
-        
-        <span class="py-5">Email: g.biscini@gmail.com</span>
+        <h2 class="text-xl mb-4">Mandami un'email</h2>
+        <form action="send_email.php" method="POST" class="space-y-4">
+            <input type="text" name="name" placeholder="Nome" required class="p-2 rounded">
+            <input type="email" name="email" placeholder="Cognome" required class="p-2 rounded">
+            <textarea name="message" rows="4" placeholder="Messaggio" required class="p-2 rounded"></textarea>
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Invia
+            </button>
+        </form>
         
     </main>
     
