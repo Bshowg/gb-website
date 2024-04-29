@@ -58,7 +58,7 @@ svg.append("g")
   function addNeologismi(){
     var width = 400
     height = 400
-    margin = 10
+    margin = 50
 
 // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
 var radius = Math.min(width, height) / 2 - margin
@@ -94,7 +94,7 @@ svg
     .outerRadius(radius)
   )
   .attr('fill', d => color(d.data[0]))
-  .attr("stroke", "black")
+  .attr("stroke", "white")
   .style("stroke-width", "2px")
   .style("opacity", 0.7)
 
