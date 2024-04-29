@@ -19,7 +19,6 @@ svg.attr("fill", "black").attr("color","white")
   var x = d3.scaleLinear()
   .range([ 0, height ])
   .domain(data.map(function(d) { return d.numero; }))
-  .padding(.1);
 svg.append("g")
   .attr("transform", "translate(0," + height + ")")
   .call(d3.axisBottom(x))
@@ -31,7 +30,6 @@ svg.append("g")
 var y = d3.scaleBand()
   .range([ 0, height ])
   .domain(data.map(function(d) { return d.anno; }))
-  .padding(.1);
 svg.append("g")
   .call(d3.axisLeft(y))
 
