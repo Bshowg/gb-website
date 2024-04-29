@@ -10,7 +10,7 @@ if (document.readyState === "loading") {
 
   function barAnglicismi(){
     console.log("eccomi")
-    const data={anno:"1990",numero:1700,anno:"2017",numero:3400,anno:"2020",numero:3958}
+    const data=[{anno:"1990",numero:1700},{anno:"2017",numero:3400},{anno:"2020",numero:3958}]
     const svg = d3.select("#barDevotoOli"),
     width = +svg.style("width").replace("px", ""),
     height = +svg.style("height").replace("px", "");
