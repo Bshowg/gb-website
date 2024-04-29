@@ -47,6 +47,8 @@ window.addEventListener('load', async () => {
                 const script = document.createElement('script');
                 script.src = `${js_path}?v=${new Date().getTime()}`;
                 script.async = true;
+                script.onload = ()=>{console.log("content loaded");}; 
+                script.onerror = () => console.error('Error loading script:', src);
                 document.head.appendChild(script);
             }
         });
