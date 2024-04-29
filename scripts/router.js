@@ -41,7 +41,15 @@ window.addEventListener('load', async () => {
             return response.text();
         });
         document.querySelector('#app').innerHTML = html;
-
+        let js_path="scripts/"+path.replace("/","")+".js"
+        const js=await fetch(js_path).then(response=>{
+            if(response.ok){
+                const script = document.createElement('script');
+                script.src = js_path;
+                script.async = true;
+                document.head.appendChild(script);
+            }
+        });
         
     } catch (error) {
         console.error('Failed to fetch page: ', error);
