@@ -14,11 +14,11 @@ if (document.readyState === "loading") {
     const svg = d3.select("#barDevotoOli"),
     width = +svg.style("width").replace("px", ""),
     height = +svg.style("height").replace("px", "");
-svg.attr("fill", "black").attr("color","white")
+
       // Add X axis
-  var x = d3.scaleLinear()
-  .range([ 0, height ])
-  .domain(data.map(function(d) { return d.numero; }))
+      var x = d3.scaleLinear()
+      .domain([0, d3.max(data, function(d) { return d.numero; })])
+      .range([0, width]);
 svg.append("g")
   .attr("transform", "translate(0," + height + ")")
   .call(d3.axisBottom(x))
