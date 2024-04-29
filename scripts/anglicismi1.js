@@ -56,7 +56,7 @@ svg.append("g")
 
     svg.append("text")
    .attr("text-anchor", "middle")
-   .attr("y", -radius - 20)
+   .attr("y", -height - 20)
    .style("font-size", "16px")
    .style("text-decoration", "underline")
    .text("Numero di anglicismi nel Devoto Oli per anno");
