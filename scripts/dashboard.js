@@ -91,5 +91,42 @@ svg.call(drag);
 }
 
 document.addEventListener("DOMContentLoaded", (event) => {
-    appendMap();
+    barAnglicismi();
   });
+
+  function barAnglicismi(){
+    const data={anno:"1990",numero:1700,anno:"2017",numero:3400,anno:"2020",numero:3958}
+    const svg = d3.select("#barDevotoOli"),
+    width = +svg.style("width").replace("px", ""),
+    height = +svg.style("height").replace("px", "");
+svg.attr("fill", "black").attr("color","white")
+      // Add X axis
+  var x = d3.scaleLinear()
+  .range([ 0, height ])
+  .domain(data.map(function(d) { return d.numero; }))
+  .padding(.1);
+svg.append("g")
+  .attr("transform", "translate(0," + height + ")")
+  .call(d3.axisBottom(x))
+  .selectAll("text")
+    .attr("transform", "translate(-10,0)rotate(-45)")
+    .style("text-anchor", "end");
+
+// Y axis
+var y = d3.scaleBand()
+  .range([ 0, height ])
+  .domain(data.map(function(d) { return d.anno; }))
+  .padding(.1);
+svg.append("g")
+  .call(d3.axisLeft(y))
+
+  svg.selectAll("myRect")
+    .data(data)
+    .enter()
+    .append("rect")
+    .attr("x", x(0) )
+    .attr("y", function(d) { return y(d.anno); })
+    .attr("width", function(d) { return x(d.numero); })
+    .attr("height", y.bandwidth() )
+    .attr("fill", "white")
+  }
