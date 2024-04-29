@@ -45,7 +45,7 @@ window.addEventListener('load', async () => {
         const js=await fetch(js_path).then(response=>{
             if(response.ok){
                 const script = document.createElement('script');
-                script.src = js_path;
+                script.src = `${js_path}?v=${new Date().getTime()}`;
                 script.async = true;
                 document.head.appendChild(script);
             }
