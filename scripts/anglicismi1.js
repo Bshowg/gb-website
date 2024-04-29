@@ -24,7 +24,8 @@ if (document.readyState === "loading") {
       // Add X axis
       var x = d3.scaleLinear()
       .domain([0, d3.max(data, function(d) { return d.numero; })])
-      .range([0, width]);
+      .range([0, width])
+      .padding(.1);
 svg.append("g")
   .attr("transform", "translate(0," + height + ")")
   .call(d3.axisBottom(x))
@@ -36,6 +37,7 @@ svg.append("g")
 var y = d3.scaleBand()
   .range([ 0, height ])
   .domain(data.map(function(d) { return d.anno; }))
+
 svg.append("g")
   .call(d3.axisLeft(y))
 
