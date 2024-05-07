@@ -9,12 +9,12 @@ if (document.readyState === "loading") {
     barAnglicismi();
     addNeologismi();
 }
+const margin = {top: 20, right: 20, bottom: 20, left: 20}
 
   function barAnglicismi(){
     console.log("eccomi")
     const data=[{anno:"1990",numero:1700},{anno:"2017",numero:3400},{anno:"2020",numero:3958}]
-    var margin = {top: 20, right: 30, bottom: 40, left: 90},
-    width = 460 - margin.left - margin.right,
+    var width = 460 - margin.left - margin.right,
     height = 400 - margin.top - margin.bottom;
     const svg = d3.select("#barDevotoOli").append("svg")
     .attr("width", width + margin.left + margin.right)
@@ -58,7 +58,6 @@ svg.append("g")
    .attr("text-anchor", "middle")
    .style("font-size", "16px")
    .style("color","white")
-   .style("text-decoration", "underline")
    .text("Numero di anglicismi nel Devoto Oli per anno");
   }
 
