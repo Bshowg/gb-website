@@ -17,7 +17,7 @@ if (document.readyState === "loading") {
     const margin = {top: 50, right: 10, bottom: 50, left: 50};
     const width = parentWidth - margin.left - margin.right,
           height = Math.min(width, 400) - margin.top - margin.bottom;
-
+    const barHeight = height / data.length - 10; // Subtracts 10 for spacing between bars
     const svg = d3.select("#barDevotoOli").append("svg")
         .attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
         .append("g")
@@ -50,7 +50,7 @@ svg.append("g")
     .attr("x", x(0) )
     .attr("y", function(d) { return y(d.anno); })
     .attr("width", function(d) { return x(d.numero); })
-    .attr("height", 80 )
+    .attr("height", width/3 )
     .style("margin-top", "40px")
     .attr("fill", "white")
 
