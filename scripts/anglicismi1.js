@@ -12,10 +12,10 @@ if (document.readyState === "loading") {
 
 
   function barAnglicismi(){
-    const margin = {top: 20, right: 20, bottom: 20, left: 20}
+    const margin = {top: 50, right: 20, bottom: 50, left: 20}
     const data = [{anno: "1990", numero: 1700}, {anno: "2017", numero: 3400}, {anno: "2020", numero: 3958}];
     const width = 460 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom;
+    height = 460 - margin.top - margin.bottom;
     const svg = d3.select("#barDevotoOli").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
@@ -63,7 +63,7 @@ svg.append("g")
   }
 
   function addNeologismi(){
-  var margin = 10, width = 400, height = 400;
+  var margin = 50, width = 400, height = 460;
   var radius = Math.min(width, height) / 2 - margin;
 
   var svg = d3.select("#donutNeologismi").append("svg")
