@@ -12,16 +12,14 @@ if (document.readyState === "loading") {
 const margin = {top: 20, right: 20, bottom: 20, left: 20}
 
   function barAnglicismi(){
-    console.log("eccomi")
-    const data=[{anno:"1990",numero:1700},{anno:"2017",numero:3400},{anno:"2020",numero:3958}]
-    var width = 460 - margin.left - margin.right,
+    const data = [{anno: "1990", numero: 1700}, {anno: "2017", numero: 3400}, {anno: "2020", numero: 3958}];
+    const width = 460 - margin.left - margin.right,
     height = 400 - margin.top - margin.bottom;
     const svg = d3.select("#barDevotoOli").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform",
-          "translate(" + margin.left + "," + margin.top + ")");
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
       // Add X axis
       var x = d3.scaleLinear()
@@ -55,26 +53,22 @@ svg.append("g")
     .attr("fill", "white")
 
     svg.append("text")
-   .attr("text-anchor", "middle")
-   .style("font-size", "16px")
-   .style("color","white")
-   .text("Numero di anglicismi nel Devoto Oli per anno");
+    .attr("x", width / 2)
+    .attr("y", 0 - (margin.top / 2))
+    .attr("text-anchor", "middle")
+    .style("font-size", "16px")
+    .attr("fill", "white")  // Changed from "color" to "fill"
+    .text("Numero di anglicismi nel Devoto Oli per anno");
   }
 
   function addNeologismi(){
-    var width = 400
-    height = 400
-    margin = 10
+  var margin = 10, width = 400, height = 400;
+  var radius = Math.min(width, height) / 2 - margin;
 
-// The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
-var radius = Math.min(width, height) / 2 - margin
-
-// append the svg object to the div called 'donutNeologismi'
-var svg = d3.select("#donutNeologismi")
-  .append("svg")
+  var svg = d3.select("#donutNeologismi").append("svg")
     .attr("width", width)
     .attr("height", height)
-  .append("g")
+    .append("g")
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
 // Create dummy data
@@ -110,7 +104,7 @@ svg
    .attr("y", -radius - 20)
    .style("font-size", "16px")
    
-   .style("color","white")
+   .style("fill","white")
    .text("Distribuzione dei neologismi in italiano");
 
  // Add a legend
@@ -132,7 +126,7 @@ svg
          .attr("y", 10)
          .attr("text-anchor", "start")
          .style("text-transform", "capitalize")
-         .style("color","white")
+         .style("fill","white")
          .text(legend_labels[index]);
  });
   }
