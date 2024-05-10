@@ -50,7 +50,7 @@ svg.append("g")
     .attr("x", x(0) )
     .attr("y", function(d) { return y(d.anno); })
     .attr("width", function(d) { return x(d.numero); })
-    .attr("height", width/3 )
+    .attr("height", barHeight )
     .style("margin-top", "40px")
     .attr("fill", "white")
 
@@ -95,7 +95,7 @@ svg
   .data(data_ready)
   .join('path')
   .attr('d', d3.arc()
-    .innerRadius(100)         // This is the size of the donut hole
+    .innerRadius(width/3)         // This is the size of the donut hole
     .outerRadius(radius)
   )
   .attr('fill', d => color(d.data[0]))
