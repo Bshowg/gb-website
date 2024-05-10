@@ -68,7 +68,7 @@ svg.append("g")
     const parentWidth = d3.select('#donutNeologismi').node().clientWidth;
     const margin = 50;
     const width = parentWidth,
-          height = Math.min(width, 460);
+          height = Math.min(width+margin, 460);
     const radius = (Math.min(width, height) / 2) - margin;
 
     const svg = d3.select("#donutNeologismi").append("svg")
