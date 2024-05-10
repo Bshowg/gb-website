@@ -12,6 +12,7 @@ if (document.readyState === "loading") {
 
 
   function barAnglicismi(){
+    const data=[{anno:"1990",numero:1700},{anno:"2017",numero:3400},{anno:"2020",numero:3958}]
     const parentWidth = d3.select('#barDevotoOli').node().clientWidth;
     const margin = {top: 50, right: 10, bottom: 50, left: 50};
     const width = parentWidth - margin.left - margin.right,
@@ -63,6 +64,7 @@ svg.append("g")
   }
 
   function addNeologismi(){
+    var data = {crudi:51.7,altro:48.3}
     const parentWidth = d3.select('#donutNeologismi').node().clientWidth;
     const margin = 50;
     const width = parentWidth,
