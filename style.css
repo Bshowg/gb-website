@@ -87,3 +87,16 @@ background: repeating-linear-gradient(
     );
 padding: 20px;
 }
+
+/* Responsive container for D3.js charts */
+.chart-container {
+    max-width: 600px; /* You can adjust this for larger screens */
+    margin: auto;
+}
+
+/* Ensures the SVG fills the container but does not overflow */
+svg {
+    width: 100%;
+    height: auto;
+    display: block; /* Removes any unnecessary whitespace below the SVG */
+}
