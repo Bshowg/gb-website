@@ -12,15 +12,15 @@ if (document.readyState === "loading") {
 
 
   function barAnglicismi(){
-    const margin = {top: 50, right: 50, bottom: 50, left: 50}
-    const data = [{anno: "1990", numero: 1700}, {anno: "2017", numero: 3400}, {anno: "2020", numero: 3958}];
-    const width = 460 - margin.left - margin.right,
-    height = 460 - margin.top - margin.bottom;
+    const parentWidth = d3.select('#barDevotoOli').node().clientWidth;
+    const margin = {top: 50, right: 10, bottom: 50, left: 50};
+    const width = parentWidth - margin.left - margin.right,
+          height = Math.min(width, 400) - margin.top - margin.bottom;
+
     const svg = d3.select("#barDevotoOli").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        .attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
       // Add X axis
       var x = d3.scaleLinear()
@@ -63,14 +63,16 @@ svg.append("g")
   }
 
   function addNeologismi(){
-  var margin = 50, width = 400, height = 460;
-  var radius = Math.min(width, height) / 2 - margin;
+    const parentWidth = d3.select('#donutNeologismi').node().clientWidth;
+    const margin = 50;
+    const width = parentWidth,
+          height = Math.min(width, 460);
+    const radius = (Math.min(width, height) / 2) - margin;
 
-  var svg = d3.select("#donutNeologismi").append("svg")
-    .attr("width", width)
-    .attr("height", height)
-    .append("g")
-    .attr("transform", "translate(" + margin + "," + margin + ")");
+    const svg = d3.select("#donutNeologismi").append("svg")
+        .attr("viewBox", `0 0 ${width} ${height}`)
+        .append("g")
+        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
 // Create dummy data
 var data = {crudi:51.7,altro:48.3}
