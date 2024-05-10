@@ -12,7 +12,7 @@ if (document.readyState === "loading") {
 
 
   function barAnglicismi(){
-    const margin = {top: 50, right: 20, bottom: 50, left: 20}
+    const margin = {top: 50, right: 50, bottom: 50, left: 50}
     const data = [{anno: "1990", numero: 1700}, {anno: "2017", numero: 3400}, {anno: "2020", numero: 3958}];
     const width = 460 - margin.left - margin.right,
     height = 460 - margin.top - margin.bottom;
