@@ -1,4 +1,6 @@
 
+
+/// JS per la pagina anglicismi.html deve avere lo stesso nome del file html!!!!!
 if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", (event) => {
         barAnglicismi();
