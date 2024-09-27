@@ -112,7 +112,7 @@ svg
    .style("font-size", "16px")
    
    .style("fill","white")
-   .text("Distribuzione dei neologismi in italiano");
+   .text("Distribuzione dei neologismi in italiano nel 2017");
 
  // Add a legend
  const legend_labels=["Direttamente in inglese","Altro"]
