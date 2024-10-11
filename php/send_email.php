@@ -15,8 +15,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email_content .= "Message:\n$message\n";
 
     // Enhanced headers
-    $email_headers = "From: $name <$email>\r\n";
-    $email_headers .= "Reply-To: $email\r\n";
+    $email_headers = "From: info@gianmarcobiscini.it\r\n";
+    $email_headers .= "Reply-To: info@gianmarcobiscini.it\r\n";
     $email_headers .= "MIME-Version: 1.0\r\n";
     $email_headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
 
