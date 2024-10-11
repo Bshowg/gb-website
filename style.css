@@ -155,7 +155,7 @@ svg {
   }
   @media screen and (max-width: 600px) {
     .left-bubble, .right-bubble {
-      max-width: 80%;
+      max-width: 90%;
     }
     
   }
