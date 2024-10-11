@@ -107,6 +107,7 @@ svg {
 .left-bubble {
     position: relative;
     background: #f1f0f0;
+    color: black;
     border-radius: 10px;
     margin: 10px;
     padding: 10px;
@@ -116,11 +117,11 @@ svg {
   .left-bubble::after {
     content: '';
     position: absolute;
-    top: 10px;
+    bottom: 0px;
     left: -15px;
     width: 0;
     height: 0;
-    border: 10px solid transparent;
+    border: 20px solid transparent;
     border-right-color: #f1f0f0;
     border-left: 0;
     border-bottom: 0;
@@ -142,13 +143,19 @@ svg {
   .right-bubble::after {
     content: '';
     position: absolute;
-    top: 10px;
+    bottom: 0px;
     right: -15px;
     width: 0;
     height: 0;
-    border: 10px solid transparent;
+    border: 20px solid transparent;
     border-left-color: #0084ff;
     border-right: 0;
     border-bottom: 0;
     margin-top: -5px;
+  }
+  @media screen and (max-width: 600px) {
+    .left-bubble, .right-bubble {
+      max-width: 80%;
+    }
+    
   }
