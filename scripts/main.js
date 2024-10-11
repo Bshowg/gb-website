@@ -26,7 +26,7 @@ function articleLoader() {
         async loadArticles() {
             const articles =await getArticlesPhp(); // Add more as needed
             console.log(articles);
-            articles.slice(1).forEach(article => {
+            articles.slice(-1).forEach(article => {
                 fetch(`${article.file}`)
                     .then(response => response.text())
                     .then(html => {
