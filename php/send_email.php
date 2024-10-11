@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (mail($recipient, $subject, $email_content, $email_headers)) {
         http_response_code(200);
-        header("Location: ../sendemailsuccess.html");
+        header("Location: ../mailsendsuccess.html");
         exit;
     } else {
         http_response_code(500);
