@@ -1,6 +1,6 @@
 <?php
 // Database connection parameters
-$host = 'gianmd-articles.db.tb-hosting.com'; // or other host
+$host = 'gianmd-articles.db.tb-hosting.com'; 
 $dbname = 'gianmd_articles';
 $username = 'gianmd_gb';
 $password = 'malleolo92';
@@ -14,7 +14,7 @@ if ($conn->connect_error) {
 }
 
 // SQL to fetch articles
-$sql = "SELECT * FROM articles";
+$sql = "SELECT * FROM articles Order by id desc";
 $result = $conn->query($sql);
 
 $articles = [];
