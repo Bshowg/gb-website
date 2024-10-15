@@ -118,7 +118,7 @@ svg {
     content: '';
     position: absolute;
     bottom: 0px;
-    left: -15px;
+    left: -10px;
     width: 0;
     height: 0;
     border: 20px solid transparent;
@@ -144,7 +144,7 @@ svg {
     content: '';
     position: absolute;
     bottom: 0px;
-    right: -15px;
+    right: -10px;
     width: 0;
     height: 0;
     border: 20px solid transparent;
