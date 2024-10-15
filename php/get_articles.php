@@ -14,7 +14,7 @@ if ($conn->connect_error) {
 }
 
 // SQL to fetch articles
-$sql = "SELECT * FROM articles Where idTags@tags=1 Order by id desc";
+$sql = "SELECT * FROM articles Order by id desc";
 $result = $conn->query($sql);
 
 $articles = [];
