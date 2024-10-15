@@ -16,7 +16,6 @@ RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
 # Handle SPA exceptions
-RewriteCond %{REQUEST_URI} !^/contacts
-RewriteCond %{REQUEST_URI} !^/mailsendsuccess
+RewriteCond %{REQUEST_URI} !^/static
 # Handle SPA fallback
 RewriteRule ^ index.html [L]
