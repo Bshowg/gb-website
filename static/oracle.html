@@ -4,14 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gbwebsite</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../style.css">
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio"></script>
     <!-- the scripts have to be called before Alpine  http-server -p 8080 --spa-->
-    <script defer src="scripts/router.js"></script> <!-- Simple router script -->
-    <script defer src="scripts/main.js"></script> <!-- Main JavaScript for handling articles -->
+    <script defer src="../scripts/main.js"></script> <!-- Main JavaScript for handling articles -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script src="scripts/d3.v7.min.js"></script>
-    
+    <script src="../scripts/oracle.js"></script>
 </head>
 <body class="notebook">
 
@@ -30,18 +28,24 @@
         </nav>
     </div>
     </header>
-    <header class="max-w-4xl mx-auto pb-8 flex items-center flex-col text-center py-12  bg-white">
-        <h1 class="text-5xl font-bold " id="subtitle">IPERSPAZIO</h1>
-        <p class="text-center"> A personal backlog</p>
+    <header class=" max-w-4xl mx-auto pb-8 flex items-center flex-col text-center py-12  bg-white">
+        <h1 class="text-5xl font-bold " id="subtitle">🔮ORACOLO🔮</h1>
 
         
     </header>
-    
-    <main class="max-w-4xl mx-auto pb-8" id="app">
-        <!-- Router Outlet -->
-        <div x-data="routerOutlet"></div>
-    </main>
 
+    <main class="max-w-4xl mx-auto py-8  text-white text-center mb-5">
+        <div x-data="oracleApp()" class="text-center text-white bg-black p-6">
+            <p class="mb-8 text-lg">Fatti una domanda e dopo chiedi la risposta dell'oracolo</p>
+            <button x-show="!answer" @click="askOracle" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-full shadow-lg">
+                APRI I CANCELLI DELLA SAGGEZZA
+            </button>
+            <div x-show="answer" x-transition.duration.1000ms class="mt-10 p-8 bg-gray-800 bg-opacity-50 rounded-lg shadow-inner">
+                <p class="text-3xl italic" x-text="`“${answer}”`"></p>
+            </div>
+        </div>
+    </main>
+    
     <footer class="text-center py-4 text-white bg-black">
         <p>© 2024 Gianmarco Biscini. All rights reserved.</p>
     </footer>
