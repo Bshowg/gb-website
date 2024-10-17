@@ -10,14 +10,14 @@ function oracleApp() {
             'Rosso di sera...',
             'Cavallo Pazzo.',
             'Icchè ci va ci vole.',
-            'Chi è causa del suo mal, pianga se stesso.',
+            'Chi è causa del suo mal, pianga sè stesso.',
             'Saprai sì, quanto sa di sale lo pane altrui.',
             'Tutto è veleno, nulla esiste di non velenoso.',
             'Vuolsi così colà dove si puote ciò che si vuole, e più non dimandare.',
             'Mangiare è sopravvivere per avere fame',
             'I fiori muoiono quando ci rattrista perderli, le male erbe spuntano dove ci rattrista vederle.',
             'Entrando nella foresta non agita l\'erba',
-            
+
         ],
         askOracle() {
             this.answer = '';
