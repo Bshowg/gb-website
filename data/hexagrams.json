@@ -1,0 +1,324 @@
+{
+  "hexagrams": [
+    {
+      "number": 1,
+      "name": "The Creative (乾 - Qián)",
+      "lines": [1, 1, 1, 1, 1, 1]
+    },
+    {
+      "number": 2,
+      "name": "The Receptive (坤 - Kūn)",
+      "lines": [0, 0, 0, 0, 0, 0]
+    },
+    {
+      "number": 3,
+      "name": "Difficulty at the Beginning (屯 - Zhūn)",
+      "lines": [0,1,0,0,0,1]
+    },
+    {
+      "number": 4,
+      "name": "Youthful Folly (蒙 - Méng)",
+      "lines": [1, 0, 0, 0, 1, 0]
+    },
+    {
+      "number": 5,
+      "name": "Waiting (需 - Xū)",
+      "lines": [0,1,0, 1, 1, 1]
+    },
+    {
+      "number": 6,
+      "name": "Conflict (訟 - Sòng)",
+      "lines": [1, 1, 1, 0,1,0]
+    },
+    {
+      "number": 7,
+      "name": "The Army (師 - Shī)",
+      "lines": [0,0, 0, 0, 1, 0]
+    },
+    {
+      "number": 8,
+      "name": "Holding Together (比 - Bǐ)",
+      "lines": [0, 1, 0, 0, 0, 0]
+    },
+    {
+      "number": 9,
+      "name": "Small Taming (小畜 - Xiǎo Chù)",
+      "lines": [1, 1, 0, 1, 1, 1]
+    },
+    {
+      "number": 10,
+      "name": "Treading (履 - Lǚ)",
+      "lines": [1, 1, 1, 0, 1, 1]
+    },
+    {
+      "number": 11,
+      "name": "Peace (泰 - Tài)",
+      "lines": [0, 0, 0, 1, 1, 1]
+    },
+    {
+      "number": 12,
+      "name": "Standstill (否 - Pǐ)",
+      "lines": [1, 1, 1, 0, 0, 0]
+    },
+    {
+      "number": 13,
+      "name": "Fellowship with Men (同人 - Tóng Rén)",
+      "lines": [1, 1, 1, 1, 0, 1]
+    },
+    {
+      "number": 14,
+      "name": "Great Possession (大有 - Dà Yǒu)",
+      "lines": [1, 0, 1, 1, 1, 1]
+    },
+    {
+      "number": 15,
+      "name": "Modesty (謙 - Qiān)",
+      "lines": [0, 0, 0, 1, 0, 0]
+    },
+    {
+      "number": 16,
+      "name": "Enthusiasm (豫 - Yù)",
+      "lines": [0, 0, 1, 0, 0, 0]
+    },
+    {
+      "number": 17,
+      "name": "Following (隨 - Suí)",
+      "lines": [0, 1, 1, 0, 0, 1]
+    },
+    {
+      "number": 18,
+      "name": "Work on the Decayed (蠱 - Gǔ)",
+      "lines": [1, 0, 0, 1, 1, 0]
+    },
+    {
+      "number": 19,
+      "name": "Approach (臨 - Lín)",
+      "lines": [0, 0, 0, 0, 1, 1]
+    },
+    {
+      "number": 20,
+      "name": "Contemplation (觀 - Guān)",
+      "lines": [1, 1, 0, 0, 0, 0]
+    },
+    {
+      "number": 21,
+      "name": "Biting Through (噬嗑 - Shì Kè)",
+      "lines": [1, 0, 1, 0,0,1]
+    },
+    {
+      "number": 22,
+      "name": "Grace (賁 - Bì)",
+      "lines": [1, 0, 0, 1, 0, 1]
+    },
+    {
+      "number": 23,
+      "name": "Splitting Apart (剝 - Bō)",
+      "lines": [1, 0, 0, 0, 0, 0]
+    },
+    {
+      "number": 24,
+      "name": "Return (復 - Fù)",
+      "lines": [0, 0, 0, 0, 0, 1]
+    },
+    {
+      "number": 25,
+      "name": "Innocence (無妄 - Wú Wàng)",
+      "lines": [1, 1, 1, 0, 0, 1]
+    },
+    {
+      "number": 26,
+      "name": "Great Taming (大畜 - Dà Chù)",
+      "lines": [1,0,0,1,1,1]
+    },
+    {
+      "number": 27,
+      "name": "Nourishing (頤 - Yí)",
+      "lines": [1, 0, 0, 0, 0, 1]
+    },
+    {
+      "number": 28,
+      "name": "Great Preponderance (大過 - Dà Guò)",
+      "lines": [0, 1, 1, 1, 1, 0]
+    },
+    {
+      "number": 29,
+      "name": "The Abysmal (坎 - Kǎn)",
+      "lines": [0, 1, 0, 0,1,0]
+    },
+    {
+      "number": 30,
+      "name": "The Clinging (離 - Lí)",
+      "lines": [1, 0, 1, 1,0,1]
+    },
+    {
+      "number": 31,
+      "name": "Influence (咸 - Xián)",
+      "lines": [0,1,1,1,0,0]
+    },
+    {
+      "number": 32,
+      "name": "Duration (恆 - Héng)",
+      "lines": [0,0,1,1,1,0]
+    },
+    {
+      "number": 33,
+      "name": "Retreat (遯 - Dùn)",
+      "lines": [1, 1, 1, 1, 0, 0]
+    },
+    {
+      "number": 34,
+      "name": "Great Power (大壯 - Dà Zhuàng)",
+      "lines": [0, 0, 1, 1, 1, 1]
+    },
+    {
+      "number": 35,
+      "name": "Progress (晉 - Jìn)",
+      "lines": [1,0,1,0,0,0]
+    },
+    {
+      "number": 36,
+      "name": "Darkening of the Light (明夷 - Míng Yí)",
+      "lines": [0,0,0,1,0,1]
+    },
+    {
+      "number": 37,
+      "name": "The Family (家人 - Jiā Rén)",
+      "lines": [1,1,0,1,0,1]
+    },
+    {
+      "number": 38,
+      "name": "Opposition (睽 - Kuí)",
+      "lines": [1,0,1,0,1,1]
+    },
+    {
+      "number": 39,
+      "name": "Obstruction (蹇 - Jiǎn)",
+      "lines": [0, 1, 0,1,0,0]
+    },
+    {
+      "number": 40,
+      "name": "Deliverance (解 - Xiè)",
+      "lines": [0,0,1,0,1,0]
+    },
+    {
+      "number": 41,
+      "name": "Decrease (損 - Sǔn)",
+      "lines": [1, 0, 0, 0,1, 1]
+    },
+    {
+      "number": 42,
+      "name": "Increase (益 - Yì)",
+      "lines": [1,1,0,0,0,1]
+    },
+    {
+      "number": 43,
+      "name": "Breakthrough (夬 - Guài)",
+      "lines": [0, 1, 1, 1, 1, 1]
+    },
+    {
+      "number": 44,
+      "name": "Coming to Meet (姤 - Gòu)",
+      "lines": [1, 1, 1, 1, 1, 0]
+    },
+    {
+      "number": 45,
+      "name": "Gathering Together (萃 - Cuì)",
+      "lines": [0,1,1,0,0,0]
+    },
+    {
+      "number": 46,
+      "name": "Pushing Upward (升 - Shēng)",
+      "lines": [0,0,0,1,1,0]
+    },
+    {
+      "number": 47,
+      "name": "Oppression (困 - Kùn)",
+      "lines": [0, 1, 1, 0, 1, 0]
+    },
+    {
+      "number": 48,
+      "name": "The Well (井 - Jǐng)",
+      "lines": [0, 1, 0, 1, 1, 0]
+    },
+    {
+      "number": 49,
+      "name": "Revolution (革 - Gé)",
+      "lines": [0,1,1,1,0,1]
+    },
+    {
+      "number": 50,
+      "name": "The Cauldron (鼎 - Dǐng)",
+      "lines": [1,0,1,1,1,0]
+    },
+    {
+      "number": 51,
+      "name": "Arousing (震 - Zhèn)",
+      "lines": [0,0,1,0,0,1]
+    },
+    {
+      "number": 52,
+      "name": "Keeping Still (艮 - Gèn)",
+      "lines": [1,0,0,1,0,0]
+    },
+    {
+      "number": 53,
+      "name": "Development (漸 - Jiàn)",
+      "lines": [1,1,0,1,0,0]
+    },
+    {
+      "number": 54,
+      "name": "The Marrying Maiden (歸妹 - Guī Mèi)",
+      "lines": [0,0,1,0,1,1]
+    },
+    {
+      "number": 55,
+      "name": "Abundance (豐 - Fēng)",
+      "lines": [0,0,1,1,0,1]
+    },
+    {
+      "number": 56,
+      "name": "The Wanderer (旅 - Lǚ)",
+      "lines": [1,0,1,1,0,0]
+    },
+    {
+      "number": 57,
+      "name": "The Gentle (巽 - Xùn)",
+      "lines": [1,1,0,1,1,0]
+    },
+    {
+      "number": 58,
+      "name": "The Joyous (兌 - Duì)",
+      "lines": [0,1,1,0,1,1]
+    },
+    {
+      "number": 59,
+      "name": "Dispersion (渙 - Huàn)",
+      "lines": [1,1,0,0,1,0]
+    },
+    {
+      "number": 60,
+      "name": "Limitation (節 - Jié)",
+      "lines": [0,1,0,0,1,1]
+    },
+    {
+      "number": 61,
+      "name": "Inner Truth (中孚 - Zhōng Fú)",
+      "lines": [1,1,0,0,1,1]
+    },
+    {
+      "number": 62,
+      "name": "Small Preponderance (小過 - Xiǎo Guò)",
+      "lines": [1,1,0,0,1,1]
+    },
+    {
+      "number": 63,
+      "name": "After Completion (既濟 - Jì Jì)",
+      "lines": [0, 1, 0, 1, 0, 1]
+    },
+    {
+      "number": 64,
+      "name": "Before Completion (未濟 - Wèi Jì)",
+      "lines": [1, 0, 1, 0, 1, 0]
+    }
+  ]
+}
