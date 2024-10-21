@@ -106,6 +106,7 @@ svg {
 /* Left speech bubble */
 .left-bubble {
     position: relative;
+    display:inline-flex;
     background: #f1f0f0;
     color: black;
     border-radius: 10px;
@@ -131,6 +132,7 @@ svg {
   /* Right speech bubble */
   .right-bubble {
     position: relative;
+    display:inline-flex;
     background: #0084ff;
     color: white;
     border-radius: 10px;
