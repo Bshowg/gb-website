@@ -113,6 +113,7 @@ svg {
     margin: 10px;
     padding: 10px;
     max-width: 60%;
+    margin-right: auto; /* Pushes the bubble to the left */
   }
   
   .left-bubble::after {
