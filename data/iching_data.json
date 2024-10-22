@@ -5,7 +5,7 @@
     "trad_chinese": "\u4e7e",
     "pinyin": "qi\u00e1n",
     "english": "Initiating",
-    "binary": 111111,
+    "binary": "111111",
     "od": "02",
     "wilhelm_above": {
       "chinese": "CH'IEN",
@@ -167,7 +167,7 @@
     "trad_chinese": "\u8499",
     "pinyin": "m\u00e9ng",
     "english": "Childhood",
-    "binary": 100010,
+    "binary": "100010",
     "od": 49,
     "wilhelm_above": {
       "chinese": "K\u00eaN",
@@ -275,7 +275,7 @@
     "trad_chinese": "\u8a1f",
     "pinyin": "s\u00f2ng",
     "english": "Contention",
-    "binary": 111010,
+    "binary": "111010",
     "od": 36,
     "wilhelm_above": {
       "chinese": "CH'IEN",
@@ -437,7 +437,7 @@
     "trad_chinese": "\u5c0f\u755c",
     "pinyin": "xi\u01ceoch\u00f9",
     "english": "Little Accumulation",
-    "binary": 110111,
+    "binary": "110111",
     "od": 16,
     "wilhelm_above": {
       "chinese": "SUN",
@@ -491,7 +491,7 @@
     "trad_chinese": "\u5c65",
     "pinyin": "l\u01da",
     "english": "Fulfillment",
-    "binary": 111011,
+    "binary": "111011",
     "od": 15,
     "wilhelm_above": {
       "chinese": "CH'IEN",
@@ -599,7 +599,7 @@
     "trad_chinese": "\u5426",
     "pinyin": "p\u01d0",
     "english": "Hindrance",
-    "binary": 111000,
+    "binary": "111000",
     "od": 11,
     "wilhelm_above": {
       "chinese": "CH'IEN",
@@ -653,7 +653,7 @@
     "trad_chinese": "\u540c\u4eba",
     "pinyin": "t\u00f3ngr\u00e9n",
     "english": "Seeking Harmony",
-    "binary": 111101,
+    "binary": "111101",
     "od": "07",
     "wilhelm_above": {
       "chinese": "CH'IEN",
@@ -707,7 +707,7 @@
     "trad_chinese": "\u5927\u6709",
     "pinyin": "d\u00e0y\u01d2u",
     "english": "Great Harvest",
-    "binary": 101111,
+    "binary": "101111",
     "od": "08",
     "wilhelm_above": {
       "chinese": "LI",
@@ -923,7 +923,7 @@
     "trad_chinese": "\u8831",
     "pinyin": "g\u01d4",
     "english": "Remedying",
-    "binary": 100110,
+    "binary": "100110",
     "od": 17,
     "wilhelm_above": {
       "chinese": "K\u00ean",
@@ -1031,7 +1031,7 @@
     "trad_chinese": "\u89c0",
     "pinyin": "gu\u0101n",
     "english": "Watching",
-    "binary": 110000,
+    "binary": "110000",
     "od": 34,
     "wilhelm_above": {
       "chinese": "SUN",
@@ -1085,7 +1085,7 @@
     "trad_chinese": "\u566c\u55d1",
     "pinyin": "sh\u00eck\u00e8",
     "english": "Eradicating",
-    "binary": 101001,
+    "binary": "101001",
     "od": 48,
     "wilhelm_above": {
       "chinese": "LI",
@@ -1139,7 +1139,7 @@
     "trad_chinese": "\u8cc1",
     "pinyin": "b\u00ec",
     "english": "Adorning",
-    "binary": 100101,
+    "binary": "100101",
     "od": 47,
     "wilhelm_above": {
       "chinese": "K\u00eaN",
@@ -1193,7 +1193,7 @@
     "trad_chinese": "\u525d",
     "pinyin": "b\u014d",
     "english": "Falling Away",
-    "binary": 100000,
+    "binary": "100000",
     "od": 43,
     "wilhelm_above": {
       "chinese": "K\u00eaN",
@@ -1301,7 +1301,7 @@
     "trad_chinese": "\u7121\u5984",
     "pinyin": "w\u00faw\u00e0ng",
     "english": "Without Falsehood",
-    "binary": 111001,
+    "binary": "111001",
     "od": 46,
     "wilhelm_above": {
       "chinese": "CH'IEN",
@@ -1355,7 +1355,7 @@
     "trad_chinese": "\u5927\u755c",
     "pinyin": "d\u00e0ch\u00f9",
     "english": "Great Accumulation",
-    "binary": 100111,
+    "binary": "100111",
     "od": 45,
     "wilhelm_above": {
       "chinese": "K\u00eaN",
@@ -1409,7 +1409,7 @@
     "trad_chinese": "\u9824",
     "pinyin": "y\u00ed",
     "english": "Nourishing",
-    "binary": 100001,
+    "binary": "100001",
     "od": 28,
     "wilhelm_above": {
       "chinese": "K\u00eaN",
@@ -1571,7 +1571,7 @@
     "trad_chinese": "\u96e2",
     "pinyin": "l\u00ed",
     "english": "Brightness",
-    "binary": 101101,
+    "binary": "101101",
     "od": 29,
     "wilhelm_above": {
       "chinese": "LI",
@@ -1733,7 +1733,7 @@
     "trad_chinese": "\u906f",
     "pinyin": "d\u00f9n",
     "english": "Retreat",
-    "binary": 111100,
+    "binary": "111100",
     "od": 19,
     "wilhelm_above": {
       "chinese": "CH'IEN",
@@ -1841,7 +1841,7 @@
     "trad_chinese": "\u6649",
     "pinyin": "j\u00ecn",
     "english": "Proceeding Forward",
-    "binary": 101000,
+    "binary": "101000",
     "od": "05",
     "wilhelm_above": {
       "chinese": "LI",
@@ -1949,7 +1949,7 @@
     "trad_chinese": "\u5bb6\u4eba",
     "pinyin": "ji\u0101r\u00e9n",
     "english": "Household",
-    "binary": 110101,
+    "binary": "110101",
     "od": 40,
     "wilhelm_above": {
       "chinese": "SUN",
@@ -2003,7 +2003,7 @@
     "trad_chinese": "\u777d",
     "pinyin": "ku\u00ed",
     "english": "Diversity",
-    "binary": 101011,
+    "binary": "101011",
     "od": 39,
     "wilhelm_above": {
       "chinese": "LI",
@@ -2165,7 +2165,7 @@
     "trad_chinese": "\u640d",
     "pinyin": "s\u01d4n",
     "english": "Decreasing",
-    "binary": 100011,
+    "binary": "100011",
     "od": 31,
     "wilhelm_above": {
       "chinese": "K\u00eaN",
@@ -2219,7 +2219,7 @@
     "trad_chinese": "\u76ca",
     "pinyin": "y\u00ec",
     "english": "Increasing",
-    "binary": 110001,
+    "binary": "110001",
     "od": 32,
     "wilhelm_above": {
       "chinese": "SUN",
@@ -2327,7 +2327,7 @@
     "trad_chinese": "\u59e4",
     "pinyin": "g\u00f2u",
     "english": "Encountering",
-    "binary": 111110,
+    "binary": "111110",
     "od": 24,
     "wilhelm_above": {
       "chinese": "CH'IEN",
@@ -2651,7 +2651,7 @@
     "trad_chinese": "\u9f0e",
     "pinyin": "d\u01d0ng",
     "english": "Establishing The New",
-    "binary": 101110,
+    "binary": "101110",
     "od": "03",
     "wilhelm_above": {
       "chinese": "LI",
@@ -2759,7 +2759,7 @@
     "trad_chinese": "\u826e",
     "pinyin": "g\u00e8n",
     "english": "Keeping Still",
-    "binary": 100100,
+    "binary": "100100",
     "od": 58,
     "wilhelm_above": {
       "chinese": "K\u00eaN",
@@ -2813,7 +2813,7 @@
     "trad_chinese": "\u6f38",
     "pinyin": "ji\u00e0n",
     "english": "Developing Gradually",
-    "binary": 110100,
+    "binary": "110100",
     "od": 54,
     "wilhelm_above": {
       "chinese": "SUN",
@@ -2975,7 +2975,7 @@
     "trad_chinese": "\u65c5",
     "pinyin": "l\u01da",
     "english": "Travelling",
-    "binary": 101100,
+    "binary": "101100",
     "od": 60,
     "wilhelm_above": {
       "chinese": "LI",
@@ -3029,7 +3029,7 @@
     "trad_chinese": "\u5dfd",
     "pinyin": "x\u00f9n",
     "english": "Proceeding Humbly",
-    "binary": 110110,
+    "binary": "110110",
     "od": 51,
     "wilhelm_above": {
       "chinese": "SUN",
@@ -3137,7 +3137,7 @@
     "trad_chinese": "\u6e19",
     "pinyin": "hu\u00e0n",
     "english": "Dispersing",
-    "binary": 110010,
+    "binary": "110010",
     "od": 55,
     "wilhelm_above": {
       "chinese": "SUN",
@@ -3245,7 +3245,7 @@
     "trad_chinese": "\u4e2d\u5b5a",
     "pinyin": "zh\u014dngf\u00fa",
     "english": "Innermost Sincerity",
-    "binary": 110011,
+    "binary": "110011",
     "od": 62,
     "wilhelm_above": {
       "chinese": "SUN",
@@ -3407,7 +3407,7 @@
     "trad_chinese": "\u672a\u6fdf",
     "pinyin": "w\u00e8ij\u00ec",
     "english": "Not Yet Fulfilled",
-    "binary": 101010,
+    "binary": "101010",
     "od": 63,
     "wilhelm_above": {
       "chinese": "LI",

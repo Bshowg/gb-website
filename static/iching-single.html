@@ -1,198 +1,362 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>I Ching Hexagram Viewer</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="../style.css" />
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-  <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio"></script>
-  <script>
-    // Fetch hexagram data from the JSON file
-    async function fetchHexagrams() {
-      const response = await fetch("../data/iching_data.json");
-      const data = await response.json();
-      return data;
-    }
-  </script>
+  <head>
+    <meta charset="UTF-8" />
+    <title>I Ching Hexagram Viewer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../style.css" />
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio"></script>
+    <script>
+      // Fetch hexagram data from the JSON file
+      async function fetchHexagrams() {
+        const response = await fetch("../data/iching_data.json");
+        const data = await response.json();
+        return data;
+      }
+    </script>
 
-  <script>
-    document.addEventListener("alpine:init", () => {
-      Alpine.data("ichingViewer", () => ({
-        hexagramBinary: '',
-        hexagramObject: null,
-        /// Initialize the viewer, CALLED AUTHOMATICALLY
-        async init() {
-          // Get the binary string from the URL parameter 'binary'
-          const urlParams = new URLSearchParams(window.location.search);
-          this.hexagramBinary = urlParams.get('binary');
+    <script>
+      document.addEventListener("alpine:init", () => {
+        Alpine.data("ichingViewer", () => ({
+          hexagramBinary: "",
+          hexagramObject: null,
+          hexagramObjectLinesOpposite: null,
+          hexagramObjectTrigramsOpposite: null,
+          /// Initialize the viewer, CALLED AUTHOMATICALLY
+          async init() {
+            // Get the binary string from the URL parameter 'binary'
+            const urlParams = new URLSearchParams(window.location.search);
+            this.hexagramBinary = urlParams.get("binary");
 
-          if (this.hexagramBinary && /^[01]{6}$/.test(this.hexagramBinary)) {
-            // Fetch hexagram data
-            const hexagrams = await fetchHexagrams();
-            console.log(hexagrams.length);
-            // Find the matching hexagram
-            this.hexagramObject = this.findHexagram(hexagrams, this.hexagramBinary);
-            console.log(this.hexagramObject);
-          } else {
-          }
-        },
-        findHexagram(hexagrams, binary) {
-          // Find the hexagram matching the binary string
-          const hexagram = hexagrams.find((h) => h.binary == binary);
-          return hexagram ? hexagram : null;
-        }
-      }));
-    });
-  </script>
-</head>
-<body class="notebook" x-data="ichingViewer" >
-  <header class="text-center py-8 hero bg-bottom bg-cover max-w-4xl mx-auto pb-8 flex items-center flex-col">
-    <div class="m-auto">
-      <h1 class="text-3xl md:text-5xl font-bold tracking-wide text-white tracking-tighter">
-        GIANMARCHISSIMO
-      </h1>
-      <nav class="mt-4">
-        <ul class="flex justify-center space-x-4">
-          <li><a href="/" class="hover:underline text-white">Home</a></li>
-          <li><a href="/static/contacts.html" class="hover:underline text-white">Contacts</a></li>
-          <li><a href="/static/oracle.html" class="hover:underline text-white">Oracolo</a></li>
-          <li><a href="/static/iching.html" class="hover:underline text-white">I King</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
-  <header class="max-w-4xl mx-auto pb-8 flex items-center flex-col text-center py-12 bg-white" >
-    <h1 class="text-5xl font-bold" id="subtitle" x-text="hexagramObject?.english"></h1>
-    <p class="text-center" x-text="hexagramObject?.hex"></p>
-  </header>
-<!-- Search Box HTML -->
-<form id="binarySearchForm" class="max-w-4xl mx-auto p-4 bg-black text-white flex justify-center my-4">
-    <input
-      type="text"
-      id="binaryInput"
-      class="border p-2 w-48 text-black"
-      placeholder="Codice Binario"
-      maxlength="6"
-      pattern="[0-1]{6}"
-      required
-    />
-    <button
-      type="submit"
-      class="ml-2 px-4 py-2 bg-white text-black font-bold hover:bg-blue-700"
+            if (this.hexagramBinary && /^[01]{6}$/.test(this.hexagramBinary)) {
+              // Fetch hexagram data
+              const hexagrams = await fetchHexagrams();
+              console.log(hexagrams.length);
+              // Find the matching hexagram
+              this.hexagramObject = this.findHexagram(
+                hexagrams,
+                this.hexagramBinary
+              );
+              this.hexagramObjectLinesOpposite = this.findHexagram(
+                hexagrams,
+                this.hexagramBinary.split("").reverse().join("")
+              );
+              var firsttrigram = this.hexagramBinary.substring(0, 3);
+              var secondtrigram = this.hexagramBinary.substring(3, 6);
+              this.hexagramObjectTrigramsOpposite = this.findHexagram(
+                hexagrams,
+                secondtrigram + firsttrigram
+              );
+            } else {
+            }
+          },
+          findHexagram(hexagrams, binary) {
+            // Find the hexagram matching the binary string
+            const hexagram = hexagrams.find((h) => h.binary == binary);
+            console.log(hexagram);
+            return hexagram ? hexagram : null;
+          },
+          goToDescription(hexagram) {
+            url =
+              "/static/iching-single.html?binary=" +
+              hexagram.binary
+            window.open(url, "_blank");
+          },
+        }));
+      });
+    </script>
+  </head>
+  <body class="notebook" x-data="ichingViewer">
+    <header
+      class="text-center py-8 hero bg-bottom bg-cover max-w-4xl mx-auto pb-8 flex items-center flex-col"
     >
-      Cerca
-    </button>
-  </form>
-  <template x-if="hexagramObject">
-  <div class="max-w-4xl mx-auto py-8 flex flex-col justify-around p-6 bg-black text-white" >
-    <!-- Hexagram Display -->
-
-      <div class="mb-4">
-        <!-- Display Hexagram Lines -->
-        <template x-for="(line, index) in hexagramBinary.split('')" :key="index">
-          <div class="flex justify-center mb-2">
-            <template x-if="line === '1'">
-              <!-- Solid Line -->
-              <svg class="h-6 w-48" viewBox="0 0 100 10" xmlns="http://www.w3.org/2000/svg">
-                <rect x="0" y="0" width="100" height="10" fill="white" />
-              </svg>
-            </template>
-            <template x-if="line === '0'">
-              <!-- Broken Line -->
-              <svg class="h-6 w-48" viewBox="0 0 100 10" xmlns="http://www.w3.org/2000/svg">
-                <rect x="0" y="0" width="40" height="10" fill="white" />
-                <rect x="60" y="0" width="40" height="10" fill="white" />
-              </svg>
-            </template>
-          </div>
-        </template>
-      </div>
-
-
-    <!-- Hexagram Details -->
-
-      <div class="text-center text-bold">
-        <h1 class="text-lg md:text-4xl font-bold">
-          <span x-text="hexagramObject.hex_font"></span>
-          <span x-text="hexagramObject.english"></span>
-          <span x-text="hexagramObject.trad_chinese"></span> (<span x-text="hexagramObject.pinyin"></span>)
+      <div class="m-auto">
+        <h1
+          class="text-3xl md:text-5xl font-bold tracking-wide text-white tracking-tighter"
+        >
+          GIANMARCHISSIMO
         </h1>
+        <nav class="mt-4">
+          <ul class="flex justify-center space-x-4">
+            <li><a href="/" class="hover:underline text-white">Home</a></li>
+            <li>
+              <a href="/static/contacts.html" class="hover:underline text-white"
+                >Contacts</a
+              >
+            </li>
+            <li>
+              <a href="/static/oracle.html" class="hover:underline text-white"
+                >Oracolo</a
+              >
+            </li>
+            <li>
+              <a href="/static/iching.html" class="hover:underline text-white"
+                >I King</a
+              >
+            </li>
+          </ul>
+        </nav>
       </div>
+    </header>
+    <header
+      class="max-w-4xl mx-auto pb-8 flex items-center flex-col text-center py-12 bg-white"
+    >
+      <h1
+        class="text-5xl font-bold"
+        id="subtitle"
+        x-text="hexagramObject?.english"
+      ></h1>
+      <p class="text-center" x-text="hexagramObject?.hex"></p>
+    </header>
+    <!-- Search Box HTML -->
+    <form
+      id="binarySearchForm"
+      class="max-w-4xl mx-auto p-4 bg-black text-white flex justify-center my-4"
+    >
+      <input
+        type="text"
+        id="binaryInput"
+        class="border p-2 w-48 text-black"
+        placeholder="Codice Binario"
+        maxlength="6"
+        pattern="[0-1]{6}"
+        required
+      />
+      <button
+        type="submit"
+        class="ml-2 px-4 py-2 bg-white text-black font-bold hover:bg-blue-700"
+      >
+        Cerca
+      </button>
+    </form>
+    <template x-if="hexagramObject">
+      <div
+        class="max-w-4xl mx-auto py-8 flex flex-col justify-around p-6 bg-black text-white"
+      >
+        <!-- Hexagram Display -->
 
-      <div class="mt-4 text-center">
-        <p>
-          <strong>&#x25B3;</strong>
-          <span x-text="hexagramObject.wilhelm_above.symbolic + ' ' + hexagramObject.wilhelm_above.alchemical"></span>
-        </p>
-        <p>
-          <strong>&#x25BD;</strong>
-          <span x-text="hexagramObject.wilhelm_below.symbolic + ' ' + hexagramObject.wilhelm_below.alchemical"></span>
-        </p>
-      </div>
-
-      <p x-text="hexagramObject.wilhelm_symbolic" class="border-4 border-white border-double p-2 m-2">
-      </p>
-      <div class="flex flex-col md:flex-row justify-around mt-4">
-        <div class="m-2 md:w-1/2 p-2 border border-white flex flex-col" x-data="{ open: false }">
-          <h1 class="text-lg font-semibold">Judgment</h1>
-          <p x-text="hexagramObject.wilhelm_judgment.text" class="mb-2"></p>
-          <button x-on:click="open = !open" class="mt-auto w-full px-4 py-2 mb-4 text-black bg-white font-bold hover:bg-purple-500 hover:text-white">
-            Comment
-          </button>
-          <div x-show="open" x-text="hexagramObject.wilhelm_judgment.comments" class=" text-xs"></div>
+        <div class="mb-4">
+          <!-- Display Hexagram Lines -->
+          <template
+            x-for="(line, index) in hexagramBinary.split('')"
+            :key="index"
+          >
+            <div class="flex justify-center mb-2">
+              <template x-if="line === '1'">
+                <!-- Solid Line -->
+                <svg
+                  class="h-6 w-48"
+                  viewBox="0 0 100 10"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <rect x="0" y="0" width="100" height="10" fill="white" />
+                </svg>
+              </template>
+              <template x-if="line === '0'">
+                <!-- Broken Line -->
+                <svg
+                  class="h-6 w-48"
+                  viewBox="0 0 100 10"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <rect x="0" y="0" width="40" height="10" fill="white" />
+                  <rect x="60" y="0" width="40" height="10" fill="white" />
+                </svg>
+              </template>
+            </div>
+          </template>
         </div>
 
-        <div class="m-2 md:w-1/2 p-2 border border-white text-right flex flex-col" x-data="{ open: false }">
-          <h3 class="text-lg font-semibold">Image</h3>
-          <p x-text="hexagramObject.wilhelm_image.text" class="mb-2"></p>
-          <button x-on:click="open = !open" class="mt-auto w-full px-4 py-2 mb-4 text-black bg-white font-bold hover:bg-purple-500 hover:text-white">
-            Comment
-          </button>
-          <div x-show="open" x-text="hexagramObject.wilhelm_image.comments" class=" text-xs"></div>
+        <!-- Hexagram Details -->
+
+        <div class="text-center text-bold">
+          <h1 class="text-lg md:text-4xl font-bold">
+            <span x-text="hexagramObject.hex_font"></span>
+            <span x-text="hexagramObject.english"></span>
+            <span x-text="hexagramObject.trad_chinese"></span> (<span
+              x-text="hexagramObject.pinyin"
+            ></span
+            >)
+          </h1>
         </div>
-      </div>
-      <div class="mt-4 bg-black">
-        <div class="relative flex py-5 items-center text-white">
+
+        <div class="mt-4 text-center">
+          <p>
+            <strong>&#x25B3;</strong>
+            <span
+              x-text="hexagramObject.wilhelm_above.symbolic + ' ' + hexagramObject.wilhelm_above.alchemical"
+            ></span>
+          </p>
+          <p>
+            <strong>&#x25BD;</strong>
+            <span
+              x-text="hexagramObject.wilhelm_below.symbolic + ' ' + hexagramObject.wilhelm_below.alchemical"
+            ></span>
+          </p>
+        </div>
+
+        <p
+          x-text="hexagramObject.wilhelm_symbolic"
+          class="border-4 border-white border-double p-2 m-2"
+        ></p>
+        <div class="flex flex-col md:flex-row justify-around mt-4">
+          <div
+            class="m-2 md:w-1/2 p-2 border border-white flex flex-col"
+            x-data="{ open: false }"
+          >
+            <h1 class="text-lg font-semibold">Judgment</h1>
+            <p x-text="hexagramObject.wilhelm_judgment.text" class="mb-2"></p>
+            <button
+              x-on:click="open = !open"
+              class="mt-auto w-full px-4 py-2 mb-4 text-black bg-white font-bold hover:bg-purple-500 hover:text-white"
+            >
+              Comment
+            </button>
+            <div
+              x-show="open"
+              x-text="hexagramObject.wilhelm_judgment.comments"
+              class="text-xs"
+            ></div>
+          </div>
+
+          <div
+            class="m-2 md:w-1/2 p-2 border border-white text-right flex flex-col"
+            x-data="{ open: false }"
+          >
+            <h3 class="text-lg font-semibold">Image</h3>
+            <p x-text="hexagramObject.wilhelm_image.text" class="mb-2"></p>
+            <button
+              x-on:click="open = !open"
+              class="mt-auto w-full px-4 py-2 mb-4 text-black bg-white font-bold hover:bg-purple-500 hover:text-white"
+            >
+              Comment
+            </button>
+            <div
+              x-show="open"
+              x-text="hexagramObject.wilhelm_image.comments"
+              class="text-xs"
+            ></div>
+          </div>
+        </div>
+        <div class="mt-4 bg-black">
+          <div class="relative flex py-5 items-center text-white">
             <div class="flex-grow border-t border-white"></div>
             <span class="flex-shrink mx-4 text-white">Changing Lines</span>
             <div class="flex-grow border-t border-white"></div>
-        </div>
-        <template
-          x-for="(line, index) in hexagramObject.wilhelm_lines"
-          :key="index"
-        >
+          </div>
+          <template
+            x-for="(line, index) in hexagramObject.wilhelm_lines"
+            :key="index"
+          >
             <div class="mt-2">
               <p class="border-b-4 border-white">
                 <strong>Line <span x-text="index"></span></strong>
               </p>
               <p x-text="line.text"></p>
-              
-              <p x-text="line.comments"  class="text-right p-4">
-              </p>
+
+              <p x-text="line.comments" class="text-right text-sm p-4"></p>
             </div>
-        </template>
+          </template>
+        </div>
+        <div class="flex flex-col md:flex-row justify-around mt-4">
+            <div class="m-2 md:w-1/2 p-2 border border-white text-center flex flex-col" >
+              <h1 class="text-lg font-semibold pb-2">Lines Opposite</h1>
+              <template
+                x-for="(line, index) in hexagramObjectLinesOpposite?.binary.split('')"
+                :key="index"
+                x-if="hexagramObjectLinesOpposite">
+                <div class="flex justify-center mb-2">
+                  <template x-if="line === '1'">
+                    <!-- Solid Line -->
+                    <svg
+                      class="h-6 w-48"
+                      viewBox="0 0 100 10"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <rect x="0" y="0" width="100" height="10" fill="white" />
+                    </svg>
+                  </template>
+                  <template x-if="line === '0'">
+                    <!-- Broken Line -->
+                    <svg
+                      class="h-6 w-48"
+                      viewBox="0 0 100 10"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <rect x="0" y="0" width="40" height="10" fill="white" />
+                      <rect x="60" y="0" width="40" height="10" fill="white" />
+                    </svg>
+                  </template>
+                </div>
+              </template>
+              <button x-on:click="goToDescription(hexagramObjectLinesOpposite)" class="mt-auto w-full px-4 py-2 my-4 text-black bg-white font-bold hover:bg-purple-500 hover:text-white"
+              x-text="hexagramObjectLinesOpposite.english">
+                
+              </button>
+            </div>
+    
+            <div class="m-2 md:w-1/2 p-2 border border-white text-center flex flex-col">
+              <h3 class="text-lg font-semibold pb-2">Trigrams Opposite</h3>
+              <template
+                x-for="(line, index) in hexagramObjectTrigramsOpposite?.binary.split('')"
+                :key="index"
+                x-if="hexagramObjectTrigramsOpposite">
+                <div class="flex justify-center mb-2 ">
+                  <template x-if="line === '1'">
+                    <!-- Solid Line -->
+                    <svg
+                      class="h-6 w-48"
+                      viewBox="0 0 100 10"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <rect x="0" y="0" width="100" height="10" fill="white" />
+                    </svg>
+                  </template>
+                  <template x-if="line === '0'">
+                    <!-- Broken Line -->
+                    <svg
+                      class="h-6 w-48"
+                      viewBox="0 0 100 10"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <rect x="0" y="0" width="40" height="10" fill="white" />
+                      <rect x="60" y="0" width="40" height="10" fill="white" />
+                    </svg>
+                  </template>
+                </div>
+              </template>
+              <button x-on:click="goToDescription(hexagramObjectTrigramsOpposite)" class="mt-auto w-full px-4 py-2 my-4 text-black bg-white font-bold hover:bg-purple-500 hover:text-white"
+              x-text="hexagramObjectTrigramsOpposite.english">
+              </button>
+            </div>
+          </div>
       </div>
+      
+    </template>
+    <!-- Error Message if Hexagram Not Found -->
+    <div
+      x-show="!hexagramObject"
+      class="bg-black max-w-4xl mx-auto py-8 text-center text-red-500"
+    >
+      <h2 class="text-2xl">Hexagram Not Found</h2>
+      <p>Please check the binary code in the URL.</p>
+    </div>
+  </body>
 
-  </div>
-</template>
-  <!-- Error Message if Hexagram Not Found -->
-  <div x-show="!hexagramObject" class="bg-black max-w-4xl mx-auto py-8 text-center text-red-500">
-    <h2 class="text-2xl">Hexagram Not Found</h2>
-    <p>Please check the binary code in the URL.</p>
-  </div>
-</body>
-
-<script>
-    document.getElementById("binarySearchForm")
+  <script>
+    document
+      .getElementById("binarySearchForm")
       .addEventListener("submit", function (e) {
         e.preventDefault();
         const binaryCode = document.getElementById("binaryInput").value;
         if (/^[01]{6}$/.test(binaryCode)) {
-            url =
-              "/static/iching-single.html?binary=" + binaryCode;
-              console.log(url);
-            window.open(url, "_blank");
+          url = "/static/iching-single.html?binary=" + binaryCode;
+          console.log(url);
+          window.open(url, "_blank");
         } else {
           alert(
             "Please enter a valid 6-digit binary code consisting of 0s and 1s."
