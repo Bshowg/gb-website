@@ -4,4 +4,4 @@
 
 ## start local server
 
-http-server -p 8080 --spa
+python -m http.server

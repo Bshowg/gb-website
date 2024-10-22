@@ -1,239 +1,550 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>I Ching Coin Toss Simulator</title>
-    <link rel="stylesheet" href="../style.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="stylesheet" href="../style.css" />
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio"></script>
     <script>
-        // Function to simulate coin toss
-        function tossCoins() {
-            let total = 0;
-            // Simulate 3 coin tosses (heads = 3, tails = 2)
-            for (let i = 0; i < 3; i++) {
-                total += Math.random() < 0.5 ? 2 : 3;
-            }
-            // Return corresponding line: old yin, young yang, young yin, or old yang
-            if (total === 6) return 'old-yin';   // broken changing line[0->1]
-            if (total === 7) return 'young-yang'; // solid line [1]
-            if (total === 8) return 'young-yin';  // broken line [0]
-            if (total === 9) return 'old-yang';   // solid changing line [1->0]
+      // Function to simulate coin toss
+      function tossCoins() {
+        let total = 0;
+        // Simulate 3 coin tosses (heads = 3, tails = 2)
+        for (let i = 0; i < 3; i++) {
+          total += Math.random() < 0.5 ? 2 : 3;
         }
+        // Return corresponding line: old yin, young yang, young yin, or old yang
+        if (total === 6) return "old-yin"; // broken changing line[0->1]
+        if (total === 7) return "young-yang"; // solid line [1]
+        if (total === 8) return "young-yin"; // broken line [0]
+        if (total === 9) return "old-yang"; // solid changing line [1->0]
+      }
 
-        // Fetch hexagram data from a JSON file
-        async function fetchHexagrams() {
-            const response = await fetch('../data/hexagrams.json');
-            const data = await response.json();
-            return data.hexagrams;
-        }
+      // Fetch hexagram data from a JSON file
+      async function fetchHexagrams() {
+        const response = await fetch("../data/iching_data.json");
+        const data = await response.json();
+        return data;
+      }
     </script>
     <script>
-        document.addEventListener('alpine:init', () => {
-            Alpine.data('iching', () => ({
-                lines: [],
-                hexagram: [],
-                hexagramMoving: [],
-                hexagramObject: {},
-                hexagramMovingObject: {},
-                tossCount: 0,
-                throwCoins() {
-                    if (this.tossCount < 6) {
-                        const result = tossCoins();
-                        this.lines.push(result);
-                        this.tossCount++;
-                        if (this.tossCount === 6) {
-                            this.generateHexagrams();
-                        }
-                    }
-                },
-                async generateHexagrams() {
-                    this.hexagram = this.lines.map(line => line === 'old-yang' || line === 'young-yang' ? 1 : 0);
-                    this.hexagramMoving = this.lines.map(line => {
-                        if (line === 'old-yin' || line=='young-yang') return  1; // changing to yang
-                        if (line === 'old-yang' || line=='young-yin') return 0; // changing to yin
-                        return this.hexagram[this.lines.indexOf(line)]; // stays the same
-                    });
+      document.addEventListener("alpine:init", () => {
+        Alpine.data("iching", () => ({
+          lines: [],
+          hexagram: [],
+          hexagramMoving: [],
+          hexagramObject: null,
+          hexagramMovingObject: null,
+          movingLines: [],
+          tossCount: 0,
+          throwCoins() {
+            if (this.tossCount < 6) {
+              const result = tossCoins();
+              this.lines.push(result);
+              this.tossCount++;
+              if (this.tossCount === 6) {
+                this.generateHexagrams();
+              }
+            }
+          },
+          async generateHexagrams() {
+            this.hexagram = this.lines.map((line) =>
+              line === "old-yang" || line === "young-yang" ? 1 : 0
+            );
+            this.hexagramMoving = this.lines.map((line) => {
+              if (line === "old-yin" || line == "young-yang") return 1; // changing to yang
+              if (line === "old-yang" || line == "young-yin") return 0; // changing to yin
+              return this.hexagram[this.lines.indexOf(line)]; // stays the same
+            });
+            this.movingLines = this.lines.map((line) =>
+              line === "old-yin" || line === "old-yang" ? 1 : 0
+            ).reverse();
 
-                    const hexagrams = await fetchHexagrams();
+            var binarystill = this.hexagram.join("");
+            var binarymoving = this.hexagramMoving.join("");
 
-                    // Match the generated hexagram with the JSON data to find the name
-                    this.hexagramObject = this.findHexagramName(hexagrams, this.hexagram);
-                    this.hexagramMovingObject = this.findHexagramName(hexagrams, this.hexagramMoving);
-                },
-                findHexagramName(hexagrams, lines) {
-                    // Compare the lines to each hexagram in the JSON to find the correct name
-                    const hexagram = hexagrams.find(h => JSON.stringify(h.lines) === JSON.stringify(lines));
-                    return hexagram ? hexagram :{name:"Unknown Hexagram"} ;
-                },
-                goToDescription(hexagram) {
-                    url="https://www.iching-online.com/hexagrams/iching-hexagram-"+hexagram.lines.join("")+".html";
-                    window.open(url,'_blank');
-                },
-                reset() {
-                    this.lines = [];
-                    this.hexagram = [];
-                    this.hexagramMoving = [];
-                    this.hexagramName = {};
-                    this.hexagramMovingName = {};
-                    this.tossCount = 0;
-                }
-            }))
-        });
+            const hexagrams = await fetchHexagrams();
+
+            // Match the generated hexagram with the JSON data to find the name
+            this.hexagramObject = this.findHexagramName(hexagrams, binarystill);
+            this.hexagramMovingObject = this.findHexagramName(
+              hexagrams,
+              binarymoving
+            );
+          },
+          findHexagramName(hexagrams, lines) {
+            // Compare the lines to each hexagram in the JSON to find the correct name
+            const hexagram = hexagrams.find((h) => h.binary == lines);
+            return hexagram ? hexagram : { english: "Unknown Hexagram" };
+          },
+          goToDescription(hexagram) {
+            url =
+              "https://www.iching-online.com/hexagrams/iching-hexagram-" +
+              hexagram.binary +
+              ".html";
+            window.open(url, "_blank");
+          },
+          reset() {
+            this.lines = [];
+            this.hexagram = [];
+            this.hexagramMoving = [];
+            this.hexagramName = {};
+            this.hexagramMovingName = {};
+            this.tossCount = 0;
+          },
+        }));
+      });
     </script>
-</head>
-<body class="notebook">
-    <header class="text-center py-8 hero bg-bottom bg-cover  max-w-4xl mx-auto pb-8 flex items-center flex-col" >
-        <div class="m-auto">
-        <h1 class="text-3xl md:text-5xl font-bold tracking-wide text-white tracking-tighter ">GIANMARCHISSIMO</h1>
+  </head>
+  <body class="notebook">
+    <header
+      class="text-center py-8 hero bg-bottom bg-cover max-w-4xl mx-auto pb-8 flex items-center flex-col"
+    >
+      <div class="m-auto">
+        <h1
+          class="text-3xl md:text-5xl font-bold tracking-wide text-white tracking-tighter"
+        >
+          GIANMARCHISSIMO
+        </h1>
         <nav class="mt-4">
-            <ul class="flex justify-center space-x-4">
-                <li><a href="/" class="hover:underline text-white">Home</a></li>
-                <li><a href="/static/contacts.html" class="hover:underline text-white">Contacts</a></li>
-                <li><a href="/static/oracle.html" class="hover:underline text-white">Oracolo</a></li>
-                <li><a href="/static/iching.html" class="hover:underline text-white">I King</a></li>
-                <!--<li><a href="#" class="hover:underline">Business</a></li>
+          <ul class="flex justify-center space-x-4">
+            <li><a href="/" class="hover:underline text-white">Home</a></li>
+            <li>
+              <a href="/static/contacts.html" class="hover:underline text-white"
+                >Contacts</a
+              >
+            </li>
+            <li>
+              <a href="/static/oracle.html" class="hover:underline text-white"
+                >Oracolo</a
+              >
+            </li>
+            <li>
+              <a href="/static/iching.html" class="hover:underline text-white"
+                >I King</a
+              >
+            </li>
+            <!--<li><a href="#" class="hover:underline">Business</a></li>
                 <li><a href="#" class="hover:underline">Culture</a></li>
                 <li><a href="#" class="hover:underline">Sports</a></li>-->
-            </ul>
+          </ul>
         </nav>
-    </div>
+      </div>
     </header>
-    <header class=" max-w-4xl mx-auto pb-8 flex items-center flex-col text-center py-12  bg-white">
-        <h1 class="text-5xl font-bold " id="subtitle">I KING</h1>
-        <p class="text-center">Millenaria Saggezza</p>
-
-        
+    <header
+      class="max-w-4xl mx-auto pb-8 flex items-center flex-col text-center py-12 bg-white"
+    >
+      <h1 class="text-5xl font-bold" id="subtitle">I KING</h1>
+      <p class="text-center">Millenaria Saggezza</p>
     </header>
-    <img src="../imgs/iching.webp" alt="" class="md:max-w-4xl mx-auto h-auto img_hero"> 
+    <img
+      src="../imgs/iching.webp"
+      alt=""
+      class="visible md:hidden mx-auto h-auto img_hero"
+    />
     <!-- Main content with two columns -->
-    <div class="max-w-4xl mx-auto py-8 flex flex-col md:flex-row justify-around">
-       
+    <div x-data="iching">
+      <div
+        class="max-w-4xl mx-auto py-8 flex flex-col md:flex-row justify-around"
+      >
         <!-- Left column: Italian explanation -->
         <div class="md:w-1/3 p-4 bg-black text-white">
-            <h2 class="text-2xl font-bold mb-4"> I King</h2>
-            <p class="mb-4">
-                L'I King, o I Ching, o "Libro dei Mutamenti", è un antico testo cinese utilizzato per la divinazione e come fonte di saggezza filosofica. Composto da 64 esagrammi, ognuno rappresenta una situazione archetipica che offre consigli per affrontare le sfide della vita.
-            </p>
-            <p class="mb-4">
-                Consultare l'I Ching implica porre una domanda e lanciare monete o bastoncini per generare un esagramma. Questo esagramma fornisce una risposta simbolica che richiede interpretazione, aiutando a riflettere sulle proprie circostanze e decisioni.
-            </p>
-            <p class="mb-4">
-                Questo strumento facilita l'estrazione delle linee e la generazione degli esagrammi corrispondenti, fisso e mobile.
-            </p>
-            <p>
-                L'esagramma fisso risponde alla tua domanda se tutte le cose che nella tua vita sono ferme, rimanessero ferme. Mentre quello mobile al contrario risponde se tutte le cose che sono in movimento rimanessero in movimento.
-            </p>
+          <h2 class="text-2xl font-bold mb-4">I King</h2>
+          <p class="mb-4">
+            L'I King, o I Ching, o "Libro dei Mutamenti", è un antico testo
+            cinese utilizzato per la divinazione e come fonte di saggezza
+            filosofica. Composto da 64 esagrammi, ognuno rappresenta una
+            situazione archetipica che offre consigli per affrontare le sfide
+            della vita.
+          </p>
+          <p class="mb-4">
+            Consultare l'I Ching implica porre una domanda e lanciare monete o
+            bastoncini per generare un esagramma. Questo esagramma fornisce una
+            risposta simbolica che richiede interpretazione, aiutando a
+            riflettere sulle proprie circostanze e decisioni.
+          </p>
+          <p class="mb-4">
+            Questo strumento facilita l'estrazione delle linee e la generazione
+            degli esagrammi corrispondenti, fisso e mobile.
+          </p>
+          <p>
+            L'esagramma fisso risponde alla tua domanda se tutte le cose che
+            nella tua vita sono ferme, rimanessero ferme. Mentre quello mobile
+            al contrario risponde se tutte le cose che sono in movimento
+            rimanessero in movimento.
+          </p>
         </div>
 
         <!-- Right column: I Ching Coin Toss Simulator -->
-        <div x-data="iching" class="md:w-1/2 p-6 bg-black text-white text-center">
-        <h1 class="text-xl font-bold mb-4 text-white">Fai una domanda a I King</h1>
-        <div class="mb-4" style="height: 200px;">
+        <div class="md:w-1/2 p-6 bg-black text-white text-center">
+          <h1 class="text-xl font-bold mb-4 text-white">
+            Fai una domanda a I King
+          </h1>
+          <div class="mb-4" style="height: 200px">
             <template x-for="(line, index) in lines" :key="index">
-                <div class="flex justify-center mb-2">
-                    <template x-if="line === 'young-yang'">
-                        <svg class="h-6 w-48" viewBox="0 0 100 10" xmlns="http://www.w3.org/2000/svg">
-                            <rect x="0" y="0" width="100" height="10" fill="white"/>
-                        </svg>
-                    </template>
-                    <template x-if="line === 'young-yin'">
-                        <svg class="h-6 w-48" viewBox="0 0 100 10" xmlns="http://www.w3.org/2000/svg">
-                            <rect x="0" y="0" width="40" height="10" fill="white"/>
-                            <rect x="60" y="0" width="40" height="10" fill="white"/>
-                        </svg>
-                    </template>
-                    <template x-if="line === 'old-yang'">
-                        <svg class="h-6 w-48" viewBox="0 0 100 10" xmlns="http://www.w3.org/2000/svg">
-                           
-                            <rect x="0" y="0" width="100" height="10" fill="white"/>
-                            <line x1="40" y1="-5" x2="60" y2="15" style="stroke:black;stroke-width:3" />
-                            <line x1="60" y1="-5" x2="40" y2="15" style="stroke:black;stroke-width:3" />
-
-                        </svg>
-                    </template>
-                    <template x-if="line === 'old-yin'">
-                        <svg class="h-6 w-48" viewBox="0 0 100 10" xmlns="http://www.w3.org/2000/svg">
-                            <rect x="0" y="0" width="40" height="10" fill="white"/>
-                            <circle r="5" cx="50" cy="5" fill="white" />
-                            <rect x="60" y="0" width="40" height="10" fill="white"/>
-                        </svg>
-                    </template>
-                </div>
+              <div class="flex justify-center mb-2">
+                <template x-if="line === 'young-yang'">
+                  <svg
+                    class="h-6 w-48"
+                    viewBox="0 0 100 10"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <rect x="0" y="0" width="100" height="10" fill="white" />
+                  </svg>
+                </template>
+                <template x-if="line === 'young-yin'">
+                  <svg
+                    class="h-6 w-48"
+                    viewBox="0 0 100 10"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <rect x="0" y="0" width="40" height="10" fill="white" />
+                    <rect x="60" y="0" width="40" height="10" fill="white" />
+                  </svg>
+                </template>
+                <template x-if="line === 'old-yang'">
+                  <svg
+                    class="h-6 w-48"
+                    viewBox="0 0 100 10"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <rect x="0" y="0" width="100" height="10" fill="white" />
+                    <line
+                      x1="40"
+                      y1="-5"
+                      x2="60"
+                      y2="15"
+                      style="stroke: black; stroke-width: 3"
+                    />
+                    <line
+                      x1="60"
+                      y1="-5"
+                      x2="40"
+                      y2="15"
+                      style="stroke: black; stroke-width: 3"
+                    />
+                  </svg>
+                </template>
+                <template x-if="line === 'old-yin'">
+                  <svg
+                    class="h-6 w-48"
+                    viewBox="0 0 100 10"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <rect x="0" y="0" width="40" height="10" fill="white" />
+                    <circle r="5" cx="50" cy="5" fill="white" />
+                    <rect x="60" y="0" width="40" height="10" fill="white" />
+                  </svg>
+                </template>
+              </div>
             </template>
-        </div>
+          </div>
 
-        <button 
+          <button
             x-on:click="throwCoins"
             x-show="tossCount != 6"
-            class="w-full px-4 py-2 mb-4 text-black bg-white font-bold hover:bg-purple-500 hover:text-white">
-        
+            class="w-full px-4 py-4 mb-4 text-black bg-white font-bold hover:bg-purple-500 hover:text-white"
+          >
             Estrai Linea
-        </button>
+          </button>
 
-        <template x-if="tossCount === 6">
-            <div >
-                <div class="p-6 border-2 border-white">
-                <h2 class="text-lg font-bold text-center text-white">Hexagram (Still)</h2>
+          <template x-if="tossCount === 6">
+            <div>
+              <div class="p-6 border-2 border-white">
+                <h2 class="text-lg font-bold text-center text-white">
+                  Hexagram (Still)
+                </h2>
                 <div class="flex flex-col items-center mb-4">
-                    <template x-for="line in hexagram" >
-                        <div class="mt-2">
-                            <template x-if="line === 1">
-                                <svg class="h-6 w-48" viewBox="0 0 100 10" xmlns="http://www.w3.org/2000/svg">
-                                    <rect x="0" y="0" width="100" height="10" fill="white"/>
-                                </svg>
-                            </template>
-                            <template x-if="line === 0">
-                                <svg class="h-6 w-48" viewBox="0 0 100 10" xmlns="http://www.w3.org/2000/svg">
-                                    <rect x="0" y="0" width="40" height="10" fill="white"/>
-                                    <rect x="60" y="0" width="40" height="10" fill="white"/>
-                                </svg>
-                            </template>
-                        </div>
-                    </template>
+                  <template x-for="line in hexagram">
+                    <div class="mt-2">
+                      <template x-if="line === 1">
+                        <svg
+                          class="h-6 w-48"
+                          viewBox="0 0 100 10"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <rect
+                            x="0"
+                            y="0"
+                            width="100"
+                            height="10"
+                            fill="white"
+                          />
+                        </svg>
+                      </template>
+                      <template x-if="line === 0">
+                        <svg
+                          class="h-6 w-48"
+                          viewBox="0 0 100 10"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <rect
+                            x="0"
+                            y="0"
+                            width="40"
+                            height="10"
+                            fill="white"
+                          />
+                          <rect
+                            x="60"
+                            y="0"
+                            width="40"
+                            height="10"
+                            fill="white"
+                          />
+                        </svg>
+                      </template>
+                    </div>
+                  </template>
                 </div>
-            
-            
 
-                <button 
-                    x-on:click="goToDescription(hexagramObject)"
-                    x-show="tossCount == 6"
-                    class="w-full px-4 py-2 my-4 text-black bg-white font-bold hover:bg-purple-500 hover:text-white"
-                    x-text="hexagramObject.name">
-                </button>
-            </div>
-                <div class="p-6 border-2 border-white">
-                <h2 class="text-lg font-bold text-center text-white">Hexagram (Moving)</h2>
+                <button
+                  x-on:click="goToDescription(hexagramObject)"
+                  x-show="tossCount == 6"
+                  class="w-full px-4 py-4 my-4 text-black bg-white font-bold hover:bg-purple-500 hover:text-white"
+                  x-text="hexagramObject.english"
+                ></button>
+              </div>
+              <div class="p-6 border-2 border-white">
+                <h2 class="text-lg font-bold text-center text-white">
+                  Hexagram (Moving)
+                </h2>
                 <div class="flex flex-col items-center mb-4">
-                    <template x-for="line in hexagramMoving" >
-                        <div class="mt-2">
-                            <template x-if="line === 1">
-                                <svg class="h-6 w-48" viewBox="0 0 100 10" xmlns="http://www.w3.org/2000/svg">
-                                    <rect x="0" y="0" width="100" height="10" fill="white"/>
-                                </svg>
-                            </template>
-                            <template x-if="line === 0">
-                                <svg class="h-6 w-48" viewBox="0 0 100 10" xmlns="http://www.w3.org/2000/svg">
-                                    <rect x="0" y="0" width="40" height="10" fill="white"/>
-                                    <rect x="60" y="0" width="40" height="10" fill="white"/>
-                                </svg>
-                            </template>
-                        </div>
-                    </template>
+                  <template x-for="line in hexagramMoving">
+                    <div class="mt-2">
+                      <template x-if="line === 1">
+                        <svg
+                          class="h-6 w-48"
+                          viewBox="0 0 100 10"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <rect
+                            x="0"
+                            y="0"
+                            width="100"
+                            height="10"
+                            fill="white"
+                          />
+                        </svg>
+                      </template>
+                      <template x-if="line === 0">
+                        <svg
+                          class="h-6 w-48"
+                          viewBox="0 0 100 10"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <rect
+                            x="0"
+                            y="0"
+                            width="40"
+                            height="10"
+                            fill="white"
+                          />
+                          <rect
+                            x="60"
+                            y="0"
+                            width="40"
+                            height="10"
+                            fill="white"
+                          />
+                        </svg>
+                      </template>
+                    </div>
+                  </template>
                 </div>
 
-                <h2 class="text-lg font-bold text-center text-white" ></h2>
-                <button 
-                    x-on:click="goToDescription(hexagramMovingObject)"
-                    x-show="tossCount == 6"
-                    class="w-full px-4 py-4 my-4 text-black bg-white font-bold hover:bg-purple-500 hover:text-white"
-                    x-text="hexagramMovingObject.name">
-                </button>
-                </div>
+                <h2 class="text-lg font-bold text-center text-white"></h2>
+                <button
+                  x-on:click="goToDescription(hexagramMovingObject)"
+                  x-show="tossCount == 6"
+                  class="w-full px-4 py-4 my-4 text-black bg-white font-bold hover:bg-purple-500 hover:text-white"
+                  x-text="hexagramMovingObject.english"
+                ></button>
+              </div>
             </div>
-        </template>
+          </template>
+        </div>
+      </div>
+      <template x-if="hexagramObject">
+        <div class="mt-8 bg-black text-white max-w-4xl mx-auto p-8">
+          <div class="text-center text-bold">
+            <h1 class="text-lg md:text-4xl font-bold">
+              <span x-text="hexagramObject.hex_font"></span>
+              <span x-text="hexagramObject.english"></span>
+              <span x-text="hexagramObject.trad_chinese"></span> (<span
+                x-text="hexagramObject.pinyin"
+              ></span
+              >)
+            </h1>
+          </div>
+
+          <div class="mt-4 text-center">
+            <p>
+              <strong>&#x25B3;</strong>
+              <span
+                x-text="hexagramObject.wilhelm_above.symbolic + ' '+hexagramObject.wilhelm_above.alchemical"
+              ></span>
+            </p>
+            <p>
+              <strong>&#x25BD;</strong>
+              <span
+                x-text="hexagramObject.wilhelm_below.symbolic + ' '+hexagramObject.wilhelm_below.alchemical"
+              ></span>
+            </p>
+            <!--<p>
+              <strong>Symbolic:</strong>
+              <span x-text="hexagramObject.wilhelm_symbolic"></span>
+            </p>-->
+          </div>
+          <div class="flex flex-col md:flex-row justify-around">
+            <div
+              class="m-2 md:w-1/2 p-2 border border-white flex flex-col"
+              x-data="{open:false}"
+            >
+              <h1 class="text-lg font-semibold">Judgment</h1>
+              <p x-text="hexagramObject.wilhelm_judgment.text" class="mb-2"></p>
+              <button
+                x-on:click="open = !open"
+                class="mt-auto w-full px-4 py-4 mb-4 text-black bg-white font-bold hover:bg-purple-500 hover:text-white"
+              >
+                Comment
+              </button>
+
+              <div
+                x-show="open"
+                x-text="hexagramObject.wilhelm_judgment.comments"
+              ></div>
+            </div>
+
+            <div
+              class="m-2 md:w-1/2 p-2 border border-white text-right flex flex-col"
+              x-data="{open:false}"
+            >
+              <h3 class="text-lg font-semibold">Image</h3>
+              <p x-text="hexagramObject.wilhelm_image.text" class="mb-2"></p>
+              <button
+                x-on:click="open = !open"
+                class="mt-auto w-full px-4 py-4 mb-4 text-black bg-white font-bold hover:bg-purple-500 hover:text-white"
+              >
+                Comment
+              </button>
+
+              <div
+                x-show="open"
+                x-text="hexagramObject.wilhelm_image.comments"
+              ></div>
+            </div>
+          </div>
+          <div class="mt-4 bg-black">
+            <div class="relative flex py-5 items-center text-white">
+                <div class="flex-grow border-t border-white"></div>
+                <span class="flex-shrink mx-4 text-white">Changing Lines</span>
+                <div class="flex-grow border-t border-white"></div>
+            </div>
+            <template
+              x-for="(line, index) in hexagramObject.wilhelm_lines"
+              :key="index"
+            >
+              <template x-if="movingLines[Number(index)-1]==1">
+                <div class="mt-2 " x-data="{open:false}">
+                  <p class="border-b-4 border-white">
+                    <strong>Line <span x-text="index"></span></strong>
+                  </p>
+                  <p x-text="line.text"></p>
+                  <button
+                x-on:click="open = !open"
+                class="mt-4 w-full px-4 py-4 mb-4 text-black bg-white font-bold hover:bg-purple-500 hover:text-white"
+              >
+                Comment
+              </button>
+                  <p x-text="line.comments" x-show="open" class="border-2 border-white border-double p-2">
+                  </p>
+                </div>
+              </template>
+            </template>
+          </div>
+        </div>
+        
+      </template>
+
+      <template x-if="hexagramMovingObject">
+        <div class="mt-8 bg-black text-white max-w-4xl mx-auto p-8">
+          <div class="text-center text-bold">
+            <h1 class="text-lg md:text-4xl font-bold">
+              <span x-text="hexagramMovingObject.hex_font"></span>
+              <span x-text="hexagramMovingObject.english"></span>
+              <span x-text="hexagramMovingObject.trad_chinese"></span> (<span
+                x-text="hexagramMovingObject.pinyin"
+              ></span
+              >)
+            </h1>
+          </div>
+
+          <div class="mt-4 text-center">
+            <p>
+              <strong>&#x25B3;</strong>
+              <span
+                x-text="hexagramMovingObject.wilhelm_above.symbolic + ' '+hexagramMovingObject.wilhelm_above.alchemical"
+              ></span>
+            </p>
+            <p>
+              <strong>&#x25BD;</strong>
+              <span
+                x-text="hexagramMovingObject.wilhelm_below.symbolic + ' '+hexagramMovingObject.wilhelm_below.alchemical"
+              ></span>
+            </p>
+            <!--<p>
+              <strong>Symbolic:</strong>
+              <span x-text="hexagramObject.wilhelm_symbolic"></span>
+            </p>-->
+          </div>
+          <div class="flex flex-col md:flex-row justify-around">
+            <div
+              class="m-2 md:w-1/2 p-2 border border-white flex flex-col"
+              x-data="{open:false}"
+            >
+              <h1 class="text-lg font-semibold">Judgment</h1>
+              <p x-text="hexagramMovingObject.wilhelm_judgment.text" class="mb-2"></p>
+              <button
+                x-on:click="open = !open"
+                class="mt-auto w-full px-4 py-4 mb-4 text-black bg-white font-bold hover:bg-purple-500 hover:text-white"
+              >
+                Comment
+              </button>
+
+              <div
+                x-show="open"
+                x-text="hexagramMovingObject.wilhelm_judgment.comments"
+              ></div>
+            </div>
+
+            <div
+              class="m-2 md:w-1/2 p-2 border border-white text-right flex flex-col"
+              x-data="{open:false}"
+            >
+              <h3 class="text-lg font-semibold">Image</h3>
+              <p x-text="hexagramMovingObject.wilhelm_image.text" class="mb-2"></p>
+              <button
+                x-on:click="open = !open"
+                class="mt-auto w-full px-4 py-4 mb-4 text-black bg-white font-bold hover:bg-purple-500 hover:text-white"
+              >
+                Comment
+              </button>
+
+              <div
+                x-show="open"
+                x-text="hexagramMovingObject.wilhelm_image.comments"
+              ></div>
+            </div>
+          </div>
+        </div>
+        
+      </template>
     </div>
-
-</body>
+  </body>
 </html>
