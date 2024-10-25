@@ -114,8 +114,8 @@ svg {
   max-width: 80%;
   margin: 20px auto;
   background-image:
-      linear-gradient(to right, #a1a1a1 1px, transparent 1px),
-      linear-gradient(to bottom, #a1a1a1 1px, transparent 1px);
+      linear-gradient(to right, #d5d3d3 1px, transparent 1px),
+      linear-gradient(to bottom, #d3d3d3 1px, transparent 1px);
     background-size: 20px 20px;
 }
 
