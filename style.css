@@ -111,6 +111,8 @@ svg {
   border-left: 4px solid #ccc;
   color: #333;
   background-color: #f9f9f9;
+  max-width: 80%;
+  margin: 20px auto;
 }
 
 .quote::before {
