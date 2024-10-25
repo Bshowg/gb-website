@@ -113,6 +113,10 @@ svg {
   background-color: #f9f9f9;
   max-width: 80%;
   margin: 20px auto;
+  background-image:
+      linear-gradient(to right, #a1a1a1 1px, transparent 1px),
+      linear-gradient(to bottom, #a1a1a1 1px, transparent 1px);
+    background-size: 20px 20px;
 }
 
 .quote::before {
