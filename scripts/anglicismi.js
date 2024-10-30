@@ -97,7 +97,7 @@ svg
   .data(data_ready)
   .join('path')
   .attr('d', d3.arc()
-    .innerRadius(width/3)         // This is the size of the donut hole
+    .innerRadius(width/5)         // This is the size of the donut hole
     .outerRadius(radius)
   )
   .attr('fill', d => color(d.data[0]))
@@ -112,7 +112,7 @@ svg
    .style("font-size", "16px")
    
    .style("fill","white")
-   .text("Distribuzione dei neologismi in italiano nel 2017");
+   .text("Distribuzione dei neologismi in  italiano nel 2017");
 
  // Add a legend
  const legend_labels=["Direttamente in inglese","Altro"]
