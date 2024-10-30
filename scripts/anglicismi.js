@@ -57,10 +57,11 @@ svg.append("g")
     .attr("fill", "white")
 
     svg.append("text")
+    .attr("x", width / 2)
+    .attr("y", 0 - (margin.top / 2))
     .attr("text-anchor", "middle")
-    .attr("y", -radius - 20)
     .style("font-size", "16px")
-    .style("fill","white")
+    .attr("fill", "white")  // Changed from "color" to "fill"
     .text("Numero di anglicismi nel Devoto Oli");
   }
 
