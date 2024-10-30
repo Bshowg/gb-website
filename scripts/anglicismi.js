@@ -62,7 +62,7 @@ svg.append("g")
     .attr("text-anchor", "middle")
     .style("font-size", "16px")
     .attr("fill", "white")  // Changed from "color" to "fill"
-    .text("Numero di anglicismi nel Devoto Oli per anno");
+    .text("Numero di anglicismi nel Devoto Oli");
   }
 
   function addNeologismi(){
@@ -112,7 +112,7 @@ svg
    .style("font-size", "16px")
    
    .style("fill","white")
-   .text("Distribuzione dei neologismi in  italiano nel 2017");
+   .text("Distribuzione dei neologismi nel 2017");
 
  // Add a legend
  const legend_labels=["Direttamente in inglese","Altro"]
