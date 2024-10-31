@@ -31,7 +31,7 @@ window.addEventListener('load', async () => {
     console.log(routes);
     const router = async () => {
     const path = window.location.pathname;
-    const route = routes[path] || routes["/"];
+    var route = routes[path] || routes["/"];
     route="/articles"+route;
     try {
         const html = await fetch(route).then(response => {
@@ -42,7 +42,7 @@ window.addEventListener('load', async () => {
             return response.text();
         });
         document.querySelector('#app').innerHTML = html;
-        let js_path="scripts/"+path.replace("/","")+".js"
+        let js_path="scripts"+path+".js"
         const js=await fetch(js_path).then(response=>{
             if(response.ok){
                 const script = document.createElement('script');
