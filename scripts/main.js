@@ -76,7 +76,7 @@ function addArticle(parser, html, article) {
                                 <!-- Skeleton Loader -->
                                 <div
                                     x-show="isLoading"
-                                    class="  w-full aspect-[16/9] absolute bg-black animate-pulse"
+                                    class="  w-full aspect-[16/9] absolute bg-black "
                                 ></div>
 
                                 <!-- Image -->
