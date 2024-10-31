@@ -33,6 +33,7 @@ window.addEventListener('load', async () => {
     const path = window.location.pathname;
     var route = routes[path] || routes["/"];
     route="articles/"+route;
+    
     try {
         const html = await fetch(route).then(response => {
             if (!response.ok) {
