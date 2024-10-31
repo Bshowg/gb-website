@@ -72,7 +72,22 @@ function addArticle(parser, html, article) {
     const articleHTML = `
                         <article class="bg-black">
 
-                            <img src=${img} alt=${img} class="w-full h-auto mb-8 img_hero">
+                            <div x-data="{ isLoading: true }" class="relative">
+                                <!-- Skeleton Loader -->
+                                <div
+                                    x-show="isLoading"
+                                    class="aspect-w-16 aspect-h-9 absolute bg-gray-300 animate-pulse"
+                                ></div>
+
+                                <!-- Image -->
+                                <img
+                                    src=${img}
+                                    @load="isLoading = false"
+                                    x-show="!isLoading"
+                                    class="w-full h-full object-cover"
+                                    alt=${img}
+                                />
+                            </div>
                             <div class=" p-6">
                                 <h3 class="text-xl font-bold mb-4 text-white">${title}</h3>
                                 <p class="mb-4 text-white">${excerpt}</p>
