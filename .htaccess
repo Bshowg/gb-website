@@ -17,5 +17,7 @@ RewriteRule ^ - [L]
 
 # Handle SPA exceptions
 RewriteCond %{REQUEST_URI} !^/static
+# Exclude .js files from SPA fallback
+RewriteCond %{REQUEST_URI} !\.js$  
 # Handle SPA fallback
 RewriteRule ^ index.html [L]
