@@ -28,7 +28,7 @@ function articleLoader() {
             console.log(articles);
             articles.pop(1);
             articles.forEach(article => {
-                fetch(`/articles${article.file}`)
+                fetch(`articles/${article.file}`)
                     .then(response => response.text())
                     .then(html => {
                         const parser = new DOMParser();
