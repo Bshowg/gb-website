@@ -200,14 +200,14 @@ svg {
 
   .book {
     margin: 0 auto;
-  
+    background-color: white;
     columns: 22rem auto;
     column-gap: 1.5rem;
   
     background: white;
   }
 
-  .book h3 {
+  .book h1 {
     width: 15rem;
     margin: 3rem 0 6rem 0;
     padding: 0.5rem;
