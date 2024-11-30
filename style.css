@@ -66,6 +66,13 @@ a.link{
     background-color: white;
     color:black;
 }
+
+p{
+    text-align: justify;
+    font-family: 'Old Standard TT', serif;
+    font-size: 1.125rem; /* 18px */
+    line-height: 1.5rem; /* 24px */
+}
 .news-header {
     font-family: 'Old Standard TT', serif;
 }
