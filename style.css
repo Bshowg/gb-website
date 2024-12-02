@@ -260,12 +260,10 @@ svg {
     margin: 0.1em 0.1em 0.2em 0;
     padding: 0.1em;
   }
-  .dropcap:before,
-  .dropcap:after {
     
   @media screen and (max-width: 600px) {
     .left-bubble, .right-bubble {
       max-width: 90%;
     }
-    
   }
+  
