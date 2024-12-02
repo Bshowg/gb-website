@@ -215,8 +215,6 @@ svg {
 
   .book .wine-glass {
     float: right;
-  
-    margin-right: -11rem;
     height: 33rem;
   
     shape-outside: url("/imgs/graphics/wine_glass.png");
