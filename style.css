@@ -213,6 +213,16 @@ svg {
     background: white;
   }
 
+  .book .wine-glass {
+    float: right;
+  
+    margin-right: -11rem;
+    height: 33rem;
+  
+    shape-outside: url("/imgs/graphics/wine_glass.png");
+    shape-margin: 2rem;
+  }
+
   .book h1 {
     margin: 3rem 0 6rem 0;
     padding: 0.5rem;
