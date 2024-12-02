@@ -218,7 +218,8 @@ svg {
     height: 20rem;
   
     shape-outside: url("/imgs/graphics/wine_glass.png");
-    shape-margin: 2rem;
+    shape-image-threshold: 0.5;
+    shape-margin: 1rem;
   }
 
   .book h1 {
