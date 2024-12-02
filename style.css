@@ -69,9 +69,8 @@ a.link{
 
 p{
     text-align: justify;
-    font-family: 'Old Standard TT', serif;
-    font-size: 1.125rem; /* 18px */
-    line-height: 1.5rem; /* 24px */
+    margin: 1rem 0;
+    line-height: 1.5rem;
 }
 .news-header {
     font-family: 'Old Standard TT', serif;
