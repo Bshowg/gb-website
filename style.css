@@ -260,6 +260,34 @@ svg {
     margin: 0.1em 0.1em 0.2em 0;
     padding: 0.1em;
   }
+
+  .paper{
+    font-family: 'Georgia', serif;
+            line-height: 1.6;
+            margin: 2em auto;
+            padding: 0 2em;
+            max-width: 800px;
+            background-color: #f9f9f9;
+            color: #333;
+  }
+  .paper  h1 {
+    font-size: 2em;
+    margin-bottom: 0.5em;
+    text-align: center;
+}
+.paper h2 {
+    font-size: 1.5em;
+    margin-top: 1.5em;
+    margin-bottom: 0.75em;
+}
+.paper h3 {
+    font-size: 1.25em;
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+}
+.paper p {
+    margin-bottom: 1em;
+}
     
   @media screen and (max-width: 600px) {
     .left-bubble, .right-bubble {
