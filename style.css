@@ -270,21 +270,20 @@ svg {
     line-height: 1.6;
     margin: 2em auto;
     padding: 0 2em;
-    max-width: 800px;
     background-color: #f9f9f9;
     color: #333;
   }
-  .paper  h1 {
+  .paperwrapper  h1 {
     font-size: 2em;
     margin-bottom: 0.5em;
     text-align: center;
 }
-.paper h2 {
+.paper-wrapper h2 {
     font-size: 1.5em;
     margin-top: 1.5em;
     margin-bottom: 0.75em;
 }
-.paper h3 {
+.paper-wrapper h3 {
     font-size: 1.25em;
     margin-top: 1em;
     margin-bottom: 0.5em;
@@ -308,6 +307,10 @@ svg {
   @media screen and (max-width: 600px) {
     .left-bubble, .right-bubble {
       max-width: 90%;
+    }
+
+    .paper{
+      margin: 5px 5px;
     }
   }
   
