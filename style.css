@@ -260,10 +260,12 @@ svg {
     margin: 0.1em 0.1em 0.2em 0;
     padding: 0.1em;
   }
+  .paper-wrapper{
 
+    background-color: white;
+  }
   .paper{
     margin: 0 auto;
-    background-color: white;
     columns: 22rem auto;
     column-gap: 1.5rem;
     font-family: 'Georgia', serif;
@@ -310,7 +312,7 @@ svg {
     }
 
     .paper{
-      margin: 5px 5px;
+      padding: 5px 5px;
     }
   }
   
