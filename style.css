@@ -262,7 +262,7 @@ svg {
   }
   .paper-wrapper{
 
-    background-color: white;
+    background-color: #f9f9f9;
   }
   .paper{
     margin: 0 auto;
@@ -272,10 +272,10 @@ svg {
     line-height: 1.6;
     margin: 2em auto;
     padding: 0 2em;
-    background-color: #f9f9f9;
+    
     color: #333;
   }
-  .paperwrapper  h1 {
+  .paper-wrapper  h1 {
     font-size: 2em;
     margin-bottom: 0.5em;
     text-align: center;
@@ -312,7 +312,7 @@ svg {
     }
 
     .paper{
-      padding: 5px 5px;
+      padding: 1.5rem 1.5rem;
     }
   }
   
