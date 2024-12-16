@@ -31,7 +31,7 @@ function articleLoader() {
             const articlePromises = articles.map(article => fetch(`articles/${article.file}`).then(response => response.text()));
             const articleContents = await Promise.all(articlePromises);
             const articleData = articles.map((article, index) => ({ ...article, content: articleContents[index] }));
-            articleData.sort((a, b) => a.order - b.order);
+            articleData.sort((a, b) => b.order-a.order);
             articleData.forEach(article => addArticle(parser, article.content, article));
         }
     };
