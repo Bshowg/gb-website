@@ -14,7 +14,7 @@ if ($conn->connect_error) {
 }
 
 // SQL to fetch articles
-$sql = "SELECT * FROM articles Order by id desc";
+$sql = "SELECT * FROM articles ORDER BY id DESC";
 $result = $conn->query($sql);
 
 $articles = [];
@@ -33,4 +33,3 @@ echo json_encode($articles);
 
 $conn->close();
 ?>
-

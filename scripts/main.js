@@ -93,5 +93,5 @@ function addArticle(parser, html, article) {
                             </div>
                         </article>
                     `;
-    document.getElementById('articlesContainer').innerHTML += articleHTML;
+    document.getElementById('articlesContainer').innerHTML = articleHTML + document.getElementById('articlesContainer').innerHTML;
 }
