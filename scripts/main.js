@@ -1,4 +1,3 @@
-// main.js
 document.addEventListener('alpine:init', () => {
     Alpine.data('routerOutlet', () => ({
         init() {
@@ -21,23 +20,19 @@ async function getArticlesPhp() {
     
     return json;
 }
+
 function articleLoader() {
     return {
         async loadArticles() {
-            const articles =await getArticlesPhp(); // Add more as needed
+            const articles = await getArticlesPhp(); // Get articles from PHP
             console.log(articles);
             articles.pop(1);
-            articles.forEach(article => {
-                fetch(`articles/${article.file}`)
-                    .then(response => response.text())
-                    .then(html => {
-                        const parser = new DOMParser();
-                        addArticle(parser, html, article);
-                    })
-                    .catch(error => {
-                        console.error('Error fetching article:', error);
-                    });
-            });
+            const parser = new DOMParser();
+            const articlePromises = articles.map(article => fetch(`articles/${article.file}`).then(response => response.text()));
+            const articleContents = await Promise.all(articlePromises);
+            const articleData = articles.map((article, index) => ({ ...article, content: articleContents[index] }));
+            articleData.sort((a, b) => a.order - b.order);
+            articleData.forEach(article => addArticle(parser, article.content, article));
         }
     };
 }
