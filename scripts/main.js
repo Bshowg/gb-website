@@ -7,26 +7,25 @@ document.addEventListener('alpine:init', () => {
     }));
 });
 
-async function getArticlesPhp() {
-    
-    let json=await fetch("./php/get_articles.php").then(response => {
-            
+let currentPage = 1;
+const articlesPerPage = 5;
+
+async function getArticlesPhp(limit = articlesPerPage, offset = 0) {
+    let json = await fetch(`./php/get_articles.php?limit=${limit}&offset=${offset}`).then(response => {
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
         console.log("done")
         return response.json();
     })
-    
     return json;
 }
 
 function articleLoader() {
     return {
         async loadArticles() {
-            const articles = await getArticlesPhp(); // Get articles from PHP
+            const articles = await getArticlesPhp(articlesPerPage, (currentPage - 1) * articlesPerPage);
             console.log(articles);
-            articles.pop(1);
             const parser = new DOMParser();
             const articlePromises = articles.map(article => fetch(`articles/${article.file}`).then(response => response.text()));
             const articleContents = await Promise.all(articlePromises);
@@ -34,6 +33,10 @@ function articleLoader() {
             articleData.sort((a, b) => a.order - b.order);
             console.log(articleData);
             articleData.forEach(article => addArticle(parser, article.content, article));
+        },
+        async loadMoreArticles() {
+            currentPage++;
+            await this.loadArticles();
         }
     };
 }
@@ -41,11 +44,9 @@ function articleLoader() {
 function articleLoaderSync() {
     return {
         async loadArticles() {
-            const articles = await getArticlesPhp(); // Get articles from PHP
+            const articles = await getArticlesPhp(articlesPerPage, (currentPage - 1) * articlesPerPage);
             console.log(articles);
-            articles.pop(1);
             const parser = new DOMParser();
-            // Use a for...of loop to fetch each article sequentially
             for (const article of articles) {
                 try {
                     const response = await fetch(`articles/${article.file}`);
@@ -55,10 +56,13 @@ function articleLoaderSync() {
                     console.error('Error fetching article:', error);
                 }
             }
+        },
+        async loadMoreArticles() {
+            currentPage++;
+            await this.loadArticles();
         }
     };
 }
-
 
 function addArticle(parser, html, article) {
     const doc = parser.parseFromString(html, "text/html");
