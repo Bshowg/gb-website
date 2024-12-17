@@ -13,8 +13,12 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// SQL to fetch articles
-$sql = "SELECT * FROM articles ORDER BY id DESC";
+// Get limit and offset from query parameters
+$limit = isset($_GET['limit']) ? intval($_GET['limit']) : 5;
+$offset = isset($_GET['offset']) ? intval($_GET['offset']) : 0;
+
+// SQL to fetch articles with limit and offset for pagination
+$sql = "SELECT * FROM articles ORDER BY id DESC LIMIT $limit OFFSET $offset";
 $result = $conn->query($sql);
 
 $articles = [];
@@ -32,4 +36,3 @@ header('Content-Type: application/json');
 echo json_encode($articles);
 
 $conn->close();
-?>
