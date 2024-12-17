@@ -32,6 +32,7 @@ function articleLoader() {
             const articleContents = await Promise.all(articlePromises);
             const articleData = articles.map((article, index) => ({ ...article, content: articleContents[index] }));
             articleData.sort((a, b) => a.order - b.order);
+            console.log(articleData);
             articleData.forEach(article => addArticle(parser, article.content, article));
         }
     };
