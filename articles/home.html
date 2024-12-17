@@ -6,7 +6,10 @@
             <!-- Articles will be loaded here by JavaScript -->
         </div>
         <div class="flex justify-center mt-6">
-            <button @click="loadMoreArticles" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 ">Altri Articoli</button>
+            <button @click="loadMoreArticles" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 load-more-button">Altri Articoli</button>
+        </div>
+        <div class="flex justify-center mt-6 no-more-articles-message" style="display: none;">
+            <p class="text-gray-500">Non ci sono più articoli da caricare.</p>
         </div>
     </section>
 </main>

@@ -35,6 +35,10 @@ function articleLoader() {
             articleData.sort((a, b) => a.order - b.order);
             console.log(articleData);
             articleData.forEach(article => addArticle(parser, article.content, article));
+            if (articles.length < articlesPerPage) {
+                document.querySelector('.load-more-button').style.display = 'none';
+                document.querySelector('.no-more-articles-message').style.display = 'block';
+            }
         },
         async loadMoreArticles() {
             currentPage++;
@@ -57,6 +61,10 @@ function articleLoaderSync() {
                 } catch (error) {
                     console.error('Error fetching article:', error);
                 }
+            }
+            if (articles.length < articlesPerPage) {
+                document.querySelector('.load-more-button').style.display = 'none';
+                document.querySelector('.no-more-articles-message').style.display = 'block';
             }
         },
         async loadMoreArticles() {
