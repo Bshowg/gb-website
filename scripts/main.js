@@ -18,6 +18,8 @@ async function getArticlesPhp(limit = articlesPerPage, offset = 0) {
         console.log("done")
         return response.json();
     })
+    // Filter out articles with empty file paths or with the path `/`
+    json = json.filter(article => article.file && article.file !== '/');
     return json;
 }
 
