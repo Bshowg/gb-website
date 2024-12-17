@@ -7,14 +7,6 @@ jobs:
     steps:
     - name: 🚚 Get latest code
       uses: actions/checkout@v4
-    
-    - name: 📂 Sync files
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-      with:
-        server: gianmd.ftp.tb-hosting.com
-        username: gianmarcobisciniit@gianmarcobisciniit
-        password: ${{ secrets.ftp_password }}
-        server-dir: ./www/
 
     - name: Install Node.js
       uses: actions/setup-node@v2
@@ -29,3 +21,11 @@ jobs:
 
     - name: Minify Tailwind CSS
       run: npx tailwindcss -o ./output.css --minify
+
+    - name: 📂 Sync files
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      with:
+        server: gianmd.ftp.tb-hosting.com
+        username: gianmarcobisciniit@gianmarcobisciniit
+        password: ${{ secrets.ftp_password }}
+        server-dir: ./www/
