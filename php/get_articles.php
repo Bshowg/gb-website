@@ -17,8 +17,13 @@ if ($conn->connect_error) {
 $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 5;
 $offset = isset($_GET['offset']) ? intval($_GET['offset']) : 0;
 
-// SQL to fetch articles with limit and offset for pagination
-$sql = "SELECT * FROM articles ORDER BY id DESC LIMIT $limit OFFSET $offset";
+// SQL to fetch articles with condition to exclude LIMIT and OFFSET if they are 0
+if ($limit === 0 && $offset === 0) {
+    $sql = "SELECT * FROM articles ORDER BY id DESC";
+} else {
+    $sql = "SELECT * FROM articles ORDER BY id DESC LIMIT $limit OFFSET $offset";
+}
+
 $result = $conn->query($sql);
 
 $articles = [];
