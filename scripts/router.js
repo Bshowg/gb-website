@@ -7,7 +7,7 @@ window.addEventListener('load', async () => {
     };
     async function getArticlesPhp() {
     
-        let json=await fetch("./php/get_articles.php").then(response => {
+        let json=await fetch("./php/get_articles.php?limit=0&offset=0").then(response => {
                 
             if (!response.ok) {
                 throw new Error('Network response was not ok');
