@@ -11,3 +11,6 @@ Using Tailwind CLI
 
     npx tailwindcss -i ./input.css -o ./output.css --watch
     npx tailwindcss -o output.css --minify
+
+### build and minify Tailwind CSS using GitHub Actions
+The GitHub Actions workflow is configured to automatically build and minify Tailwind CSS. You can trigger the workflow by pushing changes to the repository.
