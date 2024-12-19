@@ -102,52 +102,10 @@
     </script>
   </head>
   <body class="notebook">
-    <header
-      class="text-center py-8 hero bg-bottom bg-cover max-w-4xl mx-auto pb-8 flex items-center flex-col"
-    >
-      <div class="m-auto">
-        <h1
-          class="text-3xl md:text-5xl font-bold tracking-wide text-white tracking-tighter"
-        >
-          GIANMARCHISSIMO
-        </h1>
-        <nav class="mt-4">
-          <ul class="flex justify-center space-x-4">
-            <li><a href="/" class="hover:underline text-white">Home</a></li>
-            <li>
-              <a href="/static/contacts.html" class="hover:underline text-white"
-                >Contacts</a
-              >
-            </li>
-            <li>
-              <a href="/static/oracle.html" class="hover:underline text-white"
-                >Oracolo</a
-              >
-            </li>
-            <li>
-              <a href="/static/iching.html" class="hover:underline text-white"
-                >I King</a
-              >
-            </li>
-            <!--<li><a href="#" class="hover:underline">Business</a></li>
-                <li><a href="#" class="hover:underline">Culture</a></li>
-                <li><a href="#" class="hover:underline">Sports</a></li>-->
-          </ul>
-        </nav>
-      </div>
-    </header>
-    <header
-      class="max-w-4xl mx-auto pb-8 flex items-center flex-col text-center py-12 bg-white"
-    >
-      <h1 class="text-5xl font-bold" id="subtitle">I KING</h1>
-      <p class="text-center">Millenaria Saggezza</p>
-    </header>
-    <img
-      src="../imgs/iching.webp"
-      alt=""
-      class="visible md:hidden mx-auto h-auto img_hero"
-    />
-    <!-- Main content with two columns -->
+
+    <!-- Include the new header component -->
+    <div x-data x-init="$el.innerHTML = await (await fetch('../components/header.html')).text().then(html => html.replace('{{ title }}', 'I KING').replace('{{ subtitle }}', 'Millenaria Saggezza'))"></div>
+
     <div x-data="iching">
       <div
         class="max-w-4xl mx-auto py-8 flex flex-col md:flex-row justify-around"
@@ -540,9 +498,9 @@
               </button>
 
               <div
-                class=" text-xs"
                 x-show="open"
                 x-text="hexagramMovingObject.wilhelm_image.comments"
+                class=" text-xs"
               ></div>
             </div>
           </div>
