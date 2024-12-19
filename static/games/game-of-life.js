@@ -20,18 +20,23 @@ function init() {
     grid = createGrid(size);
     nextGrid = createGrid(size);
 
+    initializeGrid();
+
     const geometry = new THREE.PlaneGeometry(1, 1);
-    const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
     for (let i = 0; i < size; i++) {
         for (let j = 0; j < size; j++) {
-            const cell = new THREE.Mesh(geometry, material);
+            const cell = grid[i][j];
             cell.position.set(i - size / 2, j - size / 2, 0);
             scene.add(cell);
-            grid[i][j] = cell;
         }
     }
 
     window.addEventListener('resize', onWindowResize, false);
+
+    setInterval(() => {
+        updateGrid();
+        renderGrid();
+    }, 100); // Update every 100ms
 
     animate();
 }
@@ -44,19 +49,64 @@ function createGrid(size) {
     return grid;
 }
 
-function animate() {
-    requestAnimationFrame(animate);
-    updateGrid();
-    renderer.render(scene, camera);
+function initializeGrid() {
+    const materialAlive = new THREE.MeshBasicMaterial({ color: 0xffffff });
+    const materialDead = new THREE.MeshBasicMaterial({ color: 0x000000 });
+    const geometry = new THREE.PlaneGeometry(1, 1);
+
+    for (let i = 0; i < size; i++) {
+        for (let j = 0; j < size; j++) {
+            const alive = Math.random() > 0.5;
+            const material = alive ? materialAlive : materialDead;
+            const cell = new THREE.Mesh(geometry, material);
+            grid[i][j] = cell;
+        }
+    }
+}
+
+function countAliveNeighbors(x, y) {
+    let count = 0;
+    for (let i = -1; i <= 1; i++) {
+        for (let j = -1; j <= 1; j++) {
+            if (i === 0 && j === 0) continue;
+            const ni = (x + i + size) % size;
+            const nj = (y + j + size) % size;
+            if (grid[ni][nj].material.color.equals(new THREE.Color(0xffffff))) {
+                count++;
+            }
+        }
+    }
+    return count;
 }
 
 function updateGrid() {
     for (let i = 0; i < size; i++) {
         for (let j = 0; j < size; j++) {
-            const alive = Math.random() > 0.5;
-            grid[i][j].material.color.set(alive ? 0xffffff : 0x000000);
+            const aliveNeighbors = countAliveNeighbors(i, j);
+            const cell = grid[i][j];
+            const isAlive = cell.material.color.equals(new THREE.Color(0xffffff));
+
+            if (isAlive && (aliveNeighbors < 2 || aliveNeighbors > 3)) {
+                nextGrid[i][j] = false;
+            } else if (!isAlive && aliveNeighbors === 3) {
+                nextGrid[i][j] = true;
+            } else {
+                nextGrid[i][j] = isAlive;
+            }
         }
     }
+
+    for (let i = 0; i < size; i++) {
+        for (let j = 0; j < size; j++) {
+            const cell = grid[i][j];
+            const isAlive = nextGrid[i][j];
+            cell.material.color.set(isAlive ? 0xffffff : 0x000000);
+        }
+    }
+}
+
+function renderGrid() {
+    renderer.render(scene, camera);
 }
 
 function onWindowResize() {
