@@ -8,7 +8,13 @@ function init() {
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('gameOfLifeCanvas') });
-    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    const canvasContainer = document.querySelector('.canvas-container');
+    const width = canvasContainer.clientWidth;
+    const height = width * 9 / 16;
+    renderer.setSize(width, height);
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
     camera.position.z = 100;
 
     grid = createGrid(size);
@@ -24,6 +30,8 @@ function init() {
             grid[i][j] = cell;
         }
     }
+
+    window.addEventListener('resize', onWindowResize, false);
 
     animate();
 }
@@ -49,6 +57,15 @@ function updateGrid() {
             grid[i][j].material.color.set(alive ? 0xffffff : 0x000000);
         }
     }
+}
+
+function onWindowResize() {
+    const canvasContainer = document.querySelector('.canvas-container');
+    const width = canvasContainer.clientWidth;
+    const height = width * 9 / 16;
+    renderer.setSize(width, height);
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
 }
 
 window.onload = init;
