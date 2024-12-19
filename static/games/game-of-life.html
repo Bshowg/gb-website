@@ -8,13 +8,19 @@
     <link href="../../output.css" rel="stylesheet"></link>
     <script defer src="../../scripts/main.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="./game-of-life.js"></script>
+    <script type="importmap">
+        {
+          "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js"
+          }
+        }
+      </script>
+    <script type="module" src="./game-of-life.js"></script>
 </head>
 <body class="notebook">
 
     <!-- Include the new header component -->
-    <div x-data x-init="$el.innerHTML = await (await fetch('../../components/header.html')).text().then(html => html.replace('{{ title }}', 'GAME OF LIFE').replace('{{ subtitle }}', 'Experience the Game of Life in three.js'))"></div>
+    <div x-data x-init="$el.innerHTML = await (await fetch('../../components/header.html')).text().then(html => html.replace('{{ title }}', 'GAME OF LIFE').replace('{{ subtitle }}', ''))"></div>
 
     <main class="max-w-4xl mx-auto py-8 text-center mb-5">
         <h1 class="text-4xl font-bold mb-8">Game of Life</h1>
