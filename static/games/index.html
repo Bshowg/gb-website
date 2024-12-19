@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Games Home</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="../output.css" rel="stylesheet"></link>
+    <script defer src="../scripts/main.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="notebook">
+
+    <!-- Include the new header component -->
+    <div x-data x-init="$el.innerHTML = await (await fetch('../components/header.html')).text().then(html => html.replace('{{ title }}', 'GAMES HOME').replace('{{ subtitle }}', 'List of available games'))"></div>
+
+    <main class="max-w-4xl mx-auto py-8 text-center mb-5">
+        <h1 class="text-4xl font-bold mb-8">Games Home</h1>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-black text-white p-6 rounded-lg shadow-lg m-6 h-44">
+                <h2 class="text-2xl font-bold mb-4">Game of Life</h2>
+                <p class="mb-4">Experience the Game of Life implemented in three.js.</p>
+                <a href="game-of-life.html" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-full">Play Game of Life</a>
+            </div>
+        </div>
+    </main>
+    
+    <footer class="text-center py-4 text-white bg-black">
+        <p>© 2024 Gianmarco Biscini. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
