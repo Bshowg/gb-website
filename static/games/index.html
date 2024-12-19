@@ -15,9 +15,9 @@
     <div x-data x-init="$el.innerHTML = await (await fetch('../../components/header.html')).text().then(html => html.replace('{{ title }}', 'GAMES HOME').replace('{{ subtitle }}', 'List of available games'))"></div>
 
     <main class="max-w-4xl mx-auto py-8 text-center mb-5">
-        <h1 class="text-4xl font-bold mb-8">Games Home</h1>
+        <h1 class="text-4xl font-bold mb-8 bg-white">Games Home</h1>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="bg-black text-white p-6 rounded-lg shadow-lg m-6 h-44">
+            <div class="bg-white text-black p-6 rounded-lg shadow-lg m-6 h-44">
                 <h2 class="text-2xl font-bold mb-4">Game of Life</h2>
                 <p class="mb-4">Experience the Game of Life implemented in three.js.</p>
                 <a href="game-of-life.html" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-full">Play Game of Life</a>
