@@ -13,13 +13,15 @@ let death_range_3D = [5, 5];
 let l = -(N / 2) + 0.5; // lower bound
 let u = N / 2 - 0.5; // upper bound
 
-let scene = new THREE.Scene();
-let camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 10, 1000);
-let renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('gameOfLifeCanvas') });
-
 const canvasContainer = document.querySelector('.canvas-container');
 const width = canvasContainer.clientWidth;
 const height = width * 9 / 16;
+
+let scene = new THREE.Scene();
+let camera = new THREE.PerspectiveCamera(45, width/ height, 10, 1000);
+let renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('gameOfLifeCanvas') });
+
+
 renderer.setSize(width, height);
 camera.aspect = width / height;
 camera.updateProjectionMatrix();

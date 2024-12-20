@@ -9,7 +9,7 @@
 ### build tailwind and minify
 Using Tailwind CLI
 
-    npx tailwindcss -i ./input.css -o ./output.css --watch
+    npx tailwindcss -i ./input.css -o ./output.css
     npx tailwindcss -o output.css --minify
 
 ### build and minify Tailwind CSS using GitHub Actions
