@@ -47,33 +47,6 @@ function articleLoader() {
     };
 }
 
-function articleLoaderSync() {
-    return {
-        async loadArticles() {
-            const articles = await getArticlesPhp(articlesPerPage, (currentPage - 1) * articlesPerPage);
-            console.log(articles);
-            const parser = new DOMParser();
-            for (const article of articles) {
-                try {
-                    const response = await fetch(`articles/${article.file}`);
-                    const html = await response.text();
-                    addArticle(parser, html, article);
-                } catch (error) {
-                    console.error('Error fetching article:', error);
-                }
-            }
-            if (articles.length < articlesPerPage) {
-                document.querySelector('.load-more-button').style.display = 'none';
-                document.querySelector('.no-more-articles-message').style.display = 'block';
-            }
-        },
-        async loadMoreArticles() {
-            currentPage++;
-            await this.loadArticles();
-        }
-    };
-}
-
 function addArticle(parser, html, article) {
     const doc = parser.parseFromString(html, "text/html");
     const title = doc.querySelector('h1') ? doc.querySelector('h1').innerText : 'No title';

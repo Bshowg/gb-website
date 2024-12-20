@@ -6,6 +6,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = filter_var(trim($_POST["email"]), FILTER_SANITIZE_EMAIL);
     $message = strip_tags(trim($_POST["message"]));
 
+    // Validate email address
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        http_response_code(400);
+        echo "Invalid email address. Please enter a valid email.";
+        exit;
+    }
+
     // Specify the recipient email address
     $recipient = "g.biscini@gmail.com"; 
     $subject = "New contact from $name";
