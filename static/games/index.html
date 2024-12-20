@@ -15,7 +15,6 @@
     <div x-data x-init="$el.innerHTML = await (await fetch('../../components/header.html')).text().then(html => html.replace('{{ title }}', 'LUDOTECA').replace('{{ subtitle }}', 'List of available games'))"></div>
 
     <main class="max-w-4xl mx-auto py-8 text-center mb-5 bg-white">
-        <h1 class="text-4xl font-bold mb-8 ">Games Home</h1>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="bg-white text-black p-6 rounded-lg shadow-lg m-6 h-44">
                 <h2 class="text-2xl font-bold mb-4">Game of Life</h2>
