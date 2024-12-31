@@ -228,6 +228,7 @@ svg {
     shape-outside: url("/imgs/graphics/microscope.png");
     shape-image-threshold: 0.5;
     shape-margin: 1rem;
+    margin-left: 20px;
   }
 
   .book h1 {
