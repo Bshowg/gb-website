@@ -225,7 +225,7 @@ svg {
     float: right;
     height: 20rem;
   
-    shape-outside: url("/imgs/graphics/microscope.png");
+    shape-outside: url("/imgs/graphics/syringe_old.png");
     shape-image-threshold: 0.5;
     shape-margin: 1rem;
     margin-left: 20px;
