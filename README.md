@@ -1,19 +1,37 @@
-# Personal Website
+# Untunnai: Polymarket-Like Prediction Market Simulator
 
 [<img alt="Deployed with FTP Deploy Action" src="https://img.shields.io/badge/Deployed With-FTP DEPLOY ACTION-%3CCOLOR%3E?style=for-the-badge&color=2b9348">](https://github.com/SamKirkland/FTP-Deploy-Action)
 
-## start local server
+## Project Description
 
-    python -m http.server
+Untunnai is a full-stack web application that simulates a prediction market using simulated tokens. The project is designed to be easily deployable on platforms like Vercel or Netlify and includes serverless API routes.
 
-### build tailwind and minify
-Using Tailwind CLI
+## Features
 
-    npx tailwindcss -i ./input.css -o ./output.css
-    npx tailwindcss -o output.css --minify
+- Dynamic, responsive frontend with pages (e.g., Home, Market) and components (e.g., MarketCard).
+- API routes for handling market simulation operations like market creation, order matching, and outcome resolution.
+- Real-time updates via WebSockets or polling.
+- Basic user authentication system and a simple dashboard for market participation.
+- TypeScript for enhanced type safety (optional but recommended).
+- Modular structure with clear separation between UI components, business logic (market simulation), and API endpoints.
+- GitHub Codespaces support with a devcontainer configuration, including a Dockerfile and devcontainer.json.
 
-### build and minify Tailwind CSS using GitHub Actions
-The GitHub Actions workflow is configured to automatically build and minify Tailwind CSS. You can trigger the workflow by pushing changes to the repository.
+## Project Structure
+
+- /pages
+  - index.tsx        // Home page
+  - market.tsx       // Market view page
+  - /api
+    - market.ts     // API endpoint for market simulation operations
+- /components
+  - MarketCard.tsx   // Component to display market details
+- /utils
+  - simulation.ts    // Core market simulation logic
+- /public
+  - /assets          // Static files such as images and styles
+- .env.local         // Environment variables (e.g., API keys, configuration)
+- Dockerfile         // For GitHub Codespaces development
+- .devcontainer/devcontainer.json  // VS Code devcontainer configuration
 
 ## Setting Up and Running the Project Locally
 
@@ -21,7 +39,6 @@ The GitHub Actions workflow is configured to automatically build and minify Tail
 
 - Node.js (v14 or later)
 - npm (v6 or later)
-- Python (for running the local server)
 
 ### Installation
 
@@ -40,26 +57,42 @@ The GitHub Actions workflow is configured to automatically build and minify Tail
 
 ### Running the Project
 
-1. Start the local server:
+1. Start the development server:
 
     ```sh
-    python -m http.server
+    npm run dev
     ```
 
-2. Open your browser and navigate to `http://localhost:8000`.
+2. Open your browser and navigate to `http://localhost:3000`.
 
-### Building Tailwind CSS
+## Deployment
 
-1. Build Tailwind CSS:
+### Deploying to Vercel
+
+1. Install the Vercel CLI:
 
     ```sh
-    npx tailwindcss -i ./input.css -o ./output.css --watch
+    npm install -g vercel
     ```
 
-2. Minify Tailwind CSS:
+2. Deploy the project:
 
     ```sh
-    npx tailwindcss -o output.css --minify
+    vercel
+    ```
+
+### Deploying to Netlify
+
+1. Install the Netlify CLI:
+
+    ```sh
+    npm install -g netlify-cli
+    ```
+
+2. Deploy the project:
+
+    ```sh
+    netlify deploy
     ```
 
 ## Automated Tests
