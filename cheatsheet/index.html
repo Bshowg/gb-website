@@ -32,39 +32,31 @@
         <p class="text-center">Riassunti e guide di riferimento rapido</p>
     </header>
 
-    <main class="paper-wrapper">
-        <div class="paper">
-            <section class="abstract">
-                <strong>Cheatsheet Collection</strong> - Una raccolta di riassunti e guide di riferimento rapido su vari argomenti storici, culturali e tecnici.
-            </section>
+    <main class="max-w-4xl mx-auto py-8 text-center mb-5 bg-white">
+        <div class="bg-black text-white p-6 rounded-lg shadow-lg m-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Cheatsheet Collection</h2>
+            <p class="mb-4">Una raccolta di riassunti e guide di riferimento rapido su vari argomenti storici, culturali e tecnici.</p>
+        </div>
 
-            <h2>Cheatsheet Disponibili</h2>
+        <div id="cheatsheet-list" x-data="cheatsheetList()">
+            <div x-show="loading" class="text-center py-8">
+                <p>Caricamento cheatsheet...</p>
+            </div>
             
-            <div id="cheatsheet-list" x-data="cheatsheetList()">
-                <div x-show="loading" class="text-center py-8">
-                    <p>Caricamento cheatsheet...</p>
-                </div>
-                
-                <div x-show="!loading && cheatsheets.length > 0">
-                    <template x-for="cheatsheet in cheatsheets" :key="cheatsheet.name">
-                        <div class="mb-6 p-4 border-l-4 border-gray-300 bg-gray-50">
-                            <h3 class="text-xl font-bold mb-2">
-                                <a :href="cheatsheet.path" class="hover:underline text-blue-600" x-text="cheatsheet.title"></a>
-                            </h3>
-                            <p class="text-gray-600 mb-2" x-text="cheatsheet.description"></p>
-                            <div class="flex justify-between items-center text-sm text-gray-500">
-                                <span x-text="'File: ' + cheatsheet.name"></span>
-                                <a :href="cheatsheet.path" class="standalone-link text-sm py-1 px-3 max-w-none">
-                                    Leggi →
-                                </a>
-                            </div>
-                        </div>
-                    </template>
-                </div>
-                
-                <div x-show="!loading && cheatsheets.length === 0" class="text-center py-8">
-                    <p>Nessun cheatsheet disponibile al momento.</p>
-                </div>
+            <div x-show="!loading && cheatsheets.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <template x-for="cheatsheet in cheatsheets" :key="cheatsheet.name">
+                    <div class="bg-black text-white p-6 rounded-lg shadow-lg m-6 h-44">
+                        <h3 class="text-2xl font-bold mb-4" x-text="cheatsheet.title"></h3>
+                        <p class="mb-4" x-text="cheatsheet.description"></p>
+                        <a :href="cheatsheet.path" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-full">
+                            Leggi Cheatsheet
+                        </a>
+                    </div>
+                </template>
+            </div>
+            
+            <div x-show="!loading && cheatsheets.length === 0" class="text-center py-8">
+                <p>Nessun cheatsheet disponibile al momento.</p>
             </div>
         </div>
     </main>
