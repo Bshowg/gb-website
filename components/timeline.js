@@ -192,8 +192,8 @@ class TimelineVisualizer {
                 // Match various list formats: *, **, #, etc.
                 if (trimmedLine.match(/^[\*#:]+\s+/) || trimmedLine.match(/^\d+\.\s+/)) {
                     let eventText = trimmedLine
-                        .replace(/^[\*#:]+\s+/, '')
-                        .replace(/^\d+\.\s+/, '');
+                        .replace(/^[\*#:]+\s*/, '')
+                        .replace(/^\d+\.\s*/, '');
                     
                     // Clean up wikitext formatting
                     eventText = eventText
@@ -253,7 +253,7 @@ class TimelineVisualizer {
                 for (const line of natiLines) {
                     const trimmedLine = line.trim();
                     if (trimmedLine.startsWith('*')) {
-                        let eventText = trimmedLine.substring(1).trim();
+                        let eventText = trimmedLine.replace(/^\*+\s*/, '').trim();
                         eventText = eventText
                             .replace(/\[\[([^\|\]]+)\|([^\]]+)\]\]/g, '$2')
                             .replace(/\[\[([^\]]+)\]\]/g, '$1')
@@ -282,7 +282,7 @@ class TimelineVisualizer {
                 for (const line of mortiLines) {
                     const trimmedLine = line.trim();
                     if (trimmedLine.startsWith('*')) {
-                        let eventText = trimmedLine.substring(1).trim();
+                        let eventText = trimmedLine.replace(/^\*+\s*/, '').trim();
                         eventText = eventText
                             .replace(/\[\[([^\|\]]+)\|([^\]]+)\]\]/g, '$2')
                             .replace(/\[\[([^\]]+)\]\]/g, '$1')

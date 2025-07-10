@@ -171,7 +171,7 @@ class TimelineVisualizer {
                 
                 // Look for lines starting with * (bullet points)
                 if (line.startsWith('*')) {
-                    let eventText = line.substring(1).trim(); // Remove the *
+                    let eventText = line.replace(/^\*+\s*/, '').trim(); // Remove all leading asterisks
                     
                     console.log(`Line ${i}: Raw event:`, eventText);
                     
