@@ -60,7 +60,6 @@
     margin: 3rem 0;
     display: flex;
     align-items: center;
-    justify-content: center;
 }
 
 .event-marker {
@@ -102,14 +101,18 @@
 .event-top {
     right: 55%;
     text-align: right;
-    display: flex;
+}
+
+.timeline-event:has(.event-top) {
     justify-content: flex-end;
 }
 
 .event-bottom {
     left: 55%;
     text-align: left;
-    display: flex;
+}
+
+.timeline-event:has(.event-bottom) {
     justify-content: flex-start;
 }
 
@@ -192,7 +195,9 @@
         left: 4rem !important;
         right: auto !important;
         text-align: left !important;
-        display: flex !important;
+    }
+    
+    .timeline-event {
         justify-content: flex-start !important;
     }
     
