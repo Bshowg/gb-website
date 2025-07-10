@@ -109,11 +109,100 @@ class TimelineVisualizer {
         this.setupInteractions();
     }
 
+    async fetchWikipediaYear(year) {
+        try {
+            // Handle BC years
+            const yearStr = year < 0 ? `${Math.abs(year)} a.C.` : `${year}`;
+            const url = `https://it.wikipedia.org/api/rest_v1/page/summary/${yearStr}`;
+            
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            return {
+                title: data.title,
+                extract: data.extract,
+                url: data.content_urls?.desktop?.page || '#'
+            };
+        } catch (error) {
+            console.error('Error fetching Wikipedia data:', error);
+            return null;
+        }
+    }
+
+    showWikipediaEvents(card, year, wikipediaData) {
+        // Remove any existing Wikipedia content
+        const existingWiki = card.querySelector('.wikipedia-events');
+        if (existingWiki) {
+            existingWiki.remove();
+            return;
+        }
+
+        const wikiContainer = document.createElement('div');
+        wikiContainer.className = 'wikipedia-events';
+        
+        if (wikipediaData) {
+            wikiContainer.innerHTML = `
+                <div class="wiki-header">
+                    <h4>Altri eventi del ${year < 0 ? Math.abs(year) + ' a.C.' : year + ' d.C.'}</h4>
+                    <button class="wiki-close">×</button>
+                </div>
+                <div class="wiki-content">
+                    <p class="wiki-extract">${wikipediaData.extract}</p>
+                    <a href="${wikipediaData.url}" target="_blank" class="wiki-link">
+                        Leggi di più su Wikipedia →
+                    </a>
+                </div>
+            `;
+        } else {
+            wikiContainer.innerHTML = `
+                <div class="wiki-header">
+                    <h4>Altri eventi del ${year < 0 ? Math.abs(year) + ' a.C.' : year + ' d.C.'}</h4>
+                    <button class="wiki-close">×</button>
+                </div>
+                <div class="wiki-content">
+                    <p class="wiki-error">Nessuna informazione aggiuntiva disponibile per questo anno.</p>
+                </div>
+            `;
+        }
+
+        // Add close button functionality
+        const closeBtn = wikiContainer.querySelector('.wiki-close');
+        closeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            wikiContainer.remove();
+        });
+
+        card.appendChild(wikiContainer);
+    }
+
     setupInteractions() {
         const eventCards = this.container.querySelectorAll('.event-card');
-        eventCards.forEach(card => {
-            card.addEventListener('click', () => {
-                card.classList.toggle('expanded');
+        const sortedData = [...this.data].sort((a, b) => this.parseDate(a.date) - this.parseDate(b.date));
+        
+        eventCards.forEach((card, index) => {
+            card.addEventListener('click', async (e) => {
+                // Don't trigger if clicking on Wikipedia content
+                if (e.target.closest('.wikipedia-events')) {
+                    return;
+                }
+
+                const eventData = sortedData[index];
+                const year = this.parseDate(eventData.date);
+                
+                // Show loading state
+                card.classList.add('loading');
+                
+                // Fetch Wikipedia data for this year
+                const wikipediaData = await this.fetchWikipediaYear(year);
+                
+                // Remove loading state
+                card.classList.remove('loading');
+                
+                // Show Wikipedia events
+                this.showWikipediaEvents(card, year, wikipediaData);
             });
         });
     }
