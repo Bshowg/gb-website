@@ -1,0 +1,344 @@
+[
+    {
+        "name": "Fondazione di Florentia",
+        "date": "59 BC",
+        "description": "I Romani fondano la colonia di Florentia come insediamento per veterani militari nella valle dell'Arno. La città viene costruita secondo il classico schema urbanistico romano con cardo e decumano.",
+        "event_type": "political"
+    },
+    {
+        "name": "Primo Vescovo Felix",
+        "date": "313 AD",
+        "description": "Primo vescovo documentato di Firenze, Felix, presente a un incontro con Papa Milziade a Roma. Segna l'inizio dell'organizzazione cristiana nella città.",
+        "event_type": "religious"
+    },
+    {
+        "name": "Sede Amministrativa Dioclesiana",
+        "date": "285 AD",
+        "description": "L'imperatore Diocleziano stabilisce una sede amministrativa regionale a Firenze, accrescendo l'importanza della città nell'impero romano.",
+        "event_type": "political"
+    },
+    {
+        "name": "Sconfitta di Radagaiso",
+        "date": "405-406 AD",
+        "description": "Il generale romano Stilicone sconfigge il re goto Radagaiso presso Firenze, salvando la città dalla distruzione barbarica.",
+        "event_type": "military"
+    },
+    {
+        "name": "Occupazione Bizantina",
+        "date": "541 AD",
+        "description": "Le truppe bizantine occupano Firenze durante la Guerra Gotica, integrando la città nell'Impero Romano d'Oriente.",
+        "event_type": "military"
+    },
+    {
+        "name": "Distruzione di Totila",
+        "date": "550 AD",
+        "description": "Il re goto Totila distrugge gran parte di Firenze durante la reconquista dell'Italia centrale. La città viene gravemente danneggiata.",
+        "event_type": "military"
+    },
+    {
+        "name": "Dominio Longobardo",
+        "date": "570 AD",
+        "description": "Firenze passa sotto il controllo dei Longobardi, entrando nel Ducato di Tuscia. Inizia un periodo di riorganizzazione amministrativa.",
+        "event_type": "political"
+    },
+    {
+        "name": "Visita di Carlo Magno",
+        "date": "781-786 AD",
+        "description": "L'imperatore Carlo Magno visita Firenze più volte, consolidando il dominio franco sulla Toscana e riorganizzando l'amministrazione locale.",
+        "event_type": "political"
+    },
+    {
+        "name": "Nascita di San Giovanni Gualberto",
+        "date": "995 AD",
+        "description": "Nasce a Firenze San Giovanni Gualberto, futuro fondatore dell'ordine dei Vallombrosani e importante figura religiosa della città.",
+        "event_type": "religious"
+    },
+    {
+        "name": "Basilica di San Miniato",
+        "date": "1013 AD",
+        "description": "Costruzione della Basilica di San Miniato al Monte su progetto del Vescovo Alibrando, con il supporto dell'Imperatore Enrico II. Capolavoro dell'architettura romanica fiorentina.",
+        "event_type": "architectural"
+    },
+    {
+        "name": "Battistero di San Giovanni",
+        "date": "1059 AD",
+        "description": "Consacrazione del Battistero di San Giovanni, uno dei più antichi edifici di Firenze. Diventa il centro spirituale della città.",
+        "event_type": "religious"
+    },
+    {
+        "name": "Primo Governo Consolare",
+        "date": "1125 AD",
+        "description": "Prima documentazione di un governo consolare a Firenze. Segna l'inizio dell'autonomia comunale e dell'autogoverno cittadino.",
+        "event_type": "political"
+    },
+    {
+        "name": "Prime Corporazioni",
+        "date": "1150-1182 AD",
+        "description": "Nascita delle prime corporazioni di arti e mestieri (Arti) a Firenze. Inizia l'organizzazione del lavoro e del commercio cittadino.",
+        "event_type": "economic"
+    },
+    {
+        "name": "Costruzione del Ponte Vecchio",
+        "date": "1177 AD",
+        "description": "Costruzione del primo Ponte Vecchio in pietra sull'Arno, sostituendo i precedenti ponti in legno. Diventa centro dell'attività commerciale.",
+        "event_type": "architectural"
+    },
+    {
+        "name": "Governo del Podestà",
+        "date": "1207 AD",
+        "description": "Transizione dal governo consolare al sistema del podestà. Un magistrato esterno governa la città per garantire l'imparzialità.",
+        "event_type": "political"
+    },
+    {
+        "name": "Arrivo dei Domenicani",
+        "date": "1219 AD",
+        "description": "I frati domenicani arrivano a Firenze e fondano il convento di Santa Maria Novella. Inizia la loro influenza culturale e religiosa.",
+        "event_type": "religious"
+    },
+    {
+        "name": "Introduzione del Fiorino",
+        "date": "1252 AD",
+        "description": "Firenze introduce il fiorino d'oro, prima moneta aurea dell'Europa occidentale. Diventa standard monetario internazionale per il commercio.",
+        "event_type": "economic"
+    },
+    {
+        "name": "Popolo Vecchio",
+        "date": "1250 AD",
+        "description": "Nascita del governo del 'Popolo Vecchio', che esclude i magnati dal potere e favorisce i mercanti e artigiani. Prima rivoluzione borghese.",
+        "event_type": "political"
+    },
+    {
+        "name": "Battaglia di Montaperti",
+        "date": "1260 AD",
+        "description": "Devastante sconfitta dei Guelfi fiorentini contro i Ghibellini senesi guidati da Farinata degli Uberti. 10.000 morti tra i fiorentini.",
+        "event_type": "military"
+    },
+    {
+        "name": "Palazzo del Bargello",
+        "date": "1261 AD",
+        "description": "Completamento del Palazzo del Bargello, sede del Podestà e primo grande edificio pubblico di Firenze. Simbolo del potere civile comunale.",
+        "event_type": "architectural"
+    },
+    {
+        "name": "Nuove Mura Cittadine",
+        "date": "1282-1333 AD",
+        "description": "Costruzione della terza cerchia di mura cittadine, che racchiude un'area molto più vasta e testimonia la crescita demografica ed economica.",
+        "event_type": "architectural"
+    },
+    {
+        "name": "Battaglia di Campaldino",
+        "date": "1289 AD",
+        "description": "Vittoria decisiva dei Guelfi fiorentini sui Ghibellini aretini. Dante Alighieri partecipa alla battaglia come cavaliere. Consolida il potere guelfo.",
+        "event_type": "military"
+    },
+    {
+        "name": "Ordinamenti di Giustizia",
+        "date": "1293 AD",
+        "description": "Giano Della Bella promulga gli Ordinamenti di Giustizia, riforma costituzionale che esclude i magnati dalle cariche pubbliche e consolida il potere delle Arti.",
+        "event_type": "political"
+    },
+    {
+        "name": "Inizio Duomo di Firenze",
+        "date": "1296 AD",
+        "description": "Arnolfo di Cambio pone la prima pietra di Santa Maria del Fiore, il nuovo Duomo di Firenze. Progetto ambizioso che rivoluzionerà l'architettura.",
+        "event_type": "architectural"
+    },
+    {
+        "name": "Palazzo Vecchio",
+        "date": "1298 AD",
+        "description": "Inizio della costruzione di Palazzo Vecchio (Palazzo della Signoria) su progetto di Arnolfo di Cambio. Simbolo del potere repubblicano.",
+        "event_type": "architectural"
+    },
+    {
+        "name": "Divisione Bianchi e Neri",
+        "date": "1301 AD",
+        "description": "I Guelfi si dividono in Bianchi e Neri. Conflitto che porta all'esilio di Dante Alighieri e di molti altri cittadini prominenti.",
+        "event_type": "political"
+    },
+    {
+        "name": "Esilio di Dante",
+        "date": "1302 AD",
+        "description": "Dante Alighieri viene condannato all'esilio perpetuo dalla fazione dei Neri. Inizia il suo vagabondaggio che lo porterà a scrivere la Divina Commedia.",
+        "event_type": "cultural"
+    },
+    {
+        "name": "Giotto a Santa Croce",
+        "date": "1305 AD",
+        "description": "Giotto inizia gli affreschi delle cappelle Bardi e Peruzzi in Santa Croce, rivoluzionando l'arte occidentale con il suo stile naturalistico.",
+        "event_type": "cultural"
+    },
+    {
+        "name": "Completamento Santa Croce",
+        "date": "1320 AD",
+        "description": "Completamento della Basilica di Santa Croce, capolavoro dell'architettura gotica italiana. Diventa pantheon delle glorie fiorentine.",
+        "event_type": "architectural"
+    },
+    {
+        "name": "Nascita di Giovanni Boccaccio",
+        "date": "1313 AD",
+        "description": "Nasce a Firenze Giovanni Boccaccio, futuro autore del Decameron e una delle tre corone della letteratura italiana insieme a Dante e Petrarca.",
+        "event_type": "cultural"
+    },
+    {
+        "name": "Campanile di Giotto",
+        "date": "1334 AD",
+        "description": "Giotto inizia la costruzione del campanile del Duomo, capolavoro dell'architettura gotica fiorentina. Verrà completato dopo la sua morte.",
+        "event_type": "architectural"
+    },
+    {
+        "name": "Alluvione dell'Arno",
+        "date": "1333 AD",
+        "description": "Terribile alluvione dell'Arno che distrugge il Ponte Vecchio e gran parte della città. Migliaia di morti e devastazione economica.",
+        "event_type": "natural"
+    },
+    {
+        "name": "Peste Nera",
+        "date": "1348 AD",
+        "description": "La peste nera colpisce Firenze, uccidendo circa metà della popolazione. Boccaccio ambienta qui la cornice del Decameron.",
+        "event_type": "natural"
+    },
+    {
+        "name": "Rivolta dei Ciompi",
+        "date": "1378 AD",
+        "description": "Grande rivolta popolare guidata da Michele di Lando. I lavoratori della lana (ciompi) si ribellano contro l'oligarchia mercantile.",
+        "event_type": "political"
+    },
+    {
+        "name": "Nascita di Donatello",
+        "date": "1386 AD",
+        "description": "Nasce a Firenze Donato di Niccolò di Betto Bardi, detto Donatello, futuro rivoluzionario scultore del Rinascimento.",
+        "event_type": "cultural"
+    },
+    {
+        "name": "Nascita di Brunelleschi",
+        "date": "1377 AD",
+        "description": "Nasce Filippo Brunelleschi, futuro architetto della cupola del Duomo e padre dell'architettura rinascimentale.",
+        "event_type": "cultural"
+    },
+    {
+        "name": "Concorso per la Cupola",
+        "date": "1418 AD",
+        "description": "Concorso per la costruzione della cupola del Duomo. Brunelleschi presenta il progetto vincente per la più grande cupola mai costruita.",
+        "event_type": "architectural"
+    },
+    {
+        "name": "Ritorno di Cosimo de' Medici",
+        "date": "1434 AD",
+        "description": "Cosimo de' Medici torna dall'esilio e prende il controllo di Firenze. Inizia la signoria medicea che durerà per secoli.",
+        "event_type": "political"
+    },
+    {
+        "name": "Completamento Cupola",
+        "date": "1436 AD",
+        "description": "Filippo Brunelleschi completa la cupola di Santa Maria del Fiore, capolavoro ingegneristico del Rinascimento e simbolo di Firenze.",
+        "event_type": "architectural"
+    },
+    {
+        "name": "Concilio di Firenze",
+        "date": "1439 AD",
+        "description": "Si tiene a Firenze il Concilio per la riunificazione delle Chiese d'Oriente e d'Occidente. Porta prestigio internazionale alla città.",
+        "event_type": "religious"
+    },
+    {
+        "name": "Nascita di Lorenzo il Magnifico",
+        "date": "1449 AD",
+        "description": "Nasce Lorenzo de' Medici, futuro signore di Firenze e mecenate del Rinascimento. Diventerà simbolo del mecenatismo mediceo.",
+        "event_type": "cultural"
+    },
+    {
+        "name": "Palla d'Oro",
+        "date": "1461 AD",
+        "description": "Installazione della palla d'oro di Verrocchio sulla cupola del Duomo, completando definitivamente l'opera di Brunelleschi.",
+        "event_type": "architectural"
+    },
+    {
+        "name": "Accademia Platonica",
+        "date": "1462 AD",
+        "description": "Cosimo de' Medici fonda l'Accademia Platonica nella Villa di Careggi, guidata da Marsilio Ficino. Centro dell'Umanesimo europeo.",
+        "event_type": "cultural"
+    },
+    {
+        "name": "Nascita di Michelangelo",
+        "date": "1475 AD",
+        "description": "Nasce Michelangelo Buonarroti, futuro genio universale del Rinascimento. Crescerà nell'ambiente culturale mediceo.",
+        "event_type": "cultural"
+    },
+    {
+        "name": "Congiura dei Pazzi",
+        "date": "1478 AD",
+        "description": "Tentativo di assassinio dei fratelli Medici durante la messa in Duomo. Giuliano viene ucciso, Lorenzo il Magnifico sopravvive.",
+        "event_type": "political"
+    },
+    {
+        "name": "Nascita di Machiavelli",
+        "date": "1469 AD",
+        "description": "Nasce Niccolò Machiavelli, futuro segretario della Repubblica fiorentina e autore del 'Principe', trattato fondamentale di teoria politica.",
+        "event_type": "cultural"
+    },
+    {
+        "name": "Morte di Lorenzo il Magnifico",
+        "date": "1492 AD",
+        "description": "Muore Lorenzo de' Medici il Magnifico. La sua morte segna la fine dell'età d'oro del Rinascimento fiorentino.",
+        "event_type": "political"
+    },
+    {
+        "name": "Girolamo Savonarola",
+        "date": "1494 AD",
+        "description": "Il frate domenicano Savonarola prende il controllo di Firenze dopo la fuga dei Medici. Instaura una repubblica teocratica.",
+        "event_type": "religious"
+    },
+    {
+        "name": "Rogo delle Vanità",
+        "date": "1497 AD",
+        "description": "Savonarola organizza il 'Rogo delle Vanità' in Piazza della Signoria, bruciando opere d'arte, libri e oggetti considerati peccaminosi.",
+        "event_type": "religious"
+    },
+    {
+        "name": "Morte di Savonarola",
+        "date": "1498 AD",
+        "description": "Girolamo Savonarola viene impiccato e bruciato in Piazza della Signoria dopo essere stato scomunicato. Fine della repubblica teocratica.",
+        "event_type": "religious"
+    },
+    {
+        "name": "David di Michelangelo",
+        "date": "1501-1504 AD",
+        "description": "Michelangelo scolpisce il David, simbolo della Repubblica fiorentina e capolavoro della scultura rinascimentale.",
+        "event_type": "cultural"
+    },
+    {
+        "name": "Gonfaloniere Perpetuo",
+        "date": "1502 AD",
+        "description": "Pier Soderini diventa Gonfaloniere perpetuo della Repubblica fiorentina. Tentativo di stabilizzare il governo repubblicano.",
+        "event_type": "political"
+    },
+    {
+        "name": "Cartone di Leonardo",
+        "date": "1503 AD",
+        "description": "Leonardo da Vinci inizia il cartone per la Battaglia di Anghiari in Palazzo Vecchio, in competizione con Michelangelo.",
+        "event_type": "cultural"
+    },
+    {
+        "name": "Ritorno definitivo dei Medici",
+        "date": "1512 AD",
+        "description": "I Medici tornano definitivamente al potere con l'aiuto delle truppe spagnole. Fine della Repubblica fiorentina.",
+        "event_type": "political"
+    },
+    {
+        "name": "Leone X Papa",
+        "date": "1513 AD",
+        "description": "Giovanni de' Medici diventa Papa con il nome di Leone X. Massimo prestigio della famiglia Medici.",
+        "event_type": "religious"
+    },
+    {
+        "name": "Assedio di Firenze",
+        "date": "1529-1530 AD",
+        "description": "L'ultima Repubblica fiorentina resiste per 10 mesi all'assedio delle truppe imperiali e papali. Michelangelo fortifica la città.",
+        "event_type": "military"
+    },
+    {
+        "name": "Ducato di Firenze",
+        "date": "1532 AD",
+        "description": "Alessandro de' Medici diventa primo Duca di Firenze. Fine definitiva della Repubblica e inizio del Principato mediceo.",
+        "event_type": "political"
+    }
+]

@@ -39,8 +39,40 @@ class TimelineVisualizer {
         return this.colors[eventType.toLowerCase()] || '#6B7280';
     }
 
+    calculateSpacing(sortedData) {
+        const dates = sortedData.map(event => this.parseDate(event.date));
+        const minDate = Math.min(...dates);
+        const maxDate = Math.max(...dates);
+        const totalRange = maxDate - minDate;
+        
+        // Base spacing parameters
+        const minSpacing = 2; // minimum rem spacing
+        const maxSpacing = 20; // maximum rem spacing
+        const baseSpacing = 3; // default spacing in rem
+        
+        return sortedData.map((event, index) => {
+            if (index === 0) return baseSpacing;
+            
+            const currentDate = this.parseDate(event.date);
+            const previousDate = this.parseDate(sortedData[index - 1].date);
+            const yearDiff = Math.abs(currentDate - previousDate);
+            
+            // Calculate proportional spacing
+            let spacing;
+            if (totalRange > 0) {
+                const proportion = yearDiff / (totalRange / sortedData.length);
+                spacing = baseSpacing * Math.max(0.5, Math.min(3, proportion));
+            } else {
+                spacing = baseSpacing;
+            }
+            
+            return Math.max(minSpacing, Math.min(maxSpacing, spacing));
+        });
+    }
+
     render() {
         const sortedData = [...this.data].sort((a, b) => this.parseDate(a.date) - this.parseDate(b.date));
+        const spacings = this.calculateSpacing(sortedData);
         
         this.container.innerHTML = `
             <div class="timeline-container">
@@ -57,7 +89,7 @@ class TimelineVisualizer {
                     <div class="timeline-line"></div>
                     <div class="timeline-events">
                         ${sortedData.map((event, index) => `
-                            <div class="timeline-event" data-index="${index}">
+                            <div class="timeline-event" data-index="${index}" style="margin-top: ${spacings[index]}rem;">
                                 <div class="event-marker" style="background-color: ${this.getEventColor(event.event_type)}"></div>
                                 <div class="event-content ${index % 2 === 0 ? 'event-top' : 'event-bottom'}">
                                     <div class="event-card">
