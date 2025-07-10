@@ -1,5 +1,5 @@
 .timeline-container {
-    max-width: 1200px;
+    max-width: 1024px;
     margin: 0 auto;
     padding: 2rem 1rem;
 }
@@ -81,6 +81,24 @@
     max-width: 400px;
 }
 
+.event-content::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 3rem;
+    height: 2px;
+    background: #d1d5db;
+    z-index: 1;
+}
+
+.event-top::before {
+    right: -3rem;
+}
+
+.event-bottom::before {
+    left: -3rem;
+}
+
 .event-top {
     right: 55%;
     text-align: right;
@@ -100,6 +118,7 @@
     cursor: pointer;
     transition: all 0.3s ease;
     position: relative;
+    z-index: 2;
 }
 
 .event-card:hover {
@@ -171,6 +190,12 @@
         text-align: left !important;
     }
     
+    .event-mobile::before {
+        left: -2rem !important;
+        right: auto !important;
+        width: 2rem !important;
+    }
+    
     .event-card {
         padding: 1rem;
     }
@@ -215,6 +240,11 @@
     
     .event-mobile {
         left: 2.5rem !important;
+    }
+    
+    .event-mobile::before {
+        left: -1.5rem !important;
+        width: 1.5rem !important;
     }
     
     .event-card {
