@@ -1,0 +1,152 @@
+[
+    {
+        "name": "Fondazione di Florentia",
+        "date": "59 BC",
+        "description": "I Romani fondano la colonia di Florentia come insediamento per veterani militari. La città viene costruita secondo il classico schema urbanistico romano con cardo e decumano.",
+        "event_type": "political"
+    },
+    {
+        "name": "Primo Vescovo Felix",
+        "date": "313 AD",
+        "description": "Primo vescovo documentato di Firenze, Felix, presente a un incontro con Papa Milziade a Roma. Segna l'inizio dell'organizzazione cristiana nella città.",
+        "event_type": "religious"
+    },
+    {
+        "name": "Invasioni Barbariche",
+        "date": "406 AD",
+        "description": "Firenze subisce le invasioni barbariche. La città viene saccheggiata e la popolazione si rifugia sulle colline circostanti.",
+        "event_type": "military"
+    },
+    {
+        "name": "Basilica di San Miniato",
+        "date": "1013",
+        "description": "Costruzione della Basilica di San Miniato al Monte su progetto del Vescovo Alibrando, con il supporto dell'Imperatore Enrico II. Capolavoro dell'architettura romanica fiorentina.",
+        "event_type": "architectural"
+    },
+    {
+        "name": "Comune di Firenze",
+        "date": "1115",
+        "description": "Nascita del Comune di Firenze. La città si costituisce come libero comune, iniziando la sua ascesa politica ed economica nell'Italia centrale.",
+        "event_type": "political"
+    },
+    {
+        "name": "Costruzione del Ponte Vecchio",
+        "date": "1177",
+        "description": "Costruzione del primo Ponte Vecchio in pietra sull'Arno. Diventerà simbolo della città e centro dell'attività commerciale.",
+        "event_type": "architectural"
+    },
+    {
+        "name": "Introduzione del Fiorino",
+        "date": "1252",
+        "description": "Firenze introduce il fiorino d'oro, prima moneta aurea dell'Europa occidentale. Diventa standard monetario internazionale per il commercio.",
+        "event_type": "economic"
+    },
+    {
+        "name": "Battaglia di Montaperti",
+        "date": "1260",
+        "description": "Devastante sconfitta dei Guelfi fiorentini contro i Ghibellini senesi guidati da Farinata degli Uberti. 10.000 morti tra i fiorentini.",
+        "event_type": "military"
+    },
+    {
+        "name": "Palazzo del Bargello",
+        "date": "1261",
+        "description": "Costruzione del Palazzo del Bargello, sede del Podestà e primo edificio pubblico di Firenze. Rappresenta il potere civile del comune.",
+        "event_type": "architectural"
+    },
+    {
+        "name": "Ordinamenti di Giustizia",
+        "date": "1293",
+        "description": "Giano Della Bella promulga gli Ordinamenti di Giustizia, riforma politica che limita il potere della nobiltà e favorisce la borghesia mercantile.",
+        "event_type": "political"
+    },
+    {
+        "name": "Inizio Duomo di Firenze",
+        "date": "1296",
+        "description": "Arnolfo di Cambio inizia la costruzione di Santa Maria del Fiore, il Duomo di Firenze. Sarà completato solo nel XV secolo con la cupola del Brunelleschi.",
+        "event_type": "architectural"
+    },
+    {
+        "name": "Palazzo Vecchio",
+        "date": "1299",
+        "description": "Costruzione di Palazzo Vecchio (Palazzo della Signoria) su progetto di Arnolfo di Cambio. Diventa sede del governo fiorentino.",
+        "event_type": "architectural"
+    },
+    {
+        "name": "Bianchi e Neri",
+        "date": "1301",
+        "description": "Divisione dei Guelfi in Bianchi e Neri. Dante Alighieri viene esiliato con la fazione dei Bianchi. Inizio delle lotte intestine che segneranno il XIV secolo.",
+        "event_type": "political"
+    },
+    {
+        "name": "Giotto agli Affreschi",
+        "date": "1305",
+        "description": "Giotto inizia i suoi lavori a Firenze, tra cui gli affreschi in Santa Croce. Rivoluziona l'arte occidentale introducendo il realismo nella pittura.",
+        "event_type": "cultural"
+    },
+    {
+        "name": "Basilica di Santa Croce",
+        "date": "1320",
+        "description": "Completamento della Basilica di Santa Croce, capolavoro dell'architettura gotica italiana. Diventa pantheon delle glorie fiorentine.",
+        "event_type": "architectural"
+    },
+    {
+        "name": "Alluvione dell'Arno",
+        "date": "1333",
+        "description": "Terribile alluvione dell'Arno che distrugge il Ponte Vecchio e gran parte della città. Migliaia di morti e devastazione economica.",
+        "event_type": "natural"
+    },
+    {
+        "name": "Rivolta dei Ciompi",
+        "date": "1378",
+        "description": "Rivolta popolare guidata da Michele di Lando. I lavoratori della lana (ciompi) si ribellano contro l'oligarchia mercantile, ottenendo temporaneamente il potere.",
+        "event_type": "political"
+    },
+    {
+        "name": "Cupola del Brunelleschi",
+        "date": "1436",
+        "description": "Filippo Brunelleschi completa la cupola di Santa Maria del Fiore, capolavoro ingegneristico del Rinascimento. Diventa simbolo di Firenze.",
+        "event_type": "architectural"
+    },
+    {
+        "name": "Ascesa dei Medici",
+        "date": "1434",
+        "description": "Cosimo de' Medici torna dall'esilio e diventa signore di fatto di Firenze. Inizia la dinastia medicea che durerà per secoli.",
+        "event_type": "political"
+    },
+    {
+        "name": "Accademia Platonica",
+        "date": "1462",
+        "description": "Cosimo de' Medici fonda l'Accademia Platonica, centro di studi umanistici guidato da Marsilio Ficino. Fulcro della cultura rinascimentale.",
+        "event_type": "cultural"
+    },
+    {
+        "name": "Congiura dei Pazzi",
+        "date": "1478",
+        "description": "Tentativo di assassinio di Lorenzo il Magnifico e Giuliano de' Medici durante la messa in Duomo. Giuliano viene ucciso, Lorenzo sopravvive.",
+        "event_type": "political"
+    },
+    {
+        "name": "Girolamo Savonarola",
+        "date": "1494",
+        "description": "Il frate domenicano Savonarola prende il controllo di Firenze dopo la caduta dei Medici. Instaura una repubblica teocratica.",
+        "event_type": "religious"
+    },
+    {
+        "name": "Rogo delle Vanità",
+        "date": "1497",
+        "description": "Savonarola organizza il 'Rogo delle Vanità' in Piazza della Signoria, bruciando opere d'arte, libri e oggetti di lusso considerati peccaminosi.",
+        "event_type": "religious"
+    },
+    {
+        "name": "Morte di Savonarola",
+        "date": "1498",
+        "description": "Girolamo Savonarola viene giustiziato in Piazza della Signoria dopo essere stato scomunicato da Papa Alessandro VI. Fine della repubblica teocratica.",
+        "event_type": "religious"
+    },
+    {
+        "name": "Ritorno dei Medici",
+        "date": "1512",
+        "description": "I Medici tornano al potere con l'aiuto delle truppe spagnole. Giovanni de' Medici diventa Papa Leone X nel 1513.",
+        "event_type": "political"
+    }
+]
