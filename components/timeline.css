@@ -372,3 +372,28 @@
     text-align: center;
     margin: 0;
 }
+
+.wiki-events-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 0.75rem 0;
+}
+
+.wiki-event-item {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: #374151;
+}
+
+.wiki-event-item:last-child {
+    border-bottom: none;
+}
+
+.wiki-event-item:before {
+    content: '•';
+    color: #6b7280;
+    margin-right: 0.5rem;
+    font-weight: bold;
+}

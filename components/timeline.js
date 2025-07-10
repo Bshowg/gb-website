@@ -113,7 +113,7 @@ class TimelineVisualizer {
         try {
             // Handle BC years
             const yearStr = year < 0 ? `${Math.abs(year)} a.C.` : `${year}`;
-            const url = `https://it.wikipedia.org/api/rest_v1/page/summary/${yearStr}`;
+            const url = `https://it.wikipedia.org/w/api.php?action=parse&page=${yearStr}&format=json&section=0&prop=wikitext&origin=*`;
             
             const response = await fetch(url);
             if (!response.ok) {
@@ -121,15 +121,65 @@ class TimelineVisualizer {
             }
             
             const data = await response.json();
+            if (data.error) {
+                throw new Error(data.error.info);
+            }
+
+            const wikitext = data.parse?.wikitext?.['*'];
+            if (!wikitext) {
+                return null;
+            }
+
+            const events = this.parseWikipediaEvents(wikitext);
             return {
-                title: data.title,
-                extract: data.extract,
-                url: data.content_urls?.desktop?.page || '#'
+                title: data.parse.title,
+                events: events.slice(0, 10), // Max 10 events
+                url: `https://it.wikipedia.org/wiki/${yearStr}`
             };
         } catch (error) {
             console.error('Error fetching Wikipedia data:', error);
             return null;
         }
+    }
+
+    parseWikipediaEvents(wikitext) {
+        const events = [];
+        
+        // Look for Eventi section patterns
+        const eventSectionRegex = /==\s*Eventi\s*==([\s\S]*?)(?===|$)/i;
+        const eventSection = wikitext.match(eventSectionRegex);
+        
+        if (eventSection) {
+            const content = eventSection[1];
+            
+            // Parse bullet points and numbered lists
+            const lines = content.split('\n');
+            
+            for (const line of lines) {
+                const trimmedLine = line.trim();
+                
+                // Match various list formats: *, **, #, etc.
+                if (trimmedLine.match(/^[\*#]+\s+/)) {
+                    let eventText = trimmedLine.replace(/^[\*#]+\s+/, '');
+                    
+                    // Clean up wikitext formatting
+                    eventText = eventText
+                        .replace(/\[\[([^\|\]]+)\|?([^\]]*)\]\]/g, (match, link, text) => text || link)
+                        .replace(/\[\[([^\]]+)\]\]/g, '$1')
+                        .replace(/'''([^']+)'''/g, '$1')
+                        .replace(/''([^']+)''/g, '$1')
+                        .replace(/<[^>]+>/g, '')
+                        .replace(/{{[^}]+}}/g, '')
+                        .trim();
+                    
+                    if (eventText && eventText.length > 10 && !eventText.includes('{{')) {
+                        events.push(eventText);
+                    }
+                }
+            }
+        }
+        
+        return events;
     }
 
     showWikipediaEvents(card, year, wikipediaData) {
@@ -143,16 +193,18 @@ class TimelineVisualizer {
         const wikiContainer = document.createElement('div');
         wikiContainer.className = 'wikipedia-events';
         
-        if (wikipediaData) {
+        if (wikipediaData && wikipediaData.events && wikipediaData.events.length > 0) {
             wikiContainer.innerHTML = `
                 <div class="wiki-header">
                     <h4>Altri eventi del ${year < 0 ? Math.abs(year) + ' a.C.' : year + ' d.C.'}</h4>
                     <button class="wiki-close">×</button>
                 </div>
                 <div class="wiki-content">
-                    <p class="wiki-extract">${wikipediaData.extract}</p>
+                    <ul class="wiki-events-list">
+                        ${wikipediaData.events.map(event => `<li class="wiki-event-item">${event}</li>`).join('')}
+                    </ul>
                     <a href="${wikipediaData.url}" target="_blank" class="wiki-link">
-                        Leggi di più su Wikipedia →
+                        Vedi tutti gli eventi su Wikipedia →
                     </a>
                 </div>
             `;
@@ -163,7 +215,7 @@ class TimelineVisualizer {
                     <button class="wiki-close">×</button>
                 </div>
                 <div class="wiki-content">
-                    <p class="wiki-error">Nessuna informazione aggiuntiva disponibile per questo anno.</p>
+                    <p class="wiki-error">Nessun evento trovato per questo anno su Wikipedia.</p>
                 </div>
             `;
         }
