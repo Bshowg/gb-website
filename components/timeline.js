@@ -237,7 +237,70 @@ class TimelineVisualizer {
             }
         }
         
-        // If no events found, try fallback sections\n        if (events.length === 0) {\n            console.log('No events found, trying fallback sections...');\n            \n            // Try Nati (Born) section\n            const natiSectionRegex = /==\\s*Nati\\s*==([\\s\\S]*?)(?===|$)/i;\n            const natiSection = wikitext.match(natiSectionRegex);\n            \n            if (natiSection) {\n                console.log('✓ Found Nati section as fallback');\n                const natiContent = natiSection[1];\n                const natiLines = natiContent.split('\\n');\n                \n                for (const line of natiLines) {\n                    const trimmedLine = line.trim();\n                    if (trimmedLine.startsWith('*')) {\n                        let eventText = trimmedLine.substring(1).trim();\n                        eventText = eventText\n                            .replace(/\\[\\[([^\\|\\]]+)\\|([^\\]]+)\\]\\]/g, '$2')\n                            .replace(/\\[\\[([^\\]]+)\\]\\]/g, '$1')\n                            .replace(/'''([^']+)'''/g, '$1')\n                            .replace(/''([^']+)''/g, '$1')\n                            .replace(/<[^>]+>/g, '')\n                            .replace(/{{[^}]+}}/g, '')\n                            .trim();\n                        \n                        if (eventText && eventText.length > 10) {\n                            events.push('👶 Nascita: ' + eventText);\n                        }\n                    }\n                }\n            }\n            \n            // Try Morti (Deaths) section\n            const mortiSectionRegex = /==\\s*Morti\\s*==([\\s\\S]*?)(?===|$)/i;\n            const mortiSection = wikitext.match(mortiSectionRegex);\n            \n            if (mortiSection) {\n                console.log('✓ Found Morti section as fallback');\n                const mortiContent = mortiSection[1];\n                const mortiLines = mortiContent.split('\\n');\n                \n                for (const line of mortiLines) {\n                    const trimmedLine = line.trim();\n                    if (trimmedLine.startsWith('*')) {\n                        let eventText = trimmedLine.substring(1).trim();\n                        eventText = eventText\n                            .replace(/\\[\\[([^\\|\\]]+)\\|([^\\]]+)\\]\\]/g, '$2')\n                            .replace(/\\[\\[([^\\]]+)\\]\\]/g, '$1')\n                            .replace(/'''([^']+)'''/g, '$1')\n                            .replace(/''([^']+)''/g, '$1')\n                            .replace(/<[^>]+>/g, '')\n                            .replace(/{{[^}]+}}/g, '')\n                            .trim();\n                        \n                        if (eventText && eventText.length > 10) {\n                            events.push('💀 Morte: ' + eventText);\n                        }\n                    }\n                }\n            }\n        }\n        \n        console.log('Total events found:', events.length);
+        // If no events found, try fallback sections
+        if (events.length === 0) {
+            console.log('No events found, trying fallback sections...');
+            
+            // Try Nati (Born) section
+            const natiSectionRegex = /==\s*Nati\s*==([\s\S]*?)(?===|$)/i;
+            const natiSection = wikitext.match(natiSectionRegex);
+            
+            if (natiSection) {
+                console.log('✓ Found Nati section as fallback');
+                const natiContent = natiSection[1];
+                const natiLines = natiContent.split('\n');
+                
+                for (const line of natiLines) {
+                    const trimmedLine = line.trim();
+                    if (trimmedLine.startsWith('*')) {
+                        let eventText = trimmedLine.substring(1).trim();
+                        eventText = eventText
+                            .replace(/\[\[([^\|\]]+)\|([^\]]+)\]\]/g, '$2')
+                            .replace(/\[\[([^\]]+)\]\]/g, '$1')
+                            .replace(/'''([^']+)'''/g, '$1')
+                            .replace(/''([^']+)''/g, '$1')
+                            .replace(/<[^>]+>/g, '')
+                            .replace(/{{[^}]+}}/g, '')
+                            .trim();
+                        
+                        if (eventText && eventText.length > 10) {
+                            events.push('👶 Nascita: ' + eventText);
+                        }
+                    }
+                }
+            }
+            
+            // Try Morti (Deaths) section
+            const mortiSectionRegex = /==\s*Morti\s*==([\s\S]*?)(?===|$)/i;
+            const mortiSection = wikitext.match(mortiSectionRegex);
+            
+            if (mortiSection) {
+                console.log('✓ Found Morti section as fallback');
+                const mortiContent = mortiSection[1];
+                const mortiLines = mortiContent.split('\n');
+                
+                for (const line of mortiLines) {
+                    const trimmedLine = line.trim();
+                    if (trimmedLine.startsWith('*')) {
+                        let eventText = trimmedLine.substring(1).trim();
+                        eventText = eventText
+                            .replace(/\[\[([^\|\]]+)\|([^\]]+)\]\]/g, '$2')
+                            .replace(/\[\[([^\]]+)\]\]/g, '$1')
+                            .replace(/'''([^']+)'''/g, '$1')
+                            .replace(/''([^']+)''/g, '$1')
+                            .replace(/<[^>]+>/g, '')
+                            .replace(/{{[^}]+}}/g, '')
+                            .trim();
+                        
+                        if (eventText && eventText.length > 10) {
+                            events.push('💀 Morte: ' + eventText);
+                        }
+                    }
+                }
+            }
+        }
+        
+        console.log('Total events found:', events.length);
         return events;
     }
 
