@@ -9,7 +9,8 @@ class TimelineVisualizer {
             'architectural': '#F59E0B',
             'military': '#EF4444',
             'religious': '#8B5CF6',
-            'economic': '#F97316'
+            'economic': '#F97316',
+            'natural': '#8B5CF6'
         };
         this.init();
     }
@@ -111,13 +112,10 @@ class TimelineVisualizer {
 
     async fetchWikipediaYear(year) {
         try {
-            // Handle BC years
             const yearStr = year < 0 ? `${Math.abs(year)} a.C.` : `${year}`;
-            
-            // First try to get the full page content
             const url = `https://it.wikipedia.org/w/api.php?action=parse&page=${yearStr}&format=json&prop=wikitext&origin=*`;
             
-            console.log('Fetching Wikipedia for year:', yearStr, 'URL:', url);
+            console.log('Fetching Wikipedia for year:', yearStr);
             
             const response = await fetch(url);
             if (!response.ok) {
@@ -125,7 +123,7 @@ class TimelineVisualizer {
             }
             
             const data = await response.json();
-            console.log('Wikipedia response:', data);
+            console.log('Wikipedia API response:', data);
             
             if (data.error) {
                 console.log('Wikipedia API error:', data.error);
@@ -134,17 +132,16 @@ class TimelineVisualizer {
 
             const wikitext = data.parse?.wikitext?.['*'];
             if (!wikitext) {
-                console.log('No wikitext found in response');
+                console.log('No wikitext found');
                 return null;
             }
 
-            console.log('Wikitext sample:', wikitext.substring(0, 500));
+            console.log('Wikitext sample (first 500 chars):', wikitext.substring(0, 500));
             const events = this.parseWikipediaEvents(wikitext);
-            console.log('Parsed events:', events);
             
             return {
                 title: data.parse.title,
-                events: events.slice(0, 10), // Max 10 events
+                events: events.slice(0, 10),
                 url: `https://it.wikipedia.org/wiki/${yearStr}`
             };
         } catch (error) {
@@ -156,88 +153,64 @@ class TimelineVisualizer {
     parseWikipediaEvents(wikitext) {
         const events = [];
         
-        // Try multiple section patterns
-        const sectionPatterns = [
-            /==\s*Eventi\s*==([\s\S]*?)(?===|$)/i,
-            /==\s*Accadimenti\s*==([\s\S]*?)(?===|$)/i,
-            /==\s*Storia\s*==([\s\S]*?)(?===|$)/i,
-            /==\s*Cronologia\s*==([\s\S]*?)(?===|$)/i
-        ];
+        // Look for Eventi section
+        const eventSectionRegex = /==\s*Eventi\s*==([\s\S]*?)(?===|$)/i;
+        const eventSection = wikitext.match(eventSectionRegex);
         
-        let eventSection = null;
-        for (const pattern of sectionPatterns) {
-            eventSection = wikitext.match(pattern);
-            if (eventSection) {
-                console.log('Found section with pattern:', pattern.source);
-                break;
-            }
-        }
-        
-        if (!eventSection) {
-            // If no specific section found, try to parse the entire content for events
-            console.log('No specific section found, parsing entire content');
-            eventSection = [null, wikitext];
-        }
+        console.log('Looking for Eventi section...');
         
         if (eventSection) {
+            console.log('✓ Found Eventi section!');
             const content = eventSection[1];
-            console.log('Section content sample:', content.substring(0, 300));
+            console.log('Eventi section content (first 300 chars):', content.substring(0, 300));
             
-            // Parse bullet points and numbered lists
             const lines = content.split('\n');
             
-            for (const line of lines) {
-                const trimmedLine = line.trim();
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
                 
-                // Match various list formats: *, **, #, etc.
-                if (trimmedLine.match(/^[\*#:]+\s+/) || trimmedLine.match(/^\d+\.\s+/)) {
-                    let eventText = trimmedLine
-                        .replace(/^[\*#:]+\s+/, '')
-                        .replace(/^\d+\.\s+/, '');
+                // Look for lines starting with * (bullet points)
+                if (line.startsWith('*')) {
+                    let eventText = line.substring(1).trim(); // Remove the *
                     
-                    // Clean up wikitext formatting
+                    console.log(`Line ${i}: Raw event:`, eventText);
+                    
+                    // Clean up wikitext formatting step by step
                     eventText = eventText
-                        .replace(/\[\[([^\|\]]+)\|?([^\]]*)\]\]/g, (match, link, text) => text || link)
-                        .replace(/\[\[([^\]]+)\]\]/g, '$1')
-                        .replace(/'''([^']+)'''/g, '$1')
-                        .replace(/''([^']+)''/g, '$1')
-                        .replace(/<[^>]+>/g, '')
-                        .replace(/{{[^}]+}}/g, '')
-                        .replace(/&[a-zA-Z]+;/g, '')
+                        .replace(/\[\[([^\|\]]+)\|([^\]]+)\]\]/g, '$2') // [[link|text]] -> text
+                        .replace(/\[\[([^\]]+)\]\]/g, '$1') // [[link]] -> link
+                        .replace(/'''([^']+)'''/g, '$1') // '''bold''' -> bold
+                        .replace(/''([^']+)''/g, '$1') // ''italic'' -> italic
+                        .replace(/<[^>]+>/g, '') // remove HTML tags
+                        .replace(/{{[^}]+}}/g, '') // remove templates
+                        .replace(/&[a-zA-Z0-9]+;/g, '') // remove HTML entities
                         .trim();
                     
-                    if (eventText && eventText.length > 15 && !eventText.includes('{{') && !eventText.startsWith('|')) {
-                        events.push(eventText);
-                        console.log('Added event:', eventText);
-                    }
-                }
-                
-                // Also try to find date patterns in the text
-                if (trimmedLine.includes('gennaio') || trimmedLine.includes('febbraio') || 
-                    trimmedLine.includes('marzo') || trimmedLine.includes('aprile') ||
-                    trimmedLine.includes('maggio') || trimmedLine.includes('giugno') ||
-                    trimmedLine.includes('luglio') || trimmedLine.includes('agosto') ||
-                    trimmedLine.includes('settembre') || trimmedLine.includes('ottobre') ||
-                    trimmedLine.includes('novembre') || trimmedLine.includes('dicembre')) {
+                    console.log(`Line ${i}: Cleaned event:`, eventText);
                     
-                    let eventText = trimmedLine
-                        .replace(/\[\[([^\|\]]+)\|?([^\]]*)\]\]/g, (match, link, text) => text || link)
-                        .replace(/\[\[([^\]]+)\]\]/g, '$1')
-                        .replace(/'''([^']+)'''/g, '$1')
-                        .replace(/''([^']+)''/g, '$1')
-                        .replace(/<[^>]+>/g, '')
-                        .replace(/{{[^}]+}}/g, '')
-                        .trim();
-                    
-                    if (eventText && eventText.length > 20 && !eventText.includes('{{')) {
+                    // Add if it's a valid event
+                    if (eventText && 
+                        eventText.length > 10 && 
+                        !eventText.includes('{{') && 
+                        !eventText.includes('}}') &&
+                        !eventText.startsWith('|') &&
+                        !eventText.includes('[[Categoria:')) {
+                        
                         events.push(eventText);
-                        console.log('Added date event:', eventText);
+                        console.log(`✓ Added event ${events.length}:`, eventText);
+                    } else {
+                        console.log(`✗ Rejected event (length: ${eventText.length}):`, eventText);
                     }
                 }
             }
+        } else {
+            console.log('✗ No Eventi section found');
+            // Show available sections for debugging
+            const sections = wikitext.match(/==\s*[^=]+\s*==/g);
+            console.log('Available sections:', sections);
         }
         
-        console.log('Total events found:', events.length);
+        console.log(`Total events found: ${events.length}`);
         return events;
     }
 
@@ -302,6 +275,8 @@ class TimelineVisualizer {
 
                 const eventData = sortedData[index];
                 const year = this.parseDate(eventData.date);
+                
+                console.log('Clicked event:', eventData.name, 'Year:', year);
                 
                 // Show loading state
                 card.classList.add('loading');
