@@ -6,6 +6,7 @@
     <title>Longobardi - Cheatsheet</title>
     <link rel="stylesheet" href="../style.css">
     <link href="../output.css" rel="stylesheet">
+    <script defer src="../scripts/main.js"></script>
     <style>
         p { text-align: left; }
     </style>
@@ -13,7 +14,7 @@
 <body class="notebook">
 
     <!-- Include the header component -->
-    <div x-data x-init="$el.innerHTML = await (await fetch('../components/header.html')).text().then(html => html.replace('{{ title }}', 'Longobardi').replace('{{ subtitle }}', 'Cheatsheet storico sui Longobardi'))"></div>
+    <div x-data x-init="$el.innerHTML = await (await fetch('../components/header.html')).text().then(html => html.replace('{{ title }}', 'Longobardi').replace('{{ subtitle }}', '568-774 d.C.'))"></div>
 
     <main class="w-full max-w-7xl mx-auto py-8 mb-5">
         <section class="bg-white text-black p-4 rounded mb-6 mx-4 border-l-4 border-blue-600">
@@ -21,7 +22,17 @@
         </section>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mx-4">
-                <div class="bg-white text-black p-4 rounded shadow-lg border-l-4 border-green-600">
+            <div class="bg-white text-black p-4 rounded shadow-lg mx-4 mt-6 text-center border-l-4 border-cyan-600">
+                <p class="mb-4 text-left">Mappa politica dell'Italia nel 568 d.C. che mostra la distribuzione territoriale tra Longobardi, Bizantini e Stato Pontificio.</p>
+                <div class="mb-4 max-w-full overflow-hidden">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a2/Alboin%27s_Italy-it.svg" 
+                         alt="Mappa dell'Italia longobarda al tempo di Alboino" 
+                         class="w-full max-w-2xl mx-auto rounded shadow-lg"
+                         style="max-height: 600px; object-fit: contain;">
+                </div>
+                <p class="text-sm text-gray-600">Fonte: Wikipedia - File:Alboin's_Italy-it.svg</p>
+            </div>
+                <div class="bg-black text-white p-4 rounded shadow-lg border-l-4 border-green-600">
                     <h2 class="text-xl font-bold mb-4">Origini e Prime Migrazioni</h2>
                     <p><strong>Nome originario:</strong> Winnili (dalla Scandinavia meridionale)</p>
                     <p><strong>Etimologia:</strong> "Longobardi" (barbe lunghe) secondo la leggenda dal dio Odino</p>
@@ -29,7 +40,7 @@
                     <p><strong>Periodo fiume Elba:</strong> I-II secolo d.C. - insediamento presso il fiume Elba</p>
                 </div>
 
-                <div class="bg-white text-black p-4 rounded shadow-lg border-l-4 border-red-600">
+                <div class="bg-black text-white p-4 rounded shadow-lg border-l-4 border-red-600">
                     <h2 class="text-xl font-bold mb-4">Cronologia delle Migrazioni</h2>
                     <div class="border-l-4 border-purple-600 pl-4">
                         <p><strong>II-IV secolo:</strong> Movimento attraverso territori germanici</p>
@@ -39,7 +50,7 @@
                     </div>
                 </div>
 
-                <div class="bg-white text-black p-4 rounded shadow-lg border-l-4 border-yellow-600">
+                <div class="bg-black text-white p-4 rounded shadow-lg border-l-4 border-yellow-600">
                     <h2 class="text-xl font-bold mb-4">Sovrani Principali</h2>
                     <p><strong>Alboino (568-572):</strong> Guidò l'invasione dell'Italia</p>
                     <p><strong>Agilulfo (590-616):</strong> Espanse il territorio, sposò Teodolinda</p>
@@ -48,7 +59,7 @@
                     <p><strong>Desiderio (756-774):</strong> Ultimo re longobardo, sconfitto da Carlo Magno</p>
                 </div>
 
-                <div class="bg-white text-black p-4 rounded shadow-lg border-l-4 border-indigo-600">
+                <div class="bg-black text-white p-4 rounded shadow-lg border-l-4 border-indigo-600">
                     <h2 class="text-xl font-bold mb-4">Territorio e Organizzazione</h2>
                     <p><strong>Capitale:</strong> Pavia</p>
                     <p><strong>Divisione territoriale:</strong></p>
@@ -60,7 +71,7 @@
                     <p><strong>Fine:</strong> Sconfitta da parte dei Franchi di Carlo Magno nel 774</p>
                 </div>
 
-                <div class="bg-white text-black p-4 rounded shadow-lg border-l-4 border-pink-600">
+                <div class="bg-black text-white p-4 rounded shadow-lg border-l-4 border-pink-600">
                     <h2 class="text-xl font-bold mb-4">Cultura e Società</h2>
                     <p><strong>Governo:</strong> Società guerriera con re eletti</p>
                     <p><strong>Religione:</strong> Inizialmente pagani/ariani → conversione al cattolicesimo</p>
@@ -68,7 +79,7 @@
                     <p><strong>Integrazione:</strong> Graduale fusione con la popolazione romana</p>
                 </div>
 
-                <div class="bg-white text-black p-4 rounded shadow-lg border-l-4 border-teal-600">
+                <div class="bg-black text-white p-4 rounded shadow-lg border-l-4 border-teal-600">
                     <h2 class="text-xl font-bold mb-4">Date Chiave</h2>
                     <div class="border-l-4 border-purple-600 pl-4 italic">
                         <p><strong>568:</strong> Inizio dell'invasione dell'Italia</p>
@@ -78,21 +89,12 @@
                 </div>
             </div>
 
-            <div class="bg-white text-black p-4 rounded shadow-lg mx-4 mt-6 border-l-4 border-orange-600">
+            <div class="bg-black text-white p-4 rounded shadow-lg mx-4 mt-6 border-l-4 border-orange-600">
                 <h2 class="text-xl font-bold mb-4">Significato Storico</h2>
                 <p>I Longobardi trasformarono il panorama sociale e politico italiano, fungendo da ponte tra la cultura germanica e quella romana. Gettarono le basi per la società italiana medievale e furono infine assorbiti dai Normanni nell'XI secolo.</p>
             </div>
 
-            <div class="bg-white text-black p-4 rounded shadow-lg mx-4 mt-6 text-center border-l-4 border-cyan-600">
-                <p class="mb-4 text-left">Mappa politica dell'Italia nel 568 d.C. che mostra la distribuzione territoriale tra Longobardi, Bizantini e Stato Pontificio.</p>
-                <div class="mb-4 max-w-full overflow-hidden">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a2/Alboin%27s_Italy-it.svg" 
-                         alt="Mappa dell'Italia longobarda al tempo di Alboino" 
-                         class="w-full max-w-2xl mx-auto rounded shadow-lg"
-                         style="max-height: 600px; object-fit: contain;">
-                </div>
-                <p class="text-sm text-gray-600">Fonte: Wikipedia - File:Alboin's_Italy-it.svg</p>
-            </div>
+            
     </main>
 
     <footer class="max-w-4xl mx-auto text-center p-4 text-white bg-black">
