@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cheatsheet - Gbwebsite</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="../output.css" rel="stylesheet">
+    <script defer src="../scripts/router.js"></script>
+    <script defer src="../scripts/main.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.2/dist/cdn.min.js"></script>
+</head>
+<body class="notebook">
+
+    <!-- Header -->
+    <header class="text-center py-8 hero bg-bottom bg-cover max-w-4xl mx-auto pb-8 flex items-center flex-col">
+        <div class="m-auto">
+            <h1 class="text-3xl md:text-5xl font-bold tracking-wide text-white tracking-tighter">GIANMARCHISSIMO</h1>
+            <nav class="mt-4">
+                <ul class="flex justify-center space-x-4">
+                    <li><a href="../index.html" class="hover:underline text-white">Home</a></li>
+                    <li><a href="../static/contacts.html" class="hover:underline text-white">Contacts</a></li>
+                    <li><a href="../static/oracoli.html" class="hover:underline text-white">Oracula</a></li>
+                    <li><a href="../static/games/index.html" class="hover:underline text-white">Ludoteca</a></li>
+                    <li><a href="index.html" class="hover:underline text-white">Cheatsheet</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <header class="max-w-4xl mx-auto pb-8 flex items-center flex-col text-center py-12 bg-white">
+        <h1 class="text-5xl font-bold" id="subtitle">Cheatsheet</h1>
+        <p class="text-center">Riassunti e guide di riferimento rapido</p>
+    </header>
+
+    <main class="max-w-4xl mx-auto py-8 text-center mb-5 bg-white">
+        <div class="bg-black text-white p-6 rounded-lg shadow-lg m-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Cheatsheet Collection</h2>
+            <p class="mb-4">Una raccolta di riassunti e guide di riferimento rapido su vari argomenti storici, culturali e tecnici.</p>
+        </div>
+
+        <div id="cheatsheet-list" x-data="cheatsheetList()">
+            <div x-show="loading" class="text-center py-8">
+                <p>Caricamento cheatsheet...</p>
+            </div>
+            
+            <div x-show="!loading && cheatsheets.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <template x-for="cheatsheet in cheatsheets" :key="cheatsheet.name">
+                    <div class="bg-black text-white p-6 rounded-lg shadow-lg m-6 h-44">
+                        <h3 class="text-2xl font-bold mb-4" x-text="cheatsheet.title"></h3>
+                        <p class="mb-4" x-text="cheatsheet.description"></p>
+                        <a :href="cheatsheet.path" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-full">
+                            Leggi Cheatsheet
+                        </a>
+                    </div>
+                </template>
+            </div>
+            
+            <div x-show="!loading && cheatsheets.length === 0" class="text-center py-8">
+                <p>Nessun cheatsheet disponibile al momento.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="max-w-4xl mx-auto text-center p-4 text-white bg-black">
+        <p>© 2024 Gianmarco Biscini. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function cheatsheetList() {
+            return {
+                cheatsheets: [],
+                loading: true,
+                
+                async init() {
+                    try {
+                        // Manually define the available cheatsheets
+                        const availableCheatsheets = [
+                            {
+                                name: 'longobardi.html',
+                                path: 'longobardi.html',
+                                title: 'Longobardi (568-774 d.C.)',
+                                description: 'Cheatsheet storico sui Longobardi - popolazione germanica che conquistò gran parte dell\'Italia nel VI secolo'
+                            }
+                        ];
+                        
+                        // Verify each cheatsheet exists by trying to fetch it
+                        const validCheatsheets = [];
+                        for (const cheatsheet of availableCheatsheets) {
+                            try {
+                                const response = await fetch(cheatsheet.path, { method: 'HEAD' });
+                                if (response.ok) {
+                                    validCheatsheets.push(cheatsheet);
+                                }
+                            } catch (error) {
+                                console.log(`Cheatsheet ${cheatsheet.name} not accessible:`, error);
+                            }
+                        }
+                        
+                        this.cheatsheets = validCheatsheets;
+                        this.loading = false;
+                    } catch (error) {
+                        console.error('Error loading cheatsheets:', error);
+                        this.loading = false;
+                    }
+                }
+            }
+        }
+    </script>
+
+</body>
+</html>
