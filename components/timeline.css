@@ -102,11 +102,15 @@
 .event-top {
     right: 55%;
     text-align: right;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .event-bottom {
     left: 55%;
     text-align: left;
+    display: flex;
+    justify-content: flex-start;
 }
 
 .event-card {
@@ -188,6 +192,8 @@
         left: 4rem !important;
         right: auto !important;
         text-align: left !important;
+        display: flex !important;
+        justify-content: flex-start !important;
     }
     
     .event-mobile::before {
