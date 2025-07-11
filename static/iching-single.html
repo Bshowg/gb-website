@@ -337,4 +337,7 @@
         }
       });
   </script>
+
+  <!-- Include the footer component -->
+  <div x-data x-init="$el.innerHTML = await (await fetch('../components/footer.html')).text()"></div>
 </html>
