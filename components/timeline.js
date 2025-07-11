@@ -159,9 +159,7 @@ class TimelineVisualizer {
         // Try multiple section patterns
         const sectionPatterns = [
             /==\s*Eventi\s*==([\s\S]*?)(?===|$)/i,
-            /==\s*Accadimenti\s*==([\s\S]*?)(?===|$)/i,
-            /==\s*Storia\s*==([\s\S]*?)(?===|$)/i,
-            /==\s*Cronologia\s*==([\s\S]*?)(?===|$)/i
+            /==\s*Nati\s*==([\s\S]*?)(?===|$)/i
         ];
         
         let eventSection = null;
@@ -188,9 +186,11 @@ class TimelineVisualizer {
             
             for (const line of lines) {
                 const trimmedLine = line.trim();
-                
+
+                if(trimmedLine.length === 0) continue;
+
                 // Match various list formats: *, **, #, etc.
-                if (trimmedLine.match(/^[\*#:]+\s+/) || trimmedLine.match(/^\d+\.\s+/)) {
+                if (trimmedLine.match(/^[\*#:]+\s*/) || trimmedLine.match(/^\d+\.\s*/)) {
                     let eventText = trimmedLine
                         .replace(/^[\*#:]+\s*/, '')
                         .replace(/^\d+\.\s*/, '');
@@ -212,28 +212,7 @@ class TimelineVisualizer {
                     }
                 }
                 
-                // Also try to find date patterns in the text
-                if (trimmedLine.includes('gennaio') || trimmedLine.includes('febbraio') || 
-                    trimmedLine.includes('marzo') || trimmedLine.includes('aprile') ||
-                    trimmedLine.includes('maggio') || trimmedLine.includes('giugno') ||
-                    trimmedLine.includes('luglio') || trimmedLine.includes('agosto') ||
-                    trimmedLine.includes('settembre') || trimmedLine.includes('ottobre') ||
-                    trimmedLine.includes('novembre') || trimmedLine.includes('dicembre')) {
-                    
-                    let eventText = trimmedLine
-                        .replace(/\[\[([^\|\]]+)\|?([^\]]*)\]\]/g, (match, link, text) => text || link)
-                        .replace(/\[\[([^\]]+)\]\]/g, '$1')
-                        .replace(/'''([^']+)'''/g, '$1')
-                        .replace(/''([^']+)''/g, '$1')
-                        .replace(/<[^>]+>/g, '')
-                        .replace(/{{[^}]+}}/g, '')
-                        .trim();
-                    
-                    if (eventText && eventText.length > 20 && !eventText.includes('{{')) {
-                        events.push(eventText);
-                        console.log('Added date event:', eventText);
-                    }
-                }
+                
             }
         }
         
