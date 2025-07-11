@@ -6,16 +6,28 @@
         "event_type": "political"
     },
     {
-        "name": "Primo Vescovo Felix",
-        "date": "313 AD",
-        "description": "Primo vescovo documentato di Firenze, Felix, presente a un incontro con Papa Milziade a Roma. Segna l'inizio dell'organizzazione cristiana nella città.",
-        "event_type": "religious"
+        "name": "Prime Notizie Ufficiali",
+        "date": "123 AD",
+        "description": "Viene costruito il primo ponte sull'Arno, la città viene dotata di Foro (odierna Piazza della Repubblica) e acquedotto.",
+        "event_type": "architectural"
     },
     {
         "name": "Sede Amministrativa Dioclesiana",
         "date": "285 AD",
         "description": "L'imperatore Diocleziano stabilisce una sede amministrativa regionale a Firenze, accrescendo l'importanza della città nell'impero romano.",
         "event_type": "political"
+    },
+    {
+        "name": "Primo Vescovo Felice",
+        "date": "313 AD",
+        "description": "Primo vescovo documentato di Firenze, Felice, presente a un incontro con Papa Milziade a Roma. Segna l'inizio dell'organizzazione cristiana nella città.",
+        "event_type": "religious"
+    },
+    {
+        "name": "Visita di Sant'Ambrogio",
+        "date": "393 AD",
+        "description": "Sant'Ambrogio visita la città e fonda la chiesa di San Lorenzo allora fuori dalle mura (forse sul sito di una necropoli cristiana, come avveniva a quel tempo con le prime basiliche romane)",
+        "event_type": "religious"
     },
     {
         "name": "Sconfitta di Radagaiso",
