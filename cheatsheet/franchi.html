@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Franchi - Cheatsheet</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="../output.css" rel="stylesheet">
+    <script defer src="../scripts/main.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        p { text-align: left; }
+    </style>
+</head>
+<body class="notebook">
+
+    <!-- Include the header component -->
+    <div x-data x-init="$el.innerHTML = await (await fetch('../components/header.html')).text().then(html => html.replace('{{ title }}', 'Franchi').replace('{{ subtitle }}', 'III-IX secolo d.C.'))"></div>
+
+    <main class="w-full max-w-7xl mx-auto py-8 mb-5">
+        <section class="bg-white text-black p-4 rounded mb-6 mx-4 border-l-4 border-blue-600">
+            <strong>I Franchi (III-IX secolo d.C.)</strong> - Confederazione di tribù germaniche che dominò l'Europa occidentale, fondando l'Impero Carolingio e gettando le basi per Francia e Germania moderne.
+        </section>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mx-4">
+            <div class="bg-white text-black p-4 rounded shadow-lg mx-4 mt-6 text-center border-l-4 border-cyan-600">
+                <p class="mb-4 text-left">Mappa dell'Impero Carolingio al tempo di Carlo Magno, che mostra la massima estensione del potere franco in Europa.</p>
+                <div class="mb-4 max-w-full overflow-hidden">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Charlemagne_empire_map.png" 
+                         alt="Mappa dell'Impero Carolingio" 
+                         class="w-full max-w-2xl mx-auto rounded shadow-lg"
+                         style="max-height: 600px; object-fit: contain;">
+                </div>
+                <p class="text-sm text-gray-600">Fonte: Wikipedia - Impero Carolingio</p>
+            </div>
+                <div class="bg-black text-white p-4 rounded shadow-lg border-l-4 border-green-600">
+                    <h2 class="text-xl font-bold mb-4">Origini e Formazione</h2>
+                    <p><strong>Periodo:</strong> III-IV secolo d.C.</p>
+                    <p><strong>Territorio originario:</strong> Tra i fiumi Reno e Weser</p>
+                    <p><strong>Tribù costituenti:</strong> Catti, Cauci, Bructeri, Camavi, Sigambri</p>
+                    <p><strong>Divisioni principali:</strong></p>
+                    <ul class="ml-6 mb-4 list-disc">
+                        <li>Franchi Salii (presso il fiume IJssel)</li>
+                        <li>Franchi Ripuari (lungo il Reno)</li>
+                    </ul>
+                </div>
+
+                <div class="bg-black text-white p-4 rounded shadow-lg border-l-4 border-red-600">
+                    <h2 class="text-xl font-bold mb-4">Dinastia Merovingia</h2>
+                    <div class="border-l-4 border-purple-600 pl-4">
+                        <p><strong>Faramondo:</strong> Leggendario primo re (419-428)</p>
+                        <p><strong>Clodione:</strong> Espansione in Gallia Belgica</p>
+                        <p><strong>Meroveo:</strong> Battaglia dei Campi Catalaunici (451)</p>
+                        <p><strong>Clodoveo I (481-511):</strong> <em>Unificazione dei Franchi, conversione al cattolicesimo</em></p>
+                    </div>
+                </div>
+
+                <div class="bg-black text-white p-4 rounded shadow-lg border-l-4 border-yellow-600">
+                    <h2 class="text-xl font-bold mb-4">Dinastia Carolingia</h2>
+                    <p><strong>Pipino di Herstal (687-714):</strong> Maestro di Palazzo, unificò i regni franchi</p>
+                    <p><strong>Carlo Martello (714-741):</strong> Battaglia di Poitiers (732)</p>
+                    <p><strong>Pipino il Breve (751-768):</strong> Primo re carolingio</p>
+                    <p><strong>Carlo Magno (768-814):</strong> Imperatore del Sacro Romano Impero</p>
+                    <p><strong>Ludovico il Pio (814-840):</strong> Ultimo imperatore unificato</p>
+                </div>
+
+                <div class="bg-black text-white p-4 rounded shadow-lg border-l-4 border-indigo-600">
+                    <h2 class="text-xl font-bold mb-4">Territorio e Conquiste</h2>
+                    <p><strong>Capitali:</strong> Parigi (Merovingi), Aquisgrana (Carolingi)</p>
+                    <p><strong>Espansione territoriale:</strong></p>
+                    <ul class="ml-6 mb-4 list-disc">
+                        <li>Conquista della Gallia (V-VI secolo)</li>
+                        <li>Sottomissione dei Sassoni (772-804)</li>
+                        <li>Conquista del Regno Longobardo (774)</li>
+                        <li>Marca di Spagna (801)</li>
+                    </ul>
+                    <p><strong>Apogeo:</strong> Incoronazione di Carlo Magno (800 d.C.)</p>
+                </div>
+
+                <div class="bg-black text-white p-4 rounded shadow-lg border-l-4 border-pink-600">
+                    <h2 class="text-xl font-bold mb-4">Cultura e Società</h2>
+                    <p><strong>Religione:</strong> Cristianesimo cattolico (dal 496 d.C.)</p>
+                    <p><strong>Sistema politico:</strong> Monarchia con capitolari</p>
+                    <p><strong>Rinascita Carolingia:</strong> Rinnovamento culturale e artistico</p>
+                    <p><strong>Economia:</strong> Agricoltura e commercio</p>
+                    <p><strong>Organizzazione militare:</strong> Esercito feudale con cavalleria pesante</p>
+                </div>
+
+                <div class="bg-black text-white p-4 rounded shadow-lg border-l-4 border-teal-600">
+                    <h2 class="text-xl font-bold mb-4">Date Chiave</h2>
+                    <div class="border-l-4 border-purple-600 pl-4 italic">
+                        <p><strong>496:</strong> Conversione di Clodoveo al cattolicesimo</p>
+                        <p><strong>732:</strong> Battaglia di Poitiers contro i Musulmani</p>
+                        <p><strong>751:</strong> Pipino il Breve diventa re</p>
+                        <p><strong>774:</strong> Carlo Magno conquista il Regno Longobardo</p>
+                        <p><strong>800:</strong> Incoronazione imperiale di Carlo Magno</p>
+                        <p><strong>843:</strong> Trattato di Verdun - divisione dell'impero</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-black text-white p-4 rounded shadow-lg mx-4 mt-6 border-l-4 border-orange-600">
+                <h2 class="text-xl font-bold mb-4">Significato Storico</h2>
+                <p>I Franchi furono la popolazione germanica più influente nell'Europa medievale. Trasformarono la Gallia in Francia, crearono il Sacro Romano Impero e diffusero il cristianesimo. La loro eredità politica e culturale pose le fondamenta per l'Europa moderna, stabilendo l'alleanza tra potere temporale e spirituale che caratterizzò il Medioevo.</p>
+            </div>
+
+            
+    </main>
+
+    <footer class="max-w-4xl mx-auto text-center p-4 text-white bg-black">
+        <p>© 2024 Gianmarco Biscini. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

@@ -352,5 +352,167 @@
         "date": "1532 AD",
         "description": "Alessandro de' Medici diventa primo Duca di Firenze. Fine definitiva della Repubblica e inizio del Principato mediceo.",
         "event_type": "political"
+    },
+    {
+        "name": "Assassinio di Alessandro de' Medici",
+        "date": "1537 AD",
+        "description": "Alessandro de' Medici viene assassinato dal cugino Lorenzino. Cosimo I de' Medici gli succede come Duca di Firenze.",
+        "event_type": "political"
+    },
+    {
+        "name": "Nascita di Cosimo I",
+        "date": "1537 AD",
+        "description": "Cosimo I de' Medici diventa Duca di Firenze a soli 17 anni. Inizia la sua lunga signoria che trasformerà la Toscana.",
+        "event_type": "political"
+    },
+    {
+        "name": "Battaglia di Montemurlo",
+        "date": "1537 AD",
+        "description": "Cosimo I sconfigge i fuoriusciti repubblicani a Montemurlo, consolidando il suo potere e eliminando l'opposizione.",
+        "event_type": "military"
+    },
+    {
+        "name": "Palazzo Pitti",
+        "date": "1549 AD",
+        "description": "Cosimo I acquista Palazzo Pitti e lo trasforma nella nuova residenza ducale, abbandonando Palazzo Vecchio.",
+        "event_type": "architectural"
+    },
+    {
+        "name": "Conquista di Siena",
+        "date": "1555 AD",
+        "description": "Cosimo I conquista la Repubblica di Siena dopo un lungo assedio, espandendo significativamente il Ducato toscano.",
+        "event_type": "military"
+    },
+    {
+        "name": "Nascita di Galileo Galilei",
+        "date": "1564 AD",
+        "description": "Nasce a Pisa Galileo Galilei, futuro scienziato e astronomo che rivoluzionerà la scienza moderna.",
+        "event_type": "cultural"
+    },
+    {
+        "name": "Granducato di Toscana",
+        "date": "1569 AD",
+        "description": "Papa Pio V eleva Cosimo I a Granduca di Toscana. Firenze diventa capitale di uno stato sovrano riconosciuto.",
+        "event_type": "political"
+    },
+    {
+        "name": "Corridoio Vasariano",
+        "date": "1565 AD",
+        "description": "Giorgio Vasari costruisce il corridoio che collega Palazzo Vecchio a Palazzo Pitti passando sopra il Ponte Vecchio.",
+        "event_type": "architectural"
+    },
+    {
+        "name": "Uffizi di Vasari",
+        "date": "1580 AD",
+        "description": "Completamento degli Uffizi progettati da Giorgio Vasari come sede degli uffici amministrativi del Granducato.",
+        "event_type": "architectural"
+    },
+    {
+        "name": "Processo a Galileo",
+        "date": "1633 AD",
+        "description": "Galileo Galilei viene processato dall'Inquisizione a Roma per le sue teorie eliocentriche. Abiura sotto tortura.",
+        "event_type": "cultural"
+    },
+    {
+        "name": "Ferdinando II de' Medici",
+        "date": "1621 AD",
+        "description": "Ferdinando II diventa Granduca di Toscana e governa durante la Guerra dei Trent'anni, mantenendo la neutralità.",
+        "event_type": "political"
+    },
+    {
+        "name": "Accademia del Cimento",
+        "date": "1657 AD",
+        "description": "Fondazione dell'Accademia del Cimento da parte di Leopoldo de' Medici, prima accademia scientifica sperimentale d'Europa.",
+        "event_type": "cultural"
+    },
+    {
+        "name": "Estinzione dei Medici",
+        "date": "1737 AD",
+        "description": "Morte di Gian Gastone de' Medici, ultimo Granduca della dinastia. Fine del dominio mediceo dopo tre secoli.",
+        "event_type": "political"
+    },
+    {
+        "name": "Dinastia Lorena",
+        "date": "1737 AD",
+        "description": "Francesco Stefano di Lorena diventa Granduca di Toscana. Inizio del periodo lorenese con riforme illuministiche.",
+        "event_type": "political"
+    },
+    {
+        "name": "Pietro Leopoldo",
+        "date": "1765 AD",
+        "description": "Pietro Leopoldo di Lorena diventa Granduca. Avvia importanti riforme illuministiche: abolizione tortura, libertà di commercio.",
+        "event_type": "political"
+    },
+    {
+        "name": "Codice Penale Leopoldino",
+        "date": "1786 AD",
+        "description": "Pietro Leopoldo promulga il primo codice penale al mondo che abolisce la pena di morte e la tortura.",
+        "event_type": "political"
+    },
+    {
+        "name": "Occupazione Francese",
+        "date": "1799 AD",
+        "description": "Le truppe francesi occupano Firenze. Nasce la Repubblica Etrusca sotto il controllo napoleonico.",
+        "event_type": "military"
+    },
+    {
+        "name": "Regno di Etruria",
+        "date": "1801 AD",
+        "description": "Napoleone crea il Regno di Etruria governato da Luigi di Borbone-Parma. Firenze diventa capitale del nuovo regno.",
+        "event_type": "political"
+    },
+    {
+        "name": "Annessione all'Impero Francese",
+        "date": "1807 AD",
+        "description": "La Toscana viene annessa direttamente all'Impero Francese. Firenze diventa capoluogo del Dipartimento dell'Arno.",
+        "event_type": "political"
+    },
+    {
+        "name": "Ritorno dei Lorena",
+        "date": "1814 AD",
+        "description": "Dopo la caduta di Napoleone, Ferdinando III di Lorena torna come Granduca di Toscana. Restaurazione dell'antico regime.",
+        "event_type": "political"
+    },
+    {
+        "name": "Rivoluzioni del 1848",
+        "date": "1848 AD",
+        "description": "Ondata rivoluzionaria raggiunge Firenze. Leopoldo II concede la Costituzione e partecipa brevemente alla Prima Guerra d'Indipendenza.",
+        "event_type": "political"
+    },
+    {
+        "name": "Fuga di Leopoldo II",
+        "date": "1849 AD",
+        "description": "Leopoldo II fugge da Firenze di fronte ai moti rivoluzionari. Governo provvisorio democratico governa la Toscana.",
+        "event_type": "political"
+    },
+    {
+        "name": "Restaurazione Austriaca",
+        "date": "1849 AD",
+        "description": "Le truppe austriache restaurano Leopoldo II sul trono granducale. Repressione dei movimenti liberali e democratici.",
+        "event_type": "military"
+    },
+    {
+        "name": "Seconda Guerra d'Indipendenza",
+        "date": "1859 AD",
+        "description": "La Toscana si ribella contro il dominio austro-lorenese. Leopoldo II fugge definitivamente e abdica.",
+        "event_type": "political"
+    },
+    {
+        "name": "Governo Provvisorio",
+        "date": "1859 AD",
+        "description": "Bettino Ricasoli guida il governo provvisorio toscano e promuove l'unione con il Piemonte sabaudo.",
+        "event_type": "political"
+    },
+    {
+        "name": "Plebiscito di Annessione",
+        "date": "1860 AD",
+        "description": "Il plebiscito del 11-12 marzo approva l'annessione della Toscana al Regno di Sardegna con 386.445 voti favorevoli.",
+        "event_type": "political"
+    },
+    {
+        "name": "Unità d'Italia",
+        "date": "1861 AD",
+        "description": "Proclamazione del Regno d'Italia. Firenze diventa parte del nuovo stato unitario italiano sotto la Casa Savoia.",
+        "event_type": "political"
     }
 ]

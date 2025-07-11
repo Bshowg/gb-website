@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timeline di Venezia - Cheatsheet</title>
+    <link rel="stylesheet" href="../style.css?v=1.1">
+    <link href="../output.css?v=1.1" rel="stylesheet">
+    <link rel="stylesheet" href="../components/timeline.css?v=1.1">
+</head>
+<body class="notebook">
+    <!-- Header -->
+    <header class="text-center py-8 hero bg-bottom bg-cover max-w-4xl mx-auto pb-8 flex items-center flex-col">
+        <div class="m-auto">
+            <h1 class="text-3xl md:text-5xl font-bold tracking-wide text-white tracking-tighter">GIANMARCHISSIMO</h1>
+            <nav class="mt-4">
+                <ul class="flex flex-wrap justify-center gap-2 sm:gap-4 px-4">
+                    <li><a href="../index.html" class="hover:underline text-white text-sm sm:text-base">Home</a></li>
+                    <li><a href="../static/contacts.html" class="hover:underline text-white text-sm sm:text-base">Contacts</a></li>
+                    <li><a href="../static/oracoli.html" class="hover:underline text-white text-sm sm:text-base">Oracula</a></li>
+                    <li><a href="../static/games/index.html" class="hover:underline text-white text-sm sm:text-base">Ludoteca</a></li>
+                    <li><a href="index.html" class="hover:underline text-white text-sm sm:text-base">Cheatsheet</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <header class="max-w-4xl mx-auto pb-8 flex items-center flex-col text-center py-12 bg-white">
+        <h1 class="text-5xl font-bold">Storia di Venezia</h1>
+        <p class="text-center text-lg mt-4">Timeline completa della Serenissima (452 d.C. - 1866 d.C.)</p>
+        
+    </header>
+
+    <main class="max-w-4xl mx-auto py-8 bg-white">
+        <div class="bg-black text-white p-6 rounded-lg shadow-lg m-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Timeline della Storia di Venezia</h2>
+            <p class="mb-4">Esplora oltre 50 eventi chiave della storia veneziana dalla fondazione nelle lagune all'unificazione italiana.</p>
+            <p class="text-sm text-gray-300">Clicca sugli eventi per vedere altri eventi dello stesso anno da Wikipedia • Scorri orizzontalmente su mobile</p>
+        </div>
+
+        <!-- Timeline Container -->
+        <div id="venice-timeline" class="timeline-wrapper">
+            <div class="text-center py-8">
+                <p>Caricamento timeline...</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="max-w-4xl mx-auto text-center p-4 text-white bg-black">
+        <p>© 2024 Gianmarco Biscini. All rights reserved.</p>
+    </footer>
+
+    <script src="../components/timeline.js"></script>
+    <script>
+        // Load Venice timeline data and initialize visualizer
+        fetch('../data/venice-timeline.json')
+            .then(response => response.json())
+            .then(data => {
+                const timeline = new TimelineVisualizer('venice-timeline', data);
+            })
+            .catch(error => {
+                console.error('Error loading timeline data:', error);
+                document.getElementById('venice-timeline').innerHTML = `
+                    <div class="text-center py-8">
+                        <p class="text-red-600">Errore nel caricamento della timeline</p>
+                    </div>
+                `;
+            });
+    </script>
+</body>
+</html>

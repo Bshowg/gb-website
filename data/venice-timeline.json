@@ -1,0 +1,314 @@
+[
+    {
+        "name": "Fuga nelle Lagune",
+        "date": "452 AD",
+        "description": "Gli Unni di Attila invadono Aquileia, Concordia e Altino. Le popolazioni del Veneto si rifugiano nelle isole della laguna per sfuggire alle invasioni barbariche.",
+        "event_type": "political"
+    },
+    {
+        "name": "Dominazione Bizantina",
+        "date": "555 AD",
+        "description": "Il generale bizantino Narsete conquista la Venetia. La regione lagunare entra sotto il controllo dell'Impero Romano d'Oriente.",
+        "event_type": "political"
+    },
+    {
+        "name": "Invasione Longobarda",
+        "date": "568 AD",
+        "description": "I Longobardi invadono l'Italia settentrionale. Le zone costiere e lagunari rimangono sotto controllo bizantino, creando i presupposti per l'autonomia veneziana.",
+        "event_type": "military"
+    },
+    {
+        "name": "Primo Doge di Venezia",
+        "date": "697 AD",
+        "description": "Elezione del primo Doge di Venezia, Paoluccio Anafesto. Nasce la magistratura ducale che governerà la Serenissima per oltre mille anni.",
+        "event_type": "political"
+    },
+    {
+        "name": "Sede a Malamocco",
+        "date": "742 AD",
+        "description": "La sede amministrativa bizantina si trasferisce a Malamocco. La città diventa il centro politico della Dogana Veneta.",
+        "event_type": "political"
+    },
+    {
+        "name": "Trasferimento a Rialto",
+        "date": "810 AD",
+        "description": "La sede del governo dogale si trasferisce definitivamente alle isole di Rialto (Rivus Altus). Nasce il nucleo della futura Venezia.",
+        "event_type": "political"
+    },
+    {
+        "name": "Trafugamento di San Marco",
+        "date": "828 AD",
+        "description": "I mercanti veneziani Buono da Malamocco e Rustico da Torcello trafugano le reliquie di San Marco da Alessandria d'Egitto, portandole a Venezia.",
+        "event_type": "religious"
+    },
+    {
+        "name": "Prima Basilica di San Marco",
+        "date": "832 AD",
+        "description": "Costruzione della prima Basilica di San Marco per ospitare le reliquie del santo. Diventa il simbolo religioso e politico della città.",
+        "event_type": "architectural"
+    },
+    {
+        "name": "Patto di Lotario",
+        "date": "840 AD",
+        "description": "L'imperatore Lotario I riconosce l'autonomia di Venezia con privilegi commerciali. Primo riconoscimento ufficiale dell'indipendenza veneziana.",
+        "event_type": "political"
+    },
+    {
+        "name": "Matrimonio del Mare",
+        "date": "1000 AD",
+        "description": "Il doge Pietro II Orseolo riceve dall'imperatore bizantino il titolo di 'Dux Dalmatiae'. Nasce la cerimonia dello Sposalizio del Mare.",
+        "event_type": "political"
+    },
+    {
+        "name": "Conquista della Dalmazia",
+        "date": "1000 AD",
+        "description": "Il doge Pietro II Orseolo conquista la Dalmazia, estendendo il dominio veneziano sull'Adriatico orientale.",
+        "event_type": "military"
+    },
+    {
+        "name": "Bolla d'Oro di Bisanzio",
+        "date": "1082 AD",
+        "description": "L'imperatore bizantino Alessio I concede a Venezia la Bolla d'Oro con enormi privilegi commerciali in tutto l'Impero d'Oriente.",
+        "event_type": "economic"
+    },
+    {
+        "name": "Prima Crociata",
+        "date": "1100 AD",
+        "description": "Venezia invia 200 navi in aiuto ai crociati in Terra Santa. Inizia l'espansione commerciale veneziana nel Mediterraneo orientale.",
+        "event_type": "military"
+    },
+    {
+        "name": "Conquista di Tiro",
+        "date": "1124 AD",
+        "description": "La flotta veneziana aiuta i crociati a conquistare Tiro. Venezia ottiene un quartiere commerciale nella città fenicia.",
+        "event_type": "military"
+    },
+    {
+        "name": "Pace di Venezia",
+        "date": "1177 AD",
+        "description": "Papa Alessandro III e l'imperatore Federico Barbarossa si riconciliano a Venezia. La città acquista enorme prestigio internazionale.",
+        "event_type": "political"
+    },
+    {
+        "name": "Quarta Crociata",
+        "date": "1202-1204 AD",
+        "description": "Il doge Enrico Dandolo devia la Quarta Crociata verso Costantinopoli. Venezia partecipa al saccheggio della capitale bizantina.",
+        "event_type": "military"
+    },
+    {
+        "name": "Impero Latino d'Oriente",
+        "date": "1204 AD",
+        "description": "Dopo la conquista di Costantinopoli, Venezia ottiene un quarto dell'Impero Bizantino, diventando potenza mediterranea.",
+        "event_type": "political"
+    },
+    {
+        "name": "Conquista di Creta",
+        "date": "1212 AD",
+        "description": "Venezia conquista Creta (Candia) dai bizantini. L'isola diventa uno dei capisaldi del dominio veneziano nel Mediterraneo.",
+        "event_type": "military"
+    },
+    {
+        "name": "Guerra di Chioggia",
+        "date": "1378-1381 AD",
+        "description": "Conflitto decisivo contro Genova per l'egemonia sui mari. Venezia vince dopo essere stata assediata fino a Chioggia.",
+        "event_type": "military"
+    },
+    {
+        "name": "Conquista di Padova",
+        "date": "1405 AD",
+        "description": "Venezia conquista Padova, iniziando l'espansione in Terraferma. Nasce lo Stato da Terra veneziano.",
+        "event_type": "military"
+    },
+    {
+        "name": "Conquista di Verona",
+        "date": "1405 AD",
+        "description": "Venezia conquista Verona dai Carraresi, consolidando il controllo sul Veneto occidentale.",
+        "event_type": "military"
+    },
+    {
+        "name": "Conquista di Vicenza",
+        "date": "1404 AD",
+        "description": "Venezia conquista Vicenza, completando il controllo della pianura veneta centrale.",
+        "event_type": "military"
+    },
+    {
+        "name": "Palazzo Ducale",
+        "date": "1424 AD",
+        "description": "Completamento dell'attuale Palazzo Ducale in stile gotico veneziano. Capolavoro dell'architettura civile medievale.",
+        "event_type": "architectural"
+    },
+    {
+        "name": "Conquista di Bergamo",
+        "date": "1428 AD",
+        "description": "Venezia conquista Bergamo, estendendo i suoi domini fino alle porte di Milano.",
+        "event_type": "military"
+    },
+    {
+        "name": "Conquista di Ravenna",
+        "date": "1441 AD",
+        "description": "Venezia conquista Ravenna, estendendo il dominio fino alla Romagna.",
+        "event_type": "military"
+    },
+    {
+        "name": "Pace di Lodi",
+        "date": "1454 AD",
+        "description": "La Pace di Lodi stabilisce l'equilibrio tra gli stati italiani. Venezia consolida i suoi confini terrestri.",
+        "event_type": "political"
+    },
+    {
+        "name": "Caduta di Costantinopoli",
+        "date": "1453 AD",
+        "description": "I turchi ottomani conquistano Costantinopoli. Venezia perde il suo principale alleato commerciale in Oriente.",
+        "event_type": "political"
+    },
+    {
+        "name": "Guerra Turco-Veneziana",
+        "date": "1463-1479 AD",
+        "description": "Prima grande guerra contro l'Impero Ottomano. Venezia perde alcuni territori ma mantiene il controllo marittimo.",
+        "event_type": "military"
+    },
+    {
+        "name": "Scoperta dell'America",
+        "date": "1492 AD",
+        "description": "La scoperta dell'America sposta le rotte commerciali dall'Oceano Atlantico, iniziando il declino del monopolio veneziano.",
+        "event_type": "economic"
+    },
+    {
+        "name": "Lega di Cambrai",
+        "date": "1508 AD",
+        "description": "Si forma la Lega di Cambrai contro Venezia: Francia, Impero, Papa e Spagna si alleano per limitare l'espansione veneziana.",
+        "event_type": "military"
+    },
+    {
+        "name": "Battaglia di Agnadello",
+        "date": "1509 AD",
+        "description": "Pesante sconfitta veneziana contro i francesi ad Agnadello. Venezia perde temporaneamente quasi tutti i territori di terraferma.",
+        "event_type": "military"
+    },
+    {
+        "name": "Recupero della Terraferma",
+        "date": "1516 AD",
+        "description": "Venezia recupera la maggior parte dei territori di terraferma dopo la dissoluzione della Lega di Cambrai.",
+        "event_type": "political"
+    },
+    {
+        "name": "Battaglia di Lepanto",
+        "date": "1571 AD",
+        "description": "La flotta veneziana partecipa alla vittoria cristiana di Lepanto contro i turchi. Ultima grande vittoria navale veneziana.",
+        "event_type": "military"
+    },
+    {
+        "name": "Perdita di Cipro",
+        "date": "1571 AD",
+        "description": "I turchi conquistano Cipro dopo l'assedio di Famagosta. Venezia perde una delle sue principali colonie.",
+        "event_type": "military"
+    },
+    {
+        "name": "Ponte di Rialto",
+        "date": "1591 AD",
+        "description": "Completamento del ponte di Rialto in pietra su progetto di Antonio da Ponte. Diventa simbolo architettonico della città.",
+        "event_type": "architectural"
+    },
+    {
+        "name": "Interdetto di Paolo V",
+        "date": "1606 AD",
+        "description": "Papa Paolo V scomunica Venezia per la sua politica anticlericale. La città resiste con l'aiuto del teologo Paolo Sarpi.",
+        "event_type": "religious"
+    },
+    {
+        "name": "Congiura di Bedmar",
+        "date": "1618 AD",
+        "description": "Scoperta della congiura spagnola per rovesciare la Repubblica. Venezia rafforza il controllo interno e la sicurezza.",
+        "event_type": "political"
+    },
+    {
+        "name": "Guerra di Candia",
+        "date": "1645-1669 AD",
+        "description": "Lunga guerra contro i turchi per il controllo di Creta. Venezia resiste per 24 anni ma alla fine perde l'isola.",
+        "event_type": "military"
+    },
+    {
+        "name": "Perdita di Creta",
+        "date": "1669 AD",
+        "description": "Dopo 24 anni di assedio, Venezia perde Creta (Candia) in favore dell'Impero Ottomano. Fine del dominio veneziano nell'Egeo.",
+        "event_type": "military"
+    },
+    {
+        "name": "Conquista della Morea",
+        "date": "1687 AD",
+        "description": "Francesco Morosini conquista la Morea (Peloponneso) dai turchi. Ultima grande espansione territoriale veneziana.",
+        "event_type": "military"
+    },
+    {
+        "name": "Perdita della Morea",
+        "date": "1715 AD",
+        "description": "I turchi riconquistano la Morea. Venezia perde l'ultima conquista territoriale significativa.",
+        "event_type": "military"
+    },
+    {
+        "name": "Ultimo Doge della Serenissima",
+        "date": "1789 AD",
+        "description": "Ludovico Manin diventa il 120° e ultimo Doge della Serenissima Repubblica di Venezia.",
+        "event_type": "political"
+    },
+    {
+        "name": "Trattato di Campoformio",
+        "date": "1797 AD",
+        "description": "Napoleone dissolve la Repubblica di Venezia con il Trattato di Campoformio. Fine di oltre mille anni di indipendenza.",
+        "event_type": "political"
+    },
+    {
+        "name": "Dominazione Austriaca",
+        "date": "1798 AD",
+        "description": "Venezia passa sotto il dominio asburgico. Inizia il periodo di dominazione straniera dopo la fine della Repubblica.",
+        "event_type": "political"
+    },
+    {
+        "name": "Regno Italico",
+        "date": "1805 AD",
+        "description": "Venezia entra nel Regno Italico napoleonico. Breve parentesi di governo francese.",
+        "event_type": "political"
+    },
+    {
+        "name": "Regno Lombardo-Veneto",
+        "date": "1815 AD",
+        "description": "Con il Congresso di Vienna, Venezia diventa parte del Regno Lombardo-Veneto sotto l'Austria.",
+        "event_type": "political"
+    },
+    {
+        "name": "Rivoluzioni del 1848",
+        "date": "1848 AD",
+        "description": "Scoppia la rivoluzione veneziana guidata da Daniele Manin. Proclamazione della Repubblica di San Marco.",
+        "event_type": "political"
+    },
+    {
+        "name": "Repubblica di San Marco",
+        "date": "1848-1849 AD",
+        "description": "Daniele Manin proclama la Repubblica di San Marco. Venezia resiste all'assedio austriaco per 17 mesi.",
+        "event_type": "political"
+    },
+    {
+        "name": "Resa di Venezia",
+        "date": "1849 AD",
+        "description": "Dopo 17 mesi di assedio e epidemia di colera, Venezia si arrende agli austriaci. Fine della Repubblica di San Marco.",
+        "event_type": "military"
+    },
+    {
+        "name": "Terza Guerra d'Indipendenza",
+        "date": "1866 AD",
+        "description": "Durante la Terza Guerra d'Indipendenza, il Veneto viene ceduto all'Italia dopo la sconfitta austriaca.",
+        "event_type": "political"
+    },
+    {
+        "name": "Plebiscito di Annessione",
+        "date": "1866 AD",
+        "description": "Il plebiscito del 21-22 ottobre approva l'annessione del Veneto al Regno d'Italia con 647.246 voti favorevoli su 674.426.",
+        "event_type": "political"
+    },
+    {
+        "name": "Unità d'Italia",
+        "date": "1866 AD",
+        "description": "Venezia e il Veneto entrano a far parte del Regno d'Italia. Fine dell'indipendenza veneziana e inizio dell'era italiana.",
+        "event_type": "political"
+    }
+]
