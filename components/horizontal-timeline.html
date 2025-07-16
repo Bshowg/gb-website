@@ -1,5 +1,94 @@
 <!-- Horizontal Timeline Component -->
-<div class="timeline-container bg-white p-6 rounded shadow-lg border-l-4 border-blue-600" x-data="horizontalTimeline()">
+<div class="timeline-container bg-white p-6 rounded shadow-lg border-l-4 border-blue-600" x-data="{
+    events: [],
+    selectedTypes: ['all'],
+    tooltip: {
+        visible: false,
+        x: 0,
+        y: 0,
+        event: null
+    },
+    minYear: 568,
+    maxYear: 810,
+
+    async init() {
+        try {
+            const response = await fetch('../data/lombard_timeline.json');
+            this.events = await response.json();
+            this.minYear = Math.min(...this.events.map(e => e.start_date));
+            this.maxYear = Math.max(...this.events.map(e => e.end_date));
+        } catch (error) {
+            console.error('Error loading timeline data:', error);
+        }
+    },
+
+    get yearMarks() {
+        const marks = [];
+        const interval = 50;
+        for (let year = Math.ceil(this.minYear / interval) * interval; year <= this.maxYear; year += interval) {
+            marks.push(year);
+        }
+        return marks;
+    },
+
+    toggleEventType(type) {
+        if (type === 'all') {
+            this.selectedTypes = ['all'];
+        } else {
+            this.selectedTypes = this.selectedTypes.filter(t => t !== 'all');
+            if (this.selectedTypes.includes(type)) {
+                this.selectedTypes = this.selectedTypes.filter(t => t !== type);
+            } else {
+                this.selectedTypes.push(type);
+            }
+            if (this.selectedTypes.length === 0) {
+                this.selectedTypes = ['all'];
+            }
+        }
+    },
+
+    isEventVisible(event) {
+        return this.selectedTypes.includes('all') || this.selectedTypes.includes(event.event_type);
+    },
+
+    getEventsForLayer(layer) {
+        return this.events.filter(event => event.layer === layer);
+    },
+
+    getEventTypeClass(eventType) {
+        const classes = {
+            'political': 'bg-blue-600',
+            'military': 'bg-red-600',
+            'religious': 'bg-purple-600',
+            'cultural': 'bg-green-600',
+            'economic': 'bg-orange-600',
+            'architectural': 'bg-yellow-600'
+        };
+        return classes[eventType] || 'bg-gray-600';
+    },
+
+    getEventBarStyle(event) {
+        const totalYears = this.maxYear - this.minYear;
+        const startPercent = ((event.start_date - this.minYear) / totalYears) * 100;
+        const duration = event.end_date - event.start_date;
+        const widthPercent = Math.max((duration / totalYears) * 100, 1);
+        
+        return `left: ${startPercent}%; width: ${widthPercent}%; top: 10px; height: 60px;`;
+    },
+
+    showTooltip(event, mouseEvent) {
+        this.tooltip = {
+            visible: true,
+            x: mouseEvent.pageX + 10,
+            y: mouseEvent.pageY - 10,
+            event: event
+        };
+    },
+
+    hideTooltip() {
+        this.tooltip.visible = false;
+    }
+}"
     <h2 class="text-2xl font-bold mb-6 text-black">Timeline Longobarda (568-810 d.C.)</h2>
     
     <!-- Timeline Controls -->
@@ -61,100 +150,6 @@
     </div>
 </div>
 
-<script>
-function horizontalTimeline() {
-    return {
-        events: [],
-        selectedTypes: ['all'],
-        tooltip: {
-            visible: false,
-            x: 0,
-            y: 0,
-            event: null
-        },
-        minYear: 568,
-        maxYear: 810,
-
-        async init() {
-            try {
-                const response = await fetch('../data/lombard_timeline.json');
-                this.events = await response.json();
-                this.minYear = Math.min(...this.events.map(e => e.start_date));
-                this.maxYear = Math.max(...this.events.map(e => e.end_date));
-            } catch (error) {
-                console.error('Error loading timeline data:', error);
-            }
-        },
-
-        get yearMarks() {
-            const marks = [];
-            const interval = 50;
-            for (let year = Math.ceil(this.minYear / interval) * interval; year <= this.maxYear; year += interval) {
-                marks.push(year);
-            }
-            return marks;
-        },
-
-        toggleEventType(type) {
-            if (type === 'all') {
-                this.selectedTypes = ['all'];
-            } else {
-                this.selectedTypes = this.selectedTypes.filter(t => t !== 'all');
-                if (this.selectedTypes.includes(type)) {
-                    this.selectedTypes = this.selectedTypes.filter(t => t !== type);
-                } else {
-                    this.selectedTypes.push(type);
-                }
-                if (this.selectedTypes.length === 0) {
-                    this.selectedTypes = ['all'];
-                }
-            }
-        },
-
-        isEventVisible(event) {
-            return this.selectedTypes.includes('all') || this.selectedTypes.includes(event.event_type);
-        },
-
-        getEventsForLayer(layer) {
-            return this.events.filter(event => event.layer === layer);
-        },
-
-        getEventTypeClass(eventType) {
-            const classes = {
-                'political': 'bg-blue-600',
-                'military': 'bg-red-600',
-                'religious': 'bg-purple-600',
-                'cultural': 'bg-green-600',
-                'economic': 'bg-orange-600',
-                'architectural': 'bg-yellow-600'
-            };
-            return classes[eventType] || 'bg-gray-600';
-        },
-
-        getEventBarStyle(event) {
-            const totalYears = this.maxYear - this.minYear;
-            const startPercent = ((event.start_date - this.minYear) / totalYears) * 100;
-            const duration = event.end_date - event.start_date;
-            const widthPercent = Math.max((duration / totalYears) * 100, 1); // Minimum 1% width for single-year events
-            
-            return `left: ${startPercent}%; width: ${widthPercent}%; top: 10px; height: 60px;`;
-        },
-
-        showTooltip(event, mouseEvent) {
-            this.tooltip = {
-                visible: true,
-                x: mouseEvent.pageX + 10,
-                y: mouseEvent.pageY - 10,
-                event: event
-            };
-        },
-
-        hideTooltip() {
-            this.tooltip.visible = false;
-        }
-    }
-}
-</script>
 
 <style>
 .timeline-container {
