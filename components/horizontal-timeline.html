@@ -77,7 +77,7 @@ function horizontalTimeline() {
 
         async init() {
             try {
-                const response = await fetch('../lombard_timeline.json');
+                const response = await fetch('../data/lombard_timeline.json');
                 this.events = await response.json();
                 this.minYear = Math.min(...this.events.map(e => e.start_date));
                 this.maxYear = Math.max(...this.events.map(e => e.end_date));
