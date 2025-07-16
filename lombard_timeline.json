@@ -1,0 +1,386 @@
+[
+  {
+    "name": "Lombard Invasion of Italy",
+    "start_date": 568,
+    "end_date": 569,
+    "description": "Lombards led by Alboin enter Italy and conquer regions north of the Po; immediate foundation of the Friulian duchy; capture of Pavia",
+    "event_type": "military",
+    "layer": 1
+  },
+  {
+    "name": "Assassination of Alboin",
+    "start_date": 572,
+    "end_date": 572,
+    "description": "Alboin is assassinated (conspiracy of his wife Rosmunda, possibly with Byzantine support)",
+    "event_type": "political",
+    "layer": 1
+  },
+  {
+    "name": "Reign of Clefi",
+    "start_date": 572,
+    "end_date": 574,
+    "description": "Reign of Clefi: massacre of Roman nobles, king's murder probably by Byzantine conspiracy",
+    "event_type": "political",
+    "layer": 1
+  },
+  {
+    "name": "Interregnum Period",
+    "start_date": 574,
+    "end_date": 584,
+    "description": "For a decade the Lombards do not elect a king",
+    "event_type": "political",
+    "layer": 1
+  },
+  {
+    "name": "Reign of Autari",
+    "start_date": 584,
+    "end_date": 590,
+    "description": "Reign of Autari, who fights against the Franks who had invaded Trentino",
+    "event_type": "military",
+    "layer": 1
+  },
+  {
+    "name": "Papacy of Gregory the Great",
+    "start_date": 590,
+    "end_date": 604,
+    "description": "Papacy of Gregory the Great: the pope assumes a prominent role in government and defense of the city and enters into contact with Lombard kings",
+    "event_type": "religious",
+    "layer": 2
+  },
+  {
+    "name": "Reign of Agilulf and Theodelinda",
+    "start_date": 590,
+    "end_date": 616,
+    "description": "Reign of Agilulf and Theodelinda: invasion of central Italy; first truce with the Byzantines (598); conquest of Padua and Monselice; Theodelinda founds S. Giovanni di Monza",
+    "event_type": "political",
+    "layer": 1
+  },
+  {
+    "name": "Schism of the Three Chapters",
+    "start_date": 606,
+    "end_date": 606,
+    "description": "Schism of the Three Chapters, which sees the diocese of Aquileia in disagreement with Rome and Constantinople",
+    "event_type": "religious",
+    "layer": 3
+  },
+  {
+    "name": "Avar Invasion of Friuli",
+    "start_date": 610,
+    "end_date": 610,
+    "description": "The Avars invade Friuli and sack Cividale",
+    "event_type": "military",
+    "layer": 3
+  },
+  {
+    "name": "Foundation of S. Colombano di Bobbio",
+    "start_date": 612,
+    "end_date": 612,
+    "description": "Foundation of the monastery of S. Colombano di Bobbio",
+    "event_type": "religious",
+    "layer": 3
+  },
+  {
+    "name": "Reign of Adaloald",
+    "start_date": 616,
+    "end_date": 626,
+    "description": "Reign of Adaloald, son of Agilulf and Theodelinda",
+    "event_type": "political",
+    "layer": 1
+  },
+  {
+    "name": "Reign of Arioald",
+    "start_date": 626,
+    "end_date": 636,
+    "description": "Reign of Arioald, Duke of Turin, poorly documented by sources",
+    "event_type": "political",
+    "layer": 1
+  },
+  {
+    "name": "Reign of Rotari and the Edict",
+    "start_date": 636,
+    "end_date": 653,
+    "description": "Reign of Rotari: issuance of the Edict (643); conquests of Liguria and part of eastern Veneto (first destruction of Oderzo). After him reigns his son Rodoaldo, but only for a few months",
+    "event_type": "political",
+    "layer": 1
+  },
+  {
+    "name": "Reign of Aripert",
+    "start_date": 653,
+    "end_date": 661,
+    "description": "Reign of Aripert: was son of Gundoald Duke of Asti and nephew of Theodelinda; under him there would have been the definitive conversion to Catholicism of the Lombards",
+    "event_type": "religious",
+    "layer": 1
+  },
+  {
+    "name": "Division of the Kingdom",
+    "start_date": 661,
+    "end_date": 661,
+    "description": "The kingdom is divided between the two sons of Aripert, Godepert and Pertarit",
+    "event_type": "political",
+    "layer": 1
+  },
+  {
+    "name": "Reign of Grimoald",
+    "start_date": 662,
+    "end_date": 671,
+    "description": "Reign of Grimoald: Duke of Benevento, of Friulian origin, seizes power by killing Godepert, while Pertarit flees first to the Avars, then to the Franks; fall of Oderzo and complete conquest of eastern Veneto, while Byzantine military power takes refuge in the lagoon; the king adds some chapters to the edict",
+    "event_type": "political",
+    "layer": 1
+  },
+  {
+    "name": "Reign of Pertarit",
+    "start_date": 671,
+    "end_date": 678,
+    "description": "Reign of Pertarit: becomes king by killing Garipald, son of Grimoald; Cunipert, son of the king, is associated with the kingdom; rebellion of Alahis Duke of Trento, who is then pardoned and also assumes the duchy of Brescia",
+    "event_type": "political",
+    "layer": 1
+  },
+  {
+    "name": "Reign of Cunipert",
+    "start_date": 678,
+    "end_date": 700,
+    "description": "Reign of Cunipert: new rebellion of Alahis, defeated and killed; synod of Pavia (698) and end of the schism of the Three Chapters",
+    "event_type": "political",
+    "layer": 1
+  },
+  {
+    "name": "Synod of Rome",
+    "start_date": 680,
+    "end_date": 680,
+    "description": "Synod in Rome condemning monothelitism. First true peace between the Lombard kingdom and the Byzantine empire",
+    "event_type": "religious",
+    "layer": 2
+  },
+  {
+    "name": "Foundation of Monasteries",
+    "start_date": 700,
+    "end_date": 700,
+    "description": "Foundation of the monasteries of S. Maria di Farfa and S. Vincenzo al Volturno (ca.)",
+    "event_type": "religious",
+    "layer": 2
+  },
+  {
+    "name": "Aripert II Seizes Power",
+    "start_date": 701,
+    "end_date": 701,
+    "description": "Aripert II, son of the Duke of Turin and nephew of King Godepert, seizes the throne by killing little Liutpert, son of Cunipert, and defeating his supporters",
+    "event_type": "political",
+    "layer": 1
+  },
+  {
+    "name": "Rise of Liutprand",
+    "start_date": 712,
+    "end_date": 712,
+    "description": "Ansprand, one of Liutpert's supporters, together with his son Liutprand, defeats Aripert II and becomes king. Dies a few months later and Liutprand is elected king of the Lombards",
+    "event_type": "political",
+    "layer": 1
+  },
+  {
+    "name": "Liutprand's Legal Reforms",
+    "start_date": 713,
+    "end_date": 735,
+    "description": "First addition of chapters to the edict by Liutprand (followed by fourteen other additions in the years between 717 and 735)",
+    "event_type": "political",
+    "layer": 2
+  },
+  {
+    "name": "Iconoclastic Crisis",
+    "start_date": 726,
+    "end_date": 728,
+    "description": "Iconoclastic crisis: Leo III imposes iconoclastic doctrine at Constantinople; Byzantine Italy rebels and independent dukes are elected in the Venetiae, at Ravenna and at Naples; the pope leads the opposition, which is religious but also political",
+    "event_type": "religious",
+    "layer": 3
+  },
+  {
+    "name": "Liutprand's Conquests",
+    "start_date": 728,
+    "end_date": 729,
+    "description": "Liutprand's conquests in Emilia and the Pentapolis; submission of the rebel dukes of Spoleto and Benevento; journey to Rome of the king who places the royal insignia on the tomb of St. Peter",
+    "event_type": "military",
+    "layer": 2
+  },
+  {
+    "name": "Lombard Expansion and Frankish Alliance",
+    "start_date": 730,
+    "end_date": 740,
+    "description": "The Lombards led by Hildeprand, nephew of the king, temporarily occupy Ravenna; Liutprand intervenes in Provence in aid of Charles Martel against the Arabs; previously he had adopted with the cutting of hair his son Pippin; later, the king having fallen ill, Hildeprand is elected king; recovered, Liutprand associates his nephew to the throne (ca.)",
+    "event_type": "political",
+    "layer": 3
+  },
+  {
+    "name": "Papacy of Gregory III",
+    "start_date": 731,
+    "end_date": 741,
+    "description": "Papacy of Gregory III. First appeal to the Franks, which falls on deaf ears",
+    "event_type": "religious",
+    "layer": 4
+  },
+  {
+    "name": "Refoundation of Montecassino",
+    "start_date": 740,
+    "end_date": 740,
+    "description": "Refoundation of Montecassino (ca.)",
+    "event_type": "religious",
+    "layer": 4
+  },
+  {
+    "name": "Papacy of Zachary",
+    "start_date": 741,
+    "end_date": 752,
+    "description": "Papacy of Zachary",
+    "event_type": "religious",
+    "layer": 4
+  },
+  {
+    "name": "Peace Agreements",
+    "start_date": 742,
+    "end_date": 742,
+    "description": "Meetings at Terni and Pavia between Liutprand and Zachary, which result in peace agreements",
+    "event_type": "political",
+    "layer": 2
+  },
+  {
+    "name": "Death of Liutprand",
+    "start_date": 744,
+    "end_date": 744,
+    "description": "Death of Liutprand. Hildeprand is deposed and Ratchis, Duke of Friuli, becomes king",
+    "event_type": "political",
+    "layer": 1
+  },
+  {
+    "name": "Reign of Ratchis",
+    "start_date": 744,
+    "end_date": 749,
+    "description": "Reign of Ratchis: continuation of the Edict; military expeditions in the Pentapolis; abdicates in favor of his brother Astulf and becomes a monk at Montecassino",
+    "event_type": "political",
+    "layer": 1
+  },
+  {
+    "name": "First Phase of Astulf's Reign",
+    "start_date": 749,
+    "end_date": 751,
+    "description": "First phase of Astulf's reign: additions to the Edict (745 and 750); conquest of Ravenna and the Exarchate",
+    "event_type": "military",
+    "layer": 1
+  },
+  {
+    "name": "Papacy of Stephen II",
+    "start_date": 752,
+    "end_date": 757,
+    "description": "Papacy of Stephen II, who calls the Franks for help against Astulf; renews the anointing of Pippin and obtains the promissio carisiaca (754)",
+    "event_type": "religious",
+    "layer": 2
+  },
+  {
+    "name": "First Frankish Intervention",
+    "start_date": 754,
+    "end_date": 754,
+    "description": "First military intervention of Pippin in Italy, who defeats Astulf and forces him to 'return' to the pope the Byzantine territories he had occupied",
+    "event_type": "military",
+    "layer": 3
+  },
+  {
+    "name": "Second Frankish Intervention",
+    "start_date": 756,
+    "end_date": 756,
+    "description": "Second military intervention of Pippin in Italy. Death of Astulf",
+    "event_type": "military",
+    "layer": 3
+  },
+  {
+    "name": "Reign of Desiderius",
+    "start_date": 757,
+    "end_date": 774,
+    "description": "Desiderius is elected king of the Lombards. Does not deliver to the pope the occupied Byzantine territories. Invasion of the Pentapolis",
+    "event_type": "political",
+    "layer": 1
+  },
+  {
+    "name": "Adelchis Associated to Throne",
+    "start_date": 759,
+    "end_date": 759,
+    "description": "Adelchis, son of Desiderius, is associated to the throne by his father",
+    "event_type": "political",
+    "layer": 2
+  },
+  {
+    "name": "Foundation of S. Salvatore di Brescia",
+    "start_date": 761,
+    "end_date": 761,
+    "description": "Foundation of S. Salvatore di Brescia by Desiderius and his wife Ansa. Their daughter Anselperga is abbess",
+    "event_type": "religious",
+    "layer": 3
+  },
+  {
+    "name": "Papacy of Adrian I",
+    "start_date": 772,
+    "end_date": 795,
+    "description": "Papacy of Adrian I. Again asks Desiderius in vain for the delivery of the occupied Byzantine territories. Agreement with the Franks",
+    "event_type": "religious",
+    "layer": 2
+  },
+  {
+    "name": "Charlemagne Conquers Lombard Kingdom",
+    "start_date": 773,
+    "end_date": 774,
+    "description": "Charlemagne (768-814) conquers the Lombard kingdom and becomes rex Langobardorum",
+    "event_type": "military",
+    "layer": 1
+  },
+  {
+    "name": "Lombard Rebellion and Suppression",
+    "start_date": 775,
+    "end_date": 776,
+    "description": "Having failed the project of a general uprising, only Friuli and Veneto rebel against the Franks under the command of the Friulian duke Rotcauso and, defeated, suffer harsh repression",
+    "event_type": "military",
+    "layer": 2
+  },
+  {
+    "name": "Pippin becomes King of Lombards",
+    "start_date": 781,
+    "end_date": 781,
+    "description": "Carloman, son of Charlemagne, is baptized with the name of Pippin and becomes king of the Lombards",
+    "event_type": "political",
+    "layer": 1
+  },
+  {
+    "name": "Constitutum Constantini",
+    "start_date": 795,
+    "end_date": 800,
+    "description": "Drafting of the Constitutum Constantini",
+    "event_type": "political",
+    "layer": 3
+  },
+  {
+    "name": "Papacy of Leo III",
+    "start_date": 795,
+    "end_date": 816,
+    "description": "Papacy of Leo III",
+    "event_type": "religious",
+    "layer": 2
+  },
+  {
+    "name": "Defeat of the Avars",
+    "start_date": 796,
+    "end_date": 796,
+    "description": "Pippin, king of the Lombards, defeats the Avars and destroys the ring",
+    "event_type": "military",
+    "layer": 3
+  },
+  {
+    "name": "Charlemagne Crowned Emperor",
+    "start_date": 800,
+    "end_date": 800,
+    "description": "Charlemagne is crowned emperor in Rome at St. Peter's by Pope Leo III",
+    "event_type": "political",
+    "layer": 1
+  },
+  {
+    "name": "Death of Pippin",
+    "start_date": 810,
+    "end_date": 810,
+    "description": "Death of Pippin",
+    "event_type": "political",
+    "layer": 1
+  }
+]

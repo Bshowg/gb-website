@@ -95,6 +95,10 @@
                 <p>I Longobardi trasformarono il panorama sociale e politico italiano, fungendo da ponte tra la cultura germanica e quella romana. Gettarono le basi per la società italiana medievale e furono infine assorbiti dai Normanni nell'XI secolo.</p>
             </div>
 
+            <!-- Timeline Section -->
+            <div class="col-span-1 lg:col-span-3 mt-6">
+                <div x-data x-init="$el.innerHTML = await (await fetch('../components/horizontal-timeline.html')).text()"></div>
+            </div>
             
     </main>
 

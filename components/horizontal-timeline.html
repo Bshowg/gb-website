@@ -1,0 +1,185 @@
+<!-- Horizontal Timeline Component -->
+<div class="timeline-container bg-white p-6 rounded shadow-lg border-l-4 border-blue-600" x-data="horizontalTimeline()">
+    <h2 class="text-2xl font-bold mb-6 text-black">Timeline Longobarda (568-810 d.C.)</h2>
+    
+    <!-- Timeline Controls -->
+    <div class="mb-4 flex flex-wrap gap-2">
+        <button @click="toggleEventType('all')" 
+                :class="selectedTypes.includes('all') ? 'bg-blue-600 text-white' : 'bg-gray-200 text-black'"
+                class="px-3 py-1 rounded text-sm">Tutti</button>
+        <button @click="toggleEventType('political')" 
+                :class="selectedTypes.includes('political') ? 'bg-blue-600 text-white' : 'bg-gray-200 text-black'"
+                class="px-3 py-1 rounded text-sm">Politici</button>
+        <button @click="toggleEventType('military')" 
+                :class="selectedTypes.includes('military') ? 'bg-red-600 text-white' : 'bg-gray-200 text-black'"
+                class="px-3 py-1 rounded text-sm">Militari</button>
+        <button @click="toggleEventType('religious')" 
+                :class="selectedTypes.includes('religious') ? 'bg-purple-600 text-white' : 'bg-gray-200 text-black'"
+                class="px-3 py-1 rounded text-sm">Religiosi</button>
+    </div>
+
+    <!-- Timeline Visualization -->
+    <div class="timeline-wrapper overflow-x-auto">
+        <div class="timeline-chart relative" style="min-width: 1200px; height: 400px;">
+            <!-- Year scale -->
+            <div class="year-scale absolute top-0 left-0 right-0 h-8 border-b border-gray-300">
+                <template x-for="year in yearMarks" :key="year">
+                    <div class="absolute text-xs text-gray-600 transform -translate-x-1/2"
+                         :style="`left: ${((year - minYear) / (maxYear - minYear)) * 100}%`"
+                         x-text="year"></div>
+                </template>
+            </div>
+
+            <!-- Timeline layers -->
+            <div class="layers-container absolute top-8 left-0 right-0 bottom-0">
+                <template x-for="layer in [1, 2, 3, 4]" :key="layer">
+                    <div class="layer relative h-20 border-b border-gray-100 mb-2">
+                        <template x-for="event in getEventsForLayer(layer)" :key="event.name">
+                            <div x-show="isEventVisible(event)"
+                                 class="event-bar absolute rounded shadow cursor-pointer transition-all duration-200 hover:shadow-lg"
+                                 :class="getEventTypeClass(event.event_type)"
+                                 :style="getEventBarStyle(event)"
+                                 @mouseenter="showTooltip(event, $event)"
+                                 @mouseleave="hideTooltip()">
+                                <div class="p-2 text-xs font-medium text-white truncate" x-text="event.name"></div>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tooltip -->
+    <div x-show="tooltip.visible" 
+         x-transition
+         class="absolute z-50 bg-black text-white p-3 rounded shadow-lg max-w-xs"
+         :style="`top: ${tooltip.y}px; left: ${tooltip.x}px`">
+        <div class="font-bold text-sm" x-text="tooltip.event?.name"></div>
+        <div class="text-xs mt-1" x-text="tooltip.event?.start_date + (tooltip.event?.end_date !== tooltip.event?.start_date ? ' - ' + tooltip.event?.end_date : '')"></div>
+        <div class="text-xs mt-2" x-text="tooltip.event?.description"></div>
+    </div>
+</div>
+
+<script>
+function horizontalTimeline() {
+    return {
+        events: [],
+        selectedTypes: ['all'],
+        tooltip: {
+            visible: false,
+            x: 0,
+            y: 0,
+            event: null
+        },
+        minYear: 568,
+        maxYear: 810,
+
+        async init() {
+            try {
+                const response = await fetch('../lombard_timeline.json');
+                this.events = await response.json();
+                this.minYear = Math.min(...this.events.map(e => e.start_date));
+                this.maxYear = Math.max(...this.events.map(e => e.end_date));
+            } catch (error) {
+                console.error('Error loading timeline data:', error);
+            }
+        },
+
+        get yearMarks() {
+            const marks = [];
+            const interval = 50;
+            for (let year = Math.ceil(this.minYear / interval) * interval; year <= this.maxYear; year += interval) {
+                marks.push(year);
+            }
+            return marks;
+        },
+
+        toggleEventType(type) {
+            if (type === 'all') {
+                this.selectedTypes = ['all'];
+            } else {
+                this.selectedTypes = this.selectedTypes.filter(t => t !== 'all');
+                if (this.selectedTypes.includes(type)) {
+                    this.selectedTypes = this.selectedTypes.filter(t => t !== type);
+                } else {
+                    this.selectedTypes.push(type);
+                }
+                if (this.selectedTypes.length === 0) {
+                    this.selectedTypes = ['all'];
+                }
+            }
+        },
+
+        isEventVisible(event) {
+            return this.selectedTypes.includes('all') || this.selectedTypes.includes(event.event_type);
+        },
+
+        getEventsForLayer(layer) {
+            return this.events.filter(event => event.layer === layer);
+        },
+
+        getEventTypeClass(eventType) {
+            const classes = {
+                'political': 'bg-blue-600',
+                'military': 'bg-red-600',
+                'religious': 'bg-purple-600',
+                'cultural': 'bg-green-600',
+                'economic': 'bg-orange-600',
+                'architectural': 'bg-yellow-600'
+            };
+            return classes[eventType] || 'bg-gray-600';
+        },
+
+        getEventBarStyle(event) {
+            const totalYears = this.maxYear - this.minYear;
+            const startPercent = ((event.start_date - this.minYear) / totalYears) * 100;
+            const duration = event.end_date - event.start_date;
+            const widthPercent = Math.max((duration / totalYears) * 100, 1); // Minimum 1% width for single-year events
+            
+            return `left: ${startPercent}%; width: ${widthPercent}%; top: 10px; height: 60px;`;
+        },
+
+        showTooltip(event, mouseEvent) {
+            this.tooltip = {
+                visible: true,
+                x: mouseEvent.pageX + 10,
+                y: mouseEvent.pageY - 10,
+                event: event
+            };
+        },
+
+        hideTooltip() {
+            this.tooltip.visible = false;
+        }
+    }
+}
+</script>
+
+<style>
+.timeline-container {
+    font-family: 'Inter', sans-serif;
+}
+
+.event-bar {
+    opacity: 0.9;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.event-bar:hover {
+    opacity: 1;
+    transform: translateY(-2px);
+}
+
+.timeline-chart {
+    background: linear-gradient(to right, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.layer {
+    background: rgba(255,255,255,0.1);
+}
+
+.year-scale {
+    background: rgba(255,255,255,0.9);
+}
+</style>
