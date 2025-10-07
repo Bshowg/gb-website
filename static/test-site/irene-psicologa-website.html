@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Psicologa psicoterapeuta a Firenze | Dott.ssa Irene Del Monte</title>
+    <meta name="description" content="Psicologa e psicoterapeuta cognitivo-comportamentale a Firenze. Aiuto adolescenti, giovani adulti e adulti a gestire ansia, attacchi di panico, stress e disturbi dell'umore.">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #5a7d8c;
+            --primary-dark: #4a6d7c;
+            --secondary: #a8bfc7;
+            --accent: #d4a574;
+            --text: #333;
+            --text-light: #666;
+            --bg: #fff;
+            --bg-light: #f8f9fa;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--bg);
+        }
+
+        /* Navigation */
+        nav {
+            background: var(--bg);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        nav .logo {
+            display: none;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--primary);
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text);
+            transition: color 0.3s;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            color: var(--primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 6rem 2rem 5rem;
+            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            background-image: url('HEROIMAGEIRE.png');
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(90, 125, 140, 0.35) 0%, rgba(168, 191, 199, 0.45) 20%);
+            z-index: 1;
+        }
+
+        .hero > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero .name {
+            font-size: 2.8rem;
+            margin-bottom: 0.5rem;
+            font-weight: 400;
+            text-shadow: 1px 1px 2px #5a7d8c;
+        }
+
+        .hero .title {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+            font-weight: 300;
+            padding: 5px 5px;
+            color:white;
+            text-shadow: 1px 1px 2px black;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 300;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            line-height: 1.8;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 1rem 2.5rem;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        /* Chi Sono Section */
+        .chi-sono-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .chi-sono-image {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 6px 25px rgba(0,0,0,0.15);
+            object-fit: cover;
+            max-height: 500px;
+        }
+
+        @media (max-width: 768px) {
+            .chi-sono-content {
+                grid-template-columns: 1fr;
+            }
+
+            .chi-sono-image {
+                max-height: 400px;
+                order: -1;
+            }
+        }
+
+        /* Section Styles */
+        section {
+            margin-bottom: 4rem;
+        }
+
+        section h2 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-weight: 400;
+        }
+
+        section h3 {
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+            margin: 2rem 0 1rem;
+        }
+
+        section p {
+            margin-bottom: 1rem;
+            color: var(--text-light);
+            line-height: 1.8;
+        }
+
+        /* Alternate Background */
+        .bg-light {
+            background: var(--bg-light);
+        }
+
+        /* Approach Highlights */
+        .approach-highlights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0 3rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(90, 125, 140, 0.3);
+            transition: transform 0.3s;
+            min-height: 200px;
+        }
+
+        .highlight-box:hover {
+            transform: translateY(-5px);
+        }
+
+
+        /* Lists */
+        ul.styled-list {
+            list-style: none;
+            margin: 1.5rem 0;
+        }
+
+        ul.styled-list li {
+            padding: 0.8rem 0 0.8rem 2.5rem;
+            position: relative;
+            color: var(--text-light);
+        }
+
+        ul.styled-list li:before {
+            content: "✓";
+            color: white;
+            background: var(--accent);
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+            top: 0.8rem;
+        }
+        /* Info Steps */
+        .info-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .info-step {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 600;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 4px 15px rgba(90, 125, 140, 0.3);
+        }
+
+        .step-title {
+            font-size: 1.3rem;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+        }
+
+        .step-description {
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        .info-steps .info-step:not(:last-child)::after {
+            content: '→';
+            position: absolute;
+            right: -1rem;
+            top: 40px;
+            font-size: 2rem;
+            color: var(--secondary);
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .info-steps .info-step:not(:last-child)::after {
+                content: '↓';
+                right: auto;
+                top: auto;
+                bottom: -2rem;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .info-steps {
+                grid-template-columns: 1fr;
+            }
+        }
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 25px rgba(0,0,0,0.12);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .card h3 {
+            margin-top: 0;
+            font-size: 1.3rem;
+        }
+
+        .card p {
+            text-align: center;
+        }
+        /* Come Funziona Grid */
+        .funziona-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .funziona-card {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(90, 125, 140, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .funziona-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 25px rgba(90, 125, 140, 0.4);
+        }
+
+        .funziona-card i {
+            font-size: 2.5rem;
+            color: white;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .funziona-card h3 {
+            margin-top: 0;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .funziona-card p {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        @media (max-width: 768px) {
+            .funziona-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /*Quando Aiuto*/ 
+        .quando-aiuto {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            margin-top: 3rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            }
+
+        .quando-aiuto-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 10px;
+            }
+
+        .quando-aiuto-content h3 {
+            margin-top: 0;
+            }
+
+        @media (max-width: 768px) {
+            .quando-aiuto {
+                    grid-template-columns: 1fr;
+                }
+
+                .quando-aiuto-image {
+                    order: -1;
+                    height: 300px;
+                }
+            }
+
+
+        /* Contact Form */
+        .contact-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin: 2rem 0;
+            align-items: start;
+        }
+
+        .contact-info {
+            padding: 2rem 0;
+        }
+
+        .contact-info h3 {
+            margin-top: 0;
+            color: var(--primary);
+        }
+
+        .contact-info p {
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .contact-details {
+            margin-top: 2rem;
+        }
+
+        .contact-details p {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1rem 0;
+            font-size: 1.1rem;
+        }
+
+        .contact-details i {
+            color: var(--primary);
+            font-size: 1.3rem;
+            width: 30px;
+        }
+
+        .contact-details a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .contact-details a:hover {
+            text-decoration: underline;
+        }
+
+        .contact-form {
+            max-width: 100%;
+            margin: 0;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        @media (max-width: 768px) {
+            .contact-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* FAQ */
+        .faq-item {
+            background: white;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .faq-item h3 {
+            color: var(--primary);
+            margin: 0 0 0.8rem 0;
+            font-size: 1.1rem;
+        }
+
+        .faq-item p {
+            margin: 0;
+        }
+
+        /* Studios/Maps */
+        .studios-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .studio-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .studio-card h4 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .studio-card p {
+            margin-bottom: 1rem;
+            color: var(--text-light);
+        }
+
+        .map-container {
+            width: 100%;
+            height: 300px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        @media (max-width: 768px) {
+            .studios-container {
+                grid-template-columns: 1fr;
+            }
+
+            .map-container {
+                height: 250px;
+            }
+        }
+
+        /* Footer */
+        footer {
+            background: var(--primary-dark);
+            color: white;
+            padding: 3rem 2rem 1rem;
+            text-align: center;
+        }
+
+        footer a {
+            color: var(--secondary);
+            text-decoration: none;
+        }
+
+        .footer-info {
+            margin-bottom: 2rem;
+        }
+
+        .footer-info p {
+            margin: 0.5rem 0;
+        }
+
+       /* Responsive */
+        @media (max-width: 768px) {
+            nav .container {
+                justify-content: space-between;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            nav ul {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--bg);
+                flex-direction: column;
+                gap: 0;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease-out;
+            }
+
+            nav ul.active {
+                max-height: 500px;
+            }
+
+            nav ul li {
+                border-bottom: 1px solid var(--bg-light);
+            }
+
+            nav ul li:last-child {
+                border-bottom: none;
+            }
+
+            nav a {
+                display: block;
+                padding: 1rem 2rem;
+            }
+
+            .hero .name {
+                font-size: 2rem;
+            }
+
+            .hero .title {
+                font-size: 1.1rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">☰</button>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#chi-sono">Chi sono</a></li>
+                <li><a href="#approccio">Approccio</a></li>
+                <li><a href="#aree">Aree di intervento</a></li>
+                <li><a href="#come-funziona">Come funziona</a></li>
+                <li><a href="#contatti">Contatti</a></li>
+                <li><a href="#faq">FAQ</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <h1 class="name" >Dott.ssa Irene Del Monte</h1>
+        <p class="title">Psicologa e psicoterapeuta <b>cognitivo-comportamentale</b></p>
+        <a href="#contatti" class="cta-button">Conosciamoci</a>
+    </section>
+
+    <!-- Chi sono -->
+    <section id="chi-sono">
+        <div class="container">
+            <h2>Chi sono</h2>
+            <div class="chi-sono-content">
+                <img src="chisono.jpeg" alt="Dott.ssa Irene Del Monte" class="chi-sono-image">
+                <div>
+                    <p>Mi sono laureata con il massimo dei voti in Psicologia presso l'Università di Firenze e successivamente ho completato la formazione specialistica in Psicoterapia Cognitivo-Comportamentale presso la Scuola di Psicoterapia Cognitiva di Grosseto. Nel corso della formazione ho potuto approfondire le tecniche più innovative della terza onda, tra cui Mindfulness, Acceptance and Commitment Therapy e la Dialectical Behavior Therapy.</p>
+                    
+                    <p>Successivamente ho conseguito la formazione avanzata in Compassion Focused Therapy (CFT) ed un Master in valutazione e trattamento dei disturbi di personalità.</p>
+                    
+                    <p>Da anni lavoro con adolescenti, giovani adulti e adulti, con particolare esperienza nel trattamento dei disturbi di personalità, dei disturbi d'ansia, degli attacchi di panico e dei disturbi dell'umore. Creo percorsi terapeutici personalizzati, basati su valutazione accurata, collaborazione attiva e tecniche evidence-based.</p>
+                    
+                    <p>Credo nel rapporto terapeutico come alleanza: ascolto attento, rispetto e chiarezza. Nella mia pratica metto al centro la persona, lavorando su pensieri, emozioni e comportamenti per ottenere cambiamenti concreti nella vita quotidiana.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Approccio Terapeutico -->
+    <section id="approccio" class="bg-light">
+        <div class="container">
+            <h2>Approccio terapeutico</h2>
+            <p>Il mio approccio si basa sulla <b>terapia cognitivo-comportamentale (CBT)</b> e, in particolare, sulle più recenti evoluzioni della cosiddetta <b>terza onda</b> della psicoterapia cognitiva.</p>
+            
+            <p>Questa prospettiva, pur mantenendo le solide basi scientifiche della TCC tradizionale, amplia il lavoro terapeutico integrando concetti di accettazione, consapevolezza e valori personali, con l'obiettivo di promuovere un benessere più profondo e duraturo.</p>
+            
+            <div class="approach-highlights">
+                <div class="highlight-box">Mindfulness-Based Cognitive Therapy <br>(MBCT)</div>
+                <div class="highlight-box">Acceptance and Commitment Therapy <br>(ACT)</div>
+                <div class="highlight-box">Compassion Focused Therapy <br> (CFT)</div>
+            </div>
+            
+            <h3>Insieme lavoriamo per:</h3>
+            <ul class="styled-list">
+                <li>Riconoscere e accogliere le emozioni, anche quelle difficili</li>
+                <li>Imparare a osservare i pensieri senza esserne sopraffatti</li>
+                <li>Coltivare una maggiore presenza nel momento presente</li>
+                <li>Definire obiettivi e valori personali come guida del cambiamento</li>
+            </ul>
+            
+            <p>Durante le sedute alterno momenti di esplorazione e comprensione a esercizi pratici, che possono includere tecniche corporee di mindfulness, compassione, immaginazione e pianificazione di comportamenti significativi. Il percorso è sempre costruito insieme alla persona, in modo flessibile e rispettoso dei tempi individuali.</p>
+        </div>
+    </section>
+
+    <!-- Aree di Intervento -->
+    <section id="aree">
+        <div class="container">
+            <h2>Aree di intervento</h2>
+            
+            <div class="cards">
+                <div class="card">
+                    <i class="fas fa-user-circle card-icon"></i>
+                    <h3>Disturbi di personalità</h3>
+                    <p>Percorsi specializzati per la comprensione e il trattamento dei disturbi di personalità.</p>
+                </div>
+                <div class="card">
+                    <i class="fas fa-heart-pulse card-icon"></i>
+                    <h3>Disturbi d'ansia</h3>
+                    <p>Attacchi di panico, ansia sociale, ansia per la salute e altre forme di ansia.</p>
+                </div>
+                <div class="card">
+                    <i class="fas fa-cloud-sun card-icon"></i>
+                    <h3>Disturbi dell'umore</h3>
+                    <p>Supporto per la gestione di depressione e variazioni dell'umore.</p>
+                </div>
+                <div class="card">
+                    <i class="fas fa-people-arrows card-icon"></i>
+                    <h3>Problematiche relazionali</h3>
+                    <p>Difficoltà nelle relazioni interpersonali e comunicazione assertiva.</p>
+                </div>
+                <div class="card">
+                    <i class="fas fa-brain card-icon"></i>
+                    <h3>Regolazione emotiva</h3>
+                    <p>Tecniche per gestire meglio le proprie emozioni e reazioni.</p>
+                </div>
+                <div class="card">
+                    <i class="fas fa-bolt card-icon"></i>
+                    <h3>Stress e perfezionismo</h3>
+                    <p>Strategie per ridurre lo stress e affrontare il perfezionismo.</p>
+                </div>
+            </div>
+            
+
+            
+            <div class="quando-aiuto">
+            <img src="quandoaiuto.png" alt="Sessione di terapia" class="quando-aiuto-image">
+            <div class="quando-aiuto-content">
+                <h3>Quando chiedere aiuto?</h3>
+                <p>Il momento in cui una persona sceglie di rivolgersi a uno psicoterapeuta è sempre unico e profondamente personale. Spesso nasce dal desiderio di cambiamento, dal bisogno di comprendere e trasformare un aspetto della propria vita che porta disagio o sofferenza.</p>
+                <p>Nel mio lavoro, considero la relazione terapeutica come uno spazio sicuro e di ascolto autentico, in cui poter esplorare la propria storia, dare voce ai propri bisogni e ritrovare un senso di ordine e significato.</p>
+            </div>
+        </div>
+        </div>
+    </section>
+
+    <!-- Come Funziona -->
+    <section id="come-funziona" class="bg-light">
+        <div class="container">
+            <h2>Come funziona la psicoterapia</h2>
+            <p style="text-align: center; margin-bottom: 2rem;">Il primo contatto può avvenire telefonicamente (anche WhatsApp) o tramite mail. Durante la prima visita inquadreremo la richiesta per comprendere la tua situazione e definire insieme il percorso più adatto.</p>
+            
+            <div class="funziona-grid">
+                <div class="funziona-card">
+                    <i class="fas fa-phone"></i>
+                    <h3>Primo Contatto</h3>
+                    <p>Contattami via telefono, WhatsApp o email per fissare un primo appuntamento conoscitivo.</p>
+                </div>
+                
+                <div class="funziona-card">
+                    <i class="fas fa-calendar-check"></i>
+                    <h3>Prima Visita</h3>
+                    <p>Inquadriamo insieme la tua richiesta e valutiamo il percorso più adatto alle tue esigenze.</p>
+                </div>
+                
+                <div class="funziona-card">
+                    <i class="fas fa-clock"></i>
+                    <h3>Durata delle Sedute</h3>
+                    <p>Ogni seduta dura 50 minuti, con frequenza generalmente settimanale nelle fasi iniziali.</p>
+                </div>
+                
+                <div class="funziona-card">
+                    <i class="fas fa-laptop-house"></i>
+                    <h3>Modalità Flessibile</h3>
+                    <p>Puoi scegliere tra sedute in presenza nei miei studi a Firenze o online, secondo le tue necessità.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contatti -->
+    <section id="contatti">
+        <div class="container">
+            <h2>Contatti</h2>
+            
+            <div class="contact-section">
+                <div class="contact-info">
+                    <h3>Inizia il tuo percorso</h3>
+                    <p>Se senti che è il momento di iniziare un percorso, scrivimi o chiamami: possiamo fissare un primo colloquio conoscitivo.</p>
+                    
+                    <p>Il primo passo è sempre il più importante. Insieme valuteremo la situazione e definiremo il percorso più adatto alle tue esigenze.</p>
+                    
+                    <div class="contact-details">
+                        <p><i class="fas fa-phone"></i> <a href="tel:3405912289">340 5912289</a></p>
+                        <p><i class="fas fa-envelope"></i> <a href="mailto:info@example.com">info@delmonteirene.it</a></p>
+                        <p><i class="fab fa-whatsapp"></i> <a href="https://wa.me/393405912289">WhatsApp</a></p>
+                    </div>
+                </div>
+                
+                <div class="contact-form">
+                    <h3 style="text-align: center; margin-bottom: 1.5rem;">Richiedi un appuntamento</h3>
+                    <form>
+                        <div class="form-group">
+                            <label>Nome e Cognome *</label>
+                            <input type="text" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email *</label>
+                            <input type="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Motivo del contatto</label>
+                            <textarea></textarea>
+                        </div>
+                        <button type="submit" class="cta-button" style="width: 100%; text-align: center;">Invia la tua richiesta</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 3rem;">
+                <h3>I miei studi a Firenze</h3>
+                
+                <div class="studios-container">
+                    <div class="studio-card">
+                        <h4><i class="fas fa-map-marker-alt"></i> Studio 1</h4>
+                        <p><strong>Via della Mattonaia 17</strong><br>Firenze</p>
+                        <div class="map-container">
+                            <iframe 
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2879.8426937204706!2d11.266707!3d43.773589!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x132a5403e0c5c5c5%3A0x5c5c5c5c5c5c5c5c!2sVia%20della%20Mattonaia%2C%2017%2C%2050121%20Firenze%20FI!5e0!3m2!1sit!2sit!4v1234567890"
+                                allowfullscreen="" 
+                                loading="lazy" 
+                                referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
+                        </div>
+                    </div>
+                    
+                    <div class="studio-card">
+                        <h4><i class="fas fa-map-marker-alt"></i> Studio 2</h4>
+                        <p><strong>Via della Torretta 14</strong><br>Firenze <em> (presso i Centri Clinici Tages)</em></p>
+                        <div class="map-container">
+                            <iframe 
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2879.5!2d11.25!3d43.78!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x132a540e8c8c8c8c%3A0x8c8c8c8c8c8c8c8c!2sVia%20della%20Torretta%2C%2014%2C%2050139%20Firenze%20FI!5e0!3m2!1sit!2sit!4v1234567890"
+                                allowfullscreen="" 
+                                loading="lazy" 
+                                referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+                
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="bg-light">
+        <div class="container">
+            <h2>Domande frequenti</h2>
+            
+            <div class="faq-item">
+                <h3>Quanto dura una seduta?</h3>
+                <p>Circa 50 minuti.</p>
+            </div>
+            
+            <div class="faq-item">
+                <h3>Con che frequenza si fanno gli incontri?</h3>
+                <p>In genere settimanali all'inizio, poi si valuta in base alle necessità specifiche.</p>
+            </div>
+            
+            <div class="faq-item">
+                <h3>Posso fare sedute online?</h3>
+                <p>Sì, se compatibile con il percorso terapeutico. Durante il primo colloquio valutiamo quale soluzione è indicata per il problema riportato.</p>
+            </div>
+            
+            <div class="faq-item">
+                <h3>Le informazioni sono riservate?</h3>
+                <p>Sì, tutto ciò che viene riportato è protetto dal segreto professionale nel rispetto del codice deontologico.</p>
+            </div>
+            
+            <div class="faq-item">
+                <h3>Quanto costa la terapia?</h3>
+                <p>Le tariffe sono comunicate in modo trasparente al primo contatto.</p>
+            </div>
+            
+            <div class="faq-item">
+                <h3>Le fatture sono detraibili fiscalmente?</h3>
+                <p>Sì, in quanto prestazioni sanitarie tutte le fatture sono detraibili.</p>
+            </div>
+            
+            <div class="faq-item">
+                <h3>Qual è la differenza tra psicologo, psicoterapeuta e psichiatra?</h3>
+                <p>Lo psicologo è laureato in psicologia e abilitato all'esercizio della professione. Lo psicoterapeuta è uno psicologo o un medico che ha seguito una specializzazione quadriennale in psicoterapia. Lo psichiatra è un medico specializzato in psichiatria e può prescrivere farmaci.</p>
+            </div>
+            
+            <div class="faq-item">
+                <h3>Cos'è la psicoterapia cognitivo-comportamentale?</h3>
+                <p>La psicoterapia cognitivo-comportamentale (CBT) è un approccio basato su solide evidenze scientifiche, che aiuta a riconoscere e modificare pensieri, emozioni e comportamenti che mantengono il disagio psicologico. Attraverso tecniche pratiche e mirate, la persona impara strategie per gestire meglio le proprie difficoltà e migliorare la qualità della vita.</p>
+            </div>
+            
+            <div class="faq-item">
+                <h3>Come funziona la terapia cognitivo-comportamentale in pratica?</h3>
+                <p>Durante le sedute si lavora insieme per identificare schemi di pensiero e comportamenti che possono contribuire al malessere. Il terapeuta e il paziente collaborano attivamente: vengono proposti esercizi, riflessioni e strategie da mettere in pratica anche tra una seduta e l'altra. L'obiettivo è diventare progressivamente più autonomi nella gestione delle proprie emozioni e delle situazioni difficili.</p>
+            </div>
+            
+            <div class="faq-item">
+                <h3>Quanto dura un percorso di psicoterapia?</h3>
+                <p>La durata varia in base agli obiettivi e alla complessità del problema. Molti percorsi hanno una durata medio-breve (da 3 a 12 mesi), ma in alcuni casi può essere utile un lavoro più lungo di approfondimento o di prevenzione delle ricadute.</p>
+            </div>
+            
+            <div class="faq-item">
+                <h3>Cosa succede nel primo incontro?</h3>
+                <p>Il primo colloquio serve a conoscerci, comprendere la tua situazione e valutare insieme obiettivi e modalità di lavoro. È un momento importante per capire se la CBT è l'approccio più adatto alle tue esigenze e per impostare un percorso personalizzato.</p>
+            </div>
+            
+            <div class="faq-item">
+                <h3>Posso interrompere la terapia quando voglio?</h3>
+                <p>Sì, la scelta di proseguire o interrompere la terapia è sempre tua. In ogni caso, è utile parlarne insieme per poter chiudere il percorso in modo consapevole e valorizzare il lavoro svolto.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-info">
+            <p><strong>Dott.ssa Irene Del Monte</strong></p>
+            <p>Psicologa e Psicoterapeuta cognitivo-comportamentale</p>
+            <p>Ordine degli Psicologi della Toscana n. 8233</p>
+            <p style="margin-top: 1rem;">Via della Mattonaia 17, Firenze | Via della Torretta 14, Firenze</p>
+            <p>Tel: <a href="tel:3405912289">340 5912289</a></p>
+        </div>
+        <p style="font-size: 0.9rem; opacity: 0.8;">&copy; 2025 Dott.ssa Irene Del Monte. Tutti i diritti riservati.</p>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const menuToggle = document.querySelector('.mobile-menu-toggle');
+        const navMenu = document.querySelector('nav ul');
+
+        menuToggle.addEventListener('click', function() {
+            navMenu.classList.toggle('active');
+            this.textContent = navMenu.classList.contains('active') ? '✕' : '☰';
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    // Close mobile menu after clicking
+                    if (window.innerWidth <= 768) {
+                        navMenu.classList.remove('active');
+                        menuToggle.textContent = '☰';
+                    }
+                }
+            });
+        });
+
+        // Form submission handler
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Grazie per il tuo interesse. Questa è una demo del form. In un sito reale, i dati verrebbero inviati al server.');
+        });
+    </script>
+</body>
+</html>
