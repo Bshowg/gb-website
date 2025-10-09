@@ -21,6 +21,7 @@ export class GameState {
         this.dealerIndex = 1;
         this.deck = [];
         this.lastAggressorIndex = -1;
+        this.actionsThisStreet = new Set(); // Track who has acted this street
     }
     
     shuffleDeck() {
@@ -79,6 +80,7 @@ export class GameState {
         this.currentBet = 0;
         this.street = 'preflop';
         this.lastAggressorIndex = -1;
+        this.actionsThisStreet = new Set();
         
         // Shuffle and deal
         this.shuffleDeck();
@@ -103,11 +105,15 @@ export class GameState {
         }
         
         // Heads-up: dealer acts first preflop
+
         this.toAct = this.dealerIndex;
     }
     
     processAction(action, amount) {
         const player = this.players[this.toAct];
+        
+        // Track that this player has acted this street
+        this.actionsThisStreet.add(this.toAct);
         
         if (action === 'fold') {
             player.folded = true;
@@ -124,9 +130,13 @@ export class GameState {
             this.currentBet = player.currentBet;
             this.minRaise = Math.max(this.minRaise, raiseAmount);
             this.lastAggressorIndex = this.toAct;
+            // Reset actions tracking since there's been a raise
+            this.actionsThisStreet.clear();
+            this.actionsThisStreet.add(this.toAct);
         }
         
         this.toAct = (this.toAct + 1) % 2;
+        console.log('Next to act:', this.toAct);
     }
     
     isStreetComplete() {
@@ -138,8 +148,8 @@ export class GameState {
         // All active players have acted and matched the current bet
         const allMatched = activePlayers.every(p => p.currentBet === this.currentBet || p.stack === 0);
         
-        // Check if action has returned to last aggressor or both have acted
-        const bothActed = this.players.every(p => p.folded || p.currentBet > 0 || this.street !== 'preflop');
+        // Both active players must have acted this street
+        const bothActed = this.actionsThisStreet.size >= 2;
         
         return allMatched && bothActed;
     }
@@ -164,7 +174,9 @@ export class GameState {
         }
         
         // Post-flop: non-dealer acts first
-        this.toAct = (this.dealerIndex + 1) % 2;
+        this.toAct = (this.dealerIndex + 1) % 2; // Non-dealer acts first post-flop
+        this.lastAggressorIndex = -1; // Reset aggressor tracking
+        this.actionsThisStreet = new Set(); // Reset action tracking for new street
         this.minRaise = this.blinds.bb;
     }
     

@@ -20,10 +20,14 @@ export class GameRenderer {
         this.scene = new THREE.Scene();
         this.scene.background = new THREE.Color(0x1a5c3a);
         
-        // Setup camera with better positioning
+        // Setup camera with responsive positioning
         const aspect = window.innerWidth / window.innerHeight;
-        this.camera = new THREE.PerspectiveCamera(50, aspect, 0.1, 1000);
-        this.camera.position.set(0, 0, 15);
+        // Adjust FOV and camera distance based on aspect ratio
+        const fov = aspect < 1 ? 60 : 50; // Wider FOV for narrow screens
+        const cameraDistance = aspect < 0.6 ? 18 : 15; // Further back for very narrow screens
+        
+        this.camera = new THREE.PerspectiveCamera(fov, aspect, 0.1, 1000);
+        this.camera.position.set(0, 0, cameraDistance);
         this.camera.lookAt(0, 0, 0);
         
         // Card meshes storage
@@ -58,10 +62,63 @@ export class GameRenderer {
     handleResize() {
         const width = window.innerWidth;
         const height = window.innerHeight;
+        const aspect = width / height;
         
         this.renderer.setSize(width, height);
-        this.camera.aspect = width / height;
+        this.camera.aspect = aspect;
+        
+        // Adjust camera settings for different screen sizes
+        const fov = aspect < 1 ? 60 : 50; // Wider FOV for narrow screens
+        const cameraDistance = aspect < 0.6 ? 18 : 15; // Further back for very narrow screens
+        
+        this.camera.fov = fov;
+        this.camera.position.z = cameraDistance;
         this.camera.updateProjectionMatrix();
+        
+        // Update card positions for current viewport
+        this.updateCardPositions();
+    }
+    
+    getViewportDimensions() {
+        const aspect = this.camera.aspect;
+        const fov = this.camera.fov;
+        const distance = this.camera.position.z;
+        
+        // Calculate visible area at z=0 plane
+        const vFOV = fov * Math.PI / 180;
+        const height = 2 * Math.tan(vFOV / 2) * distance;
+        const width = height * aspect;
+        
+        return { width, height };
+    }
+    
+    updateCardPositions() {
+        // Only update if cards exist
+        if (this.cardMeshes.player0.length === 0 && this.cardMeshes.player1.length === 0) return;
+        
+        const viewport = this.getViewportDimensions();
+        const playerCardScale = 1.5;
+        const scaledCardWidth = 2 * playerCardScale;
+        const playerCardOverlap = scaledCardWidth * 0.8; // Adjust overlap for larger cards
+        const cardHeight = 1.96 * playerCardScale; // Scaled card height
+        const sideMargin = 2; // Add side margin
+        
+        // Calculate positions with 20% of card outside viewport
+        const cardOffsetOut = cardHeight * -0.6; // 20% of card height outside
+        
+        // Update player 0 cards (bottom-right, 20% below viewport)
+        this.cardMeshes.player0.forEach((mesh, i) => {
+            const startX = viewport.width / 2 - playerCardOverlap - sideMargin; // Right edge with larger margin
+            const baseY = -viewport.height / 2 - cardOffsetOut; // 20% below viewport
+            mesh.position.set(startX + i * playerCardOverlap, baseY, i * 0.01);
+        });
+        
+        // Update player 1 cards (top-left, 20% above viewport)
+        this.cardMeshes.player1.forEach((mesh, i) => {
+            const startX = -viewport.width / 2 + sideMargin; // Left edge with larger margin
+            const baseY = viewport.height / 2 + cardOffsetOut; // 20% above viewport
+            mesh.position.set(startX + i * playerCardOverlap, baseY, i * 0.01);
+        });
     }
     
     createTable() {
@@ -155,8 +212,8 @@ export class GameRenderer {
         return texture;
     }
     
-    createCardMesh(cardName, isRevealed = false) {
-        const geometry = new THREE.PlaneGeometry(2, 2.8);
+    createCardMesh(cardName, isRevealed = false, scale = 1) {
+        const geometry = new THREE.PlaneGeometry(2 * scale, 2.8 * scale);
         
         // Start with back texture unless revealed
         const initialTexture = isRevealed ? this.textures.cards[cardName] : this.textures.back;
@@ -205,12 +262,24 @@ export class GameRenderer {
         this.cardMeshes.board = [];
         
         const isShowdown = gameState.street === 'showdown' || gameState.players.some(p => p.folded);
-        
+        const viewport = this.getViewportDimensions();
+        const cardOverlap = 1.4 * 0.8; // 20% overlap between cards
+        const cardHeight = 1.96; // Card height
+        const cardOffsetOut = cardHeight * -0.6; // 20% of card height outside
+        const playerCardScale = 1.5;
+        const scaledCardWidth = 2 * playerCardScale;
+        const playerCardOverlap = scaledCardWidth * 0.8; // Adjust overlap for larger cards
+        const sideMargin = 2; // Add side margin
         // Player 0 cards (bottom) - face down unless showdown
         if (gameState.players[0].hole.length > 0) {
+            
+            
+            const startX = viewport.width / 2 - playerCardOverlap - sideMargin; // Right edge with larger margin
+            const baseY = -viewport.height / 2 - cardOffsetOut; // 20% below viewport
+            
             gameState.players[0].hole.forEach((card, i) => {
-                const mesh = this.createCardMesh(card, isShowdown);
-                mesh.position.set(-1.5 + i * 3, -5, 0);
+                const mesh = this.createCardMesh(card, isShowdown, playerCardScale);
+                mesh.position.set(startX + i * playerCardOverlap, baseY, i * 0.01);
                 mesh.userData.owner = 0;
                 mesh.userData.cardIndex = i;
                 this.scene.add(mesh);
@@ -221,9 +290,14 @@ export class GameRenderer {
         
         // Player 1 cards (top, rotated 180°) - face down unless showdown
         if (gameState.players[1].hole.length > 0) {
+
+            
+            const startX = -viewport.width / 2 + sideMargin; // Left edge with larger margin
+            const baseY = viewport.height / 2 + cardOffsetOut; // 20% above viewport
+            
             gameState.players[1].hole.forEach((card, i) => {
-                const mesh = this.createCardMesh(card, isShowdown);
-                mesh.position.set(1.5 - i * 3, 5, 0);
+                const mesh = this.createCardMesh(card, isShowdown, playerCardScale);
+                mesh.position.set(startX + i * playerCardOverlap, baseY, i * 0.01);
                 mesh.rotation.z = Math.PI;
                 mesh.userData.baseRotation.z = Math.PI;
                 mesh.userData.owner = 1;
@@ -236,10 +310,18 @@ export class GameRenderer {
         
         // Board cards - always face up when dealt
         if (gameState.board.length > 0) {
-            const boardStartX = -(gameState.board.length - 1) * 1.2;
+            console.log('Adding board cards:', gameState.board);
+            // Use overlapping layout that fits all cards on screen
+            const boardCardScale = 1.5;
+            const scaledCardWidth = 2 * boardCardScale;
+            const maxCardSpacing = Math.min(scaledCardWidth * 1.6, viewport.width * 0.2); // Max spacing based on viewport
+            const cardSpacing = Math.min(maxCardSpacing, viewport.width * 0.9 / gameState.board.length); // Fit in 70% of screen width
+            const totalWidth = (gameState.board.length - 1) * cardSpacing;
+            const boardStartX = -totalWidth / 2; // Center the cards
+            
             gameState.board.forEach((card, i) => {
-                const mesh = this.createCardMesh(card, true);
-                mesh.position.set(boardStartX + i * 2.4, 0, 0);
+                const mesh = this.createCardMesh(card, true, boardCardScale);
+                mesh.position.set(boardStartX + i * cardSpacing, 0, 0.1 + i * 0.01);
                 this.scene.add(mesh);
                 this.cardMeshes.board.push(mesh);
                 console.log(`Added board card ${i} at`, mesh.position);
@@ -321,6 +403,33 @@ export class GameRenderer {
         
         const base = cardMesh.userData.baseRotation;
         cardMesh.rotation.copy(base);
+    }
+    
+    getPlayerCards(owner) {
+        return owner === 0 ? this.cardMeshes.player0 : this.cardMeshes.player1;
+    }
+    
+    updatePlayerCardsRotation(owner, rotationDegrees) {
+        const cards = this.getPlayerCards(owner);
+        const rotationRadians = rotationDegrees * Math.PI / 180;
+        
+        cards.forEach(cardMesh => {
+            // Copy base rotation and add slide rotation around Y axis
+            const base = cardMesh.userData.baseRotation;
+            cardMesh.rotation.set(base.x, base.y + rotationRadians, base.z);
+            
+            // Update texture based on rotation threshold
+            const isRevealed = rotationDegrees > 90; // Revealed when past 90 degrees
+            if (isRevealed && !cardMesh.userData.showingFront) {
+                cardMesh.material.map = cardMesh.userData.frontTexture;
+                cardMesh.material.needsUpdate = true;
+                cardMesh.userData.showingFront = true;
+            } else if (!isRevealed && cardMesh.userData.showingFront) {
+                cardMesh.material.map = cardMesh.userData.backTexture;
+                cardMesh.material.needsUpdate = true;
+                cardMesh.userData.showingFront = false;
+            }
+        });
     }
     
     render() {

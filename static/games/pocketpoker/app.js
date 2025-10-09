@@ -10,7 +10,7 @@ export const CONFIG = {
     REVEAL_THRESHOLD_DEG: 30,
     HYSTERESIS_DEG: 6,
     autoHideMs: 1200,
-    turnGate: "ownerOnly", // "ownerOnly" | "freePeek" | "turnOnly"
+    turnGate: "freePeek", // "ownerOnly" | "freePeek" | "turnOnly"
     fpsDebug: false,
     seed: null,
 };
@@ -32,93 +32,123 @@ class PokerGame {
     }
     
     setupUI() {
-        const foldBtn = document.getElementById('fold-btn');
-        const checkCallBtn = document.getElementById('check-call-btn');
-        const betRaiseBtn = document.getElementById('bet-raise-btn');
-        const sizingPanel = document.getElementById('sizing-panel');
-        const confirmBetBtn = document.getElementById('confirm-bet-btn');
-        const cancelBetBtn = document.getElementById('cancel-bet-btn');
-        const betSlider = document.getElementById('bet-slider');
-        const sliderValue = document.getElementById('slider-value');
         const readyBtn = document.getElementById('ready-btn');
-        const nextHandBtn = document.getElementById('next-hand-btn');
         
-        let pendingBetAmount = 0;
-        
-        foldBtn.addEventListener('click', () => {
-            this.gameState.processAction('fold', 0);
-            this.checkForNextStreet();
-        });
-        
-        checkCallBtn.addEventListener('click', () => {
-            const callAmount = this.gameState.currentBet - this.gameState.players[this.gameState.toAct].currentBet;
-            this.gameState.processAction('call', callAmount);
-            this.checkForNextStreet();
-        });
-        
-        betRaiseBtn.addEventListener('click', () => {
-            sizingPanel.classList.remove('hidden');
-            this.updateBetSlider();
-        });
-        
-        document.querySelectorAll('.size-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const size = btn.dataset.size;
-                if (size === 'allin') {
-                    pendingBetAmount = this.gameState.players[this.gameState.toAct].stack;
-                } else {
-                    const potSize = parseFloat(size) * this.gameState.pot;
-                    const currentPlayer = this.gameState.players[this.gameState.toAct];
-                    const toCall = this.gameState.currentBet - currentPlayer.currentBet;
-                    pendingBetAmount = Math.min(Math.floor(toCall + potSize), currentPlayer.stack);
-                }
-                sliderValue.textContent = `$${pendingBetAmount}`;
-            });
-        });
-        
-        betSlider.addEventListener('input', () => {
-            const currentPlayer = this.gameState.players[this.gameState.toAct];
-            const min = this.gameState.minRaise;
-            const max = currentPlayer.stack;
-            const value = parseInt(betSlider.value);
-            pendingBetAmount = Math.floor(min + (max - min) * (value / 100));
-            sliderValue.textContent = `$${pendingBetAmount}`;
-        });
-        
-        confirmBetBtn.addEventListener('click', () => {
-            sizingPanel.classList.add('hidden');
-            this.gameState.processAction('raise', pendingBetAmount);
-            this.checkForNextStreet();
-        });
-        
-        cancelBetBtn.addEventListener('click', () => {
-            sizingPanel.classList.add('hidden');
-        });
+        // New player-specific UI elements
+        this.playerControls = {
+            0: {
+                container: document.getElementById('bottom-player-controls'),
+                foldBtn: document.getElementById('bottom-fold-btn'),
+                actionBtn: document.getElementById('bottom-action-btn'),
+                slider: document.getElementById('bottom-bet-slider'),
+                sliderValue: document.getElementById('bottom-slider-value')
+            },
+            1: {
+                container: document.getElementById('top-player-controls'),
+                foldBtn: document.getElementById('top-fold-btn'),
+                actionBtn: document.getElementById('top-action-btn'),
+                slider: document.getElementById('top-bet-slider'),
+                sliderValue: document.getElementById('top-slider-value')
+            }
+        };
         
         readyBtn.addEventListener('click', () => {
             document.getElementById('pass-device-overlay').classList.add('hidden');
         });
         
-        nextHandBtn.addEventListener('click', () => {
-            document.getElementById('result-overlay').classList.add('hidden');
-            this.gameState.startNewHand();
-            this.renderer.updateScene(this.gameState);
-            this.updateUI();
+        // Add click listener to pot display for next hand
+        const potDisplay = document.getElementById('pot-display');
+        potDisplay.addEventListener('click', () => {
+            if (this.gameState.isHandComplete()) {
+                this.awardPotAndStartNextHand();
+            }
         });
+        
+        // Setup player-specific controls
+        this.setupPlayerControls();
     }
     
-    updateBetSlider() {
-        const slider = document.getElementById('bet-slider');
-        const currentPlayer = this.gameState.players[this.gameState.toAct];
-        const min = this.gameState.minRaise;
-        const max = currentPlayer.stack;
-        
-        slider.min = 0;
-        slider.max = 100;
-        slider.value = 50;
-        
-        document.getElementById('slider-value').textContent = `$${Math.floor((min + max) / 2)}`;
+    setupPlayerControls() {
+        [0, 1].forEach(playerId => {
+            const controls = this.playerControls[playerId];
+            
+            // Fold button
+            controls.foldBtn.addEventListener('click', () => {
+                console.log(`Player ${playerId} fold button clicked, toAct: ${this.gameState.toAct}`);
+                if (this.gameState.toAct === playerId) {
+                    this.gameState.processAction('fold', 0);
+                    this.checkForNextStreet();
+                }
+            });
+            
+            // Action button - executes action based on slider amount
+            controls.actionBtn.addEventListener('click', () => {
+                console.log(`Player ${playerId} action button clicked, toAct: ${this.gameState.toAct}`);
+                if (this.gameState.toAct === playerId) {
+                    const currentPlayer = this.gameState.players[playerId];
+                    const toCall = this.gameState.currentBet - currentPlayer.currentBet;
+                    const sliderAmount = parseInt(controls.slider.value);
+                    
+                    console.log(`Action: toCall=${toCall}, sliderAmount=${sliderAmount}`);
+                    
+                    if (toCall === 0 && sliderAmount === 0) {
+                        // Check (no money to call, slider at 0)
+                        this.gameState.processAction('call', 0);
+                    } else if (sliderAmount === toCall) {
+                        // Call (slider amount equals call amount)
+                        this.gameState.processAction('call', toCall);
+                    } else if (sliderAmount > toCall) {
+                        // Raise/Bet (slider amount is more than call)
+                        this.gameState.processAction('raise', sliderAmount);
+                    } else {
+                        // Call with whatever amount is on slider (shouldn't happen with proper slider setup)
+                        this.gameState.processAction('call', sliderAmount);
+                    }
+                    this.checkForNextStreet();
+                }
+            });
+            
+            // Slider
+            controls.slider.addEventListener('input', () => {
+                if (this.gameState.toAct === playerId) {
+                    const value = parseInt(controls.slider.value);
+                    console.log(`Player ${playerId} slider input: ${value}`);
+                    controls.sliderValue.textContent = `$${value}`;
+                    
+                    // Update action button text based on new slider value
+                    const currentPlayer = this.gameState.players[playerId];
+                    const toCall = this.gameState.currentBet - currentPlayer.currentBet;
+                    const canCheck = toCall === 0;
+                    this.updateActionButtonText(controls, canCheck, toCall);
+                }
+            });
+            
+            // Slider change (when user releases) - just update display, no action
+            controls.slider.addEventListener('change', () => {
+                // No automatic action, just ensure display is updated
+                if (this.gameState.toAct === playerId) {
+                    const value = parseInt(controls.slider.value);
+                    controls.sliderValue.textContent = `$${value}`;
+                    console.log(`Player ${playerId} slider set to: ${value}`);
+                }
+            });
+        });
     }
+
+    updateActionButtonText(controls, canCheck, toCall) {
+        const sliderAmount = parseInt(controls.slider.value);
+        
+        if (canCheck && sliderAmount === 0) {
+            controls.actionBtn.textContent = 'Check';
+        } else if (sliderAmount === toCall) {
+            controls.actionBtn.textContent = `Call`;
+        } else if (sliderAmount > toCall) {
+            controls.actionBtn.textContent = `$${sliderAmount}`;
+        } else {
+            controls.actionBtn.textContent = `Call`;
+        }
+    }
+
     
     checkForNextStreet() {
         if (this.gameState.isHandComplete()) {
@@ -141,24 +171,45 @@ class PokerGame {
         
         const winner = this.gameState.determineWinner();
         if (winner.tie) {
-            resultMessage.textContent = `Tie! Both players split the pot.\n${winner.handName}`;
+            resultMessage.textContent = `Tie! Both players split the pot.\n${winner.handName}\n\nClick pot to continue`;
         } else {
-            resultMessage.textContent = `Player ${winner.playerIndex + 1} wins with ${winner.handName}!`;
+            resultMessage.textContent = `Player ${winner.playerIndex + 1} wins with ${winner.handName}!\n\nClick pot to continue`;
         }
         
         this.renderer.updateScene(this.gameState);
         resultOverlay.classList.remove('hidden');
     }
     
+    awardPotAndStartNextHand() {
+        const winner = this.gameState.determineWinner();
+        
+        // Award the pot to the winner
+        if (winner.tie) {
+            // Split the pot
+            const halfPot = Math.floor(this.gameState.pot / 2);
+            this.gameState.players[0].stack += halfPot;
+            this.gameState.players[1].stack += this.gameState.pot - halfPot; // Handle odd amounts
+        } else {
+            // Winner takes all
+            this.gameState.players[winner.playerIndex].stack += this.gameState.pot;
+        }
+        
+        // Hide result overlay and start new hand
+        document.getElementById('result-overlay').classList.add('hidden');
+        this.gameState.startNewHand();
+        this.renderer.updateScene(this.gameState);
+        this.updateUI();
+    }
+    
     updateUI() {
         const state = this.gameState;
         
         // Update player info
-        document.querySelector('#top-player-info .player-stack').textContent = `Stack: $${state.players[1].stack}`;
-        document.querySelector('#top-player-info .player-bet').textContent = state.players[1].currentBet > 0 ? `Bet: $${state.players[1].currentBet}` : '';
+        document.querySelector('#top-player-info #top-player-controls .player-stack').textContent = `Stack $${state.players[1].stack}`;
+        //document.querySelector('#top-player-info .player-bet').textContent = state.players[1].currentBet > 0 ? `Bet: $${state.players[1].currentBet}` : '';
         
-        document.querySelector('#bottom-player-info .player-stack').textContent = `Stack: $${state.players[0].stack}`;
-        document.querySelector('#bottom-player-info .player-bet').textContent = state.players[0].currentBet > 0 ? `Bet: $${state.players[0].currentBet}` : '';
+        document.querySelector('#bottom-player-info #bottom-player-controls .player-stack').textContent = `Stack $${state.players[0].stack}`;
+        //document.querySelector('#bottom-player-info .player-bet').textContent = state.players[0].currentBet > 0 ? `Bet: $${state.players[0].currentBet}` : '';
         
         // Update pot
         document.getElementById('pot-display').textContent = `Pot: $${state.pot}`;
@@ -177,20 +228,84 @@ class PokerGame {
             dealerBtn.style.bottom = 'auto';
         }
         
-        // Update action buttons
-        const currentPlayer = state.players[state.toAct];
-        const toCall = state.currentBet - currentPlayer.currentBet;
-        const canCheck = toCall === 0;
         
-        document.getElementById('check-call-btn').textContent = canCheck ? 'Check' : `Call $${toCall}`;
-        document.getElementById('bet-raise-btn').textContent = state.currentBet > 0 ? 'Raise' : 'Bet';
+        // Update player-specific controls
+        this.updatePlayerControls();
+    }
+    
+    updatePlayerControls() {
+        const state = this.gameState;
+        const isGameActive = state.street !== 'showdown' && !state.players.some(p => p.folded);
         
-        const actionPanel = document.getElementById('action-panel');
-        if (state.street === 'showdown' || state.players.some(p => p.folded)) {
-            actionPanel.style.display = 'none';
-        } else {
-            actionPanel.style.display = 'block';
-        }
+        console.log(`Updating player controls: toAct=${state.toAct}, isGameActive=${isGameActive}, street=${state.street}`);
+        
+        [0, 1].forEach(playerId => {
+            const controls = this.playerControls[playerId];
+            const isActivePlayer = state.toAct === playerId;
+            const currentPlayer = state.players[playerId];
+            const toCall = state.currentBet - currentPlayer.currentBet;
+            const canCheck = toCall === 0;
+            
+            console.log(`Player ${playerId}: isActive=${isActivePlayer}, disabled=${controls.container.classList.contains('disabled')}`);
+            
+            // Always show controls but enable/disable based on game state and active player
+            if (isGameActive && isActivePlayer) {
+                // Enable controls for active player
+                controls.container.classList.remove('disabled');
+                console.log(`Enabled controls for player ${playerId}`);
+                
+                // Update action button text based on slider
+                this.updateActionButtonText(controls, canCheck, toCall);
+                
+                // Update slider to reflect next action
+                const callAmount = toCall;
+                const minRaise = state.minRaise;
+                const max = currentPlayer.stack;
+                
+                // Slider should start with call amount, range up to all-in
+                const minSliderValue = callAmount; // Minimum is the call amount
+                const maxSliderValue = max; // Maximum is all-in
+                
+                controls.slider.min = minSliderValue;
+                controls.slider.max = maxSliderValue;
+                
+                // Only reset slider value if it's outside valid range
+                if (parseInt(controls.slider.value) < minSliderValue || parseInt(controls.slider.value) > maxSliderValue) {
+                    controls.slider.value = callAmount; // Default to call amount
+                }
+                
+                // Update display with current slider value
+                const currentSliderValue = parseInt(controls.slider.value);
+                controls.sliderValue.textContent = `$${currentSliderValue}`;
+                
+                // Enable controls
+                controls.foldBtn.disabled = false;
+                controls.actionBtn.disabled = false;
+                controls.slider.disabled = false;
+            } else {
+                // Disable controls for inactive player or when game is over
+                controls.container.classList.add('disabled');
+                
+                // Show what the action would be if it were their turn
+                controls.actionBtn.textContent = canCheck ? 'Check' : `Call $${toCall}`;
+                
+                // Set default values for inactive player
+                if (isGameActive) {
+                    const min = state.minRaise;
+                    const max = currentPlayer.stack;
+                    const defaultBet = Math.floor((min + max) / 2);
+                    controls.sliderValue.textContent = `$${defaultBet}`;
+                } else {
+                    controls.actionBtn.textContent = 'Action';
+                    controls.sliderValue.textContent = '$0';
+                }
+                
+                // Disable controls
+                controls.foldBtn.disabled = true;
+                controls.actionBtn.disabled = true;
+                controls.slider.disabled = true;
+            }
+        });
     }
     
     setupQA() {

@@ -1,4 +1,5 @@
-// /game/input.js
+import * as THREE from '../three.module.js';
+
 export class InputHandler {
     constructor(canvas, renderer, gameState, config) {
         this.canvas = canvas;
@@ -7,28 +8,37 @@ export class InputHandler {
         this.config = config;
         
         this.activeTouch = null;
-        this.targetCard = null;
+        this.targetOwner = null;
         this.autoHideTimer = null;
-        this.smoothRotX = 0;
-        this.smoothRotY = 0;
+        this.slidePosition = {}; // Track slide position for each player
+        this.slidePosition[0] = 0; // Player 0 slide position
+        this.slidePosition[1] = 0; // Player 1 slide position
+        this.startX = 0;
         
         this.setupListeners();
     }
     
     setupListeners() {
+        // Touch events for mobile devices
         this.canvas.addEventListener('touchstart', (e) => this.handleTouchStart(e), { passive: false });
         this.canvas.addEventListener('touchmove', (e) => this.handleTouchMove(e), { passive: false });
         this.canvas.addEventListener('touchend', (e) => this.handleTouchEnd(e), { passive: false });
         this.canvas.addEventListener('touchcancel', (e) => this.handleTouchEnd(e), { passive: false });
         
+        // Mouse events for desktop devices
+        this.canvas.addEventListener('mousedown', (e) => this.handleMouseDown(e), { passive: false });
+        this.canvas.addEventListener('mousemove', (e) => this.handleMouseMove(e), { passive: false });
+        this.canvas.addEventListener('mouseup', (e) => this.handleMouseUp(e), { passive: false });
+        this.canvas.addEventListener('mouseleave', (e) => this.handleMouseUp(e), { passive: false });
+        
         document.addEventListener('visibilitychange', () => {
             if (document.hidden) {
-                this.cancelPeek();
+                this.cancelSlide();
             }
         });
         
         window.addEventListener('orientationchange', () => {
-            this.cancelPeek();
+            this.cancelSlide();
         });
     }
     
@@ -45,85 +55,51 @@ export class InputHandler {
         const y = touch.clientY - rect.top;
         const owner = y < rect.height / 2 ? 1 : 0;
         
+        // Check if touching in player's area and if there are cards to reveal
+        const playerCards = this.renderer.getPlayerCards(owner);
+        if (playerCards.length === 0) {
+            this.activeTouch = null;
+            return;
+        }
+        
         // Check turn gate
         if (this.config.turnGate === 'ownerOnly') {
             // Always allow in this mode for peek mechanics
         } else if (this.config.turnGate === 'turnOnly') {
             if (this.gameState.toAct !== owner) {
+                this.activeTouch = null;
                 return;
             }
         }
         
-        // Find card at touch position
-        this.targetCard = this.renderer.getCardMeshAt(touch.clientX, touch.clientY, owner);
-        
-        if (this.targetCard && this.targetCard.userData.owner === owner) {
-            // Start auto-hide timer
-            this.startAutoHideTimer();
-        } else {
-            this.targetCard = null;
-        }
+        this.targetOwner = owner;
+        this.startX = touch.clientX;
+        this.startAutoHideTimer();
     }
     
     handleTouchMove(e) {
         e.preventDefault();
         
-        if (!this.activeTouch || !this.targetCard) return;
+        if (!this.activeTouch || this.targetOwner === null) return;
         
         const touch = Array.from(e.touches).find(t => t.identifier === this.activeTouch);
         if (!touch) return;
         
-        // Check if still over card
+        // Calculate horizontal slide distance (can be positive or negative)
+        const deltaX = touch.clientX - this.startX;
         const rect = this.canvas.getBoundingClientRect();
-        const card = this.renderer.getCardMeshAt(touch.clientX, touch.clientY, this.targetCard.userData.owner);
+        const slideDistance = Math.abs(deltaX) / (rect.width * 0.3); // Normalize slide distance magnitude
         
-        if (!card || card !== this.targetCard) {
-            this.cancelPeek();
-            return;
-        }
-        
-        // Calculate card-local normalized coordinates
-        const cardWorldPos = this.targetCard.position;
-        
-        // Project card position to screen
-        const tempVec = new THREE.Vector3().copy(cardWorldPos);
-        tempVec.project(this.renderer.camera);
-        
-        const cardScreenX = (tempVec.x + 1) / 2 * rect.width + rect.left;
-        const cardScreenY = (-tempVec.y + 1) / 2 * rect.height + rect.top;
-        
-        // Calculate normalized offset from card center
-        const cardWidth = 1.4 * rect.width / 20;
-        const cardHeight = 1.96 * rect.height / 20;
-        
-        let nx = (touch.clientX - cardScreenX) / cardWidth;
-        let ny = (touch.clientY - cardScreenY) / cardHeight;
-        
-        // Clamp to reasonable range
-        nx = Math.max(-1, Math.min(1, nx));
-        ny = Math.max(-1, Math.min(1, ny));
-        
-        // Adjust for owner (top player is rotated)
-        if (this.targetCard.userData.owner === 1) {
-            nx = -nx;
-            ny = -ny;
-        }
-        
-        // Calculate target rotations
-        const targetRotX = ny * this.config.ROT_MAX_X_DEG;
-        const targetRotY = nx * this.config.ROT_MAX_Y_DEG;
-        
-        // Smooth interpolation
-        this.smoothRotX += (targetRotX - this.smoothRotX) * 0.3;
-        this.smoothRotY += (targetRotY - this.smoothRotY) * 0.3;
+        // Clamp slide to 0-1 range (0 = hidden, 1 = fully revealed at 180°)
+        this.slidePosition[this.targetOwner] = Math.max(0, Math.min(1, slideDistance));
         
         // Update QA if enabled
         if (this.config.fpsDebug && window.game) {
             window.game.updateQA(
                 `${touch.clientX.toFixed(0)}, ${touch.clientY.toFixed(0)}`,
-                `${nx.toFixed(2)}, ${ny.toFixed(2)}`,
-                `X:${this.smoothRotX.toFixed(1)}° Y:${this.smoothRotY.toFixed(1)}°`,
-                this.targetCard.userData.isRevealed ? 'REVEALED' : 'HIDDEN'
+                `ΔX: ${deltaX.toFixed(0)}, Slide: ${this.slidePosition[this.targetOwner].toFixed(2)}`,
+                `Rotation: ${(this.slidePosition[this.targetOwner] * 180).toFixed(1)}°`,
+                this.slidePosition[this.targetOwner] > 0.5 ? 'REVEALED' : 'HIDDEN'
             );
         }
     }
@@ -135,7 +111,74 @@ export class InputHandler {
         
         const touch = Array.from(e.changedTouches).find(t => t.identifier === this.activeTouch);
         if (touch) {
-            this.cancelPeek();
+            this.cancelSlide();
+        }
+    }
+    
+    handleMouseDown(e) {
+        e.preventDefault();
+        
+        if (this.activeTouch) return;
+        
+        // Simulate touch identifier for mouse
+        this.activeTouch = 'mouse';
+        
+        // Determine which player is clicking based on screen position
+        const rect = this.canvas.getBoundingClientRect();
+        const y = e.clientY - rect.top;
+        const owner = y < rect.height / 2 ? 1 : 0;
+        
+        // Check if clicking in player's area and if there are cards to reveal
+        const playerCards = this.renderer.getPlayerCards(owner);
+        if (playerCards.length === 0) {
+            this.activeTouch = null;
+            return;
+        }
+        
+        // Check turn gate
+        if (this.config.turnGate === 'ownerOnly') {
+            // Always allow in this mode for peek mechanics
+        } else if (this.config.turnGate === 'turnOnly') {
+            if (this.gameState.toAct !== owner) {
+                this.activeTouch = null;
+                return;
+            }
+        }
+        
+        this.targetOwner = owner;
+        this.startX = e.clientX;
+        this.startAutoHideTimer();
+    }
+    
+    handleMouseMove(e) {
+        e.preventDefault();
+        
+        if (!this.activeTouch || this.activeTouch !== 'mouse' || this.targetOwner === null) return;
+        
+        // Calculate horizontal slide distance (can be positive or negative)
+        const deltaX = e.clientX - this.startX;
+        const rect = this.canvas.getBoundingClientRect();
+        const slideDistance = Math.abs(deltaX) / (rect.width * 0.3); // Normalize slide distance magnitude
+        
+        // Clamp slide to 0-1 range (0 = hidden, 1 = fully revealed at 180°)
+        this.slidePosition[this.targetOwner] = Math.max(0, Math.min(1, slideDistance));
+        
+        // Update QA if enabled
+        if (this.config.fpsDebug && window.game) {
+            window.game.updateQA(
+                `${e.clientX.toFixed(0)}, ${e.clientY.toFixed(0)}`,
+                `ΔX: ${deltaX.toFixed(0)}, Slide: ${this.slidePosition[this.targetOwner].toFixed(2)}`,
+                `Rotation: ${(this.slidePosition[this.targetOwner] * 180).toFixed(1)}°`,
+                this.slidePosition[this.targetOwner] > 0.5 ? 'REVEALED' : 'HIDDEN'
+            );
+        }
+    }
+    
+    handleMouseUp(e) {
+        e.preventDefault();
+        
+        if (this.activeTouch === 'mouse') {
+            this.cancelSlide();
         }
     }
     
@@ -144,10 +187,9 @@ export class InputHandler {
         
         if (this.config.autoHideMs > 0) {
             this.autoHideTimer = setTimeout(() => {
-                if (this.targetCard) {
-                    this.renderer.resetPeekRotation(this.targetCard);
-                    this.smoothRotX = 0;
-                    this.smoothRotY = 0;
+                if (this.targetOwner !== null) {
+                    this.slidePosition[this.targetOwner] = 0;
+                    this.renderer.updatePlayerCardsRotation(this.targetOwner, 0);
                 }
             }, this.config.autoHideMs);
         }
@@ -160,21 +202,21 @@ export class InputHandler {
         }
     }
     
-    cancelPeek() {
-        if (this.targetCard) {
-            this.renderer.resetPeekRotation(this.targetCard);
+    cancelSlide() {
+        if (this.targetOwner !== null) {
+            this.slidePosition[this.targetOwner] = 0;
+            this.renderer.updatePlayerCardsRotation(this.targetOwner, 0);
         }
         
         this.activeTouch = null;
-        this.targetCard = null;
-        this.smoothRotX = 0;
-        this.smoothRotY = 0;
+        this.targetOwner = null;
         this.clearAutoHideTimer();
     }
     
     update() {
-        if (this.targetCard && this.activeTouch) {
-            this.renderer.applyPeekRotation(this.targetCard, this.smoothRotX, this.smoothRotY);
+        if (this.targetOwner !== null && this.activeTouch) {
+            const rotationAngle = this.slidePosition[this.targetOwner] * 180; // 0 to 180 degrees
+            this.renderer.updatePlayerCardsRotation(this.targetOwner, rotationAngle);
         }
     }
 }
