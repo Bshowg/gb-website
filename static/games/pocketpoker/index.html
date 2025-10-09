@@ -1,0 +1,89 @@
+<!-- /index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Pocket Poker</title>
+    <link rel="manifest" href="./manifest.webmanifest">
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+    <div id="app">
+        <canvas id="gameCanvas"></canvas>
+        
+        <div id="ui-overlay">
+            <div id="top-player-info" class="player-info">
+                <div class="player-name">Player 2</div>
+                <div class="player-stack"></div>
+                <div class="player-bet"></div>
+            </div>
+            
+            <div id="center-info">
+                <div id="pot-display">Pot: $0</div>
+                <div id="street-display"></div>
+                <div id="dealer-button" class="button-marker">D</div>
+            </div>
+            
+            <div id="bottom-player-info" class="player-info">
+                <div class="player-name">Player 1</div>
+                <div class="player-stack"></div>
+                <div class="player-bet"></div>
+            </div>
+            
+            <div id="action-panel">
+                <div id="bet-controls">
+                    <button id="fold-btn" class="action-btn">Fold</button>
+                    <button id="check-call-btn" class="action-btn primary">Check</button>
+                    <button id="bet-raise-btn" class="action-btn">Bet</button>
+                </div>
+                <div id="sizing-panel" class="hidden">
+                    <button class="size-btn" data-size="0.5">1/2 Pot</button>
+                    <button class="size-btn" data-size="0.75">3/4 Pot</button>
+                    <button class="size-btn" data-size="1">Pot</button>
+                    <button class="size-btn" data-size="allin">All-In</button>
+                    <div id="slider-container">
+                        <input type="range" id="bet-slider" min="0" max="100" step="1" value="50">
+                        <div id="slider-value">$0</div>
+                    </div>
+                    <button id="confirm-bet-btn" class="action-btn primary">Confirm</button>
+                    <button id="cancel-bet-btn" class="action-btn">Cancel</button>
+                </div>
+            </div>
+            
+            <div id="pass-device-overlay" class="hidden">
+                <div class="pass-message">Pass device to other player</div>
+                <button id="ready-btn" class="action-btn primary">Ready</button>
+            </div>
+            
+            <div id="result-overlay" class="hidden">
+                <div id="result-message"></div>
+                <button id="next-hand-btn" class="action-btn primary">Next Hand</button>
+            </div>
+        </div>
+        
+        <button id="qa-toggle" class="icon-btn" title="QA Debug">⚙️</button>
+        
+        <div id="qa-overlay" class="hidden">
+            <h3>QA Debug</h3>
+            <div id="qa-content">
+                <div>Touch: <span id="qa-touch">-</span></div>
+                <div>Card Local: <span id="qa-local">-</span></div>
+                <div>Rotation: <span id="qa-rotation">-</span></div>
+                <div>State: <span id="qa-state">-</span></div>
+                <div>FPS: <span id="qa-fps">-</span></div>
+            </div>
+            <button id="qa-close" class="action-btn">Close</button>
+        </div>
+        
+        <div id="install-prompt" class="hidden">
+            <p>Add to Home Screen for best experience</p>
+            <button id="install-dismiss">Dismiss</button>
+        </div>
+    </div>
+    
+    <script type="module" src="./app.js"></script>
+</body>
+</html>

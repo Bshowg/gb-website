@@ -1,0 +1,11 @@
+
+{
+  "name": "Texas Hold'em - Heads Up",
+  "short_name": "Hold'em",
+  "description": "2-player Texas Hold'em poker with slide-to-peek mechanics",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#1a1a1a",
+  "theme_color": "#1a5c3a"
+}
