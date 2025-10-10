@@ -314,12 +314,14 @@ class PokerGame {
 
                 if(isAllInScenario) {
                     console.log('All-in scenario: showing only continue button');
+                    // Set slider min/max first, then value
+                    controls.slider.min = 0;
+                    controls.slider.max = 0;
                     controls.slider.value = 0;
-                    controls.actionBtn.textContent = 'Continue';
                     controls.actionBtn.disabled = false;
                     controls.slider.disabled = true;
                     // Update display with current slider value
-                    controls.sliderValue.textContent = `$${parseInt(controls.slider.value)}`;
+                    controls.sliderValue.textContent = `$0`;
                 
                     // Update action button text based on slider
                     this.updateActionButtonText(controls, canCheck, toCall,isAllInScenario);
@@ -347,9 +349,8 @@ class PokerGame {
                 controls.slider.max = maxSliderValue;
                 
                 // Only reset slider value if it's outside valid range
-                //if (parseInt(controls.slider.value) < minSliderValue || parseInt(controls.slider.value) > maxSliderValue) {
                 controls.slider.value = callAmount; // Default to call amount
-                //}
+                
                 
                 // Update display with current slider value
                 const currentSliderValue = parseInt(controls.slider.value);
@@ -377,16 +378,7 @@ class PokerGame {
                 // Show what the action would be if it were their turn
                 controls.actionBtn.textContent = canCheck ? 'Check' : `Call $${toCall}`;
                 
-                // Set default values for inactive player
-                if (isGameActive) {
-                    const min = state.minRaise;
-                    const max = currentPlayer.stack;
-                    const defaultBet = Math.floor((min + max) / 2);
-                    controls.sliderValue.textContent = `$${defaultBet}`;
-                } else {
-                    controls.actionBtn.textContent = 'Action';
-                    controls.sliderValue.textContent = '$0';
-                }
+                
                 
                 // Disable controls
                 controls.foldBtn.disabled = true;
@@ -744,7 +736,7 @@ class PokerGame {
         // Reset CONFIG to defaults
         CONFIG.autoHideMs = 1200;
         CONFIG.turnGate = "freePeek";
-        CONFIG.fpsDebug = false;
+        CONFIG.fpsDebug = false; // Always false, not a user setting
         
         // Update form
         this.loadSettingsIntoForm();
@@ -776,8 +768,8 @@ class PokerGame {
     saveSettings() {
         const settings = {
             autoHideMs: CONFIG.autoHideMs,
-            turnGate: CONFIG.turnGate,
-            fpsDebug: CONFIG.fpsDebug
+            turnGate: CONFIG.turnGate
+            // Note: fpsDebug is no longer saved as a user setting
         };
         localStorage.setItem('pocketPokerSettings', JSON.stringify(settings));
     }
@@ -797,7 +789,8 @@ class PokerGame {
         
         if (settings.autoHideMs !== undefined) CONFIG.autoHideMs = settings.autoHideMs;
         if (settings.turnGate !== undefined) CONFIG.turnGate = settings.turnGate;
-        if (settings.fpsDebug !== undefined) CONFIG.fpsDebug = settings.fpsDebug;
+        // Note: fpsDebug is no longer a user setting, always keep it false
+        CONFIG.fpsDebug = false;
         
         // Apply starting stack to new games
         if (settings.startingStack && this.gameState) {
