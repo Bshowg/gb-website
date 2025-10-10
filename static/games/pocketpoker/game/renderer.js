@@ -182,6 +182,10 @@ export class GameRenderer {
         canvas.height = 358;
         const ctx = canvas.getContext('2d');
         
+        // Flip the canvas horizontally to compensate for Y-axis rotation
+        ctx.scale(-1, 1);
+        ctx.translate(-256, 0);
+        
         ctx.fillStyle = '#ffffff';
         ctx.fillRect(0, 0, 256, 358);
         
@@ -192,20 +196,68 @@ export class GameRenderer {
         const isRed = suit === 'h' || suit === 'd';
         ctx.fillStyle = isRed ? '#dc2626' : '#000000';
         
+        const suitSymbols = { c: '♣', d: '♦', h: '♥', s: '♠' };
+        const suitCenterY = 179;
+        const rankDistance = 71; // Distance from suit center to rank
+        
+        // Rank above the suit symbol
         ctx.font = 'bold 64px Arial';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(rank, 128, 80);
+        ctx.fillText(rank, 128, suitCenterY - rankDistance);
         
-        const suitSymbols = { c: '♣', d: '♦', h: '♥', s: '♠' };
+        // Suit symbol in center
         ctx.font = 'bold 96px Arial';
-        ctx.fillText(suitSymbols[suit], 128, 179);
+        ctx.fillText(suitSymbols[suit], 128, suitCenterY);
         
+        // Add mirrored rank below the suit symbol
         ctx.save();
-        ctx.translate(128, 358);
+        ctx.translate(128, suitCenterY + rankDistance);
+        ctx.scale(1, -1); // Mirror vertically
+        ctx.font = 'bold 64px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(rank, 0, 0);
+        ctx.restore();
+        
+        // Add small rank and suit in corners
+        ctx.font = 'bold 24px Arial';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'top';
+        
+        // Top-left corner
+        ctx.fillText(rank, 15, 15);
+        ctx.font = 'bold 20px Arial';
+        ctx.fillText(suitSymbols[suit], 15, 45);
+        
+        // Top-right corner
+        ctx.textAlign = 'right';
+        ctx.font = 'bold 24px Arial';
+        ctx.fillText(rank, 241, 15);
+        ctx.font = 'bold 20px Arial';
+        ctx.fillText(suitSymbols[suit], 241, 45);
+        
+        // Bottom corners (rotated)
+        ctx.save();
+        ctx.translate(128, 179);
         ctx.rotate(Math.PI);
-        ctx.font = 'bold 48px Arial';
-        ctx.fillText(rank, 0, -278);
+        
+        ctx.font = 'bold 24px Arial';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'top';
+        
+        // Bottom-left (when rotated)
+        ctx.fillText(rank, -113, -164);
+        ctx.font = 'bold 20px Arial';
+        ctx.fillText(suitSymbols[suit], -113, -134);
+        
+        // Bottom-right (when rotated)
+        ctx.textAlign = 'right';
+        ctx.font = 'bold 24px Arial';
+        ctx.fillText(rank, 113, -164);
+        ctx.font = 'bold 20px Arial';
+        ctx.fillText(suitSymbols[suit], 113, -134);
+        
         ctx.restore();
         
         const texture = new THREE.CanvasTexture(canvas);
@@ -322,6 +374,8 @@ export class GameRenderer {
             gameState.board.forEach((card, i) => {
                 const mesh = this.createCardMesh(card, true, boardCardScale);
                 mesh.position.set(boardStartX + i * cardSpacing, 0, 0.1 + i * 0.01);
+                // Rotate board cards 180 degrees around Y-axis to show correctly with flipped texture
+                mesh.rotation.y = Math.PI;
                 this.scene.add(mesh);
                 this.cardMeshes.board.push(mesh);
                 console.log(`Added board card ${i} at`, mesh.position);
