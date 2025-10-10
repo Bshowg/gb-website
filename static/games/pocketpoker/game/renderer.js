@@ -213,7 +213,7 @@ export class GameRenderer {
         // Add mirrored rank below the suit symbol
         ctx.save();
         ctx.translate(128, suitCenterY + rankDistance);
-        ctx.scale(1, -1); // Mirror vertically
+        ctx.scale(-1, -1); // Mirror vertically
         ctx.font = 'bold 64px Arial';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
