@@ -12,9 +12,100 @@
 </head>
 <body>
     <div id="app">
-        <canvas id="gameCanvas"></canvas>
+        <!-- Start Screen -->
+        <div id="start-screen">
+            <div class="start-screen-content">
+                <h1 class="game-title">Pocket Poker</h1>
+                <p class="game-subtitle">Two-Player Texas Hold'em</p>
+                
+                <div class="start-buttons">
+                    <button id="new-game-btn" class="action-btn primary large">New Game</button>
+                    <button id="continue-game-btn" class="action-btn secondary large hidden">Continue Game</button>
+                    <button id="start-settings-btn" class="action-btn secondary">Settings</button>
+                </div>
+                
+                <div class="start-instructions">
+                    <p>Touch and drag cards to reveal them</p>
+                    <p>Two players share one device</p>
+                </div>
+            </div>
+        </div>
         
-        <div id="ui-overlay">
+        <!-- End Screen -->
+        <div id="end-screen" class="hidden">
+            <div class="end-screen-content">
+                <!-- Celebration Animation -->
+                <div id="celebration-animation" class="celebration-animation">
+                    <div class="confetti"></div>
+                    <div class="confetti"></div>
+                    <div class="confetti"></div>
+                    <div class="confetti"></div>
+                    <div class="confetti"></div>
+                </div>
+                
+                <!-- Winner Announcement -->
+                <div class="winner-section">
+                    <h1 id="winner-title" class="winner-title">🎉 Player 1 Wins! 🎉</h1>
+                    <p id="winner-subtitle" class="winner-subtitle">Congratulations on your victory!</p>
+                </div>
+                
+                <!-- Match Statistics -->
+                <div class="match-stats">
+                    <h3>Match Summary</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <span class="stat-label">Hands Played</span>
+                            <span id="stat-hands" class="stat-value">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Total Duration</span>
+                            <span id="stat-duration" class="stat-value">0:00</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Biggest Pot</span>
+                            <span id="stat-biggest-pot" class="stat-value">$0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Final Chips</span>
+                            <span id="stat-final-chips" class="stat-value">$0</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Player Final Standings -->
+                <div class="final-standings">
+                    <h3>Final Standings</h3>
+                    <div class="standings-list">
+                        <div class="standing-item winner">
+                            <div class="standing-rank">🥇</div>
+                            <div class="standing-info">
+                                <div id="winner-name" class="standing-name">Player 1</div>
+                                <div id="winner-chips" class="standing-chips">$1500</div>
+                            </div>
+                        </div>
+                        <div class="standing-item">
+                            <div class="standing-rank">🥈</div>
+                            <div class="standing-info">
+                                <div id="loser-name" class="standing-name">Player 2</div>
+                                <div id="loser-chips" class="standing-chips">$500</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="end-screen-actions">
+                    <button id="play-again-btn" class="action-btn primary large">Play Again</button>
+                    <button id="back-to-menu-btn" class="action-btn secondary large">Back to Menu</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Game Canvas and UI (initially hidden) -->
+        <div id="game-container" class="hidden">
+            <canvas id="gameCanvas"></canvas>
+            
+            <div id="ui-overlay">
             <div id="top-player-info" class="player-info">
                 
                 <div id="top-player-controls" class="player-controls top-controls disabled">
@@ -61,10 +152,78 @@
             <div id="result-overlay" class="hidden">
                 <div id="result-message"></div>
             </div>
+            
+            <button id="settings-toggle" class="icon-btn" title="Settings">⚙️</button>
         </div>
         
-        <button id="qa-toggle" class="icon-btn" title="QA Debug">⚙️</button>
+        <!-- Game Settings Overlay -->
+        <div id="settings-overlay" class="hidden">
+            <div class="settings-content">
+                <h3>Game Settings</h3>
+                
+                <div class="settings-section">
+                    <h4>Match Control</h4>
+                    <button id="end-match-btn" class="action-btn secondary full-width">End Current Match</button>
+                    <button id="return-start-btn" class="action-btn secondary full-width">Return to Start Screen</button>
+                </div>
+                
+                <div class="settings-section">
+                    <h4>Game Options</h4>
+                    
+                    <div class="setting-item">
+                        <label for="starting-stack">Starting Stack</label>
+                        <select id="starting-stack">
+                            <option value="500">$500</option>
+                            <option value="1000" selected>$1000</option>
+                            <option value="2000">$2000</option>
+                            <option value="5000">$5000</option>
+                        </select>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="blind-level">Blinds</label>
+                        <select id="blind-level">
+                            <option value="2-5">$2/$5</option>
+                            <option value="5-10" selected>$5/$10</option>
+                            <option value="10-20">$10/$20</option>
+                            <option value="25-50">$25/$50</option>
+                        </select>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="auto-hide-time">Card Auto-Hide (ms)</label>
+                        <select id="auto-hide-time">
+                            <option value="0">Never</option>
+                            <option value="800">800ms</option>
+                            <option value="1200" selected>1200ms</option>
+                            <option value="2000">2000ms</option>
+                            <option value="3000">3000ms</option>
+                        </select>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="turn-gate">Card Peek Mode</label>
+                        <select id="turn-gate">
+                            <option value="freePeek" selected>Free Peek</option>
+                            <option value="ownerOnly">Owner Only</option>
+                            <option value="turnOnly">Turn Only</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <h4>Data Management</h4>
+                    <button id="clear-save-btn" class="action-btn secondary full-width">Clear Saved Game</button>
+                    <button id="reset-defaults-btn" class="action-btn secondary full-width">Reset to Defaults</button>
+                </div>
+                
+                <div class="settings-actions">
+                    <button id="settings-close" class="action-btn primary">Close</button>
+                </div>
+            </div>
+        </div>
         
+        <!-- QA Debug Overlay (kept for debugging) -->
         <div id="qa-overlay" class="hidden">
             <h3>QA Debug</h3>
             <div id="qa-content">
@@ -77,10 +236,23 @@
             <button id="qa-close" class="action-btn">Close</button>
         </div>
         
+        <!-- Confirmation Dialog -->
+        <div id="confirmation-overlay" class="hidden">
+            <div class="confirmation-content">
+                <h3 id="confirmation-title">Confirm Action</h3>
+                <p id="confirmation-message">Are you sure you want to proceed?</p>
+                <div class="confirmation-actions">
+                    <button id="confirmation-cancel" class="action-btn secondary">Cancel</button>
+                    <button id="confirmation-confirm" class="action-btn primary">Confirm</button>
+                </div>
+            </div>
+        </div>
+        
         <div id="install-prompt" class="hidden">
             <p>Add to Home Screen for best experience</p>
             <button id="install-dismiss">Dismiss</button>
         </div>
+        </div> <!-- Close game-container -->
     </div>
     
     <script type="module" src="./app.js"></script>
