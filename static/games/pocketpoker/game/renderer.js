@@ -413,6 +413,7 @@ export class GameRenderer {
         const cards = this.getPlayerCards(owner);
         const rotationRadians = rotationDegrees * Math.PI / 180;
         
+        
         cards.forEach(cardMesh => {
             // Copy base rotation and add slide rotation around Y axis
             const base = cardMesh.userData.baseRotation;

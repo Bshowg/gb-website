@@ -20,10 +20,29 @@ export class InputHandler {
     
     setupListeners() {
         // Touch events for mobile devices
-        this.canvas.addEventListener('touchstart', (e) => this.handleTouchStart(e), { passive: false });
-        this.canvas.addEventListener('touchmove', (e) => this.handleTouchMove(e), { passive: false });
-        this.canvas.addEventListener('touchend', (e) => this.handleTouchEnd(e), { passive: false });
-        this.canvas.addEventListener('touchcancel', (e) => this.handleTouchEnd(e), { passive: false });
+        this.canvas.addEventListener('touchstart', (e) => this.handleTouchStart(e), { passive: false, capture: true });
+        this.canvas.addEventListener('touchmove', (e) => this.handleTouchMove(e), { passive: false, capture: true });
+        this.canvas.addEventListener('touchend', (e) => this.handleTouchEnd(e), { passive: false, capture: true });
+        this.canvas.addEventListener('touchcancel', (e) => this.handleTouchEnd(e), { passive: false, capture: true });
+        
+        // Fallback document-level listeners for better touch handling
+        document.addEventListener('touchmove', (e) => {
+            if (this.activeTouch !== null) {
+                this.handleTouchMove(e);
+            }
+        }, { passive: false });
+        
+        document.addEventListener('touchend', (e) => {
+            if (this.activeTouch !== null) {
+                this.handleTouchEnd(e);
+            }
+        }, { passive: false });
+        
+        document.addEventListener('touchcancel', (e) => {
+            if (this.activeTouch !== null) {
+                this.handleTouchEnd(e);
+            }
+        }, { passive: false });
         
         // Mouse events for desktop devices
         this.canvas.addEventListener('mousedown', (e) => this.handleMouseDown(e), { passive: false });
@@ -44,8 +63,9 @@ export class InputHandler {
     
     handleTouchStart(e) {
         e.preventDefault();
+        e.stopPropagation();
         
-        if (this.activeTouch || e.touches.length === 0) return;
+        if (this.activeTouch !== null || e.touches.length === 0) return;
         
         const touch = e.touches[0];
         this.activeTouch = touch.identifier;
@@ -79,8 +99,9 @@ export class InputHandler {
     
     handleTouchMove(e) {
         e.preventDefault();
+        e.stopPropagation();
         
-        if (!this.activeTouch || this.targetOwner === null) return;
+        if (this.activeTouch === null || this.targetOwner === null) return;
         
         const touch = Array.from(e.touches).find(t => t.identifier === this.activeTouch);
         if (!touch) return;
@@ -92,6 +113,7 @@ export class InputHandler {
         
         // Clamp slide to 0-1 range (0 = hidden, 1 = fully revealed at 180°)
         this.slidePosition[this.targetOwner] = Math.max(0, Math.min(1, slideDistance));
+        
         
         // Update QA if enabled
         if (this.config.fpsDebug && window.game) {
@@ -106,8 +128,9 @@ export class InputHandler {
     
     handleTouchEnd(e) {
         e.preventDefault();
+        e.stopPropagation();
         
-        if (!this.activeTouch) return;
+        if (this.activeTouch === null) return;
         
         const touch = Array.from(e.changedTouches).find(t => t.identifier === this.activeTouch);
         if (touch) {
@@ -117,8 +140,9 @@ export class InputHandler {
     
     handleMouseDown(e) {
         e.preventDefault();
+        e.stopPropagation();
         
-        if (this.activeTouch) return;
+        if (this.activeTouch !== null) return;
         
         // Simulate touch identifier for mouse
         this.activeTouch = 'mouse';
@@ -152,8 +176,9 @@ export class InputHandler {
     
     handleMouseMove(e) {
         e.preventDefault();
+        e.stopPropagation();
         
-        if (!this.activeTouch || this.activeTouch !== 'mouse' || this.targetOwner === null) return;
+        if (this.activeTouch !== 'mouse' || this.targetOwner === null) return;
         
         // Calculate horizontal slide distance (can be positive or negative)
         const deltaX = e.clientX - this.startX;
@@ -176,6 +201,7 @@ export class InputHandler {
     
     handleMouseUp(e) {
         e.preventDefault();
+        e.stopPropagation();
         
         if (this.activeTouch === 'mouse') {
             this.cancelSlide();
@@ -214,7 +240,7 @@ export class InputHandler {
     }
     
     update() {
-        if (this.targetOwner !== null && this.activeTouch) {
+        if (this.targetOwner !== null && this.activeTouch !== null) {
             const rotationAngle = this.slidePosition[this.targetOwner] * 180; // 0 to 180 degrees
             this.renderer.updatePlayerCardsRotation(this.targetOwner, rotationAngle);
         }
