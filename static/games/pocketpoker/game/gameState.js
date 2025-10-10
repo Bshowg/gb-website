@@ -148,7 +148,7 @@ export class GameState {
         // All active players have acted and matched the current bet
         const allMatched = activePlayers.every(p => p.currentBet === this.currentBet || p.stack === 0);
         
-        // Both active players must have acted this street
+        // Normal scenario: both active players must have acted this street
         const bothActed = this.actionsThisStreet.size >= 2;
         
         return allMatched && bothActed;
@@ -156,7 +156,41 @@ export class GameState {
     
     isHandComplete() {
         if (this.players.some(p => p.folded)) return true;
-        return this.street === 'showdown';
+        console.log('Street:', this.street);
+        if (this.street === 'showdown') return true;
+        
+        // Hand is also complete if we're at the river and the street is complete
+        if (this.street === 'river' && this.isStreetComplete()) return true;
+        
+        return false;
+    }
+    
+    // Check if a player is all-in (has no chips left)
+    isPlayerAllIn(playerIndex) {
+        return this.players[playerIndex].stack === 0;
+    }
+    
+    // Check if any player is all-in
+    hasAllInPlayer() {
+        return this.players.some(p => !p.folded && p.stack === 0);
+    }
+    
+    // Check if we're in an all-in scenario where only "continue" should be available
+    // This happens when one player went all-in and bets are matched
+    isAllInScenario() {
+        if (this.players.some(p => p.folded)) return false;
+        
+        const activePlayers = this.players.filter(p => !p.folded);
+        if (activePlayers.length !== 2) return false;
+        
+        // Check if any player is all-in
+        const hasAllIn = activePlayers.some(p => p.stack === 0);
+        if (!hasAllIn) return false;
+        
+        // Check if bets are matched (both players have same current bet or one is all-in)
+        const betsMatched = activePlayers.every(p => p.currentBet === this.currentBet || p.stack === 0);
+        
+        return betsMatched;
     }
     
     advanceStreet() {
