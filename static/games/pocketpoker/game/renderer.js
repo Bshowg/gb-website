@@ -75,6 +75,9 @@ export class GameRenderer {
         this.camera.position.z = cameraDistance;
         this.camera.updateProjectionMatrix();
         
+        // Update table size for new viewport
+        this.updateTableSize();
+        
         // Update card positions for current viewport
         this.updateCardPositions();
     }
@@ -122,15 +125,34 @@ export class GameRenderer {
     }
     
     createTable() {
-        const geometry = new THREE.PlaneGeometry(30, 20);
+        const viewport = this.getViewportDimensions();
+        // Make table slightly larger than viewport to ensure full coverage
+        const tableWidth = viewport.width * 1.2;
+        const tableHeight = viewport.height * 1.2;
+        
+        const geometry = new THREE.PlaneGeometry(tableWidth, tableHeight);
         const material = new THREE.MeshBasicMaterial({ 
             color: 0x0d4028,
             side: THREE.DoubleSide 
         });
-        const table = new THREE.Mesh(geometry, material);
-        table.position.z = -0.5;
-        this.scene.add(table);
-        console.log('Table created');
+        this.table = new THREE.Mesh(geometry, material);
+        this.table.position.z = -0.5;
+        this.scene.add(this.table);
+        console.log('Table created with size:', tableWidth, 'x', tableHeight);
+    }
+    
+    updateTableSize() {
+        if (this.table) {
+            const viewport = this.getViewportDimensions();
+            // Make table slightly larger than viewport to ensure full coverage
+            const tableWidth = viewport.width * 1.2;
+            const tableHeight = viewport.height * 1.2;
+            
+            // Update geometry
+            this.table.geometry.dispose(); // Clean up old geometry
+            this.table.geometry = new THREE.PlaneGeometry(tableWidth, tableHeight);
+            console.log('Table size updated to:', tableWidth, 'x', tableHeight);
+        }
     }
     
     createTextures() {
@@ -315,7 +337,6 @@ export class GameRenderer {
         
         const isShowdown = gameState.street === 'showdown' || gameState.players.some(p => p.folded);
         const viewport = this.getViewportDimensions();
-        const cardOverlap = 1.4 * 0.8; // 20% overlap between cards
         const cardHeight = 1.96; // Card height
         const cardOffsetOut = cardHeight * -0.6; // 20% of card height outside
         const playerCardScale = 1.5;
@@ -364,7 +385,7 @@ export class GameRenderer {
         if (gameState.board.length > 0) {
             console.log('Adding board cards:', gameState.board);
             // Use overlapping layout that fits all cards on screen
-            const boardCardScale = 1.5;
+            const boardCardScale = 1.3;
             const scaledCardWidth = 2 * boardCardScale;
             const maxCardSpacing = Math.min(scaledCardWidth * 1.6, viewport.width * 0.2); // Max spacing based on viewport
             const cardSpacing = Math.min(maxCardSpacing, viewport.width * 0.9 / gameState.board.length); // Fit in 70% of screen width
