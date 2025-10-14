@@ -174,27 +174,11 @@ export class GameRenderer {
     }
     
     createBackTexture() {
-        const canvas = document.createElement('canvas');
-        canvas.width = 256;
-        canvas.height = 358;
-        const ctx = canvas.getContext('2d');
-        
-        ctx.fillStyle = '#2563eb';
-        ctx.fillRect(0, 0, 256, 358);
-        
-        ctx.strokeStyle = '#1e40af';
-        ctx.lineWidth = 8;
-        ctx.strokeRect(4, 4, 248, 350);
-        
-        ctx.strokeStyle = '#3b82f6';
-        ctx.lineWidth = 2;
-        for (let i = 0; i < 8; i++) {
-            ctx.beginPath();
-            ctx.arc(128, 179, 20 + i * 15, 0, Math.PI * 2);
-            ctx.stroke();
-        }
-        
-        const texture = new THREE.CanvasTexture(canvas);
+        // Load custom card back image
+        const loader = new THREE.TextureLoader();
+        const texture = loader.load('./images/card_back.png');
+        texture.minFilter = THREE.LinearFilter;
+        texture.magFilter = THREE.LinearFilter;
         return texture;
     }
     
