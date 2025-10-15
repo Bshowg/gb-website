@@ -176,7 +176,7 @@ export class GameRenderer {
     createBackTexture() {
         // Load custom card back image
         const loader = new THREE.TextureLoader();
-        const texture = loader.load('./images/card_back.png');
+        const texture = loader.load('./images/card_back.webp');
         texture.minFilter = THREE.LinearFilter;
         texture.magFilter = THREE.LinearFilter;
         return texture;
