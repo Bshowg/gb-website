@@ -1,16 +1,19 @@
 // /sw.js
-const CACHE_NAME = 'holdem-v1';
+const CACHE_NAME = 'pocket-poker-v1';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/styles.css',
-  '/app.js',
-  '/three.module.js',
-  '/game/gameState.js',
-  '/game/evaluator.js',
-  '/game/input.js',
-  '/game/renderer.js',
-  '/manifest.webmanifest'
+  './',
+  './index.html',
+  './styles.css',
+  './app.js',
+  './three.module.js',
+  './game/gameState.js',
+  './game/evaluator.js',
+  './game/input.js',
+  './game/renderer.js',
+  './manifest.webmanifest',
+  './icon-192.png',
+  './icon-512.png',
+  './images/card_back.webp'
 ];
 
 self.addEventListener('install', event => {

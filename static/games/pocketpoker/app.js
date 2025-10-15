@@ -510,16 +510,44 @@ class PokerGame {
     }
     
     setupPWA() {
+        console.log('Setting up PWA...');
+        
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('./sw.js').catch(() => {});
+            navigator.serviceWorker.register('./sw.js')
+                .then(registration => {
+                    console.log('Service Worker registered:', registration);
+                })
+                .catch(error => {
+                    console.error('Service Worker registration failed:', error);
+                });
+        } else {
+            console.log('Service Worker not supported');
         }
         
         let deferredPrompt;
         const installButton = document.getElementById('install-app-btn');
         const installPrompt = document.getElementById('install-prompt');
         
+        // Check if already running as PWA
+        const isStandalone = window.matchMedia && window.matchMedia('(display-mode: standalone)').matches;
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+        
+        console.log('PWA Status:', {
+            isStandalone,
+            isIOS,
+            userAgent: navigator.userAgent
+        });
+        
+        if (isStandalone) {
+            console.log('Already running as PWA');
+            installButton.classList.add('hidden');
+            installPrompt.classList.add('hidden');
+            return;
+        }
+        
         // Handle beforeinstallprompt event
         window.addEventListener('beforeinstallprompt', (e) => {
+            console.log('beforeinstallprompt event fired');
             e.preventDefault();
             deferredPrompt = e;
             
@@ -528,13 +556,30 @@ class PokerGame {
             
             // Also show bottom prompt for redundancy
             installPrompt.classList.remove('hidden');
+            
+            console.log('Install buttons shown');
         });
         
-        // Install button click handler
+        // For iOS Safari - show manual instructions
+        if (isIOS && !isStandalone) {
+            console.log('iOS detected - showing manual install option');
+            // Show a different button for iOS users
+            installButton.textContent = '📱 Add to Home Screen';
+            installButton.classList.remove('hidden');
+            
+            installButton.addEventListener('click', () => {
+                alert('To install this app on iOS:\n\n1. Tap the Share button (square with arrow)\n2. Scroll down and tap "Add to Home Screen"\n3. Tap "Add" to confirm');
+            });
+        }
+        
+        // Install button click handler for Chrome/Android
         installButton.addEventListener('click', async () => {
             if (deferredPrompt) {
+                console.log('Triggering install prompt');
                 deferredPrompt.prompt();
                 const { outcome } = await deferredPrompt.userChoice;
+                
+                console.log('Install outcome:', outcome);
                 
                 if (outcome === 'accepted') {
                     installButton.classList.add('hidden');
@@ -552,15 +597,19 @@ class PokerGame {
         
         // Hide install button if already installed
         window.addEventListener('appinstalled', () => {
+            console.log('App installed successfully');
             installButton.classList.add('hidden');
             installPrompt.classList.add('hidden');
         });
         
-        // Check if already running as PWA
-        if (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) {
-            installButton.classList.add('hidden');
-            installPrompt.classList.add('hidden');
-        }
+        // Debug: Show button after 3 seconds if not shown naturally (for testing)
+        setTimeout(() => {
+            if (installButton.classList.contains('hidden') && !isStandalone) {
+                console.log('Debug: Force showing install button for testing');
+                installButton.classList.remove('hidden');
+                installButton.textContent = '📱 Add to Home Screen (Debug)';
+            }
+        }, 3000);
     }
     
     start() {

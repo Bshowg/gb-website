@@ -2,10 +2,10 @@
 {
   "name": "Pocket Poker - Texas Hold'em",
   "short_name": "Pocket Poker",
-  "description": "2-player Texas Hold'em poker with slide-to-peek mechanics",
+  "description": "2-player Texas Hold'em poker on 1-screen",
   "start_url": "./",
   "display": "standalone",
-  "orientation": "any",
+  "orientation": "portrait",
   "background_color": "#1a1a1a",
   "theme_color": "#1a5c3a",
   "icons": [
