@@ -116,6 +116,70 @@ html, body {
     transition: all 0.3s ease;
 }
 
+/* Player Game Info Areas */
+.player-game-info {
+    position: absolute;
+    text-align: center;
+    z-index: 10;
+    width: 30%;
+}
+
+.left-info {
+    left: 20px;
+    bottom: 10%; /* Player 0 (bottom) - pot on left, 10% from bottom */
+}
+
+.right-info {
+    right: 20px;
+    top: 10%; /* Player 1 (top) - pot on right, 10% from top */
+    transform: rotate(180deg); /* Rotate 180 degrees for player 2 */
+}
+
+.right-info .pot-display,
+.right-info .street-display {
+    transform: rotate(180deg); /* Counter-rotate text to keep it readable */
+}
+
+.player-game-info .pot-display {
+    font-size: 18px;
+    font-weight: bold;
+    color: #fbbf24;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 6px 12px;
+    border-radius: 6px;
+    margin-bottom: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    pointer-events: auto;
+    min-width: 80px;
+}
+
+.player-game-info .pot-display:hover {
+    background: rgba(0, 0, 0, 0.9);
+}
+
+.player-game-info .street-display {
+    font-size: 12px;
+    color: #9ca3af;
+    margin-bottom: 6px;
+}
+
+.player-game-info .dealer-button {
+    width: 24px;
+    height: 24px;
+    background: #ef4444;
+    border-radius: 50%;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    position: static;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
 .action-btn {
     padding: 8px 16px;
     font-size: 14px;

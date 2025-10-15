@@ -68,13 +68,17 @@ class PokerGame {
             document.getElementById('pass-device-overlay').classList.add('hidden');
         });
         
-        // Add click listener to pot display for manual advance or immediate continue
-        const potDisplay = document.getElementById('pot-display');
-        potDisplay.addEventListener('click', () => {
-            if (this.gameState.isHandComplete() && this.showingWinnerMessage) {
-                // If showing winner message, immediately advance to next hand
-                this.awardPotAndStartNextHand();
-            }
+        // Add click listeners to both pot displays for manual advance or immediate continue
+        const topPotDisplay = document.getElementById('top-pot-display');
+        const bottomPotDisplay = document.getElementById('bottom-pot-display');
+        
+        [topPotDisplay, bottomPotDisplay].forEach(potDisplay => {
+            potDisplay.addEventListener('click', () => {
+                if (this.gameState.isHandComplete() && this.showingWinnerMessage) {
+                    // If showing winner message, immediately advance to next hand
+                    this.awardPotAndStartNextHand();
+                }
+            });
         });
         
         // Setup player-specific controls
@@ -194,15 +198,18 @@ class PokerGame {
         // Set a flag to indicate we're showing winner message
         this.showingWinnerMessage = true;
         
-        // Update street display to show winner info instead of using overlay
-        const streetDisplay = document.getElementById('street-display');
-        if (winner.tie) {
-            streetDisplay.textContent = `Tie! Both players split the pot. ${winner.handName} (Click pot to continue)`;
-        } else {
-            streetDisplay.textContent = `Player ${winner.playerIndex + 1} wins with ${winner.handName}! (Click pot to continue)`;
-        }
+        // Update both street displays to show winner info
+        const topStreetDisplay = document.getElementById('top-street-display');
+        const bottomStreetDisplay = document.getElementById('bottom-street-display');
         
-        console.log('Winner message set:', streetDisplay.textContent);
+        const winnerMessage = winner.tie 
+            ? `Tie! Both players split the pot. ${winner.handName} (Click pot to continue)`
+            : `Player ${winner.playerIndex + 1} wins with ${winner.handName}! (Click pot to continue)`;
+            
+        topStreetDisplay.textContent = winnerMessage;
+        bottomStreetDisplay.textContent = winnerMessage;
+        
+        console.log('Winner message set:', winnerMessage);
         
         this.renderer.updateScene(this.gameState);
         this.updateUI(); // Update UI but preserve winner message
@@ -235,10 +242,12 @@ class PokerGame {
             this.autoAdvanceTimer = null;
         }
         
-        // Clear winner message flag and display
+        // Clear winner message flag and both displays
         this.showingWinnerMessage = false;
-        const streetDisplay = document.getElementById('street-display');
-        streetDisplay.textContent = '';
+        const topStreetDisplay = document.getElementById('top-street-display');
+        const bottomStreetDisplay = document.getElementById('bottom-street-display');
+        topStreetDisplay.textContent = '';
+        bottomStreetDisplay.textContent = '';
         
         console.log('Winner message cleared, starting new hand');
         
@@ -269,24 +278,30 @@ class PokerGame {
         document.querySelector('#bottom-player-info #bottom-player-controls .player-stack').textContent = `Stack $${state.players[0].stack}`;
         //document.querySelector('#bottom-player-info .player-bet').textContent = state.players[0].currentBet > 0 ? `Bet: $${state.players[0].currentBet}` : '';
         
-        // Update pot
-        document.getElementById('pot-display').textContent = `Pot: $${state.pot}`;
+        // Update both pot displays
+        document.getElementById('top-pot-display').textContent = `Pot: $${state.pot}`;
+        document.getElementById('bottom-pot-display').textContent = `Pot: $${state.pot}`;
         
-        // Update street (only if not showing winner message)
-        const streetDisplay = document.getElementById('street-display');
+        // Update both street displays (only if not showing winner message)
         if (!this.showingWinnerMessage) {
             const streetNames = { preflop: 'Pre-Flop', flop: 'Flop', turn: 'Turn', river: 'River', showdown: 'Showdown' };
-            streetDisplay.textContent = streetNames[state.street] || '';
+            const streetText = streetNames[state.street] || '';
+            document.getElementById('top-street-display').textContent = streetText;
+            document.getElementById('bottom-street-display').textContent = streetText;
         }
         
-        // Update dealer button position
-        const dealerBtn = document.getElementById('dealer-button');
-        if (state.dealerIndex === 0) {
-            dealerBtn.style.top = 'auto';
-            dealerBtn.style.bottom = '-40px';
+        // Update dealer button visibility - show only for the dealer player
+        const topDealerBtn = document.getElementById('top-dealer-button');
+        const bottomDealerBtn = document.getElementById('bottom-dealer-button');
+        
+        if (state.dealerIndex === 1) {
+            // Player 1 (top) is dealer
+            topDealerBtn.style.display = 'flex';
+            bottomDealerBtn.style.display = 'none';
         } else {
-            dealerBtn.style.top = '-40px';
-            dealerBtn.style.bottom = 'auto';
+            // Player 0 (bottom) is dealer
+            topDealerBtn.style.display = 'none';
+            bottomDealerBtn.style.display = 'flex';
         }
         
         

@@ -107,8 +107,21 @@
             <canvas id="gameCanvas"></canvas>
             
             <div id="ui-overlay">
+            <!-- Player 1 Game Info (Right Side, Rotated 180°) -->
+            <div id="top-game-info" class="player-game-info right-info">
+                <div id="top-pot-display" class="pot-display">Pot: $0</div>
+                <div id="top-street-display" class="street-display"></div>
+                <div id="top-dealer-button" class="dealer-button">D</div>
+            </div>
+            
+            <!-- Player 0 Game Info (Left Side) -->
+            <div id="bottom-game-info" class="player-game-info left-info">
+                <div id="bottom-pot-display" class="pot-display">Pot: $0</div>
+                <div id="bottom-street-display" class="street-display"></div>
+                <div id="bottom-dealer-button" class="dealer-button">D</div>
+            </div>
+            
             <div id="top-player-info" class="player-info">
-                
                 <div id="top-player-controls" class="player-controls top-controls disabled">
                     <div class="control-group">
                         <div class="player-stack"></div>
@@ -123,14 +136,7 @@
                 </div>
             </div>
             
-            <div id="center-info">
-                <div id="pot-display">Pot: $0</div>
-                <div id="street-display"></div>
-                <div id="dealer-button" class="button-marker">D</div>
-            </div>
-            
             <div id="bottom-player-info" class="player-info">
-                
                 <div id="bottom-player-controls" class="player-controls bottom-controls disabled">
                     <div class="control-group">
                         <div class="player-stack"></div>
