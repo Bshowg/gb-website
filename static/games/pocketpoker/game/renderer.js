@@ -192,15 +192,15 @@ export class GameRenderer {
         ctx.scale(-1, 1);
         ctx.translate(-256, 0);
         
-        ctx.fillStyle = '#ffffff';
+        ctx.fillStyle = '#000000';
         ctx.fillRect(0, 0, 256, 358);
         
-        ctx.strokeStyle = '#000000';
+        ctx.strokeStyle = '#ffffff';
         ctx.lineWidth = 4;
         ctx.strokeRect(2, 2, 252, 354);
         
         const isRed = suit === 'h' || suit === 'd';
-        ctx.fillStyle = isRed ? '#dc2626' : '#000000';
+        ctx.fillStyle = isRed ? '#dc2626' : '#ffffff';
         
         const suitSymbols = { c: '♣', d: '♦', h: '♥', s: '♠' };
         const suitCenterY = 179;
