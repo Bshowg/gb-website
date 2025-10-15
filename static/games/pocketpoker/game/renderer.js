@@ -471,12 +471,28 @@ export class GameRenderer {
     updatePlayerCardsRotation(owner, rotationDegrees) {
         const cards = this.getPlayerCards(owner);
         const rotationRadians = rotationDegrees * Math.PI / 180;
+        const isFullyRevealed = rotationDegrees >= 180;
         
-        
-        cards.forEach(cardMesh => {
+        cards.forEach((cardMesh, i) => {
             // Copy base rotation and add slide rotation around Y axis
             const base = cardMesh.userData.baseRotation;
             cardMesh.rotation.set(base.x, base.y + rotationRadians, base.z);
+            
+            // Store original z position if not already stored
+            if (cardMesh.userData.originalZ === undefined) {
+                cardMesh.userData.originalZ = cardMesh.position.z;
+            }
+            
+            // Manage z-index based on rotation state
+            if (rotationDegrees > 0) {
+                // During rotation (0-180°): invert z-index for proper card stacking
+                const originalZ = cardMesh.userData.originalZ;
+                const maxZ = Math.max(...cards.map(c => c.userData.originalZ));
+                cardMesh.position.z = maxZ - originalZ + 0.1; // Invert and elevate for visibility
+            } else {
+                // On touch release (0°): restore original z position
+                cardMesh.position.z = cardMesh.userData.originalZ;
+            }
             
             // Update texture based on rotation threshold
             const isRevealed = rotationDegrees > 90; // Revealed when past 90 degrees
