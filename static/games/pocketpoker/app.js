@@ -511,21 +511,56 @@ class PokerGame {
     
     setupPWA() {
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js').catch(() => {});
+            navigator.serviceWorker.register('./sw.js').catch(() => {});
         }
         
         let deferredPrompt;
+        const installButton = document.getElementById('install-app-btn');
+        const installPrompt = document.getElementById('install-prompt');
+        
+        // Handle beforeinstallprompt event
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
             
-            const installPrompt = document.getElementById('install-prompt');
-            installPrompt.classList.remove('hidden');
+            // Show install button on start screen
+            installButton.classList.remove('hidden');
             
-            document.getElementById('install-dismiss').addEventListener('click', () => {
-                installPrompt.classList.add('hidden');
-            });
+            // Also show bottom prompt for redundancy
+            installPrompt.classList.remove('hidden');
         });
+        
+        // Install button click handler
+        installButton.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                
+                if (outcome === 'accepted') {
+                    installButton.classList.add('hidden');
+                    installPrompt.classList.add('hidden');
+                }
+                
+                deferredPrompt = null;
+            }
+        });
+        
+        // Dismiss button for bottom prompt
+        document.getElementById('install-dismiss').addEventListener('click', () => {
+            installPrompt.classList.add('hidden');
+        });
+        
+        // Hide install button if already installed
+        window.addEventListener('appinstalled', () => {
+            installButton.classList.add('hidden');
+            installPrompt.classList.add('hidden');
+        });
+        
+        // Check if already running as PWA
+        if (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) {
+            installButton.classList.add('hidden');
+            installPrompt.classList.add('hidden');
+        }
     }
     
     start() {

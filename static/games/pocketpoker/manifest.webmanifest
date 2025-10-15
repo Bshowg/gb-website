@@ -1,11 +1,25 @@
 
 {
-  "name": "Texas Hold'em - Heads Up",
-  "short_name": "Hold'em",
+  "name": "Pocket Poker - Texas Hold'em",
+  "short_name": "Pocket Poker",
   "description": "2-player Texas Hold'em poker with slide-to-peek mechanics",
-  "start_url": "/",
+  "start_url": "./",
   "display": "standalone",
-  "orientation": "landscape",
+  "orientation": "any",
   "background_color": "#1a1a1a",
-  "theme_color": "#1a5c3a"
+  "theme_color": "#1a5c3a",
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
 }

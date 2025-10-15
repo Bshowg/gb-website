@@ -487,6 +487,42 @@ html, body {
     cursor: pointer;
 }
 
+/* Install App Button */
+.install-btn {
+    background: linear-gradient(135deg, #059669, #10b981) !important;
+    border: 2px solid #047857 !important;
+    color: #ffffff !important;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.install-btn:hover {
+    background: linear-gradient(135deg, #047857, #059669) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(5, 150, 105, 0.4);
+}
+
+.install-btn:active {
+    transform: translateY(0);
+}
+
+.install-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.install-btn:hover::before {
+    left: 100%;
+}
+
 .hidden {
     display: none !important;
 }
