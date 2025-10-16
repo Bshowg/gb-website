@@ -15,6 +15,13 @@ export class InputHandler {
         this.slidePosition[1] = 0; // Player 1 slide position
         this.startX = 0;
         
+        // Drag-to-fold functionality
+        this.longPressTimer = null;
+        this.isDragging = false;
+        this.dragStartTime = null;
+        this.dragStartPosition = { x: 0, y: 0 };
+        this.currentDragPosition = { x: 0, y: 0 };
+        this.draggedCard = null;
         
         this.setupListeners();
     }
@@ -96,6 +103,13 @@ export class InputHandler {
         this.targetOwner = owner;
         this.startX = touch.clientX;
         
+        // Store initial drag position
+        this.dragStartPosition.x = touch.clientX;
+        this.dragStartPosition.y = touch.clientY;
+        this.dragStartTime = Date.now();
+        
+        // Start long press timer for drag-to-fold
+        this.startLongPressTimer();
         
         this.startAutoHideTimer();
     }
@@ -109,6 +123,16 @@ export class InputHandler {
         const touch = Array.from(e.touches).find(t => t.identifier === this.activeTouch);
         if (!touch) return;
         
+        // Update current drag position
+        this.currentDragPosition.x = touch.clientX;
+        this.currentDragPosition.y = touch.clientY;
+        
+        // Check if we're in drag mode
+        if (this.isDragging) {
+            // Handle drag-to-fold functionality
+            this.updateDragVisuals();
+            return;
+        }
         
         // Regular card peek functionality
         // Calculate horizontal slide distance (can be positive or negative)
@@ -116,6 +140,14 @@ export class InputHandler {
         const rect = this.canvas.getBoundingClientRect();
         const slideDistance = Math.abs(deltaX) / (rect.width * 0.3); // Normalize slide distance magnitude
         
+        // Cancel long press timer if significant movement is detected (more than slide)
+        const totalMovement = Math.sqrt(
+            Math.pow(touch.clientX - this.dragStartPosition.x, 2) + 
+            Math.pow(touch.clientY - this.dragStartPosition.y, 2)
+        );
+        if (totalMovement > 30) { // 30px threshold for movement
+            this.clearLongPressTimer();
+        }
         
         // Clamp slide to 0-1 range (0 = hidden, 1 = fully revealed at 180°)
         this.slidePosition[this.targetOwner] = Math.max(0, Math.min(1, slideDistance));
@@ -140,6 +172,11 @@ export class InputHandler {
         
         const touch = Array.from(e.changedTouches).find(t => t.identifier === this.activeTouch);
         if (touch) {
+            // Handle drag end if we were dragging
+            if (this.isDragging) {
+                this.handleDragEnd(touch);
+                return;
+            }
             this.cancelSlide();
         }
     }
@@ -178,6 +215,13 @@ export class InputHandler {
         this.targetOwner = owner;
         this.startX = e.clientX;
         
+        // Store initial drag position
+        this.dragStartPosition.x = e.clientX;
+        this.dragStartPosition.y = e.clientY;
+        this.dragStartTime = Date.now();
+        
+        // Start long press timer for drag-to-fold
+        this.startLongPressTimer();
         
         this.startAutoHideTimer();
     }
@@ -188,6 +232,16 @@ export class InputHandler {
         
         if (this.activeTouch !== 'mouse' || this.targetOwner === null) return;
         
+        // Update current drag position
+        this.currentDragPosition.x = e.clientX;
+        this.currentDragPosition.y = e.clientY;
+        
+        // Check if we're in drag mode
+        if (this.isDragging) {
+            // Handle drag-to-fold functionality
+            this.updateDragVisuals();
+            return;
+        }
         
         // Regular card peek functionality
         // Calculate horizontal slide distance (can be positive or negative)
@@ -195,6 +249,14 @@ export class InputHandler {
         const rect = this.canvas.getBoundingClientRect();
         const slideDistance = Math.abs(deltaX) / (rect.width * 0.3); // Normalize slide distance magnitude
         
+        // Cancel long press timer if significant movement is detected (more than slide)
+        const totalMovement = Math.sqrt(
+            Math.pow(e.clientX - this.dragStartPosition.x, 2) + 
+            Math.pow(e.clientY - this.dragStartPosition.y, 2)
+        );
+        if (totalMovement > 30) { // 30px threshold for movement
+            this.clearLongPressTimer();
+        }
         
         // Clamp slide to 0-1 range (0 = hidden, 1 = fully revealed at 180°)
         this.slidePosition[this.targetOwner] = Math.max(0, Math.min(1, slideDistance));
@@ -215,7 +277,12 @@ export class InputHandler {
         e.stopPropagation();
         
         if (this.activeTouch === 'mouse') {
-            this.cancelSlide();
+            // Handle drag end if we were dragging
+            if (this.isDragging) {
+                this.handleDragEnd({ clientX: e.clientX, clientY: e.clientY });
+            } else {
+                this.cancelSlide();
+            }
         }
     }
     
@@ -247,9 +314,14 @@ export class InputHandler {
         }
         
         
+        // Clean up drag state
+        this.isDragging = false;
+        this.draggedCard = null;
+        
         this.activeTouch = null;
         this.targetOwner = null;
         this.clearAutoHideTimer();
+        this.clearLongPressTimer();
     }
     
     update() {
@@ -259,4 +331,106 @@ export class InputHandler {
         }
     }
     
+    startLongPressTimer() {
+        this.clearLongPressTimer();
+        
+        // Start configurable timer for long press detection
+        this.longPressTimer = setTimeout(() => {
+            this.startDragMode();
+        }, this.config.longPressDurationMs);
+    }
+    
+    clearLongPressTimer() {
+        if (this.longPressTimer) {
+            clearTimeout(this.longPressTimer);
+            this.longPressTimer = null;
+        }
+    }
+    
+    startDragMode() {
+        // Only start drag mode if player can currently act (fold)
+        if (this.gameState.toAct !== this.targetOwner) {
+            return;
+        }
+        
+        console.log(`Starting drag mode for player ${this.targetOwner}`);
+        this.isDragging = true;
+        this.clearAutoHideTimer(); // Stop auto-hide during drag
+        
+        // Scale up cards and start following touch
+        this.renderer.startCardDrag(this.targetOwner, 1.5);
+    }
+    
+    updateDragVisuals() {
+        if (!this.isDragging || this.targetOwner === null) return;
+        
+        // Update card position to follow touch
+        const rect = this.canvas.getBoundingClientRect();
+        const normalizedX = (this.currentDragPosition.x - rect.left) / rect.width;
+        const normalizedY = (this.currentDragPosition.y - rect.top) / rect.height;
+        
+        this.renderer.updateCardDragPosition(this.targetOwner, normalizedX, normalizedY);
+    }
+    
+    handleDragEnd(touch) {
+        if (!this.isDragging) {
+            this.cancelSlide();
+            return;
+        }
+        
+        console.log('Handling drag end');
+        
+        // Determine drop zone
+        const rect = this.canvas.getBoundingClientRect();
+        const normalizedX = (touch.clientX - rect.left) / rect.width;
+        const normalizedY = (touch.clientY - rect.top) / rect.height;
+        
+        // Define center area (middle 40% of screen both horizontally and vertically)
+        const centerMinX = 0.3;
+        const centerMaxX = 0.7;
+        const centerMinY = 0.3;
+        const centerMaxY = 0.7;
+        
+        const isInCenterArea = normalizedX >= centerMinX && normalizedX <= centerMaxX &&
+                              normalizedY >= centerMinY && normalizedY <= centerMaxY;
+        
+        if (isInCenterArea) {
+            // Dropped in center - trigger fold action
+            console.log(`Player ${this.targetOwner} dropped cards in center - folding`);
+            this.executeFold();
+        } else {
+            // Dropped elsewhere - return to original position
+            console.log(`Player ${this.targetOwner} dropped cards outside center - returning to position`);
+            this.returnCardsToPosition();
+        }
+        
+        // Clean up drag state
+        this.isDragging = false;
+        this.draggedCard = null;
+        this.activeTouch = null;
+        this.targetOwner = null;
+        this.clearLongPressTimer();
+    }
+    
+    executeFold() {
+        // Trigger fold action through game state
+        if (this.gameState.toAct === this.targetOwner) {
+            console.log(`Executing fold for player ${this.targetOwner}`);
+            this.gameState.processAction('fold', 0);
+            
+            // Notify the main game instance to handle the fold
+            if (window.gameInstance) {
+                window.gameInstance.saveGameState();
+                window.gameInstance.checkForNextStreet();
+            }
+        }
+        
+        // Reset cards
+        this.renderer.resetCardDrag(this.targetOwner);
+    }
+    
+    returnCardsToPosition() {
+        // Animate cards back to original position
+        this.renderer.resetCardDrag(this.targetOwner);
+    }
 }

@@ -8,8 +8,8 @@ export class GameState {
     constructor(seed = null) {
         this.seed = seed;
         this.players = [
-            { stack: 1000, hole: [], currentBet: 0, isDealer: false },
-            { stack: 1000, hole: [], currentBet: 0, isDealer: true }
+            { stack: 1000, hole: [], currentBet: 0, folded: false, isDealer: false },
+            { stack: 1000, hole: [], currentBet: 0, folded: false, isDealer: true }
         ];
         this.blinds = { sb: 5, bb: 10 };
         this.pot = 0;
@@ -65,6 +65,7 @@ export class GameState {
         this.players.forEach(p => {
             p.hole = [];
             p.currentBet = 0;
+            p.folded = false;
         });
         
         // Rotate dealer
@@ -114,7 +115,9 @@ export class GameState {
         // Track that this player has acted this street
         this.actionsThisStreet.add(this.toAct);
         
-        if (action === 'call') {
+        if (action === 'fold') {
+            player.folded = true;
+        } else if (action === 'call') {
             const callAmount = Math.min(amount, player.stack);
             player.stack -= callAmount;
             player.currentBet += callAmount;
@@ -137,8 +140,9 @@ export class GameState {
     }
     
     isStreetComplete() {
+        if (this.players.some(p => p.folded)) return true;
         
-        const activePlayers = this.players;
+        const activePlayers = this.players.filter(p => !p.folded);
         if (activePlayers.length === 0) return true;
         
         // All active players have acted and matched the current bet
@@ -151,6 +155,7 @@ export class GameState {
     }
     
     isHandComplete() {
+        if (this.players.some(p => p.folded)) return true;
         console.log('Street:', this.street);
         if (this.street === 'showdown') return true;
         
@@ -167,7 +172,7 @@ export class GameState {
     
     // Check if any player is all-in
     hasAllInPlayer() {
-        return this.players.some(p => p.stack === 0);
+        return this.players.some(p => !p.folded && p.stack === 0);
     }
     
     // Check if we're in an all-in scenario where only "continue" should be available
@@ -175,7 +180,7 @@ export class GameState {
     isAllInScenario() {
         if (this.players.some(p => p.folded)) return false;
         
-        const activePlayers = this.players;
+        const activePlayers = this.players.filter(p => !p.folded);
         if (activePlayers.length !== 2) return false;
         
         // Check if any player is all-in
@@ -210,6 +215,12 @@ export class GameState {
     }
     
     determineWinner() {
+        if (this.players[0].folded) {
+            return { playerIndex: 1, handName: 'Opponent folded', tie: false };
+        }
+        if (this.players[1].folded) {
+            return { playerIndex: 0, handName: 'Opponent folded', tie: false };
+        }
         
         const hand0 = evaluateHand([...this.players[0].hole, ...this.board]);
         const hand1 = evaluateHand([...this.players[1].hole, ...this.board]);

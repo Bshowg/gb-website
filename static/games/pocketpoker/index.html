@@ -28,12 +28,13 @@
                 <div class="start-instructions">
                     <p>Two players share one device</p>
                     <p>Touch and drag cards to reveal them</p>
+                    <p>Hold cards for 3s to drag and fold</p>
                     <p>Press Pot to go to next hand</p>
                     <p>T is Ten (10)</p>
                 </div>
                 
                 <div class="version-info">
-                    <span class="version-number">v1.3.0</span>
+                    <span class="version-number">v1.4.0</span>
                 </div>
             </div>
         </div>
@@ -133,8 +134,15 @@
                 <div id="top-player-controls" class="player-controls top-controls disabled">
                     <div class="control-group">
                         <div class="bet-control">
-                            <input type="range" id="top-bet-slider" class="bet-slider" min="0" max="100" step="1" >
-                            <div id="top-slider-value" class="slider-value">$0</div>
+                                <div class="wheel" role="slider" aria-label="Player 1 Bet" tabindex="0"
+                                    data-roller
+                                    data-min="0" data-max="100" data-step="1" data-pixels-per-step="8"
+                                    data-accel-max="6" data-accel-threshold-ms="120"
+                                    data-color-a="#eb4034" data-color-b="#ffffff"
+                                    id="top-bet-wheel">
+                                    <span class="sr-only">Drag left/right to roll. Home/End jump to limits; arrows adjust by step.</span>
+                                </div>
+                            
                         </div>
                         <button id="top-action-btn" class="action-btn primary">Check</button>
                     </div>
@@ -146,8 +154,15 @@
                 <div id="bottom-player-controls" class="player-controls bottom-controls disabled">
                     <div class="control-group">
                         <div class="bet-control">
-                            <input type="range" id="bottom-bet-slider" class="bet-slider" min="0" max="100" step="1" >
-                            <div id="bottom-slider-value" class="slider-value">$0</div>
+                                <div class="wheel" role="slider" aria-label="Player 0 Bet" tabindex="0"
+                                    data-roller
+                                    data-min="0" data-max="100" data-step="1" data-pixels-per-step="8"
+                                    data-accel-max="6" data-accel-threshold-ms="120"
+                                    data-color-a="#ffffff" data-color-b="#00a603"
+                                    id="bottom-bet-wheel">
+                                    <span class="sr-only">Drag left/right to roll. Home/End jump to limits; arrows adjust by step.</span>
+                               
+                            </div>
                         </div>
                         <button id="bottom-action-btn" class="action-btn primary">Check</button>
                     </div>
@@ -277,6 +292,166 @@
         </div> <!-- Close game-container -->
     </div>
     
+    <!-- Virtual Roller (Wheel Component) Library -->
+    <script>
+    (function(global){
+        const INSTANCE = new WeakMap();
+
+        class VirtualRoller {
+            constructor(el){
+                this.el = el;
+                this.valueEl = el.parentElement?.querySelector('[data-bind="value"]') || null;
+                this.conf = {
+                    min: Number(el.dataset.min ?? 0),
+                    max: Number(el.dataset.max ?? 100),
+                    step: Number(el.dataset.step ?? 1),
+                    pixelsPerStep: Number(el.dataset.pixelsPerStep ?? 8),
+                    accelMax: Number(el.dataset.accelMax ?? 6),
+                    accelThresholdMs: Number(el.dataset.accelThresholdMs ?? 120),
+                };
+                // Colors from attributes
+                this.el.style.setProperty('--stripe-a', el.dataset.colorA || '#fde68a');
+                this.el.style.setProperty('--stripe-b', el.dataset.colorB || '#fca5a5');
+
+                this.value = Number(el.getAttribute('aria-valuenow') || this.conf.min) || this.conf.min;
+                this.pointerActive = false;
+                this.lastX = 0;
+                this.pixelBank = 0;
+                this.accel = { dir: 0, multiplier: 1, lastStepTime: 0 };
+
+                this.render();
+                this.bind();
+            }
+
+            clamp(v){ return Math.min(this.conf.max, Math.max(this.conf.min, v)); }
+            atMin(){ return this.value <= this.conf.min; }
+            atMax(){ return this.value >= this.conf.max; }
+
+            render(){
+                if (this.valueEl) this.valueEl.textContent = this.value;
+                this.el.setAttribute('aria-valuenow', String(this.value));
+                const ratio = (this.value - this.conf.min) / (this.conf.max - this.conf.min || 1);
+                const textureX = Math.round(ratio * 600);
+                this.el.style.setProperty('--texture-x', textureX + 'px');
+            }
+
+            setValue(next){
+                const clamped = this.clamp(next);
+                if (clamped === this.value) return false;
+                this.value = clamped;
+                this.render();
+                this.el.dispatchEvent(new CustomEvent('rollerchange', { detail: { value: this.value } }));
+                return true;
+            }
+
+            nudge(deltaSteps){ this.setValue(this.value + deltaSteps * this.conf.step); }
+
+            updateAccel(sign){
+                const now = performance.now();
+                const within = (now - this.accel.lastStepTime) <= this.conf.accelThresholdMs;
+                if (this.accel.dir === sign && within) {
+                    this.accel.multiplier = Math.min(this.accel.multiplier + 1, this.conf.accelMax);
+                } else {
+                    this.accel.multiplier = 1; this.accel.dir = sign;
+                }
+                this.accel.lastStepTime = now;
+            }
+            resetAccel(){ this.accel.multiplier = 1; this.accel.dir = 0; this.accel.lastStepTime = 0; }
+
+            beginInteraction(x){
+                this.pointerActive = true;
+                this.lastX = x;
+                this.pixelBank = 0;
+                if (performance.now() - this.accel.lastStepTime > this.conf.accelThresholdMs * 2) this.resetAccel();
+            }
+            moveInteraction(x){
+                if (!this.pointerActive) return;
+                const dx = x - this.lastX;
+                this.lastX = x;
+                this.pixelBank += dx;
+                while (Math.abs(this.pixelBank) >= this.conf.pixelsPerStep) {
+                    const sign = this.pixelBank > 0 ? 1 : -1;
+                    this.updateAccel(sign);
+                    const stepDelta = sign * this.accel.multiplier;
+                    this.nudge(stepDelta);
+                    this.pixelBank -= this.conf.pixelsPerStep * sign;
+                    if ((this.atMin() && sign < 0) || (this.atMax() && sign > 0)) { this.pixelBank = 0; this.resetAccel(); break; }
+                }
+            }
+            endInteraction(){
+                this.pointerActive = false;
+                this.pixelBank = 0;
+                setTimeout(() => { if (!this.pointerActive) this.resetAccel(); }, this.conf.accelThresholdMs * 2);
+            }
+
+            bind(){
+                const el = this.el;
+                // Pointer events
+                el.addEventListener('pointerdown', (e) => { el.setPointerCapture?.(e.pointerId); this.beginInteraction(e.clientX); });
+                el.addEventListener('pointermove', (e) => this.moveInteraction(e.clientX));
+                const endPointer = (e) => { try{ el.releasePointerCapture?.(e.pointerId); }catch{} this.endInteraction(); };
+                el.addEventListener('pointerup', endPointer);
+                el.addEventListener('pointercancel', endPointer);
+                el.addEventListener('lostpointercapture', () => this.endInteraction());
+                // Touch fallback
+                el.addEventListener('touchstart', (e) => { if (e.touches?.length){ e.preventDefault(); this.beginInteraction(e.touches[0].clientX); } }, { passive:false });
+                el.addEventListener('touchmove',  (e) => { if (e.touches?.length){ e.preventDefault(); this.moveInteraction(e.touches[0].clientX); } }, { passive:false });
+                el.addEventListener('touchend',   (e) => { e.preventDefault(); this.endInteraction(); }, { passive:false });
+                el.addEventListener('touchcancel',() => this.endInteraction());
+                // Keyboard
+                el.addEventListener('keydown', (e) => {
+                    switch (e.key) {
+                        case 'ArrowRight': case 'ArrowUp': e.preventDefault(); this.updateAccel(1); this.nudge(1 * this.accel.multiplier); break;
+                        case 'ArrowLeft': case 'ArrowDown': e.preventDefault(); this.updateAccel(-1); this.nudge(-1 * this.accel.multiplier); break;
+                        case 'PageUp': e.preventDefault(); this.resetAccel(); this.nudge(10); break;
+                        case 'PageDown': e.preventDefault(); this.resetAccel(); this.nudge(-10); break;
+                        case 'Home': e.preventDefault(); this.resetAccel(); this.setValue(this.conf.min); break;
+                        case 'End': e.preventDefault(); this.resetAccel(); this.setValue(this.conf.max); break;
+                    }
+                });
+            }
+
+            configure(opts={}){
+                if ('min' in opts) this.conf.min = Number(opts.min);
+                if ('max' in opts) this.conf.max = Number(opts.max);
+                if ('step' in opts) this.conf.step = Number(opts.step);
+                if ('pixelsPerStep' in opts) this.conf.pixelsPerStep = Number(opts.pixelsPerStep);
+                if ('accelMax' in opts) this.conf.accelMax = Number(opts.accelMax);
+                if ('accelThresholdMs' in opts) this.conf.accelThresholdMs = Number(opts.accelThresholdMs);
+                if ('colorA' in opts) this.el.style.setProperty('--stripe-a', opts.colorA);
+                if ('colorB' in opts) this.el.style.setProperty('--stripe-b', opts.colorB);
+                this.el.setAttribute('aria-valuemin', String(this.conf.min));
+                this.el.setAttribute('aria-valuemax', String(this.conf.max));
+                this.render();
+            }
+        }
+
+        function create(el){
+            if (!el) throw new Error('VirtualRoller.create requires an element');
+            if (INSTANCE.has(el)) return INSTANCE.get(el);
+            const inst = new VirtualRoller(el);
+            INSTANCE.set(el, inst);
+            return inst;
+        }
+
+        function initAll(root){
+            if (!root) root = document;
+            const nodes = root.querySelectorAll('[data-roller]');
+            return Array.from(nodes).map(create);
+        }
+
+        // Expose a minimal API for app.js wiring
+        global.VirtualRoller = {
+            create, initAll,
+            get: (el) => INSTANCE.get(el),
+        };
+
+        // Auto-init when used inline without app.js
+        if (document.readyState !== 'loading') initAll(document);
+        else document.addEventListener('DOMContentLoaded', () => initAll(document));
+    })(window);
+    </script>
+
     <script type="module" src="./app.js"></script>
 </body>
 </html>

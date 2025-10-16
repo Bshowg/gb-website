@@ -47,20 +47,24 @@ class PokerGame {
     setupUI() {
         const readyBtn = document.getElementById('ready-btn');
         
-        // New player-specific UI elements
+        // New player-specific UI elements with wheel components
         this.playerControls = {
             0: {
                 container: document.getElementById('bottom-player-controls'),
                 actionBtn: document.getElementById('bottom-action-btn'),
-                slider: document.getElementById('bottom-bet-slider'),
-                sliderValue: document.getElementById('bottom-slider-value')
+                wheel: document.getElementById('bottom-bet-wheel')
             },
             1: {
                 container: document.getElementById('top-player-controls'),
                 actionBtn: document.getElementById('top-action-btn'),
-                slider: document.getElementById('top-bet-slider'),
-                sliderValue: document.getElementById('top-slider-value')
+                wheel: document.getElementById('top-bet-wheel')
             }
+        };
+        
+        // Initialize wheel components
+        this.wheelInstances = {
+            0: null,
+            1: null
         };
         
         readyBtn.addEventListener('click', () => {
@@ -82,6 +86,60 @@ class PokerGame {
         
         // Setup player-specific controls
         this.setupPlayerControls();
+        
+        // Initialize wheel components after DOM is ready
+        setTimeout(() => this.initializeWheels(), 100);
+    }
+    
+    initializeWheels() {
+        // Initialize wheel components for each player
+        [0, 1].forEach(playerId => {
+            const controls = this.playerControls[playerId];
+            if (controls.wheel && window.VirtualRoller) {
+                this.wheelInstances[playerId] = window.VirtualRoller.create(controls.wheel);
+                
+                // Listen for wheel changes
+                controls.wheel.addEventListener('rollerchange', (e) => {
+                    if (this.gameState.toAct === playerId) {
+                        const value = e.detail.value;
+                        console.log(`Player ${playerId} wheel change: ${value}`);
+                        
+                        // Update action button text based on new wheel value
+                        const currentPlayer = this.gameState.players[playerId];
+                        const toCall = this.gameState.currentBet - currentPlayer.currentBet;
+                        const canCheck = toCall === 0;
+                        this.updateActionButtonText(controls, canCheck, toCall);
+                    }
+                });
+            }
+        });
+        
+        // Update wheels with initial game state after a short delay
+        setTimeout(() => this.updateWheelRanges(), 200);
+    }
+    
+    updateWheelRanges() {
+        // Update wheel min/max ranges based on current game state
+        [0, 1].forEach(playerId => {
+            const wheelInstance = this.wheelInstances[playerId];
+            const currentPlayer = this.gameState.players[playerId];
+            const toCall = this.gameState.currentBet - currentPlayer.currentBet;
+            const max = currentPlayer.stack;
+            
+            if (wheelInstance) {
+                const minValue = Math.max(0, toCall);
+                const maxValue = max;
+                
+                console.log(`Updating wheel ${playerId}: min=${minValue}, max=${maxValue}, toCall=${toCall}`);
+                
+                wheelInstance.configure({ 
+                    min: minValue, 
+                    max: maxValue,
+                    step: 1
+                });
+                wheelInstance.setValue(minValue);
+            }
+        });
     }
     
     setupPlayerControls() {
@@ -89,78 +147,52 @@ class PokerGame {
             const controls = this.playerControls[playerId];
             
             
-            // Action button - executes action based on slider amount or handles continue in all-in
+            // Action button - executes action based on wheel amount or handles continue in all-in
             controls.actionBtn.addEventListener('click', () => {
                 console.log(`Player ${playerId} action button clicked, toAct: ${this.gameState.toAct}`);
-                
-               
                 
                 // Normal betting flow - only active player can act
                 if (this.gameState.toAct === playerId) {
                     const currentPlayer = this.gameState.players[playerId];
                     const toCall = this.gameState.currentBet - currentPlayer.currentBet;
-                    const sliderAmount = parseInt(controls.slider.value);
+                    const wheelAmount = this.wheelInstances[playerId] ? this.wheelInstances[playerId].value : 0;
                     
-                    console.log(`Action: toCall=${toCall}, sliderAmount=${sliderAmount}`);
+                    console.log(`Action: toCall=${toCall}, wheelAmount=${wheelAmount}`);
                     
-                    if (toCall === 0 && sliderAmount === 0) {
-                        // Check (no money to call, slider at 0)
+                    if (toCall === 0 && wheelAmount === 0) {
+                        // Check (no money to call, wheel at 0)
                         this.gameState.processAction('call', 0);
-                    } else if (sliderAmount === toCall) {
-                        // Call (slider amount equals call amount)
+                    } else if (wheelAmount === toCall) {
+                        // Call (wheel amount equals call amount)
                         this.gameState.processAction('call', toCall);
-                    } else if (sliderAmount > toCall) {
-                        // Raise/Bet (slider amount is more than call)
-                        this.gameState.processAction('raise', sliderAmount);
+                    } else if (wheelAmount > toCall) {
+                        // Raise/Bet (wheel amount is more than call)
+                        this.gameState.processAction('raise', wheelAmount);
                     } else {
-                        // Call with whatever amount is on slider (shouldn't happen with proper slider setup)
-                        this.gameState.processAction('call', sliderAmount);
+                        // Call with whatever amount is on wheel (shouldn't happen with proper wheel setup)
+                        this.gameState.processAction('call', wheelAmount);
                     }
                     this.saveGameState(); // Auto-save after action
                     this.checkForNextStreet();
-                }
-            });
-            
-            // Slider
-            controls.slider.addEventListener('input', () => {
-                if (this.gameState.toAct === playerId) {
-                    const value = parseInt(controls.slider.value);
-                    console.log(`Player ${playerId} slider input: ${value}`);
-                    controls.sliderValue.textContent = `$${value}`;
-                    
-                    // Update action button text based on new slider value
-                    const currentPlayer = this.gameState.players[playerId];
-                    const toCall = this.gameState.currentBet - currentPlayer.currentBet;
-                    const canCheck = toCall === 0;
-                    this.updateActionButtonText(controls, canCheck, toCall);
-                }
-            });
-            
-            // Slider change (when user releases) - just update display, no action
-            controls.slider.addEventListener('change', () => {
-                // No automatic action, just ensure display is updated
-                if (this.gameState.toAct === playerId) {
-                    const value = parseInt(controls.slider.value);
-                    controls.sliderValue.textContent = `$${value}`;
-                    console.log(`Player ${playerId} slider set to: ${value}`);
                 }
             });
         });
     }
 
     updateActionButtonText(controls, canCheck, toCall, isAllIn=false) {
-        const sliderAmount = parseInt(controls.slider.value);
+        // Find the wheel instance for this control
+        const playerId = controls.wheel?.id === 'top-bet-wheel' ? 1 : 0;
+        const wheelAmount = this.wheelInstances[playerId] ? this.wheelInstances[playerId].value : 0;
         
         if (isAllIn) {
             controls.actionBtn.textContent = 'Continue';
-        }else if (canCheck && sliderAmount === 0) {
+        } else if (canCheck && wheelAmount === 0) {
             controls.actionBtn.textContent = 'Check';
-        } else if (sliderAmount === toCall) {
+        } else if (wheelAmount === toCall) {
             controls.actionBtn.textContent = `Call`;
-        } else if (sliderAmount > toCall) {
-            controls.actionBtn.textContent = `$${sliderAmount}`;
-        }
-        else {
+        } else if (wheelAmount > toCall) {
+            controls.actionBtn.textContent = `$${wheelAmount}`;
+        } else {
             controls.actionBtn.textContent = `Call`;
         }
     }
@@ -175,10 +207,14 @@ class PokerGame {
                 this.saveGameState(); // Auto-save after street advance
                 this.renderer.updateScene(this.gameState);
                 this.updateUI();
+                // Update wheel ranges after street advance
+                setTimeout(() => this.updateWheelRanges(), 50);
             }, 500);
         } else {
             this.renderer.updateScene(this.gameState);
             this.updateUI();
+            // Update wheel ranges after action
+            setTimeout(() => this.updateWheelRanges(), 50);
         }
     }
     
@@ -256,6 +292,8 @@ class PokerGame {
         this.saveGameState(); // Auto-save after new hand starts
         this.renderer.updateScene(this.gameState);
         this.updateUI();
+        // Update wheel ranges for new hand
+        setTimeout(() => this.updateWheelRanges(), 100);
     }
     
     updateUI() {
@@ -305,6 +343,7 @@ class PokerGame {
         
         [0, 1].forEach(playerId => {
             const controls = this.playerControls[playerId];
+            const wheelInstance = this.wheelInstances[playerId];
             const isActivePlayer = state.toAct === playerId;
             const currentPlayer = state.players[playerId];
             const toCall = state.currentBet - currentPlayer.currentBet;
@@ -313,51 +352,49 @@ class PokerGame {
             console.log(`Player ${playerId}: isActive=${isActivePlayer}, disabled=${controls.container.classList.contains('disabled')}`);
 
             if (isGameActive && isActivePlayer) {
-
                 if(isAllInScenario) {
                     console.log('All-in scenario: showing only continue button');
-                    // Set slider min/max first, then value
-                    controls.slider.min = 0;
-                    controls.slider.max = 0;
-                    controls.slider.value = 0;
+                    // Configure wheel for all-in scenario
+                    if (wheelInstance) {
+                        wheelInstance.configure({ min: 0, max: 0 });
+                        wheelInstance.setValue(0);
+                    }
                     controls.actionBtn.disabled = false;
-                    controls.slider.disabled = true;
-                    // Update display with current slider value
-                    controls.sliderValue.textContent = `$0`;
+                    if (controls.wheel) controls.wheel.style.pointerEvents = 'none';
+                    
                 
-                    // Update action button text based on slider
-                    this.updateActionButtonText(controls, canCheck, toCall,isAllInScenario);
+                    // Update action button text
+                    this.updateActionButtonText(controls, canCheck, toCall, isAllInScenario);
                     
                     // Enable controls for active player
                     controls.container.classList.remove('disabled');
                     console.log(`Enabled controls for player ${playerId}`);
-                    return
+                    return;
                 }
-                // Show all controls (in case they were hidden during all-in)
-                controls.slider.style.display = '';
-                controls.sliderValue.style.display = '';
                 
-                // Update slider to reflect next action
+                // Show all controls (in case they were hidden during all-in)
+                if (controls.wheel) controls.wheel.style.display = '';
+                
+                // Update wheel to reflect next action
                 const callAmount = toCall;
-                const minRaise = state.minRaise;
                 const max = currentPlayer.stack;
                 
-                // Slider should start with call amount, range up to all-in
-                const minSliderValue = callAmount; // Minimum is the call amount
-                const maxSliderValue = max; // Maximum is all-in
+                // Wheel should start with call amount, range up to all-in
+                const minWheelValue = callAmount; // Minimum is the call amount
+                const maxWheelValue = max; // Maximum is all-in
                 
-                controls.slider.min = minSliderValue;
-                controls.slider.max = maxSliderValue;
+                if (wheelInstance) {
+                    wheelInstance.configure({ 
+                        min: minWheelValue, 
+                        max: maxWheelValue,
+                        step: 1
+                    });
+                    // Set to call amount by default
+                    wheelInstance.setValue(callAmount);
+                }
                 
-                // Only reset slider value if it's outside valid range
-                controls.slider.value = callAmount; // Default to call amount
                 
-                
-                // Update display with current slider value
-                const currentSliderValue = parseInt(controls.slider.value);
-                controls.sliderValue.textContent = `$${currentSliderValue}`;
-                
-                // Update action button text based on slider
+                // Update action button text
                 this.updateActionButtonText(controls, canCheck, toCall, isAllInScenario);
 
                 // Enable controls for active player
@@ -365,23 +402,20 @@ class PokerGame {
                 console.log(`Enabled controls for player ${playerId}`);
                 
                 controls.actionBtn.disabled = false;
-                controls.slider.disabled = false;
+                if (controls.wheel) controls.wheel.style.pointerEvents = 'auto';
             } else {
                 // Disable controls for inactive player or when game is over
                 controls.container.classList.add('disabled');
                 
                 // Show all controls (in case they were hidden during all-in)
-                controls.slider.style.display = '';
-                controls.sliderValue.style.display = '';
+                if (controls.wheel) controls.wheel.style.display = '';
                 
                 // Show what the action would be if it were their turn
                 controls.actionBtn.textContent = canCheck ? 'Check' : `Call $${toCall}`;
                 
-                
-                
                 // Disable controls
                 controls.actionBtn.disabled = true;
-                controls.slider.disabled = true;
+                if (controls.wheel) controls.wheel.style.pointerEvents = 'none';
             }
         });
     }
@@ -620,6 +654,8 @@ class PokerGame {
         this.saveGameState(); // Auto-save initial game state
         this.renderer.updateScene(this.gameState);
         this.updateUI();
+        // Update wheel ranges after starting new hand
+        setTimeout(() => this.updateWheelRanges(), 300);
         this.animate();
     }
     
