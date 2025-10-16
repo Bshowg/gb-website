@@ -10,6 +10,7 @@ export const CONFIG = {
     HYSTERESIS_DEG: 6,
     autoHideMs: 1200,
     turnGate: "freePeek", // "ownerOnly" | "freePeek" | "turnOnly"
+    longPressDurationMs: 1500, // Duration for drag-to-fold activation
     fpsDebug: false,
     seed: null,
 };
@@ -50,14 +51,12 @@ class PokerGame {
         this.playerControls = {
             0: {
                 container: document.getElementById('bottom-player-controls'),
-                foldBtn: document.getElementById('bottom-fold-btn'),
                 actionBtn: document.getElementById('bottom-action-btn'),
                 slider: document.getElementById('bottom-bet-slider'),
                 sliderValue: document.getElementById('bottom-slider-value')
             },
             1: {
                 container: document.getElementById('top-player-controls'),
-                foldBtn: document.getElementById('top-fold-btn'),
                 actionBtn: document.getElementById('top-action-btn'),
                 slider: document.getElementById('top-bet-slider'),
                 sliderValue: document.getElementById('top-slider-value')
@@ -89,15 +88,6 @@ class PokerGame {
         [0, 1].forEach(playerId => {
             const controls = this.playerControls[playerId];
             
-            // Fold button
-            controls.foldBtn.addEventListener('click', () => {
-                console.log(`Player ${playerId} fold button clicked, toAct: ${this.gameState.toAct}`);
-                if (this.gameState.toAct === playerId) {
-                    this.gameState.processAction('fold', 0);
-                    this.saveGameState(); // Auto-save after action
-                    this.checkForNextStreet();
-                }
-            });
             
             // Action button - executes action based on slider amount or handles continue in all-in
             controls.actionBtn.addEventListener('click', () => {
@@ -346,7 +336,6 @@ class PokerGame {
                 // Show all controls (in case they were hidden during all-in)
                 controls.slider.style.display = '';
                 controls.sliderValue.style.display = '';
-                controls.foldBtn.style.display = '';
                 
                 // Update slider to reflect next action
                 const callAmount = toCall;
@@ -375,7 +364,6 @@ class PokerGame {
                 controls.container.classList.remove('disabled');
                 console.log(`Enabled controls for player ${playerId}`);
                 
-                controls.foldBtn.disabled = false;
                 controls.actionBtn.disabled = false;
                 controls.slider.disabled = false;
             } else {
@@ -385,7 +373,6 @@ class PokerGame {
                 // Show all controls (in case they were hidden during all-in)
                 controls.slider.style.display = '';
                 controls.sliderValue.style.display = '';
-                controls.foldBtn.style.display = '';
                 
                 // Show what the action would be if it were their turn
                 controls.actionBtn.textContent = canCheck ? 'Check' : `Call $${toCall}`;
@@ -393,7 +380,6 @@ class PokerGame {
                 
                 
                 // Disable controls
-                controls.foldBtn.disabled = true;
                 controls.actionBtn.disabled = true;
                 controls.slider.disabled = true;
             }
@@ -478,6 +464,11 @@ class PokerGame {
         
         document.getElementById('turn-gate').addEventListener('change', (e) => {
             CONFIG.turnGate = e.target.value;
+            this.saveSettings();
+        });
+        
+        document.getElementById('long-press-duration').addEventListener('change', (e) => {
+            CONFIG.longPressDurationMs = parseInt(e.target.value);
             this.saveSettings();
         });
     }
@@ -768,6 +759,7 @@ class PokerGame {
         // Load current CONFIG values into the form
         document.getElementById('auto-hide-time').value = CONFIG.autoHideMs;
         document.getElementById('turn-gate').value = CONFIG.turnGate;
+        document.getElementById('long-press-duration').value = CONFIG.longPressDurationMs;
         
         // Load starting stack (from current game or default)
         const currentStack = this.gameState?.players?.[0]?.stack || 1000;
@@ -832,6 +824,7 @@ class PokerGame {
         // Reset CONFIG to defaults
         CONFIG.autoHideMs = 1200;
         CONFIG.turnGate = "freePeek";
+        CONFIG.longPressDurationMs = 3000;
         CONFIG.fpsDebug = false; // Always false, not a user setting
         
         // Update form
@@ -864,7 +857,8 @@ class PokerGame {
     saveSettings() {
         const settings = {
             autoHideMs: CONFIG.autoHideMs,
-            turnGate: CONFIG.turnGate
+            turnGate: CONFIG.turnGate,
+            longPressDurationMs: CONFIG.longPressDurationMs
             // Note: fpsDebug is no longer saved as a user setting
         };
         localStorage.setItem('pocketPokerSettings', JSON.stringify(settings));
@@ -885,6 +879,7 @@ class PokerGame {
         
         if (settings.autoHideMs !== undefined) CONFIG.autoHideMs = settings.autoHideMs;
         if (settings.turnGate !== undefined) CONFIG.turnGate = settings.turnGate;
+        if (settings.longPressDurationMs !== undefined) CONFIG.longPressDurationMs = settings.longPressDurationMs;
         // Note: fpsDebug is no longer a user setting, always keep it false
         CONFIG.fpsDebug = false;
         
@@ -1035,6 +1030,9 @@ class PokerGame {
         this.renderer.updateScene(this.gameState);
         this.updateUI();
         this.animate();
+        
+        // Update global reference
+        window.gameInstance = this;
     }
     
     returnToStartFromEndScreen() {
@@ -1143,6 +1141,7 @@ function setupStartScreenSettings() {
         'blind-level': (e) => updateStartBlindLevel(e.target.value),
         'auto-hide-time': (e) => updateStartSetting('autoHideMs', parseInt(e.target.value)),
         'turn-gate': (e) => updateStartSetting('turnGate', e.target.value),
+        'long-press-duration': (e) => updateStartSetting('longPressDurationMs', parseInt(e.target.value)),
         'reset-defaults-btn': () => resetStartDefaults(),
         'clear-save-btn': () => clearSavedGameFromStart()
     };
@@ -1168,6 +1167,7 @@ function updateStartSetting(setting, value) {
     // Update CONFIG immediately
     if (setting === 'autoHideMs') CONFIG.autoHideMs = value;
     if (setting === 'turnGate') CONFIG.turnGate = value;
+    if (setting === 'longPressDurationMs') CONFIG.longPressDurationMs = value;
 }
 
 function updateStartBlindLevel(level) {
@@ -1181,6 +1181,7 @@ function resetStartDefaults() {
     localStorage.removeItem('pocketPokerSettings');
     CONFIG.autoHideMs = 1200;
     CONFIG.turnGate = "freePeek";
+    CONFIG.longPressDurationMs = 3000;
     loadDefaultSettingsIntoForm();
 }
 
@@ -1199,6 +1200,9 @@ function startNewGame() {
     
     // Initialize new game instance
     gameInstance = new PokerGame();
+    
+    // Expose game instance globally for input handler
+    window.gameInstance = gameInstance;
 }
 
 function continueGame() {
@@ -1208,6 +1212,9 @@ function continueGame() {
     
     // Initialize game instance and load saved state
     gameInstance = new PokerGame();
+    
+    // Expose game instance globally for input handler
+    window.gameInstance = gameInstance;
     
     // Try to load saved state, if it fails start a new game
     if (!gameInstance.loadGameState()) {
@@ -1236,6 +1243,7 @@ function loadDefaultSettingsIntoForm() {
     
     document.getElementById('auto-hide-time').value = settings.autoHideMs || CONFIG.autoHideMs;
     document.getElementById('turn-gate').value = settings.turnGate || CONFIG.turnGate;
+    document.getElementById('long-press-duration').value = settings.longPressDurationMs || CONFIG.longPressDurationMs;
     document.getElementById('starting-stack').value = settings.startingStack || 1000;
     
     // Set blinds
@@ -1263,6 +1271,7 @@ function returnToStartScreen() {
     if (gameInstance) {
         gameInstance.cleanup();
         gameInstance = null;
+        window.gameInstance = null;
     }
     
     // Update continue button visibility

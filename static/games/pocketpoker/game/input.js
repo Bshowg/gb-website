@@ -15,6 +15,7 @@ export class InputHandler {
         this.slidePosition[1] = 0; // Player 1 slide position
         this.startX = 0;
         
+        
         this.setupListeners();
     }
     
@@ -94,6 +95,8 @@ export class InputHandler {
         
         this.targetOwner = owner;
         this.startX = touch.clientX;
+        
+        
         this.startAutoHideTimer();
     }
     
@@ -106,10 +109,13 @@ export class InputHandler {
         const touch = Array.from(e.touches).find(t => t.identifier === this.activeTouch);
         if (!touch) return;
         
+        
+        // Regular card peek functionality
         // Calculate horizontal slide distance (can be positive or negative)
         const deltaX = touch.clientX - this.startX;
         const rect = this.canvas.getBoundingClientRect();
         const slideDistance = Math.abs(deltaX) / (rect.width * 0.3); // Normalize slide distance magnitude
+        
         
         // Clamp slide to 0-1 range (0 = hidden, 1 = fully revealed at 180°)
         this.slidePosition[this.targetOwner] = Math.max(0, Math.min(1, slideDistance));
@@ -171,6 +177,8 @@ export class InputHandler {
         
         this.targetOwner = owner;
         this.startX = e.clientX;
+        
+        
         this.startAutoHideTimer();
     }
     
@@ -180,10 +188,13 @@ export class InputHandler {
         
         if (this.activeTouch !== 'mouse' || this.targetOwner === null) return;
         
+        
+        // Regular card peek functionality
         // Calculate horizontal slide distance (can be positive or negative)
         const deltaX = e.clientX - this.startX;
         const rect = this.canvas.getBoundingClientRect();
         const slideDistance = Math.abs(deltaX) / (rect.width * 0.3); // Normalize slide distance magnitude
+        
         
         // Clamp slide to 0-1 range (0 = hidden, 1 = fully revealed at 180°)
         this.slidePosition[this.targetOwner] = Math.max(0, Math.min(1, slideDistance));
@@ -228,11 +239,13 @@ export class InputHandler {
         }
     }
     
+    
     cancelSlide() {
         if (this.targetOwner !== null) {
             this.slidePosition[this.targetOwner] = 0;
             this.renderer.updatePlayerCardsRotation(this.targetOwner, 0);
         }
+        
         
         this.activeTouch = null;
         this.targetOwner = null;
@@ -245,4 +258,5 @@ export class InputHandler {
             this.renderer.updatePlayerCardsRotation(this.targetOwner, rotationAngle);
         }
     }
+    
 }

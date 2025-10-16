@@ -33,7 +33,7 @@
                 </div>
                 
                 <div class="version-info">
-                    <span class="version-number">v1.2.1</span>
+                    <span class="version-number">v1.3.0</span>
                 </div>
             </div>
         </div>
@@ -132,7 +132,6 @@
             <div id="top-player-info" class="player-info">
                 <div id="top-player-controls" class="player-controls top-controls disabled">
                     <div class="control-group">
-                        <button id="top-fold-btn" class="action-btn fold-btn">Fold</button>
                         <div class="bet-control">
                             <input type="range" id="top-bet-slider" class="bet-slider" min="0" max="100" step="1" >
                             <div id="top-slider-value" class="slider-value">$0</div>
@@ -146,7 +145,6 @@
             <div id="bottom-player-info" class="player-info">
                 <div id="bottom-player-controls" class="player-controls bottom-controls disabled">
                     <div class="control-group">
-                        <button id="bottom-fold-btn" class="action-btn fold-btn">Fold</button>
                         <div class="bet-control">
                             <input type="range" id="bottom-bet-slider" class="bet-slider" min="0" max="100" step="1" >
                             <div id="bottom-slider-value" class="slider-value">$0</div>
@@ -220,6 +218,17 @@
                             <option value="freePeek" selected>Free Peek</option>
                             <option value="ownerOnly">Owner Only</option>
                             <option value="turnOnly">Turn Only</option>
+                        </select>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="long-press-duration">Drag Hold Duration (ms)</label>
+                        <select id="long-press-duration">
+                            <option value="1000">1000ms (1s)</option>
+                            <option value="2000">2000ms (2s)</option>
+                            <option value="3000" selected>3000ms (3s)</option>
+                            <option value="4000">4000ms (4s)</option>
+                            <option value="5000">5000ms (5s)</option>
                         </select>
                     </div>
                 </div>

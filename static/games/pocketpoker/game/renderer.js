@@ -511,4 +511,97 @@ export class GameRenderer {
     render() {
         this.renderer.render(this.scene, this.camera);
     }
+    
+    startCardDrag(owner, scale = 1.5) {
+        const cards = this.getPlayerCards(owner);
+        
+        if (cards.length === 0) return;
+        
+        // Calculate center point of all cards for group movement
+        let centerX = 0, centerY = 0;
+        cards.forEach(cardMesh => {
+            centerX += cardMesh.position.x;
+            centerY += cardMesh.position.y;
+        });
+        centerX /= cards.length;
+        centerY /= cards.length;
+        
+        cards.forEach(cardMesh => {
+            // Store original scale and position if not already stored
+            if (!cardMesh.userData.originalScale) {
+                cardMesh.userData.originalScale = cardMesh.scale.clone();
+            }
+            if (!cardMesh.userData.originalPosition) {
+                cardMesh.userData.originalPosition = cardMesh.position.clone();
+            }
+            
+            // Store relative offset from group center
+            if (!cardMesh.userData.groupOffset) {
+                cardMesh.userData.groupOffset = {
+                    x: cardMesh.position.x - centerX,
+                    y: cardMesh.position.y - centerY,
+                    z: cardMesh.position.z
+                };
+            }
+            
+            // Scale up the cards
+            cardMesh.scale.multiplyScalar(scale);
+            
+            // Move cards to front with significant z-index boost for visibility
+            cardMesh.position.z += 5; // Increased from 2 to 5 for better visibility
+            
+            // Mark as being dragged
+            cardMesh.userData.isDragging = true;
+        });
+        
+        // Store group center for movement calculations
+        this.dragGroupCenter = { x: centerX, y: centerY };
+        
+        console.log(`Started card drag for player ${owner} with scale ${scale}, group center: (${centerX.toFixed(2)}, ${centerY.toFixed(2)})`);
+    }
+    
+    updateCardDragPosition(owner, normalizedX, normalizedY) {
+        const cards = this.getPlayerCards(owner);
+        const viewport = this.getViewportDimensions();
+        
+        // Convert normalized screen coordinates to world coordinates
+        const worldX = (normalizedX - 0.5) * viewport.width;
+        const worldY = (0.5 - normalizedY) * viewport.height; // Flip Y axis
+        
+        cards.forEach(cardMesh => {
+            if (cardMesh.userData.isDragging && cardMesh.userData.groupOffset) {
+                // Maintain relative positioning within the group
+                cardMesh.position.x = worldX + cardMesh.userData.groupOffset.x;
+                cardMesh.position.y = worldY + cardMesh.userData.groupOffset.y;
+                // Keep the elevated z position for visibility
+            }
+        });
+    }
+    
+    resetCardDrag(owner) {
+        const cards = this.getPlayerCards(owner);
+        
+        cards.forEach(cardMesh => {
+            if (cardMesh.userData.isDragging) {
+                // Restore original scale
+                if (cardMesh.userData.originalScale) {
+                    cardMesh.scale.copy(cardMesh.userData.originalScale);
+                }
+                
+                // Restore original position
+                if (cardMesh.userData.originalPosition) {
+                    cardMesh.position.copy(cardMesh.userData.originalPosition);
+                }
+                
+                // Clear drag state and group offset
+                cardMesh.userData.isDragging = false;
+                cardMesh.userData.groupOffset = null;
+            }
+        });
+        
+        // Clear group center reference
+        this.dragGroupCenter = null;
+        
+        console.log(`Reset card drag for player ${owner}`);
+    }
 }
