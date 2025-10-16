@@ -63,77 +63,6 @@ html, body {
     bottom: 25%;
 }
 
-.player-name {
-    font-weight: bold;
-    font-size: 14px;
-    margin-bottom: 4px;
-}
-
-.player-stack, .player-bet {
-    font-size: 16px;
-    color: #4ade80;
-}
-
-#center-info {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    -webkit-transform: translate(-50%, -50%);
-    -moz-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    text-align: center;
-}
-
-#pot-display {
-    font-size: 20px;
-    font-weight: bold;
-    color: #fbbf24;
-    background: rgba(0, 0, 0, 0.8);
-    padding: 8px 16px;
-    border-radius: 8px;
-    margin-bottom: 8px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    -webkit-transition: background-color 0.2s;
-    -moz-transition: background-color 0.2s;
-    -o-transition: background-color 0.2s;
-    pointer-events: auto;
-}
-
-#pot-display:hover {
-    background: rgba(0, 0, 0, 0.9);
-}
-
-#street-display {
-    font-size: 14px;
-    color: #9ca3af;
-}
-
-#dealer-button {
-    position: absolute;
-    width: 32px;
-    height: 32px;
-    background: #ef4444;
-    border-radius: 50%;
-    display: flex;
-    display: -webkit-flex;
-    display: -moz-flex;
-    align-items: center;
-    -webkit-align-items: center;
-    justify-content: center;
-    -webkit-justify-content: center;
-    font-weight: bold;
-    font-size: 14px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-    -webkit-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-    -moz-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-    transition: all 0.3s ease;
-    -webkit-transition: all 0.3s ease;
-    -moz-transition: all 0.3s ease;
-    -o-transition: all 0.3s ease;
-}
-
 /* Player Game Info Areas */
 .player-game-info {
     position: absolute;
@@ -144,12 +73,12 @@ html, body {
 
 .left-info {
     left: 20px;
-    bottom: 10%; /* Player 0 (bottom) - pot on left, 10% from bottom */
+    top: 80%; /* Player 0 (bottom) - pot on left, 10% from bottom */
 }
 
 .right-info {
     right: 20px;
-    top: 10%; /* Player 1 (top) - pot on right, 10% from top */
+    bottom: 80%; /* Player 1 (top) - pot on right, 10% from top */
     transform: rotate(180deg); /* Rotate 180 degrees for player 2 */
     -webkit-transform: rotate(180deg);
     -moz-transform: rotate(180deg);
@@ -401,22 +330,6 @@ html, body {
     margin-bottom: 24px;
     text-align: center;
     padding: 0 20px;
-}
-
-#settings-toggle, #qa-toggle {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 48px;
-    height: 48px;
-    border: none;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.7);
-    color: #ffffff;
-    font-size: 24px;
-    cursor: pointer;
-    pointer-events: auto;
-    z-index: 50;
 }
 
 .icon-btn {

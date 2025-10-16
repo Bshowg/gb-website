@@ -271,13 +271,6 @@ class PokerGame {
     updateUI() {
         const state = this.gameState;
         
-        // Update player info
-        //document.querySelector('#top-player-info #top-player-controls .player-stack').textContent = `Stack $${state.players[1].stack}`;
-        //document.querySelector('#top-player-info .player-bet').textContent = state.players[1].currentBet > 0 ? `Bet: $${state.players[1].currentBet}` : '';
-        
-        //document.querySelector('#bottom-player-info #bottom-player-controls .player-stack').textContent = `Stack $${state.players[0].stack}`;
-        //document.querySelector('#bottom-player-info .player-bet').textContent = state.players[0].currentBet > 0 ? `Bet: $${state.players[0].currentBet}` : '';
-        
         // Update both stack displays
         document.getElementById('top-stack-display').textContent = `Stack: $${state.players[1].stack}`;
         document.getElementById('bottom-stack-display').textContent = `Stack: $${state.players[0].stack}`;
