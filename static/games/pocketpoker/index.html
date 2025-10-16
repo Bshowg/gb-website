@@ -29,6 +29,10 @@
                     <p>Touch and drag cards to reveal them</p>
                     <p>Two players share one device</p>
                 </div>
+                
+                <div class="version-info">
+                    <span class="version-number">v1.2.0</span>
+                </div>
             </div>
         </div>
         
@@ -109,6 +113,7 @@
             <div id="ui-overlay">
             <!-- Player 1 Game Info (Right Side, Rotated 180°) -->
             <div id="top-game-info" class="player-game-info right-info">
+                <div id="top-stack-display" class="stack-display">Stack: $0</div>
                 <div id="top-pot-display" class="pot-display">Pot: $0</div>
                 <div id="top-street-display" class="street-display"></div>
                 <div id="top-dealer-button" class="dealer-button">D</div>
@@ -116,6 +121,7 @@
             
             <!-- Player 0 Game Info (Left Side) -->
             <div id="bottom-game-info" class="player-game-info left-info">
+                <div id="bottom-stack-display" class="stack-display">Stack: $0</div>
                 <div id="bottom-pot-display" class="pot-display">Pot: $0</div>
                 <div id="bottom-street-display" class="street-display"></div>
                 <div id="bottom-dealer-button" class="dealer-button">D</div>
@@ -124,7 +130,6 @@
             <div id="top-player-info" class="player-info">
                 <div id="top-player-controls" class="player-controls top-controls disabled">
                     <div class="control-group">
-                        <div class="player-stack"></div>
                         <button id="top-fold-btn" class="action-btn fold-btn">Fold</button>
                         <div class="bet-control">
                             <input type="range" id="top-bet-slider" class="bet-slider" min="0" max="100" step="1" >
@@ -139,7 +144,6 @@
             <div id="bottom-player-info" class="player-info">
                 <div id="bottom-player-controls" class="player-controls bottom-controls disabled">
                     <div class="control-group">
-                        <div class="player-stack"></div>
                         <button id="bottom-fold-btn" class="action-btn fold-btn">Fold</button>
                         <div class="bet-control">
                             <input type="range" id="bottom-bet-slider" class="bet-slider" min="0" max="100" step="1" >

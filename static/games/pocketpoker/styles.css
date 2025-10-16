@@ -45,6 +45,9 @@ html, body {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
+    -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
     text-align: center;
     background: rgba(0, 0, 0, 0.7);
     padding: 8px 16px;
@@ -76,6 +79,9 @@ html, body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
     text-align: center;
 }
 
@@ -89,6 +95,9 @@ html, body {
     margin-bottom: 8px;
     cursor: pointer;
     transition: background-color 0.2s;
+    -webkit-transition: background-color 0.2s;
+    -moz-transition: background-color 0.2s;
+    -o-transition: background-color 0.2s;
     pointer-events: auto;
 }
 
@@ -108,12 +117,21 @@ html, body {
     background: #ef4444;
     border-radius: 50%;
     display: flex;
+    display: -webkit-flex;
+    display: -moz-flex;
     align-items: center;
+    -webkit-align-items: center;
     justify-content: center;
+    -webkit-justify-content: center;
     font-weight: bold;
     font-size: 14px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
     transition: all 0.3s ease;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
 }
 
 /* Player Game Info Areas */
@@ -133,11 +151,23 @@ html, body {
     right: 20px;
     top: 10%; /* Player 1 (top) - pot on right, 10% from top */
     transform: rotate(180deg); /* Rotate 180 degrees for player 2 */
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
 }
 
-.right-info .pot-display,
-.right-info .street-display {
-    transform: rotate(180deg); /* Counter-rotate text to keep it readable */
+
+
+
+.player-game-info .stack-display {
+    font-size: 16px;
+    font-weight: bold;
+    color: #4ade80;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-bottom: 4px;
+    min-width: 80px;
 }
 
 .player-game-info .pot-display {
@@ -150,6 +180,9 @@ html, body {
     margin-bottom: 6px;
     cursor: pointer;
     transition: background-color 0.2s;
+    -webkit-transition: background-color 0.2s;
+    -moz-transition: background-color 0.2s;
+    -o-transition: background-color 0.2s;
     pointer-events: auto;
     min-width: 80px;
 }
@@ -173,11 +206,17 @@ html, body {
     font-weight: bold;
     font-size: 12px;
     display: flex;
+    display: -webkit-flex;
+    display: -moz-flex;
     align-items: center;
+    -webkit-align-items: center;
     justify-content: center;
+    -webkit-justify-content: center;
     margin: 0 auto;
     position: static;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
 .action-btn {
@@ -192,10 +231,16 @@ html, body {
     min-width: 60px;
     min-height: 36px;
     transition: all 0.2s;
+    -webkit-transition: all 0.2s;
+    -moz-transition: all 0.2s;
+    -o-transition: all 0.2s;
 }
 
 .action-btn:active {
     transform: scale(0.95);
+    -webkit-transform: scale(0.95);
+    -moz-transform: scale(0.95);
+    -ms-transform: scale(0.95);
 }
 
 .action-btn.primary {
@@ -212,6 +257,9 @@ html, body {
     margin-top: 8px;
     opacity: 0.9;
     transition: opacity 0.3s ease;
+    -webkit-transition: opacity 0.3s ease;
+    -moz-transition: opacity 0.3s ease;
+    -o-transition: opacity 0.3s ease;
 }
 
 .player-controls.disabled {
@@ -225,25 +273,41 @@ html, body {
 
 .top-controls {
     transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
     transform-origin: center;
+    -webkit-transform-origin: center;
+    -moz-transform-origin: center;
+    -ms-transform-origin: center;
 }
 
 .control-group {
     display: flex;
+    display: -webkit-flex;
+    display: -moz-flex;
     align-items: center;
+    -webkit-align-items: center;
     gap: 8px;
     background: rgba(0, 0, 0, 0.6);
     padding: 8px;
     border-radius: 6px;
     backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     justify-content: center;
+    -webkit-justify-content: center;
 }
 
 .bet-control {
     display: flex;
+    display: -webkit-flex;
+    display: -moz-flex;
     flex-direction: column;
+    -webkit-flex-direction: column;
+    -moz-flex-direction: column;
     align-items: center;
-    min-width: 100px;
+    -webkit-align-items: center;
+    min-width: 150px;
 }
 
 .bet-slider {
@@ -253,8 +317,12 @@ html, body {
     background: #374151;
     outline: none;
     -webkit-appearance: none;
+    -moz-appearance: none;
     appearance: none;
     transition: opacity 0.3s ease;
+    -webkit-transition: opacity 0.3s ease;
+    -moz-transition: opacity 0.3s ease;
+    -o-transition: opacity 0.3s ease;
 }
 
 .bet-slider:disabled {
@@ -263,6 +331,7 @@ html, body {
 }
 
 .bet-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
     appearance: none;
     width: 20px;
     height: 20px;
@@ -273,6 +342,16 @@ html, body {
 }
 
 .bet-slider::-moz-range-thumb {
+    -moz-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #10b981;
+    cursor: pointer;
+    border: 2px solid #fff;
+}
+
+.bet-slider::-ms-thumb {
     width: 20px;
     height: 20px;
     border-radius: 50%;
@@ -658,6 +737,21 @@ html, body {
 
 .start-instructions p {
     margin: 8px 0;
+}
+
+.version-info {
+    margin-top: 24px;
+    text-align: center;
+}
+
+.version-number {
+    color: #6b7280;
+    font-size: 12px;
+    font-weight: 500;
+    background: rgba(107, 114, 128, 0.1);
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(107, 114, 128, 0.2);
 }
 
 /* Game container initially hidden */

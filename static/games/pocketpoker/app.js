@@ -203,8 +203,8 @@ class PokerGame {
         const bottomStreetDisplay = document.getElementById('bottom-street-display');
         
         const winnerMessage = winner.tie 
-            ? `Tie! Both players split the pot. ${winner.handName} (Click pot to continue)`
-            : `Player ${winner.playerIndex + 1} wins with ${winner.handName}! (Click pot to continue)`;
+            ? `Tie! Both players split the pot. ${winner.handName}`
+            : `Player ${winner.playerIndex + 1} wins with ${winner.handName}!`;
             
         topStreetDisplay.textContent = winnerMessage;
         bottomStreetDisplay.textContent = winnerMessage;
@@ -272,11 +272,15 @@ class PokerGame {
         const state = this.gameState;
         
         // Update player info
-        document.querySelector('#top-player-info #top-player-controls .player-stack').textContent = `Stack $${state.players[1].stack}`;
+        //document.querySelector('#top-player-info #top-player-controls .player-stack').textContent = `Stack $${state.players[1].stack}`;
         //document.querySelector('#top-player-info .player-bet').textContent = state.players[1].currentBet > 0 ? `Bet: $${state.players[1].currentBet}` : '';
         
-        document.querySelector('#bottom-player-info #bottom-player-controls .player-stack').textContent = `Stack $${state.players[0].stack}`;
+        //document.querySelector('#bottom-player-info #bottom-player-controls .player-stack').textContent = `Stack $${state.players[0].stack}`;
         //document.querySelector('#bottom-player-info .player-bet').textContent = state.players[0].currentBet > 0 ? `Bet: $${state.players[0].currentBet}` : '';
+        
+        // Update both stack displays
+        document.getElementById('top-stack-display').textContent = `Stack: $${state.players[1].stack}`;
+        document.getElementById('bottom-stack-display').textContent = `Stack: $${state.players[0].stack}`;
         
         // Update both pot displays
         document.getElementById('top-pot-display').textContent = `Pot: $${state.pot}`;
