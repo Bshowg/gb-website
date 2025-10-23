@@ -74,6 +74,9 @@
         transform: translateY(-100%);
         transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         border-bottom: 1px solid rgba(231, 231, 234, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
       }
 
       .nav-header.visible {
@@ -84,6 +87,121 @@
         height: 40px;
         width: auto;
         transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .nav-menu {
+        display: flex;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        gap: 30px;
+      }
+
+      .nav-menu li {
+        margin: 0;
+      }
+
+      .nav-menu a {
+        color: #e7e7ea;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        transition: color 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .nav-menu a:hover {
+        color: #ffffff;
+      }
+
+      .nav-toggle {
+        display: none;
+        background: none;
+        border: none;
+        color: #e7e7ea;
+        font-size: 24px;
+        cursor: pointer;
+        padding: 5px;
+      }
+
+      .nav-close {
+        display: none;
+      }
+
+      /* Mobile Navigation */
+      @media (max-width: 768px) {
+        .nav-menu {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
+          background: #000000;
+          flex-direction: column;
+          gap: 0;
+          padding: 80px 30px 30px 30px;
+          transform: translateX(-100%);
+          opacity: 1;
+          visibility: visible;
+          transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          z-index: 9999;
+          justify-content: flex-start;
+          align-items: stretch;
+          text-align: right;
+        }
+
+        .nav-menu.open {
+          transform: translateX(0);
+        }
+
+        .nav-menu li {
+          padding: 20px 0;
+          border-bottom: 1px solid #ffffff;
+          margin: 0;
+        }
+
+        .nav-menu li:last-child {
+          border-bottom: 1px solid #ffffff;
+        }
+
+        .nav-menu a {
+          font-size: 18px;
+          font-weight: 600;
+          color: #ffffff;
+          display: block;
+          width: 100%;
+          text-align: left;
+        }
+
+        .nav-menu a:hover {
+          color: #cccccc;
+        }
+
+        .nav-toggle {
+          display: block;
+          z-index: 10000;
+          position: relative;
+        }
+
+        /* Close button in mobile menu */
+        .nav-close {
+          position: absolute;
+          top: 20px;
+          left: 30px;
+          background: none;
+          border: none;
+          color: #ffffff;
+          font-size: 24px;
+          cursor: pointer;
+          z-index: 10001;
+          padding: 5px;
+          display: block;
+        }
+
+        .nav-close:hover {
+          color: #cccccc;
+        }
       }
 
       /* About section */
@@ -156,6 +274,36 @@
         }
       }
 
+      /* Desktop warning message */
+      .desktop-warning {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: #000000;
+        color: #ffffff;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+        z-index: 99999;
+        padding: 20px;
+        box-sizing: border-box;
+      }
+
+      @media (min-width: 769px) {
+        .desktop-warning {
+          display: flex;
+        }
+        
+        body > *:not(.desktop-warning) {
+          display: none !important;
+        }
+      }
+
       @media (prefers-reduced-motion: reduce) {
         * {
           animation: none !important;
@@ -165,6 +313,11 @@
     </style>
   </head>
   <body>
+    <!-- Desktop Warning -->
+    <div class="desktop-warning">
+      Vi avevo detto di non guardare da desktop
+    </div>
+    
     <!-- Background Image -->
     <div class="background-image" id="backgroundImage"></div>
     
@@ -314,6 +467,20 @@
           </g>
         </g>
       </svg>
+      
+      <!-- Navigation Menu -->
+      <nav class="nav-menu" id="navMenu">
+        <button class="nav-close" id="navClose">✕</button>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#spazio">Spazio</a></li>
+        <li><a href="#contatti">Contatti</a></li>
+        <li><a href="#archivio">Archivio</a></li>
+        <li><a href="#servizi">Servizi</a></li>
+        <li><a href="#podcast">Podcast</a></li>
+      </nav>
+      
+      <!-- Mobile Toggle Button -->
+      <button class="nav-toggle" id="navToggle">☰</button>
     </header>
 
     <div class="wrap">
@@ -463,7 +630,7 @@
     </div>
 
     <!-- About Us Section -->
-    <section class="about-section">
+    <section class="about-section" id="about">
       <div class="about-container">
         <div class="about-text">
           <h2>About Us</h2>
@@ -860,30 +1027,45 @@
         } else if (scrollY === 0) {
           navHeader.classList.remove("visible");
         }
+      }
 
-
-        /*// Calculate scroll progress for logo animation
-        const scrollProgress = Math.min(scrollY / viewportHeight, 1);
+      // Navigation menu toggle functionality
+      function initMobileNav() {
+        const navToggle = document.getElementById('navToggle');
+        const navMenu = document.getElementById('navMenu');
+        const navClose = document.getElementById('navClose');
         
-        if (scrollProgress > 0.1) {
-          // Scale and rotate the navigation logo
-          const scale = 1 - (scrollProgress * 0.3); // Scale from 1 to 0.7
-          const rotation = scrollProgress * -180; // Rotate from 0 to -180 degrees
+        function closeMenu() {
+          navMenu.classList.remove('open');
+        }
+        
+        function openMenu() {
+          navMenu.classList.add('open');
+        }
+        
+        if (navToggle && navMenu) {
+          // Open menu when clicking hamburger
+          navToggle.addEventListener('click', openMenu);
           
-          navScene.style.transform = `scale(${scale}) rotate(${rotation}deg)`;
-          navScene.style.transformOrigin = 'center';
-          
-          // Also apply transformation to main SVG for smooth transition
-          if (scrollProgress < 0.8) {
-            const mainRotation = scrollProgress * -180;
-            const mainScale = 1 - (scrollProgress * 0.2);
-            mainScene.style.transform = `scale(${mainScale}) rotate(${mainRotation}deg)`;
+          // Close menu when clicking close button
+          if (navClose) {
+            navClose.addEventListener('click', closeMenu);
           }
-        } else {
-          // Reset transformations when scrolled back to top
-          navScene.style.transform = '';
-          mainScene.style.transform = '';
-        }*/
+          
+          // Close menu when clicking menu links
+          navMenu.addEventListener('click', (e) => {
+            if (e.target.tagName === 'A') {
+              closeMenu();
+            }
+          });
+          
+          // Close menu when clicking outside (but not on toggle button)
+          document.addEventListener('click', (e) => {
+            if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+              closeMenu();
+            }
+          });
+        }
       }
 
       // Throttled scroll listener (temporarily disabled for testing)
@@ -903,8 +1085,14 @@
       }
 
       // Try multiple events to ensure animation starts
-      window.addEventListener("load", startAnimation);
-      document.addEventListener("DOMContentLoaded", startAnimation);
+      window.addEventListener("load", () => {
+        startAnimation();
+        initMobileNav();
+      });
+      document.addEventListener("DOMContentLoaded", () => {
+        startAnimation();
+        initMobileNav();
+      });
       
       // Fallback timeout in case events don't fire
       setTimeout(() => {
