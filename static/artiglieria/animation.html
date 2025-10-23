@@ -846,16 +846,13 @@
       }
 
       function updateHeaderAndLogo() {
-        const scrollY = window.scrollY;
+        const scrollY = window.pageYOffset || document.documentElement.scrollTop;
         const viewportHeight = window.innerHeight;
         const navHeader = document.getElementById("navHeader");
         const navLogo = document.getElementById("nav_logo");
         const navScene = document.getElementById("nav-scene");
         const mainSvg = document.getElementById("Livello_1");
         const mainScene = document.getElementById("scene");
-
-        // Determine scroll direction
-        scrollDirection = scrollY > lastScrollY ? "down" : "up";
 
         // Show header when scrolling down past threshold, hide when at top
         if (scrollY > 50 ) {
@@ -864,7 +861,6 @@
           navHeader.classList.remove("visible");
         }
 
-        lastScrollY = scrollY;
 
         /*// Calculate scroll progress for logo animation
         const scrollProgress = Math.min(scrollY / viewportHeight, 1);
@@ -893,7 +889,30 @@
       // Throttled scroll listener (temporarily disabled for testing)
        window.addEventListener("scroll", handleScroll, { passive: true });
 
-      window.addEventListener("load", runSequence);
+      // Multiple ways to trigger animation for Firefox compatibility
+      let animationStarted = false;
+      
+      function startAnimation() {
+        if (animationStarted) {
+          console.log('Animation already started, skipping...');
+          return;
+        }
+        animationStarted = true;
+        console.log('Starting animation...');
+        runSequence().catch(console.error);
+      }
+
+      // Try multiple events to ensure animation starts
+      window.addEventListener("load", startAnimation);
+      document.addEventListener("DOMContentLoaded", startAnimation);
+      
+      // Fallback timeout in case events don't fire
+      setTimeout(() => {
+        if (document.readyState === 'complete') {
+          console.log('Fallback animation start');
+          startAnimation();
+        }
+      }, 1000);
     </script>
   </body>
 </html>
