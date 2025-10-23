@@ -752,17 +752,19 @@
         
        
 
-        // --- WAVE 2: Rotate ---
-        await rotateScene(scene, { deg: 90, duration: 800 });
+        // --- WAVE 2: Rotate and elements enter together ---
+        const rotationPromise = rotateScene(scene, { deg: 90, duration: 800 });
+        
         for (const [i, g] of wave2.entries()) {
           await animateIn(g, {
             from: i % 2 ? "top" : "bottom",
             distance: 110,
             duration: 500,
           });
-          
+          await sleep(60);
         }
-        await sleep(60);
+        
+        await rotationPromise; // Ensure rotation completes
         // --- WAVE 3: with entrance and shake ---
         for (const [i, g] of wave3.entries()) {
           await enterWithHit(g, {
