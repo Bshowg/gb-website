@@ -199,12 +199,12 @@
 
       /* About section */
       .about-section {
-        min-height: 100vh;
-        padding: 80px 20px;
-        background: linear-gradient(135deg, #f5f5f7 0%, #e8e8ea 100%);
         display: flex;
+        background-color: #f5f5f7 ;
         align-items: center;
         justify-content: center;
+        padding-right: 30px;
+        padding-left: 30px;
       }
 
       .about-container {
@@ -213,6 +213,8 @@
         grid-template-columns: 1fr 1fr;
         gap: 60px;
         align-items: center;
+        padding: 80px 0px 80px 0px;
+        border-bottom: 1px solid #000;
       }
 
       .about-text {
@@ -240,6 +242,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        padding: 20px;
       }
 
       .about-image img {
@@ -258,7 +261,7 @@
         .about-container {
           grid-template-columns: 1fr;
           gap: 40px;
-          text-align: center;
+          text-align: justify;
         }
 
         .about-text h2 {
@@ -266,33 +269,33 @@
         }
       }
 
-      /* Desktop warning message */
-      .desktop-warning {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background: #000000;
-        color: #ffffff;
-        display: none;
-        align-items: center;
-        justify-content: center;
-        font-size: 24px;
-        font-weight: bold;
-        text-align: center;
-        z-index: 99999;
-        padding: 20px;
-        box-sizing: border-box;
-      }
-
+      /* Desktop layout */
       @media (min-width: 769px) {
-        .desktop-warning {
+        body {
           display: flex;
         }
         
-        body > *:not(.desktop-warning) {
-          display: none !important;
+        .wrap {
+          position: fixed;
+          right: 0;
+          top: 0;
+          width: 25vw;
+          max-width: 600px;
+          height: 100vh;
+          z-index: 100;
+          background-image: url('images/10.webp');
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
+        }
+        
+        .content-area {
+          width: 75vw;
+          min-height: 100vh;
+        }
+        
+        .about-section {
+          margin-top: 0;
         }
       }
 
@@ -306,11 +309,6 @@
     </style>
   </head>
   <body>
-    <!-- Desktop Warning -->
-    <div class="desktop-warning">
-      Vi avevo detto di non guardare da desktop
-    </div>
-    
     <!-- Background Image -->
     <div class="background-image" id="backgroundImage"></div>
     
@@ -631,8 +629,10 @@
       </svg>
     </div>
 
-    <!-- About Us Section -->
-    <section class="about-section" id="about">
+    <!-- Content Area for Desktop -->
+    <div class="content-area">
+      <!-- About Us Section -->
+      <section class="about-section" id="about">
       <div class="about-container">
         <div class="about-text">
           <h2>About Us</h2>
@@ -663,6 +663,160 @@
         </div>
       </div>
     </section>
+
+    <!-- Spazio Section -->
+    <section class="about-section" id="spazio">
+      <div class="about-container">
+        <div class="about-text">
+          <h2>Spazio</h2>
+          <p>
+            Il nostro spazio è un ambiente creativo e versatile, progettato per 
+            ospitare eventi culturali, mostre d'arte e performance dal vivo. 
+            Situato nel cuore della città, offre una location unica e suggestiva.
+          </p>
+          <p>
+            Con una superficie di 200 metri quadri, lo spazio può essere configurato 
+            in diverse modalità per adattarsi alle esigenze di ogni evento. 
+            Disponiamo di sistema audio professionale e illuminazione scenica.
+          </p>
+          <p>
+            La location è disponibile per eventi privati, presentazioni aziendali, 
+            workshop creativi e residenze artistiche. Offriamo anche servizi di 
+            consulenza per la progettazione e realizzazione di eventi su misura.
+          </p>
+        </div>
+        <div class="about-image">
+          <img
+            src="https://picsum.photos/500/400?random=2"
+            alt="Spazio placeholder image"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Contatti Section -->
+    <section class="about-section" id="contatti">
+      <div class="about-container">
+        <div class="about-text">
+          <h2>Contatti</h2>
+          <p>
+            Siamo sempre aperti al dialogo e pronti ad ascoltare le vostre idee. 
+            Per informazioni sui nostri servizi, prenotazioni dello spazio o 
+            collaborazioni, non esitate a contattarci attraverso i nostri canali.
+          </p>
+          <p>
+            Email: info@artiglieria.com<br>
+            Telefono: +39 02 1234 5678<br>
+            Indirizzo: Via delle Arti 15, Milano<br>
+            Orari: Lunedì-Venerdì 9:00-18:00
+          </p>
+          <p>
+            Seguici sui social media per rimanere aggiornato sui nostri eventi 
+            e progetti. Siamo attivi su Instagram, Facebook e LinkedIn. 
+            Iscriviti alla nostra newsletter per ricevere aggiornamenti mensili.
+          </p>
+        </div>
+        <div class="about-image">
+          <img
+            src="https://picsum.photos/500/400?random=3"
+            alt="Contatti placeholder image"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Archivio Section -->
+    <section class="about-section" id="archivio">
+      <div class="about-container">
+        <div class="about-text">
+          <h2>Archivio</h2>
+          <p>
+            Il nostro archivio raccoglie oltre dieci anni di progetti, eventi 
+            e collaborazioni artistiche. Una collezione digitale che documenta 
+            l'evoluzione del panorama culturale contemporaneo e le nostre attività.
+          </p>
+          <p>
+            Esplora le gallerie fotografiche dei nostri eventi passati, leggi 
+            le interviste con gli artisti ospitati e scopri i backstage dei progetti 
+            più significativi. Ogni elemento è catalogato e facilmente ricercabile.
+          </p>
+          <p>
+            L'archivio è una risorsa preziosa per ricercatori, studenti e appassionati 
+            di cultura contemporanea. Offriamo anche servizi di consultazione 
+            specializzata per tesi di laurea e ricerche accademiche.
+          </p>
+        </div>
+        <div class="about-image">
+          <img
+            src="https://picsum.photos/500/400?random=4"
+            alt="Archivio placeholder image"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Servizi Section -->
+    <section class="about-section" id="servizi">
+      <div class="about-container">
+        <div class="about-text">
+          <h2>Servizi</h2>
+          <p>
+            Offriamo una gamma completa di servizi per la realizzazione di eventi 
+            culturali e artistici. Dalla progettazione alla produzione, ci occupiamo 
+            di ogni aspetto per garantire la riuscita del vostro progetto.
+          </p>
+          <p>
+            I nostri servizi includono: consulenza artistica, produzione eventi, 
+            service audio-video, comunicazione e marketing culturale, 
+            gestione logistica e coordinamento con istituzioni e media partner.
+          </p>
+          <p>
+            Collaboriamo con una rete di professionisti specializzati: curatori, 
+            tecnici, grafici, fotografi e videomaker. Ogni progetto viene seguito 
+            con cura artigianale, da qui il nostro nome: Artiglieria.
+          </p>
+        </div>
+        <div class="about-image">
+          <img
+            src="https://picsum.photos/500/400?random=5"
+            alt="Servizi placeholder image"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Podcast Section -->
+    <section class="about-section" id="podcast">
+      <div class="about-container">
+        <div class="about-text">
+          <h2>Podcast</h2>
+          <p>
+            "Voci dall'Artiglieria" è il nostro podcast settimanale dedicato 
+            all'arte contemporanea, alla cultura underground e alle tendenze 
+            emergenti. Ogni episodio approfondisce temi attuali attraverso 
+            interviste esclusive con artisti, curatori e pensatori.
+          </p>
+          <p>
+            Gli episodi esplorano diversi format: dalle conversazioni intime 
+            con gli artisti ai dibattiti su temi culturali, dalle recensioni 
+            di mostre ai reportage da festival internazionali. Ogni mercoledì 
+            un nuovo episodio disponibile su tutte le piattaforme.
+          </p>
+          <p>
+            Il podcast ha già superato i 50.000 download mensili e ha ottenuto 
+            riconoscimenti dalla critica specializzata. Ascolta gli episodi 
+            su Spotify, Apple Podcasts, Google Podcasts e sul nostro sito web.
+          </p>
+        </div>
+        <div class="about-image">
+          <img
+            src="https://picsum.photos/500/400?random=6"
+            alt="Podcast placeholder image"
+          />
+        </div>
+      </div>
+    </section>
+    </div>
 
     <script>
       const scene = document.querySelector("#scene");
@@ -739,6 +893,7 @@
       const navHeader = document.getElementById("navHeader");
       navHeader.classList.add("visible");
       // Event listeners
+      //window.addEventListener("scroll", handleScroll, { passive: true });
       document.addEventListener("DOMContentLoaded", initMobileNav);
       
     </script>

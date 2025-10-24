@@ -207,10 +207,9 @@
       /* About section */
       .about-section {
         min-height: 100vh;
-        padding: 80px 20px;
-        background: linear-gradient(135deg, #f5f5f7 0%, #e8e8ea 100%);
         display: flex;
         align-items: center;
+        background-color: #f5f5f7 ;
         justify-content: center;
       }
 
@@ -220,6 +219,8 @@
         grid-template-columns: 1fr 1fr;
         gap: 60px;
         align-items: center;
+        padding: 80px 20px;
+        border-bottom: 1px solid #000;
       }
 
       .about-text {
@@ -247,6 +248,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        padding: 20px;
       }
 
       .about-image img {
@@ -274,33 +276,49 @@
         }
       }
 
-      /* Desktop warning message */
-      .desktop-warning {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background: #000000;
-        color: #ffffff;
-        display: none;
-        align-items: center;
-        justify-content: center;
-        font-size: 24px;
-        font-weight: bold;
-        text-align: center;
-        z-index: 99999;
-        padding: 20px;
-        box-sizing: border-box;
-      }
-
+      /* Desktop layout */
       @media (min-width: 769px) {
-        .desktop-warning {
+        body {
           display: flex;
         }
         
-        body > *:not(.desktop-warning) {
-          display: none !important;
+        .wrap {
+          position: fixed;
+          right: 0;
+          top: 0;
+          width: 25vw;
+          max-width: 600px;
+          height: 100vh;
+          z-index: 100;
+          background-color: #f5f5f7;
+          background-image: url('images/10.webp');
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
+          opacity: 0;
+          transition: opacity 2s ease-in-out;
+        }
+        
+        .wrap.visible {
+          opacity: 1;
+        }
+        
+        .wrap .st1:not(.gradient-fill) {
+          fill: #000;
+        }
+        
+        .wrap.visible .st1:not(.gradient-fill) {
+          fill: #fff;
+          transition: fill 2s ease-in-out;
+        }
+        
+        .content-area {
+          width: 75vw;
+          min-height: 100vh;
+        }
+        
+        .about-section {
+          margin-top: 0;
         }
       }
 
@@ -313,11 +331,6 @@
     </style>
   </head>
   <body>
-    <!-- Desktop Warning -->
-    <div class="desktop-warning">
-      Vi avevo detto di non guardare da desktop
-    </div>
-    
     <!-- Background Image -->
     <div class="background-image" id="backgroundImage"></div>
     
@@ -654,8 +667,10 @@
       </svg>
     </div>
 
-    <!-- About Us Section -->
-    <section class="about-section" id="about">
+    <!-- Content Area for Desktop -->
+    <div class="content-area">
+      <!-- About Us Section -->
+      <section class="about-section" id="about">
       <div class="about-container">
         <div class="about-text">
           <h2>About Us</h2>
@@ -686,6 +701,7 @@
         </div>
       </div>
     </section>
+    </div>
 
     <script>
       const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -694,35 +710,6 @@
 
 
       
-      // --- Minimal self-tests (non-invasive) ---
-      (function selfTest() {
-        try {
-          console.assert(
-            typeof hapticHit === "function",
-            "hapticHit should be a function"
-          );
-          console.assert(
-            typeof animateIn === "function",
-            "animateIn should be defined"
-          );
-          console.assert(
-            typeof enterWithHit === "function",
-            "enterWithHit should be defined"
-          );
-          console.assert(
-            typeof shakeOthers === "function",
-            "shakeOthers should be defined"
-          );
-          console.assert(
-            typeof rotateScene === "function",
-            "rotateScene should be defined"
-          );
-          const scene = document.querySelector("#scene");
-          console.assert(!!scene, "Expected #scene to exist");
-        } catch (e) {
-          console.warn("Self-test failed:", e);
-        }
-      })();
 
       async function runSequence() {
         const scene = document.querySelector("#scene");
@@ -741,6 +728,12 @@
           const backgroundImage = document.getElementById('backgroundImage');
           if (backgroundImage) {
             backgroundImage.classList.add('visible');
+          }
+          
+          // Also fade in wrap background on desktop
+          const wrap = document.querySelector('.wrap');
+          if (wrap && window.innerWidth >= 769) {
+            wrap.classList.add('visible');
           }
         }, 500);
         
