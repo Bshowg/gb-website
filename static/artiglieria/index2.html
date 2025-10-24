@@ -27,14 +27,10 @@
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
-        opacity: 0;
+        opacity: 1;
         z-index: -1;
-        transition: opacity 2s ease-in-out;
       }
 
-      .background-image.visible {
-        opacity: 1;
-      }
       .wrap {
         min-height: 100svh;
         display: grid;
@@ -48,7 +44,6 @@
         display: block;
       }
 
-      /* Crucial for predictable transforms on <g> */
       g {
         transform-box: fill-box;
         transform-origin: center;
@@ -68,7 +63,7 @@
         left: 0;
         right: 0;
         background: rgba(245, 245, 247, 0.95);
-        backdrop-filter:  blur(10px);
+        backdrop-filter: blur(10px);
         padding: 12px 20px;
         z-index: 1000;
         transform: translateY(-100%);
@@ -86,7 +81,6 @@
       .nav-logo {
         height: 40px;
         width: auto;
-        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
       }
 
       .nav-menu {
@@ -106,7 +100,6 @@
         text-decoration: none;
         font-size: 14px;
         font-weight: 500;
-        transition: color 0.3s ease;
         text-transform: uppercase;
         letter-spacing: 0.5px;
       }
@@ -255,7 +248,6 @@
         height: auto;
         border-radius: 12px;
         box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-        transition: transform 0.3s ease;
       }
 
       .about-image img:hover {
@@ -304,11 +296,12 @@
         }
       }
 
-      @media (prefers-reduced-motion: reduce) {
-        * {
-          animation: none !important;
-          transition: none !important;
-        }
+      .st1 {
+        fill: #fff;
+      }
+
+      .st1.gradient-fill {
+        fill: url(#orangePinkGradientMain);
       }
     </style>
   </head>
@@ -332,21 +325,10 @@
         role="img"
         aria-label="Navigation logo"
       >
-        <!-- Generator: Adobe Illustrator 29.8.2, SVG Export Plug-In . SVG Version: 2.1.1 Build 3)  -->
         <defs>
           <style>
             .st1 {
               fill: #000;
-              transition: fill 2s ease-in-out;
-            }
-            
-            .st1.white-fill {
-              fill: #fff;
-            }
-            
-            .st1.gradient-fill {
-              fill: url(#orangePinkGradient);
-              transition: fill 2s ease-in-out;
             }
           </style>
           <linearGradient id="orangePinkGradient" x1="0%" y1="100%" x2="100%" y2="0%">
@@ -358,11 +340,11 @@
         <g id="nav-scene">
           <g class="layer wave2">
             <path
-              class="st1"
+              class="st1 gradient-fill"
               d="M389.3,289.57c-58.15,0-105.46-47.3-105.46-105.44s47.31-105.43,105.46-105.43,105.39,47.29,105.39,105.43-47.28,105.44-105.39,105.44ZM389.3,81.05c-56.85,0-103.1,46.24-103.1,103.08s46.25,103.09,103.1,103.09,103.04-46.24,103.04-103.09-46.22-103.08-103.04-103.08Z"
             />
             <path
-              class="st1"
+              class="st1 gradient-fill"
               d="M389.3,290.21c-58.5,0-106.1-47.59-106.1-106.08s47.6-106.07,106.1-106.07,106.03,47.58,106.03,106.07-47.56,106.08-106.03,106.08ZM389.3,79.34c-57.79,0-104.82,47.01-104.82,104.79s47.02,104.8,104.82,104.8,104.75-47.01,104.75-104.8-46.99-104.79-104.75-104.79ZM389.3,287.86c-57.21,0-103.75-46.53-103.75-103.73s46.54-103.72,103.75-103.72,103.68,46.53,103.68,103.72-46.51,103.73-103.68,103.73ZM389.3,81.7c-56.5,0-102.46,45.95-102.46,102.43s45.96,102.45,102.46,102.45,102.4-45.96,102.4-102.45-45.94-102.43-102.4-102.43Z"
             />
           </g>
@@ -501,17 +483,12 @@
         version="1.1"
         viewBox="0 0 360 595"
         role="img"
-        aria-label="Logo animation with 5 waves"
+        aria-label="Logo"
       >
-        <!-- Generator: Adobe Illustrator 29.8.2, SVG Export Plug-In . SVG Version: 2.1.1 Build 3)  -->
         <defs>
           <style>
-            .st0 {
-              fill: #12100b;
-            }
             .st1 {
-              fill: #000;
-              transition: fill 2s ease-in-out;
+              fill: #fff;
             }
             
             .st1.white-fill {
@@ -532,11 +509,11 @@
         <g id="scene">
           <g class="layer wave2">
             <path
-              class="st1"
+              class="st1 gradient-fill"
               d="M389.3,289.57c-58.15,0-105.46-47.3-105.46-105.44s47.31-105.43,105.46-105.43,105.39,47.29,105.39,105.43-47.28,105.44-105.39,105.44ZM389.3,81.05c-56.85,0-103.1,46.24-103.1,103.08s46.25,103.09,103.1,103.09,103.04-46.24,103.04-103.09-46.22-103.08-103.04-103.08Z"
             />
             <path
-              class="st1"
+              class="st1 gradient-fill"
               d="M389.3,290.21c-58.5,0-106.1-47.59-106.1-106.08s47.6-106.07,106.1-106.07,106.03,47.58,106.03,106.07-47.56,106.08-106.03,106.08ZM389.3,79.34c-57.79,0-104.82,47.01-104.82,104.79s47.02,104.8,104.82,104.8,104.75-47.01,104.75-104.8-46.99-104.79-104.75-104.79ZM389.3,287.86c-57.21,0-103.75-46.53-103.75-103.73s46.54-103.72,103.75-103.72,103.68,46.53,103.68,103.72-46.51,103.73-103.68,103.73ZM389.3,81.7c-56.5,0-102.46,45.95-102.46,102.43s45.96,102.45,102.46,102.45,102.4-45.96,102.4-102.45-45.94-102.43-102.4-102.43Z"
             />
           </g>
@@ -688,82 +665,23 @@
     </section>
 
     <script>
-      const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-      const prefersReduce = () =>
-        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-
-      
-      // --- Minimal self-tests (non-invasive) ---
-      (function selfTest() {
-        try {
-          console.assert(
-            typeof hapticHit === "function",
-            "hapticHit should be a function"
-          );
-          console.assert(
-            typeof animateIn === "function",
-            "animateIn should be defined"
-          );
-          console.assert(
-            typeof enterWithHit === "function",
-            "enterWithHit should be defined"
-          );
-          console.assert(
-            typeof shakeOthers === "function",
-            "shakeOthers should be defined"
-          );
-          console.assert(
-            typeof rotateScene === "function",
-            "rotateScene should be defined"
-          );
-          const scene = document.querySelector("#scene");
-          console.assert(!!scene, "Expected #scene to exist");
-        } catch (e) {
-          console.warn("Self-test failed:", e);
-        }
-      })();
-
-      async function runSequence() {
-        const scene = document.querySelector("#scene");
+      const scene = document.querySelector("#scene");
 
         // Apply static rotation and translation
-        scene.style.transform = 'translate(0px, 60px) rotate(90deg)';
-        
-        // Add gradient fill to wave2 elements from the beginning (both nav and main)
-        const wave2Elements = document.querySelectorAll('.wave2 .st1');
-        wave2Elements.forEach(element => {
-          element.classList.add('gradient-fill');
-        });
-        
-        // Wait a moment, then fade in background image
-        setTimeout(() => {
-          const backgroundImage = document.getElementById('backgroundImage');
-          if (backgroundImage) {
-            backgroundImage.classList.add('visible');
-          }
-        }, 500);
-        
-        // Change SVG fill color from black to white after background starts fading 
-        // (only for main scene, exclude nav-scene and gradient-fill elements)
-        setTimeout(() => {
-          const svgElements = document.querySelectorAll('#scene .st1:not(.gradient-fill)');
-          svgElements.forEach(element => {
-            element.classList.add('white-fill');
-          });
-        }, 1000);
-      }
+      scene.style.transform = 'translate(0px, 60px) rotate(90deg)';
 
-      // Scroll handling for navigation header and SVG animation
+      const logoElements = document.querySelectorAll('#nav-scene .st1:not(.gradient-fill)');
+        logoElements.forEach(element => {
+          element.style.fill = '#000000';
+        });
+      // Scroll handling for navigation header
       let isScrolling = false;
       let scrollTimeout;
-      let lastScrollY = 0;
-      let scrollDirection = "down";
 
       function handleScroll() {
         if (!isScrolling) {
           isScrolling = true;
-          requestAnimationFrame(updateHeaderAndLogo);
+          requestAnimationFrame(updateHeader);
         }
 
         clearTimeout(scrollTimeout);
@@ -772,17 +690,12 @@
         }, 100);
       }
 
-      function updateHeaderAndLogo() {
+      function updateHeader() {
         const scrollY = window.pageYOffset || document.documentElement.scrollTop;
-        const viewportHeight = window.innerHeight;
         const navHeader = document.getElementById("navHeader");
-        const navLogo = document.getElementById("nav_logo");
-        const navScene = document.getElementById("nav-scene");
-        const mainSvg = document.getElementById("Livello_1");
-        const mainScene = document.getElementById("scene");
 
         // Show header when scrolling down past threshold, hide when at top
-        if (scrollY > 50 ) {
+        if (scrollY > 50) {
           navHeader.classList.add("visible");
         } else if (scrollY === 0) {
           navHeader.classList.remove("visible");
@@ -804,22 +717,18 @@
         }
         
         if (navToggle && navMenu) {
-          // Open menu when clicking hamburger
           navToggle.addEventListener('click', openMenu);
           
-          // Close menu when clicking close button
           if (navClose) {
             navClose.addEventListener('click', closeMenu);
           }
           
-          // Close menu when clicking menu links
           navMenu.addEventListener('click', (e) => {
             if (e.target.tagName === 'A') {
               closeMenu();
             }
           });
           
-          // Close menu when clicking outside (but not on toggle button)
           document.addEventListener('click', (e) => {
             if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
               closeMenu();
@@ -827,40 +736,11 @@
           });
         }
       }
-
-      // Throttled scroll listener (temporarily disabled for testing)
-       window.addEventListener("scroll", handleScroll, { passive: true });
-
-      // Multiple ways to trigger animation for Firefox compatibility
-      let animationStarted = false;
+      const navHeader = document.getElementById("navHeader");
+      navHeader.classList.add("visible");
+      // Event listeners
+      document.addEventListener("DOMContentLoaded", initMobileNav);
       
-      function startAnimation() {
-        if (animationStarted) {
-          console.log('Animation already started, skipping...');
-          return;
-        }
-        animationStarted = true;
-        console.log('Starting animation...');
-        runSequence().catch(console.error);
-      }
-
-      // Try multiple events to ensure animation starts
-      window.addEventListener("load", () => {
-        startAnimation();
-        initMobileNav();
-      });
-      document.addEventListener("DOMContentLoaded", () => {
-        startAnimation();
-        initMobileNav();
-      });
-      
-      // Fallback timeout in case events don't fire
-      setTimeout(() => {
-        if (document.readyState === 'complete') {
-          console.log('Fallback animation start');
-          startAnimation();
-        }
-      }, 1000);
     </script>
   </body>
 </html>
