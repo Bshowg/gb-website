@@ -14,9 +14,9 @@
         }
 
         :root {
-            --primary: #5a7d8c;
+            --primary: #8fc2c7;
             --primary-dark: #4a6d7c;
-            --secondary: #a8bfc7;
+            --secondary: #ad326d;
             --accent: #d4a574;
             --text: #333;
             --text-light: #666;
@@ -41,16 +41,29 @@
         }
 
         nav .container {
-            max-width: 1200px;
+            max-width: none;
             margin: 0 auto;
             padding: 1rem 2rem;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
         }
 
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
         nav .logo {
-            display: none;
+            height: 40px;
+            display: flex;
+            align-items: center;
+        }
+
+        nav .logo img {
+            height: 100%;
+            width: auto;
         }
 
         .mobile-menu-toggle {
@@ -63,8 +76,11 @@
             padding: 0.5rem;
         }
         .header-title {
-                display: none;
-            }
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+            font-style: italic;
+        }
 
         nav ul {
             list-style: none;
@@ -91,13 +107,13 @@
             color: white;
             padding: 6rem 2rem 5rem;
             text-align: center;
-            min-height: 100vh;
+            min-height: 90vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             position: relative;
-            background-image: url('HEROIMAGEIRE.png');
+            background-image: url('Hero.jpg');
             background-size: cover;
             background-position: center;
             background-blend-mode: overlay;
@@ -119,11 +135,19 @@
             z-index: 2;
         }
 
-        .hero .name {
-            font-size: 2.8rem;
-            margin-bottom: 0.5rem;
-            font-weight: 400;
-            text-shadow: 1px 1px 2px #5a7d8c;
+        .hero .logo-container {
+            margin-bottom: 2rem;
+            width: 70%;
+        }
+
+        .hero .logo-container img {
+            width: 100%;
+            height: auto;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+            display: block;
+            margin: 0 auto;
+            opacity: 1;
+            background: transparent;
         }
 
         .hero .title {
@@ -151,7 +175,7 @@
 
         .cta-button {
             display: inline-block;
-            background: var(--accent);
+            background: var(--secondary);
             color: white;
             padding: 1rem 2.5rem;
             text-decoration: none;
@@ -198,6 +222,9 @@
                 max-height: 400px;
                 order: -1;
             }
+            .hero .logo-container {
+            width: 100%;
+        }
         }
 
         /* Section Styles */
@@ -238,7 +265,7 @@
         }
 
         .highlight-box {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
             padding: 1.5rem;
             border-radius: 10px;
@@ -357,17 +384,56 @@
         }
 
         .card {
-            background: white;
-            padding: 2rem;
+            background: transparent;
+            padding: 0;
             border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            transition: transform 0.3s, box-shadow 0.3s;
-            text-align: center;
+            height: 200px;
+            perspective: 1000px;
+            cursor: pointer;
         }
 
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 25px rgba(0,0,0,0.12);
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .card:hover .card-inner,
+        .card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card-front {
+            background: white;
+        }
+
+        .card-back {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            
+            transform: rotateY(180deg);
+        }
+
+        .card-back p {
+            text-align: center;
+            line-height: 1.6;
+            color: white;
         }
 
         .card-icon {
@@ -391,9 +457,13 @@
             gap: 2rem;
             margin: 2rem 0;
         }
+        .funziona-text{
+            text-align: center;
+            margin-bottom: 2rem;
+        }
 
         .funziona-card {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
             padding: 2rem;
             border-radius: 10px;
@@ -411,6 +481,7 @@
             color: white;
             margin-bottom: 1rem;
             display: block;
+            float:right
         }
 
         .funziona-card h3 {
@@ -422,6 +493,7 @@
         .funziona-card p {
             margin: 0;
             color: rgba(255, 255, 255, 0.9);
+            text-align: left;
         }
 
         @media (max-width: 768px) {
@@ -571,6 +643,16 @@
             color: var(--primary);
             margin: 0 0 0.8rem 0;
             font-size: 1.1rem;
+            position: relative;
+        }
+
+        .faq-item h3::after {
+            content: "\f059";
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            float: right;
+            color: var(--secondary);
+            font-size: 1.2rem;
         }
 
         .faq-item p {
@@ -617,6 +699,95 @@
             border: 0;
         }
 
+        /* Studio Carousel */
+        .studio-carousel {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .carousel-slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .carousel-slide.active {
+            opacity: 1;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .carousel-slide iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        .carousel-controls {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .carousel-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .carousel-dot.active {
+            background: white;
+        }
+
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background 0.3s;
+            z-index: 10;
+        }
+
+        .carousel-nav:hover {
+            background: rgba(0, 0, 0, 0.7);
+        }
+
+        .carousel-prev {
+            left: 10px;
+        }
+
+        .carousel-next {
+            right: 10px;
+        }
+
         @media (max-width: 768px) {
             .studios-container {
                 grid-template-columns: 1fr;
@@ -624,6 +795,57 @@
 
             .map-container {
                 height: 250px;
+            }
+
+            .studio-carousel {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .carousel-container {
+                width: 100%;
+                height: 250px;
+            }
+
+            .mobile-nav-buttons {
+                display: flex;
+                justify-content: center;
+                gap: 20px;
+            }
+
+            .carousel-nav {
+                position: static;
+                transform: none;
+                padding: 12px 25px;
+                font-size: 20px;
+                min-width: 60px;
+                min-height: 45px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 25px;
+            }
+
+            .carousel-controls {
+                position: static;
+                transform: none;
+                order: -1;
+                margin-bottom: 10px;
+            }
+
+            .carousel-dot {
+                width: 15px;
+                height: 15px;
+                margin: 0 5px;
+            }
+
+            /* Justify text on mobile */
+            section p,
+            .faq-item p,
+            .contact-info p,
+            .funziona-text {
+                text-align: justify;
             }
         }
 
@@ -652,6 +874,18 @@
         @media (max-width: 768px) {
             nav .container {
                 justify-content: space-between;
+            }
+
+            .nav-left {
+                gap: 0.5rem;
+            }
+
+            nav .logo {
+                height: 35px;
+            }
+
+            .header-title {
+                font-size: 0.9rem;
             }
 
             .mobile-menu-toggle {
@@ -688,12 +922,9 @@
                 display: block;
                 padding: 1rem 2rem;
             }
-            .header-title {
-                display: block;
-            }
 
-            .hero .name {
-                font-size: 1.8rem;
+            .hero .logo-container img {
+                width: 100%;
             }
 
             .hero .title {
@@ -718,6 +949,12 @@
     <!-- Navigation -->
     <nav>
         <div class="container">
+            <div class="nav-left">
+                <div class="logo">
+                    <img src="marchio.svg" alt="Dott.ssa Irene Del Monte">
+                </div>
+                <div class="header-title">Dott.ssa Irene Del Monte</div>
+            </div>
             <button class="mobile-menu-toggle" aria-label="Toggle menu">☰</button>
             <ul>
                 <li><a href="#home">Home</a></li>
@@ -728,14 +965,14 @@
                 <li><a href="#contatti">Contatti</a></li>
                 <li><a href="#faq">FAQ</a></li>
             </ul>
-            <div class="header-title"><i>Dott.ssa Irene Del Monte</i> </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
     <section id="home" class="hero">
-        <h1 class="name" >Dott.ssa Irene Del Monte</h1>
-        <p class="title">Psicologa e psicoterapeuta <b>cognitivo-comportamentale</b></p>
+        <div class="logo-container">
+            <img src="logo.svg" alt="Dott.ssa Irene Del Monte">
+        </div>
         <a href="#contatti" class="cta-button">Conosciamoci</a>
     </section>
 
@@ -762,15 +999,10 @@
     <section id="approccio" class="bg-light">
         <div class="container">
             <h2>Approccio terapeutico</h2>
-            <p>Il mio approccio si basa sulla <b>terapia cognitivo-comportamentale (CBT)</b> e, in particolare, sulle più recenti evoluzioni della cosiddetta <b>terza onda</b> della psicoterapia cognitiva.</p>
-            
-            <p>Questa prospettiva, pur mantenendo le solide basi scientifiche della TCC tradizionale, amplia il lavoro terapeutico integrando concetti di accettazione, consapevolezza e valori personali, con l'obiettivo di promuovere un benessere più profondo e duraturo.</p>
-            
-            <div class="approach-highlights">
-                <div class="highlight-box">Mindfulness-Based Cognitive Therapy <br>(MBCT)</div>
-                <div class="highlight-box">Acceptance and Commitment Therapy <br>(ACT)</div>
-                <div class="highlight-box">Compassion Focused Therapy <br> (CFT)</div>
-            </div>
+           <p>Il mio approccio si basa sulla terapia cognitivo-comportamentale (CBT) e, in particolare, sulle più recenti evoluzioni della cosiddetta “terza onda” della psicoterapia cognitiva.
+Questa prospettiva, pur mantenendo le solide basi scientifiche della CBT tradizionale, amplia il lavoro terapeutico integrando concetti di accettazione, consapevolezza e compassione, con l’obiettivo di promuovere un benessere più profondo e duraturo.
+Nei miei percorsi utilizzo strumenti derivati da approcci che aiutano a sviluppare una relazione più equilibrata con i propri pensieri ed emozioni, favorendo una maggiore flessibilità psicologica e la capacità di vivere in linea con ciò che è davvero importante per sé, come la Mindfulness, l’Acceptance and Commitment Therapy e la Compassion Focused Therapy.</p> 
+
             
             <h3>Insieme lavoriamo per:</h3>
             <ul class="styled-list">
@@ -791,41 +1023,110 @@
             
             <div class="cards">
                 <div class="card">
-                    <i class="fas fa-user-circle card-icon"></i>
-                    <h3>Disturbi di personalità</h3>
-                    <p>Percorsi specializzati per la comprensione e il trattamento dei disturbi di personalità.</p>
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <i class="fas fa-user-circle card-icon"></i>
+                            <h3>Disturbi di personalità</h3>
+                        </div>
+                        <div class="card-back">
+                            <p>Percorsi di consapevolezza e cambiamento per migliorare la gestione delle emozioni e le relazioni interpersonali.</p>
+                        </div>
+                    </div>
                 </div>
                 <div class="card">
-                    <i class="fas fa-heart-pulse card-icon"></i>
-                    <h3>Disturbi d'ansia</h3>
-                    <p>Attacchi di panico, ansia sociale, ansia per la salute e altre forme di ansia.</p>
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <i class="fas fa-heart-pulse card-icon"></i>
+                            <h3>Disturbi d'ansia</h3>
+                        </div>
+                        <div class="card-back">
+                            <p>Terapia per attacchi di panico, ansia sociale, ansia per la salute e altre forme di ansia.</p>
+                        </div>
+                    </div>
                 </div>
                 <div class="card">
-                    <i class="fas fa-cloud-sun card-icon"></i>
-                    <h3>Disturbi dell'umore</h3>
-                    <p>Supporto per la gestione di depressione e variazioni dell'umore.</p>
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <i class="fas fa-cloud-sun card-icon"></i>
+                            <h3>Disturbi dell'umore</h3>
+                        </div>
+                        <div class="card-back">
+                            <p>Interventi mirati per comprendere e gestire stati depressivi o sbalzi d'umore, favorendo equilibrio e benessere emotivo.</p>
+                        </div>
+                    </div>
                 </div>
                 <div class="card">
-                    <i class="fas fa-people-arrows card-icon"></i>
-                    <h3>Problematiche relazionali</h3>
-                    <p>Difficoltà nelle relazioni interpersonali e comunicazione assertiva.</p>
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <i class="fas fa-people-arrows card-icon"></i>
+                            <h3>Problematiche relazionali</h3>
+                        </div>
+                        <div class="card-back">
+                            <p>Percorsi per affrontare difficoltà interpersonali nelle relazioni affettive, familiari o lavorative e training di comunicazione assertiva.</p>
+                        </div>
+                    </div>
                 </div>
                 <div class="card">
-                    <i class="fas fa-brain card-icon"></i>
-                    <h3>Regolazione emotiva</h3>
-                    <p>Tecniche per gestire meglio le proprie emozioni e reazioni.</p>
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <i class="fas fa-brain card-icon"></i>
+                            <h3>Regolazione emotiva</h3>
+                        </div>
+                        <div class="card-back">
+                            <p>Percorsi per riconoscere, accogliere e gestire in modo più efficace le proprie emozioni.</p>
+                        </div>
+                    </div>
                 </div>
                 <div class="card">
-                    <i class="fas fa-bolt card-icon"></i>
-                    <h3>Stress e perfezionismo</h3>
-                    <p>Strategie per ridurre lo stress e affrontare il perfezionismo.</p>
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <i class="fas fa-bolt card-icon"></i>
+                            <h3>Stress</h3>
+                        </div>
+                        <div class="card-back">
+                            <p>Strategie psicologiche per ridurre l'impatto dello stress e ritrovare benessere e vitalità nella vita quotidiana.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <i class="fas fa-bullseye card-icon"></i>
+                            <h3>Perfezionismo</h3>
+                        </div>
+                        <div class="card-back">
+                            <p>Un aiuto per comprendere le radici del perfezionismo e imparare a vivere con maggiore flessibilità e autoaccettazione.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <i class="fas fa-chalkboard-teacher card-icon"></i>
+                            <h3>Parent training</h3>
+                        </div>
+                        <div class="card-back">
+                            <p>Percorsi di sostegno per genitori che desiderano sviluppare strategie educative efficaci e coerenti.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <i class="fas fa-heart card-icon"></i>
+                            <h3>Supporto alla genitorialità</h3>
+                        </div>
+                        <div class="card-back">
+                            <p>Spazi di confronto e accompagnamento per affrontare le sfide della crescita dei figli e migliorare la relazione genitore-bambino.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
             
 
             
             <div class="quando-aiuto">
-            <img src="quandoaiuto.png" alt="Sessione di terapia" class="quando-aiuto-image">
+            <img src="quandoaiuto.jpeg" alt="Sessione di terapia" class="quando-aiuto-image">
             <div class="quando-aiuto-content">
                 <h3>Quando chiedere aiuto?</h3>
                 <p>Il momento in cui una persona sceglie di rivolgersi a uno psicoterapeuta è sempre unico e profondamente personale. Spesso nasce dal desiderio di cambiamento, dal bisogno di comprendere e trasformare un aspetto della propria vita che porta disagio o sofferenza.</p>
@@ -839,7 +1140,7 @@
     <section id="come-funziona" class="bg-light">
         <div class="container">
             <h2>Come funziona la psicoterapia</h2>
-            <p style="text-align: center; margin-bottom: 2rem;">Il primo contatto può avvenire telefonicamente (anche WhatsApp) o tramite mail. Durante la prima visita inquadreremo la richiesta per comprendere la tua situazione e definire insieme il percorso più adatto.</p>
+            <p class="funziona-text">Il primo contatto può avvenire telefonicamente (anche WhatsApp) o tramite mail. Durante la prima visita inquadreremo la richiesta per comprendere la tua situazione e definire insieme il percorso più adatto.</p>
             
             <div class="funziona-grid">
                 <div class="funziona-card">
@@ -883,7 +1184,7 @@
                     
                     <div class="contact-details">
                         <p><i class="fas fa-phone"></i> <a href="tel:3405912289">340 5912289</a></p>
-                        <p><i class="fas fa-envelope"></i> <a href="mailto:info@example.com">info@delmonteirene.it</a></p>
+                        <p><i class="fas fa-envelope"></i> <a href="mailto:info@example.com">info@irenedelmonte.it</a></p>
                         <p><i class="fab fa-whatsapp"></i> <a href="https://wa.me/393405912289">WhatsApp</a></p>
                     </div>
                 </div>
@@ -913,28 +1214,66 @@
                 
                 <div class="studios-container">
                     <div class="studio-card">
-                        <h4><i class="fas fa-map-marker-alt"></i> Studio 1</h4>
+                        <h4><i class="fas fa-map-marker-alt"></i> Studio Mattonaia</h4>
                         <p><strong>Via della Mattonaia 17</strong><br>Firenze</p>
-                        <div class="map-container">
-                            <iframe 
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2879.8426937204706!2d11.266707!3d43.773589!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x132a5403e0c5c5c5%3A0x5c5c5c5c5c5c5c5c!2sVia%20della%20Mattonaia%2C%2017%2C%2050121%20Firenze%20FI!5e0!3m2!1sit!2sit!4v1234567890"
-                                allowfullscreen="" 
-                                loading="lazy" 
-                                referrerpolicy="no-referrer-when-downgrade">
-                            </iframe>
+                        <div class="studio-carousel" data-studio="mattonaia">
+                            <div class="carousel-container">
+                                <div class="carousel-slide active">
+                                    <img src="studio_mattonaia1.jpg" alt="Studio Mattonaia - Foto 1">
+                                </div>
+                                <div class="carousel-slide">
+                                    <img src="studio_mattonaia2.jpg" alt="Studio Mattonaia - Foto 2">
+                                </div>
+                                <div class="carousel-slide">
+                                    <iframe 
+                                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2879.8426937204706!2d11.266707!3d43.773589!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x132a5403e0c5c5c5%3A0x5c5c5c5c5c5c5c5c!2sVia%20della%20Mattonaia%2C%2017%2C%2050121%20Firenze%20FI!5e0!3m2!1sit!2sit!4v1234567890"
+                                        allowfullscreen="" 
+                                        loading="lazy" 
+                                        referrerpolicy="no-referrer-when-downgrade">
+                                    </iframe>
+                                </div>
+                            </div>
+                            <div class="mobile-nav-buttons">
+                                <button class="carousel-nav carousel-prev">‹</button>
+                                <button class="carousel-nav carousel-next">›</button>
+                            </div>
+                            <div class="carousel-controls">
+                                <div class="carousel-dot active" data-slide="0"></div>
+                                <div class="carousel-dot" data-slide="1"></div>
+                                <div class="carousel-dot" data-slide="2"></div>
+                            </div>
                         </div>
                     </div>
                     
                     <div class="studio-card">
-                        <h4><i class="fas fa-map-marker-alt"></i> Studio 2</h4>
+                        <h4><i class="fas fa-map-marker-alt"></i> Studio Tages</h4>
                         <p><strong>Via della Torretta 14</strong><br>Firenze <em> (presso i Centri Clinici Tages)</em></p>
-                        <div class="map-container">
-                            <iframe 
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2879.5!2d11.25!3d43.78!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x132a540e8c8c8c8c%3A0x8c8c8c8c8c8c8c8c!2sVia%20della%20Torretta%2C%2014%2C%2050139%20Firenze%20FI!5e0!3m2!1sit!2sit!4v1234567890"
-                                allowfullscreen="" 
-                                loading="lazy" 
-                                referrerpolicy="no-referrer-when-downgrade">
-                            </iframe>
+                        <div class="studio-carousel" data-studio="tages">
+                            <div class="carousel-container">
+                                <div class="carousel-slide active">
+                                    <img src="studio_tages1.jpeg" alt="Studio Tages - Foto 1">
+                                </div>
+                                <div class="carousel-slide">
+                                    <img src="studio_tages2.jpeg" alt="Studio Tages - Foto 2">
+                                </div>
+                                <div class="carousel-slide">
+                                    <iframe 
+                                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2879.5!2d11.25!3d43.78!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x132a540e8c8c8c8c%3A0x8c8c8c8c8c8c8c8c!2sVia%20della%20Torretta%2C%2014%2C%2050139%20Firenze%20FI!5e0!3m2!1sit!2sit!4v1234567890"
+                                        allowfullscreen="" 
+                                        loading="lazy" 
+                                        referrerpolicy="no-referrer-when-downgrade">
+                                    </iframe>
+                                </div>
+                            </div>
+                            <div class="mobile-nav-buttons">
+                                <button class="carousel-nav carousel-prev">‹</button>
+                                <button class="carousel-nav carousel-next">›</button>
+                            </div>
+                            <div class="carousel-controls">
+                                <div class="carousel-dot active" data-slide="0"></div>
+                                <div class="carousel-dot" data-slide="1"></div>
+                                <div class="carousel-dot" data-slide="2"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1008,6 +1347,11 @@
                 <h3>Posso interrompere la terapia quando voglio?</h3>
                 <p>Sì, la scelta di proseguire o interrompere la terapia è sempre tua. In ogni caso, è utile parlarne insieme per poter chiudere il percorso in modo consapevole e valorizzare il lavoro svolto.</p>
             </div>
+            
+            <div class="faq-item" style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white;">
+                <h3 style="color: white;">Hai altre domande?</h3>
+                <p style="color:white"><a href="#contatti" style="color: white; text-decoration: underline; font-weight: 500;">Contattami</a> per qualsiasi altra informazione di cui hai bisogno. Sono qui per aiutarti a chiarire ogni dubbio.</p>
+            </div>
         </div>
     </section>
 
@@ -1015,7 +1359,7 @@
     <footer>
         <div class="footer-info">
             <p><strong>Dott.ssa Irene Del Monte</strong></p>
-            <p>Psicologa e Psicoterapeuta cognitivo-comportamentale</p>
+            <p>Psicologa e Psicoterapeuta</p>
             <p>Ordine degli Psicologi della Toscana n. 8233</p>
             <p style="margin-top: 1rem;">Via della Mattonaia 17, Firenze | Via della Torretta 14, Firenze</p>
             <p>Tel: <a href="tel:3405912289">340 5912289</a></p>
@@ -1056,6 +1400,64 @@
         document.querySelector('form').addEventListener('submit', function(e) {
             e.preventDefault();
             alert('Grazie per il tuo interesse. Questa è una demo del form. In un sito reale, i dati verrebbero inviati al server.');
+        });
+
+        // Carousel functionality
+        function initCarousels() {
+            const carousels = document.querySelectorAll('.studio-carousel');
+            
+            carousels.forEach(carousel => {
+                const slides = carousel.querySelectorAll('.carousel-slide');
+                const dots = carousel.querySelectorAll('.carousel-dot');
+                const prevBtn = carousel.querySelector('.carousel-prev');
+                const nextBtn = carousel.querySelector('.carousel-next');
+                let currentSlide = 0;
+
+                function showSlide(index) {
+                    slides.forEach((slide, i) => {
+                        slide.classList.toggle('active', i === index);
+                    });
+                    dots.forEach((dot, i) => {
+                        dot.classList.toggle('active', i === index);
+                    });
+                    currentSlide = index;
+                }
+
+                function nextSlide() {
+                    const next = (currentSlide + 1) % slides.length;
+                    showSlide(next);
+                }
+
+                function prevSlide() {
+                    const prev = (currentSlide - 1 + slides.length) % slides.length;
+                    showSlide(prev);
+                }
+
+                // Event listeners
+                nextBtn.addEventListener('click', nextSlide);
+                prevBtn.addEventListener('click', prevSlide);
+
+                dots.forEach((dot, index) => {
+                    dot.addEventListener('click', () => showSlide(index));
+                });
+
+                // Auto-advance carousel every 5 seconds
+                setInterval(nextSlide, 10000);
+            });
+        }
+
+        // Initialize carousels when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initCarousels);
+
+        // Card flip functionality for mobile
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.card');
+            
+            cards.forEach(card => {
+                card.addEventListener('click', function() {
+                    this.classList.toggle('flipped');
+                });
+            });
         });
     </script>
 </body>
