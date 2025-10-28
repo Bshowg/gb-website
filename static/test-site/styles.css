@@ -129,7 +129,7 @@ nav a {
 .hero .logo-container img {
     width: 100%;
     height: auto;
-    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+    filter: drop-shadow(2px 2px 4px rgba(256,256,256,1));
     display: block;
     margin: 0 auto;
     opacity: 1;
