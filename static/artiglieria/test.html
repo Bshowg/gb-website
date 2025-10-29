@@ -1,136 +1,263 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>SVG Invert Window (mix-blend-mode: difference)</title>
+<title>Watery Ink Trail (mobile-friendly)</title>
 <style>
-  /* Page scaffolding */
-  html, body {
-    height: 100%;
-    margin: 0;
-    font: 16px/1.4 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-    color: #111;
-  }
-  .scene {
-    position: relative;
-    height: 100%;
-    overflow: hidden;
-    /* Create a backdrop with some variation so inversion is obvious */
-    background:
-      radial-gradient(circle at 20% 30%, #e0f7ff, transparent 40%),
-      radial-gradient(circle at 80% 70%, #ffe8d6, transparent 35%),
-      linear-gradient(135deg, #fafafa, #ddd);
-    isolation: isolate; /* keeps blending scoped to this stacking context */
+  html, body { margin:0; padding:0; }
+  body {
+    font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    background: #0f1115; /* dark base so the trail shows over both light/dark tiles below */
+    color: #e6e6e6;
   }
 
-  /* Sample content to show through */
+  /* Demo content so you can verify visibility over text & images */
   .content {
-    max-width: 60ch;
-    padding: 6rem 2rem;
-    mix-blend-mode: normal;
+    max-width: 64rem;
+    margin: 0 auto;
+    padding: 2rem 1rem 120svh;
   }
-  .cards {
+  h1 { font-size: 2rem; margin: 1.5rem 0; }
+  p { opacity: .9; }
+  .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 16px;
-    margin-top: 2rem;
+    gap: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    margin: 1rem 0 2rem;
   }
-  .card {
-    background: rgba(255,255,255,0.7);
-    border: 1px solid rgba(0,0,0,0.08);
+  .tile {
+    aspect-ratio: 4/3;
     border-radius: 12px;
-    padding: 1rem;
-    backdrop-filter: blur(2px);
+    overflow: hidden;
+    background: center/cover no-repeat;
+  }
+  .tile:nth-child(1){ background-image:url(https://picsum.photos/800/600?random=201); }
+  .tile:nth-child(2){ background-image:url(https://picsum.photos/800/600?random=202); }
+  .tile:nth-child(3){ background-image:url(https://picsum.photos/800/600?random=203); }
+  .tile:nth-child(4){ background-image:url(https://picsum.photos/800/600?random=204); }
+  .tile:nth-child(5){ background-image:url(https://picsum.photos/800/600?random=205); }
+  .tile:nth-child(6){ background-image:url(https://picsum.photos/800/600?random=206); }
+
+  /* --------- Watery Ink Trail Overlay --------- */
+
+  /* Absolute overlay, visually pinned to viewport via JS translateY(scrollY) */
+  .trail-container {
+    position: absolute;     /* not fixed -> fewer mobile quirks */
+    top: 0;
+    right: 0;
+    width: 96px;            /* trail strip width */
+    height: 100vh;
+    pointer-events: none;   /* allow clicks through */
+    z-index: 9999;          /* above everything */
   }
 
-  /* The inverter */
-  .inverter {
-    position: absolute;
-    inset: 0;       /* stretch to a layer over the scene */
-    pointer-events: none; /* so mouse events reach the page */
-    mix-blend-mode: difference; /* key: white inverts, black no-op */
-  }
-  /* We’ll position the group <g> inside via CSS variables set by JS */
-  .inverter g {
-    transform: translate(var(--x, 50vw), var(--y, 50vh));
+  .trail-svg {
+    width: 100%;
+    height: 100%;
+    display: block;
   }
 
-  /* A11y: a visible focus ring for the toggle button */
-  button:focus-visible { outline: 2px solid #000; outline-offset: 2px; }
+  /* LAYERS:
+     - bleed: soft diffuse pool under the stroke
+     - main: inky stroke with roughened edges
+     - highlight: faint watery gloss on top
+  */
+  #trailBleed {
+    fill: none;
+    stroke: #0b2545;        /* deep ink */
+    stroke-opacity: 0.35;
+    stroke-width: 28;       /* bigger than main -> pool/bleed around it */
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: url(#inkBleed);
+  }
+
+  #trailMain {
+    fill: none;
+    stroke: #133a73;        /* main ink color */
+    stroke-opacity: 0.9;
+    stroke-width: 14;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: url(#edgeRoughen);
+  }
+
+  #trailHighlight {
+    fill: none;
+    stroke: #d8e6ff;        /* watery highlight */
+    stroke-opacity: 0.18;
+    stroke-width: 8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: url(#inkShine);
+  }
+
+  /* Mobile tweak */
+  @media (max-width: 768px) {
+    .trail-container { width: 80px; right: 10px; }
+    #trailBleed     { stroke-width: 24; }
+    #trailMain      { stroke-width: 12; }
+    #trailHighlight { stroke-width: 7; }
+  }
 </style>
 </head>
 <body>
-  <div class="scene" id="scene">
-    <div class="content">
-      <h1>Move your mouse — the circle inverts the page beneath it</h1>
-      <p>
-        This uses <code>mix-blend-mode: difference</code>. White areas of the SVG invert the colors of whatever is below; black leaves them unchanged.
-      </p>
-      <div class="cards">
-        <div class="card"><strong>Card A</strong><br/>Some text for contrast.</div>
-        <div class="card"><strong>Card B</strong><br/>Try over gradients and images.</div>
-        <div class="card"><strong>Card C</strong><br/>Blending is per-pixel.</div>
-      </div>
-      <p>
-        Tip: scope blending with <code>isolation:isolate</code> on a wrapper to avoid affecting the whole page.
-      </p>
-      <button id="mode">Toggle: difference/exclusion</button>
-    </div>
 
-    <!-- SVG overlay layer -->
-    <svg class="inverter" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-      <defs>
-        <!-- A soft feathered edge looks nicer when inverting -->
-        <radialGradient id="feather" cx="50%" cy="50%" r="50%">
-          <!-- white core = strong invert -->
-          <stop offset="60%" stop-color="white"/>
-          <!-- fade to gray to soften the edge -->
-          <stop offset="85%" stop-color="#aaa"/>
-          <!-- outer edge closer to black = near no-op -->
-          <stop offset="100%" stop-color="black"/>
-        </radialGradient>
-      </defs>
+<!-- Watery Ink trail overlay -->
+<div class="trail-container" id="trailContainer" aria-hidden="true">
+  <!-- viewBox gives stable coordinates; tall so we can draw long curves -->
+  <svg class="trail-svg" id="trailSvg" viewBox="0 0 100 2000" preserveAspectRatio="none">
+    <defs>
+      <!-- Soft diffuse bleed (blur + slight spread) -->
+      <filter id="inkBleed" x="-20%" y="-5%" width="140%" height="110%">
+        <!-- blur -->
+        <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"/>
+        <!-- a touch of extra spread by boosting alpha -->
+        <feColorMatrix in="blur" type="matrix"
+          values="1 0 0 0 0
+                  0 1 0 0 0
+                  0 0 1 0 0
+                  0 0 0 1.6 0" result="bloom"/>
+        <feMerge>
+          <feMergeNode in="bloom"/>
+        </feMerge>
+      </filter>
 
-      <!-- We'll position this group via CSS vars from JS -->
-      <g>
-        <!-- Circle that acts as the "invert window" -->
-        <circle r="120" fill="url(#feather)" />
-        <!-- Add a smaller hard-core if you want a crisp center -->
-        <!-- <circle r="40" fill="white" /> -->
-      </g>
-    </svg>
+      <!-- Roughen the stroke edge (tiny displacement with fractal noise) -->
+      <filter id="edgeRoughen" x="-5%" y="-2%" width="110%" height="104%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="1" seed="5" result="noise"/>
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.6" xChannelSelector="R" yChannelSelector="G" result="rough"/>
+        <feGaussianBlur in="rough" stdDeviation="0.3" result="soften"/>
+        <feMerge>
+          <feMergeNode in="soften"/>
+        </feMerge>
+        <!-- subtle motion in the water (animate seed) -->
+        <animate xlink:href="#edgeRoughen feTurbulence"
+                 attributeName="seed" from="5" to="25" dur="12s" repeatCount="indefinite"/>
+      </filter>
+
+      <!-- Watery highlight: slight blur + faint glow -->
+      <filter id="inkShine" x="-5%" y="-2%" width="110%" height="104%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="0.8" result="g1"/>
+        <feMerge>
+          <feMergeNode in="g1"/>
+        </feMerge>
+      </filter>
+    </defs>
+
+    <!-- Layer order: bleed under, main stroke, highlight on top -->
+    <path id="trailBleed" d=""></path>
+    <path id="trailMain" d=""></path>
+    <path id="trailHighlight" d=""></path>
+  </svg>
+</div>
+
+<!-- Page content -->
+<div class="content">
+  <h1>Watery Ink Trail</h1>
+  <p>Scroll to “draw” the trail on the right. It rides above text and images and looks like diffusing watercolor/ink.</p>
+  <div class="grid">
+    <div class="tile"></div><div class="tile"></div><div class="tile"></div>
+    <div class="tile"></div><div class="tile"></div><div class="tile"></div>
   </div>
+  <h1>More Content</h1>
+  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus vitae lorem quis arcu accumsan sagittis. Suspendisse potenti. Pellentesque habitant morbi tristique senectus et netus.</p>
+  <div class="grid">
+    <div class="tile"></div><div class="tile"></div><div class="tile"></div>
+  </div>
+</div>
 
 <script>
-  // Move the inverter to follow the pointer (mouse + touch)
-  const scene = document.getElementById('scene');
-  const svg = document.querySelector('.inverter');
-  const group = svg.querySelector('g');
+/*
+  Watery ink trail:
+  - Overlay is absolute, pinned to viewport via translateY(scrollY)
+  - Path grows with scroll progress (smooth Bezier)
+  - Visual is layered: bleed (blurred), main stroke (roughened), highlight
+  - No mix-blend-mode / backdrop-filter -> robust on mobile
+*/
+(function initWateryInkTrail() {
+  const container = document.getElementById('trailContainer');
+  const bleed = document.getElementById('trailBleed');
+  const main  = document.getElementById('trailMain');
+  const hi    = document.getElementById('trailHighlight');
+  if (!container || !bleed || !main || !hi) return;
 
-  function setPos(clientX, clientY) {
-    // Place the group's origin at the pointer
-    group.style.setProperty('--x', clientX + 'px');
-    group.style.setProperty('--y', clientY + 'px');
+  // Pin overlay to viewport (acts like fixed without fixed)
+  let pinRAF = 0;
+  function pin() { container.style.transform = `translateY(${window.scrollY}px)`; }
+  function onScrollPin() {
+    if (pinRAF) return;
+    pinRAF = requestAnimationFrame(() => { pinRAF = 0; pin(); });
+  }
+  window.addEventListener('scroll', onScrollPin, { passive: true });
+  window.addEventListener('resize', pin);
+  pin();
+
+  // Path generation
+  const maxPoints = 150;  // more points => smoother
+  const vbH = 2000;       // match viewBox height
+  const centerX = 58;     // center in the 100px strip
+  const ampMain = 18;     // main wave amplitude
+  const ampJitter = 3;    // fine jitter
+
+  function bezier(points) {
+    if (points.length < 2) return '';
+    let d = `M ${points[0].x} ${points[0].y}`;
+    for (let i = 1; i < points.length; i++) {
+      const p0 = points[i - 1];
+      const p1 = points[i];
+      const p2 = points[i + 1] || p1;
+      const t = 0.38;
+      const dx = p2.x - p0.x;
+      const dy = p2.y - p0.y;
+      const cp1x = p0.x + dx * t;
+      const cp1y = p0.y + dy * t;
+      const cp2x = p1.x - dx * t;
+      const cp2y = p1.y - dy * t;
+      d += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${p1.x} ${p1.y}`;
+    }
+    return d;
   }
 
-  scene.addEventListener('mousemove', (e) => setPos(e.clientX, e.clientY), { passive: true });
-  scene.addEventListener('touchmove', (e) => {
-    const t = e.touches[0];
-    if (t) setPos(t.clientX, t.clientY);
-  }, { passive: true });
+  let raf = 0;
+  function updatePath() {
+    const denom = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = denom > 0 ? window.scrollY / denom : 1;
+    const prog = Math.max(0, Math.min(pct, 1));
+    const target = Math.max(2, Math.floor(prog * maxPoints));
 
-  // Start centered
-  setPos(window.innerWidth / 2, window.innerHeight / 2);
+    const pts = [];
+    for (let i = 0; i <= target; i++) {
+      const t = i / maxPoints;
+      const y = t * vbH;
+      const x = centerX + Math.sin(t * Math.PI * 3) * ampMain + Math.sin(t * 14) * ampJitter;
+      pts.push({ x, y });
+    }
 
-  // Toggle between difference and exclusion to compare looks
-  const toggle = document.getElementById('mode');
-  toggle.addEventListener('click', () => {
-    const curr = getComputedStyle(svg).mixBlendMode;
-    svg.style.mixBlendMode = curr === 'difference' ? 'exclusion' : 'difference';
-    toggle.textContent = 'Mode: ' + svg.style.mixBlendMode + ' (click to toggle)';
-  });
-  toggle.click(); // initialize label
+    const d = bezier(pts);
+    if (d) {
+      bleed.setAttribute('d', d);
+      main.setAttribute('d', d);
+      hi.setAttribute('d', d);
+    }
+  }
+
+  function onScroll() {
+    if (raf) return;
+    raf = requestAnimationFrame(() => { raf = 0; updatePath(); });
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', updatePath);
+
+  // Initial visible mark (so you immediately see something)
+  const start = `M ${centerX} 0 L ${centerX} 1`;
+  bleed.setAttribute('d', start);
+  main.setAttribute('d', start);
+  hi.setAttribute('d', start);
+  updatePath();
+})();
 </script>
 </body>
 </html>
