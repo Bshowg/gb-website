@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ARTIGLIERIA</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+      }
+      body {
+        background: #f5f5f7;
+        color: #1d1d1f;
+        font: 16px/1.4 Helvetica, Arial, sans-serif;
+        position: relative;
+      }
+
+      /* Main layout */
+      @media (min-width: 769px) {
+        .sidebar {
+          position: fixed;
+          left: 0;
+          top: 0;
+          width: 15vw;
+          height: 100vh;
+          background: rgba(245, 245, 247, 0.95);
+          backdrop-filter: blur(10px);
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          padding: 20px 0px;
+          box-sizing: border-box;
+          z-index: 1000;
+        }
+
+        .main-content {
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .content-wrapper {
+          margin-left: 15vw;
+          width: 85vw;
+          max-width: 85vw;
+        }
+
+        .nav-header {
+          display: none;
+        }
+
+        .hero-svg {
+          width: 100%;
+          max-width: 400px;
+          height: auto;
+          display: block;
+        }
+      }
+
+      /* Mobile layout */
+      @media (max-width: 768px) {
+        .sidebar {
+          display: none;
+        }
+
+        .main-content {
+          width: 100vw;
+          min-height: 100svh;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .hero-svg {
+          width: 100%;
+          max-width: 720px;
+          height: auto;
+          display: block;
+        }
+
+        /* Mobile Navigation Header */
+        .nav-header {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          background: rgba(245, 245, 247, 0.95);
+          backdrop-filter: blur(10px);
+          padding: 12px 20px;
+          z-index: 1000;
+          transform: translateY(-100%);
+          transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          border-bottom: 1px solid rgba(29, 29, 31, 0.1);
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        .nav-header.visible {
+          transform: translateY(0);
+        }
+
+        .nav-logo-mobile {
+          height: 40px;
+          width: auto;
+        }
+
+        .nav-toggle {
+          display: block;
+          background: none;
+          border: none;
+          color: #1d1d1f;
+          font-size: 24px;
+          cursor: pointer;
+          padding: 5px;
+          z-index: 10000;
+          position: relative;
+        }
+
+        .nav-menu-mobile {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
+          background: #f5f5f7;
+          flex-direction: column;
+          gap: 0;
+          padding: 80px 30px 30px 30px;
+          transform: translateX(-100%);
+          opacity: 1;
+          visibility: visible;
+          transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          z-index: 9999;
+          justify-content: flex-start;
+          align-items: stretch;
+          text-align: right;
+          display: flex;
+          list-style: none;
+          margin: 0;
+        }
+
+        .nav-menu-mobile.open {
+          transform: translateX(0);
+        }
+
+        .nav-menu-mobile li {
+          padding: 20px 0;
+          border-bottom: 1px solid #1d1d1f;
+          margin: 0;
+        }
+
+        .nav-menu-mobile li:last-child {
+          border-bottom: 1px solid #1d1d1f;
+        }
+
+        .nav-menu-mobile a {
+          font-size: 18px;
+          font-weight: 600;
+          color: #1d1d1f;
+          display: block;
+          width: 100%;
+          text-align: left;
+          text-decoration: none;
+          text-transform: lowercase;
+          letter-spacing: 0.5px;
+        }
+
+        .nav-menu-mobile a:hover {
+          color: #000000;
+        }
+
+        .nav-close {
+          position: absolute;
+          top: 20px;
+          left: 30px;
+          background: none;
+          border: none;
+          color: #1d1d1f;
+          font-size: 24px;
+          cursor: pointer;
+          z-index: 10001;
+          padding: 5px;
+          display: block;
+        }
+
+        .nav-close:hover {
+          color: #000000;
+        }
+      }
+
+      /* Sidebar styles for desktop */
+      .logo-container {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        height: auto;
+      }
+
+      .sidebar-logo {
+        height: 60px;
+        width: auto;
+        max-width: 100%;
+      }
+
+      .nav-menu-sidebar {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0px;
+        text-align: right;
+        margin-top: 20px;
+        border-right: 1px solid black;
+        padding-right: 20px;
+      }
+
+      .nav-menu-sidebar li {
+        margin: 0;
+      }
+      .nav-menu-sidebar li:last-child a {
+        margin-bottom: 0;
+      }
+
+      .nav-menu-sidebar a {
+        color: #1d1d1f;
+        text-decoration: none;
+        font-size: 18px;
+        font-weight: 500;
+        text-transform: lowercase;
+        letter-spacing: 0.5px;
+        display: block;
+        padding: 2px 0;
+        transition: color 0.3s ease;
+      }
+
+      .nav-menu-sidebar a:hover {
+        color: #000000;
+      }
+
+      /* Home taglines */
+      .home-taglines {
+        margin-top: 40px;
+      }
+
+      /* Desktop layout for taglines */
+      @media (min-width: 769px) {
+        .home-taglines {
+          display: flex;
+          gap: 30px;
+          justify-content: center;
+          align-items: flex-end;
+        }
+
+        .tagline {
+          font-size: 30px;
+          color: #1d1d1f;
+          font-weight: 200;
+          letter-spacing: 0.5px;
+        }
+      }
+
+      /* Mobile layout for taglines */
+      @media (max-width: 768px) {
+        .home-taglines {
+          display: flex;
+          flex-direction: row;
+          align-items: flex-end;
+          text-align: right;
+          gap: 8px;
+        }
+
+        .tagline {
+          font-size: 16px;
+          color: #1d1d1f;
+          font-weight: 400;
+          letter-spacing: 0.5px;
+        }
+      }
+
+      /* Ink Trail */
+
+      .blend-root {
+        position: relative;
+        background: #f5f5f7;
+        isolation: isolate;
+        min-height: 100vh;
+      }
+      .ink-trail-container {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 100px;
+        height: 100vh;
+        pointer-events: none;
+        z-index: 9999;
+      }
+      .ink-trail-svg {
+        width: 100%;
+        height: 100%;
+      }
+
+      #inkTrailPath {
+        /* Put the blend on the PATH for Safari/WebKit */
+        mix-blend-mode: difference;
+        stroke: #fff;
+        stroke-width: 12;
+        fill: none;
+        opacity: 1;
+      }
+      /* Base Section */
+      .base-section {
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+        box-sizing: border-box;
+        background: #f5f5f7;
+      }
+
+      /* About Us Section */
+
+      .about-content {
+        max-width: 800px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        height: 100%;
+        justify-content: center;
+        position: relative;
+      }
+
+      .about-content h2 {
+        font-size: 3rem;
+        margin: 0 0 30px 0;
+        font-weight: 700;
+        color: #1d1d1f;
+        text-transform: lowercase;
+        letter-spacing: 1px;
+        text-align: right;
+      }
+
+      .about-text {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-bottom: 40px;
+      }
+
+      .about-intro {
+        font-size: 1.2rem;
+        line-height: 1.6;
+        color: #1d1d1f;
+        margin: 0 0 20px 0;
+      }
+
+      .about-more {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s ease-in-out;
+      }
+
+      .about-more.expanded {
+        max-height: 500px;
+      }
+
+      .about-more p {
+        font-size: 1rem;
+        line-height: 1.6;
+        color: #1d1d1f;
+        margin: 15px 0;
+        opacity: 0.9;
+      }
+
+      .read-more-btn {
+        background: none;
+        color: #1d1d1f;
+        padding: 12px 24px;
+        font-size: 14px;
+        border: none;
+        font-weight: bold;
+        text-transform: lowercase;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        align-self: center;
+      }
+
+      .read-more-btn:hover {
+        background: #1d1d1f;
+        color: #f5f5f7;
+      }
+
+      .spazio-content {
+        max-width: 1000px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        height: 100%;
+        justify-content: center;
+        position: relative;
+      }
+
+      .spazio-content h2 {
+        font-size: 3rem;
+        margin: 0 0 30px 0;
+        font-weight: 700;
+        color: #1d1d1f;
+        text-transform: lowercase;
+        letter-spacing: 1px;
+        text-align: right;
+      }
+
+      .carousel-container {
+        flex: 1;
+        position: relative;
+        width: 100%;
+        max-width: 800px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .carousel-wrapper {
+        flex: 1;
+        overflow: hidden;
+      }
+
+      .carousel-track {
+        display: flex;
+        transition: transform 0.4s ease;
+      }
+
+      .carousel-slide {
+        flex: 0 0 50%;
+        padding: 0 5px;
+      }
+
+      .carousel-image {
+        width: 100%;
+        height: 350px;
+        object-fit: cover;
+      }
+
+      .carousel-arrow {
+        background: none;
+        color: #1d1d1f;
+        border: none;
+        height: 80px;
+        font-size: 40px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: color 0.3s ease;
+        flex-shrink: 0;
+      }
+
+      .carousel-arrow:hover {
+        color: #000000;
+      }
+
+      .carousel-arrow:disabled {
+        opacity: 0;
+        cursor: not-allowed;
+      }
+
+      .spazio-text {
+        margin-top: 40px;
+        max-width: 800px;
+      }
+
+      .spazio-intro {
+        font-size: 1.2rem;
+        line-height: 1.6;
+        color: #1d1d1f;
+        margin: 0;
+        text-align: left;
+      }
+
+      /* Mobile adjustments for about section */
+      @media (max-width: 768px) {
+        .content-wrapper {
+          margin-left: 0;
+          width: 100vw;
+        }
+
+        .about-section {
+          padding: 20px;
+        }
+
+        .about-content h2 {
+          font-size: 2.5rem;
+        }
+
+        .about-intro {
+          font-size: 1.1rem;
+        }
+
+        .about-more p {
+          font-size: 0.95rem;
+        }
+
+        .spazio-section {
+          padding: 20px;
+        }
+
+        .spazio-content h2 {
+          font-size: 2.5rem;
+        }
+
+        .carousel-slide {
+          flex: 0 0 100%;
+        }
+
+        .carousel-image {
+          height: 250px;
+        }
+
+        .spazio-intro {
+          font-size: 1.1rem;
+        }
+
+        .base-section {
+          height: calc(100vh - 73px);
+          padding-top: 93px;
+          text-align: justify;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Desktop Sidebar -->
+    <aside class="sidebar">
+      <div class="logo-container">
+        <a href="#home">
+          <object
+            data="logo.svg"
+            type="image/svg+xml"
+            class="sidebar-logo"
+            id="sidebar_logo"
+            aria-label="Sidebar logo"
+          ></object>
+        </a>
+      </div>
+
+      <nav class="nav-menu-sidebar">
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#spazio">Spazio</a></li>
+        <li><a href="#coworking">Coworking</a></li>
+        <li><a href="#servizi">Servizi</a></li>
+        <li><a href="#archivio">Archivio</a></li>
+        <li><a href="#podcast">Podcast</a></li>
+        <li><a href="#contatti">Contatti</a></li>
+      </nav>
+    </aside>
+
+    <!-- Mobile Navigation Header -->
+    <header class="nav-header" id="navHeader">
+      <a href="#home">
+        <object
+          data="logo.svg"
+          type="image/svg+xml"
+          class="nav-logo-mobile"
+          id="nav_logo"
+          aria-label="Navigation logo"
+        ></object>
+      </a>
+
+      <!-- Mobile Navigation Menu -->
+      <nav class="nav-menu-mobile" id="navMenuMobile">
+        <button class="nav-close" id="navClose">✕</button>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#spazio">Spazio</a></li>
+        <li><a href="#coworking">Coworking</a></li>
+        <li><a href="#servizi">Servizi</a></li>
+        <li><a href="#archivio">Archivio</a></li>
+        <li><a href="#podcast">Podcast</a></li>
+        <li><a href="#contatti">Contatti</a></li>
+      </nav>
+
+      <!-- Mobile Toggle Button -->
+      <button class="nav-toggle" id="navToggle">☰</button>
+    </header>
+    <div class="blend-root">
+      <!-- Ink Trail -->
+      <div class="ink-trail-container">
+        <svg class="ink-trail-svg" id="inkTrailSvg">
+          <path id="inkTrailPath"></path>
+        </svg>
+      </div>
+
+      <!-- Main Content Area -->
+      <main class="content-wrapper">
+        <!-- Home Section -->
+        <section class="main-content" id="home">
+          <object
+            data="logo.svg"
+            type="image/svg+xml"
+            class="hero-svg"
+            id="hero_svg"
+            aria-label="Hero Logo"
+          ></object>
+          <div class="home-taglines">
+            <span class="tagline">Project Space.</span>
+            <span class="tagline">Art Studio.</span>
+            <span class="tagline">Cultural Association.</span>
+          </div>
+        </section>
+
+        <!-- About Us Section -->
+        <section class="base-section about-section" id="about">
+          <div class="about-content">
+            <h2>About Us</h2>
+            <div class="about-text">
+              <p class="about-intro">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                nisi ut aliquip ex ea commodo consequat.
+              </p>
+
+              <div class="about-more" id="aboutMore">
+                <p>
+                  Duis aute irure dolor in reprehenderit in voluptate velit esse
+                  cillum dolore eu fugiat nulla pariatur. Excepteur sint
+                  occaecat cupidatat non proident, sunt in culpa qui officia
+                  deserunt mollit anim id est laborum.
+                </p>
+                <p>
+                  Sed ut perspiciatis unde omnis iste natus error sit voluptatem
+                  accusantium doloremque laudantium, totam rem aperiam, eaque
+                  ipsa quae ab illo inventore veritatis et quasi architecto
+                  beatae vitae dicta sunt explicabo.
+                </p>
+                <p>
+                  Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut
+                  odit aut fugit, sed quia consequuntur magni dolores eos qui
+                  ratione voluptatem sequi nesciunt.
+                </p>
+              </div>
+            </div>
+
+            <button class="read-more-btn" id="readMoreBtn">leggi di più</button>
+          </div>
+        </section>
+
+        <!-- Spazio Section -->
+        <section class="base-section spazio-section" id="spazio">
+          <div class="spazio-content">
+            <h2>Spazio</h2>
+            <div class="carousel-container">
+              <button
+                class="carousel-arrow carousel-arrow-left"
+                id="carouselLeft"
+              >
+                ‹
+              </button>
+              <div class="carousel-wrapper">
+                <div class="carousel-track" id="carouselTrack">
+                  <div class="carousel-slide">
+                    <img
+                      src="images/spazio_1.webp"
+                      alt="Spazio Image 1"
+                      class="carousel-image"
+                    />
+                  </div>
+                  <div class="carousel-slide">
+                    <img
+                      src="images/spazio_2.webp"
+                      alt="Spazio Image 2"
+                      class="carousel-image"
+                    />
+                  </div>
+                  <div class="carousel-slide">
+                    <img
+                      src="images/spazio_3.webp"
+                      alt="Spazio Image 3"
+                      class="carousel-image"
+                    />
+                  </div>
+                  <div class="carousel-slide">
+                    <img
+                      src="images/spazio_4.webp"
+                      alt="Spazio Image 4"
+                      class="carousel-image"
+                    />
+                  </div>
+                </div>
+              </div>
+              <button
+                class="carousel-arrow carousel-arrow-right"
+                id="carouselRight"
+              >
+                ›
+              </button>
+            </div>
+            <div class="spazio-text">
+              <p class="spazio-intro">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                nisi ut aliquip ex ea commodo consequat.
+              </p>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script>
+      // Mobile navigation functionality
+      function initMobileNav() {
+        const navToggle = document.getElementById("navToggle");
+        const navMenu = document.getElementById("navMenuMobile");
+        const navClose = document.getElementById("navClose");
+
+        function closeMenu() {
+          navMenu.classList.remove("open");
+        }
+
+        function openMenu() {
+          navMenu.classList.add("open");
+        }
+
+        if (navToggle && navMenu) {
+          navToggle.addEventListener("click", openMenu);
+
+          if (navClose) {
+            navClose.addEventListener("click", closeMenu);
+          }
+
+          navMenu.addEventListener("click", (e) => {
+            if (e.target.tagName === "A") {
+              closeMenu();
+            }
+          });
+
+          document.addEventListener("click", (e) => {
+            if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+              closeMenu();
+            }
+          });
+        }
+      }
+
+      // Show mobile nav header immediately
+      const navHeader = document.getElementById("navHeader");
+      if (navHeader) {
+        navHeader.classList.add("visible");
+      }
+
+      // Initialize mobile navigation
+      document.addEventListener("DOMContentLoaded", initMobileNav);
+
+      // Read more functionality
+      function initReadMore() {
+        const readMoreBtn = document.getElementById("readMoreBtn");
+        const aboutMore = document.getElementById("aboutMore");
+
+        if (readMoreBtn && aboutMore) {
+          readMoreBtn.addEventListener("click", () => {
+            const isExpanded = aboutMore.classList.contains("expanded");
+
+            if (isExpanded) {
+              aboutMore.classList.remove("expanded");
+              readMoreBtn.textContent = "leggi di più";
+            } else {
+              aboutMore.classList.add("expanded");
+              readMoreBtn.textContent = "leggi di meno";
+            }
+          });
+        }
+      }
+
+      // Initialize read more functionality
+      document.addEventListener("DOMContentLoaded", initReadMore);
+
+      // Carousel functionality
+      function initCarousel() {
+        const carouselTrack = document.getElementById("carouselTrack");
+        const leftArrow = document.getElementById("carouselLeft");
+        const rightArrow = document.getElementById("carouselRight");
+
+        if (!carouselTrack || !leftArrow || !rightArrow) return;
+
+        let currentIndex = 0;
+        const slides = carouselTrack.children;
+        const totalSlides = slides.length;
+
+        // Determine slides per view based on screen size
+        function getSlidesPerView() {
+          return window.innerWidth <= 768 ? 1 : 2;
+        }
+
+        function updateCarousel() {
+          const slidesPerView = getSlidesPerView();
+          const maxIndex = totalSlides - slidesPerView;
+          const translateX = -(currentIndex * (100 / slidesPerView));
+
+          carouselTrack.style.transform = `translateX(${translateX}%)`;
+
+          // Update arrow states
+          leftArrow.disabled = currentIndex === 0;
+          rightArrow.disabled = currentIndex >= maxIndex;
+        }
+
+        function moveLeft() {
+          if (currentIndex > 0) {
+            currentIndex--;
+            updateCarousel();
+          }
+        }
+
+        function moveRight() {
+          const slidesPerView = getSlidesPerView();
+          const maxIndex = totalSlides - slidesPerView;
+          if (currentIndex < maxIndex) {
+            currentIndex++;
+            updateCarousel();
+          }
+        }
+
+        leftArrow.addEventListener("click", moveLeft);
+        rightArrow.addEventListener("click", moveRight);
+
+        // Handle window resize
+        window.addEventListener("resize", () => {
+          updateCarousel();
+        });
+
+        // Initialize
+        updateCarousel();
+      }
+
+      // Initialize carousel functionality
+      document.addEventListener("DOMContentLoaded", initCarousel);
+
+      // Ink Trail functionality
+      function initInkTrail() {
+        const inkTrailSvg = document.getElementById("inkTrailSvg");
+        const inkTrailPath = document.getElementById("inkTrailPath");
+
+        if (!inkTrailSvg || !inkTrailPath) return;
+
+        let points = [];
+        const maxPoints = 100;
+        const svgHeight = window.innerHeight;
+        const svgWidth = 100;
+
+        function generateBezierPath(points) {
+          if (points.length < 2) return "";
+
+          let path = `M ${points[0].x} ${points[0].y}`;
+
+          for (let i = 1; i < points.length; i++) {
+            const prev = points[i - 1];
+            const curr = points[i];
+            const next = points[i + 1] || curr;
+
+            // Calculate smooth control points using adjacent points
+            const tension = 0.4;
+
+            // Vector from previous to next point
+            const dx = next.x - prev.x;
+            const dy = next.y - prev.y;
+
+            // Control points for smoother curves
+            const cp1x = prev.x + dx * tension;
+            const cp1y = prev.y + dy * tension;
+            const cp2x = curr.x - dx * tension;
+            const cp2y = curr.y - dy * tension;
+
+            path += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${curr.x} ${curr.y}`;
+          }
+
+          return path;
+        }
+
+        function updateInkTrail() {
+          const scrollPercent =
+            window.scrollY /
+            (document.documentElement.scrollHeight - window.innerHeight);
+          const scrollProgress = Math.min(scrollPercent, 1);
+
+          // Calculate how many points we should have based on scroll
+          const targetPoints = Math.floor(scrollProgress * maxPoints);
+
+          // Generate points from start to current scroll position
+          points = [];
+          for (let i = 0; i <= targetPoints; i++) {
+            const progress = i / maxPoints;
+            const y = progress * svgHeight;
+            const x =
+              30 +
+              Math.sin(progress * Math.PI * 4) * 20 +
+              Math.sin(progress * 10) * 3;
+            points.push({ x, y });
+          }
+
+          // Generate and apply path
+          const pathData = generateBezierPath(points);
+          inkTrailPath.setAttribute("d", pathData);
+        }
+
+        // Update on scroll
+        window.addEventListener("scroll", updateInkTrail);
+
+        // Initial draw
+        updateInkTrail();
+      }
+
+      // Initialize ink trail functionality
+      document.addEventListener("DOMContentLoaded", initInkTrail);
+    </script>
+  </body>
+</html>

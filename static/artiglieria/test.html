@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>SVG Invert Window (mix-blend-mode: difference)</title>
+<style>
+  /* Page scaffolding */
+  html, body {
+    height: 100%;
+    margin: 0;
+    font: 16px/1.4 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    color: #111;
+  }
+  .scene {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    /* Create a backdrop with some variation so inversion is obvious */
+    background:
+      radial-gradient(circle at 20% 30%, #e0f7ff, transparent 40%),
+      radial-gradient(circle at 80% 70%, #ffe8d6, transparent 35%),
+      linear-gradient(135deg, #fafafa, #ddd);
+    isolation: isolate; /* keeps blending scoped to this stacking context */
+  }
+
+  /* Sample content to show through */
+  .content {
+    max-width: 60ch;
+    padding: 6rem 2rem;
+    mix-blend-mode: normal;
+  }
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-top: 2rem;
+  }
+  .card {
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 12px;
+    padding: 1rem;
+    backdrop-filter: blur(2px);
+  }
+
+  /* The inverter */
+  .inverter {
+    position: absolute;
+    inset: 0;       /* stretch to a layer over the scene */
+    pointer-events: none; /* so mouse events reach the page */
+    mix-blend-mode: difference; /* key: white inverts, black no-op */
+  }
+  /* We’ll position the group <g> inside via CSS variables set by JS */
+  .inverter g {
+    transform: translate(var(--x, 50vw), var(--y, 50vh));
+  }
+
+  /* A11y: a visible focus ring for the toggle button */
+  button:focus-visible { outline: 2px solid #000; outline-offset: 2px; }
+</style>
+</head>
+<body>
+  <div class="scene" id="scene">
+    <div class="content">
+      <h1>Move your mouse — the circle inverts the page beneath it</h1>
+      <p>
+        This uses <code>mix-blend-mode: difference</code>. White areas of the SVG invert the colors of whatever is below; black leaves them unchanged.
+      </p>
+      <div class="cards">
+        <div class="card"><strong>Card A</strong><br/>Some text for contrast.</div>
+        <div class="card"><strong>Card B</strong><br/>Try over gradients and images.</div>
+        <div class="card"><strong>Card C</strong><br/>Blending is per-pixel.</div>
+      </div>
+      <p>
+        Tip: scope blending with <code>isolation:isolate</code> on a wrapper to avoid affecting the whole page.
+      </p>
+      <button id="mode">Toggle: difference/exclusion</button>
+    </div>
+
+    <!-- SVG overlay layer -->
+    <svg class="inverter" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <!-- A soft feathered edge looks nicer when inverting -->
+        <radialGradient id="feather" cx="50%" cy="50%" r="50%">
+          <!-- white core = strong invert -->
+          <stop offset="60%" stop-color="white"/>
+          <!-- fade to gray to soften the edge -->
+          <stop offset="85%" stop-color="#aaa"/>
+          <!-- outer edge closer to black = near no-op -->
+          <stop offset="100%" stop-color="black"/>
+        </radialGradient>
+      </defs>
+
+      <!-- We'll position this group via CSS vars from JS -->
+      <g>
+        <!-- Circle that acts as the "invert window" -->
+        <circle r="120" fill="url(#feather)" />
+        <!-- Add a smaller hard-core if you want a crisp center -->
+        <!-- <circle r="40" fill="white" /> -->
+      </g>
+    </svg>
+  </div>
+
+<script>
+  // Move the inverter to follow the pointer (mouse + touch)
+  const scene = document.getElementById('scene');
+  const svg = document.querySelector('.inverter');
+  const group = svg.querySelector('g');
+
+  function setPos(clientX, clientY) {
+    // Place the group's origin at the pointer
+    group.style.setProperty('--x', clientX + 'px');
+    group.style.setProperty('--y', clientY + 'px');
+  }
+
+  scene.addEventListener('mousemove', (e) => setPos(e.clientX, e.clientY), { passive: true });
+  scene.addEventListener('touchmove', (e) => {
+    const t = e.touches[0];
+    if (t) setPos(t.clientX, t.clientY);
+  }, { passive: true });
+
+  // Start centered
+  setPos(window.innerWidth / 2, window.innerHeight / 2);
+
+  // Toggle between difference and exclusion to compare looks
+  const toggle = document.getElementById('mode');
+  toggle.addEventListener('click', () => {
+    const curr = getComputedStyle(svg).mixBlendMode;
+    svg.style.mixBlendMode = curr === 'difference' ? 'exclusion' : 'difference';
+    toggle.textContent = 'Mode: ' + svg.style.mixBlendMode + ' (click to toggle)';
+  });
+  toggle.click(); // initialize label
+</script>
+</body>
+</html>
