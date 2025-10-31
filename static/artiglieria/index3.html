@@ -753,6 +753,8 @@
         grid-auto-rows: minmax(150px, auto);
         gap: 20px;
         margin-bottom: 40px;
+        contain: layout style;
+        will-change: transform;
       }
 
       .gallery-item {
@@ -760,6 +762,8 @@
         cursor: pointer;
         overflow: hidden;
         background: #000;
+        contain: layout style paint;
+        transform: translateZ(0);
       }
 
       .gallery-item.portrait {
@@ -776,7 +780,10 @@
         height: 100%;
         object-fit: cover;
         display: block;
-        transition: opacity 0.3s ease;
+        transition: opacity 0.2s ease;
+        transform: translateZ(0);
+        backface-visibility: hidden;
+        image-rendering: auto;
       }
 
       .gallery-item:hover img {
@@ -1223,28 +1230,28 @@
                     <img
                       src="images/spazio_1.webp"
                       alt="Spazio Image 1"
-                      class="carousel-image"
+                      class="carousel-image" loading="lazy"
                     />
                   </div>
                   <div class="carousel-slide">
                     <img
                       src="images/spazio_2.webp"
                       alt="Spazio Image 2"
-                      class="carousel-image"
+                      class="carousel-image" loading="lazy"
                     />
                   </div>
                   <div class="carousel-slide">
                     <img
                       src="images/spazio_3.webp"
                       alt="Spazio Image 3"
-                      class="carousel-image"
+                      class="carousel-image" loading="lazy"
                     />
                   </div>
                   <div class="carousel-slide">
                     <img
                       src="images/spazio_4.webp"
                       alt="Spazio Image 4"
-                      class="carousel-image"
+                      class="carousel-image" loading="lazy"
                     />
                   </div>
                 </div>
@@ -1286,28 +1293,28 @@
                     <img
                       src="images/coworking/1.webp"
                       alt="Spazio Image 1"
-                      class="carousel-image"
+                      class="carousel-image" loading="lazy"
                     />
                   </div>
                   <div class="carousel-slide">
                     <img
                       src="images/coworking/2.webp"
                       alt="Spazio Image 2"
-                      class="carousel-image"
+                      class="carousel-image" loading="lazy"
                     />
                   </div>
                   <div class="carousel-slide">
                     <img
                       src="images/spazio_3.webp"
                       alt="Spazio Image 3"
-                      class="carousel-image"
+                      class="carousel-image" loading="lazy"
                     />
                   </div>
                   <div class="carousel-slide">
                     <img
                       src="images/spazio_4.webp"
                       alt="Spazio Image 4"
-                      class="carousel-image"
+                      class="carousel-image" loading="lazy"
                     />
                   </div>
                 </div>
@@ -1341,32 +1348,32 @@
             <h2>Archivio</h2>
             <div class="archivio-gallery" id="archivioGallery">
               <div class="gallery-item landscape" data-caption="Exhibition opening night showcasing contemporary installations">
-                <img src="images/archivio/1.webp" alt="Archivio Image 1" />
+                <img src="images/archivio/1.webp" alt="Archivio Image" />
                 <div class="gallery-caption">Exhibition opening night showcasing contemporary installations</div>
               </div>
               <div class="gallery-item landscape" data-caption="Collaborative art workshop exploring mixed media techniques">
-                <img src="images/archivio/2.webp" alt="Archivio Image 2" />
+                <img src="images/archivio/2.webp" alt="Archivio Image" />
                 <div class="gallery-caption">Collaborative art workshop exploring mixed media techniques</div>
               </div>
               <div class="gallery-item portrait" data-caption="Solo exhibition featuring sculptural works and experimental forms that challenge traditional boundaries">
-                <img src="images/archivio/3por.webp" alt="Archivio Image 3" />
+                <img src="images/archivio/3por.webp" alt="Archivio Image"  />
                 <div class="gallery-caption">Solo exhibition featuring sculptural works and experimental forms that challenge traditional boundaries</div>
               </div>
               <div class="gallery-item portrait" data-caption="Performance art piece exploring themes of identity and transformation in contemporary society">
-                <img src="images/archivio/4por.webp" alt="Archivio Image 4" />
+                <img src="images/archivio/4por.webp" alt="Archivio Image"  />
                 <div class="gallery-caption">Performance art piece exploring themes of identity and transformation in contemporary society</div>
               </div>
               <div class="gallery-item landscape" data-caption="Community event bringing together local artists and residents">
-                <img src="images/archivio/5.webp" alt="Archivio Image 5" />
+                <img src="images/archivio/5.webp" alt="Archivio Image"  />
                 <div class="gallery-caption">Community event bringing together local artists and residents</div>
               </div>
               <div class="gallery-item landscape" data-caption="Interactive installation inviting audience participation">
-                <img src="images/archivio/6.webp" alt="Archivio Image 6" />
+                <img src="images/archivio/6.webp" alt="Archivio Image"  />
                 <div class="gallery-caption">Interactive installation inviting audience participation</div>
               </div>
               <div class="gallery-item landscape" data-caption="NZIRIA |15-04-2022 | Live dell’ artista hard-neomelodic dell’ album XXYBRID
 lightscapes di B. Peruzzi">
-                <img src="images/archivio/7.webp" alt="Archivio Image 7" />
+                <img src="images/archivio/7.webp" alt="Archivio Image"  />
                 <div class="gallery-caption">NZIRIA |15-04-2022 | Live dell’ artista hard-neomelodic dell’ album XXYBRID
 lightscapes di B. Peruzzi</div>
               </div>
@@ -1374,7 +1381,7 @@ lightscapes di B. Peruzzi</div>
 Lancio della issue 03 di EKI magazine + talk con MONOGRID sul tema della
 luce digitale. Per l’occasione Artiglieria ha ospitato MESH spin-off prodotto
 da MONOGRID, accompagnata dal Live Coding di Contraddizione.">
-                <img src="images/archivio/8por.webp" alt="Archivio Image 8" />
+                <img src="images/archivio/8por.webp" alt="Archivio Image"  />
                 <div class="gallery-caption">EKI LIGHT IN DIGITAL + MESH POWERED BY MONOGRID | 8-03-2023 |
 Lancio della issue 03 di EKI magazine + talk con MONOGRID sul tema della
 luce digitale. Per l’occasione Artiglieria ha ospitato MESH spin-off prodotto
@@ -1384,7 +1391,7 @@ da MONOGRID, accompagnata dal Live Coding di Contraddizione.</div>
 Lancio della issue 03 di EKI magazine + talk con MONOGRID sul tema della
 luce digitale. Per l’occasione Artiglieria ha ospitato MESH spin-off prodotto
 da MONOGRID, accompagnata dal Live Coding di Contraddizione.">
-                <img src="images/archivio/9.webp" alt="Archivio Image 9" />
+                <img src="images/archivio/9.webp" alt="Archivio Image"  />
                 <div class="gallery-caption">EKI LIGHT IN DIGITAL + MESH POWERED BY MONOGRID | 8-03-2023 |
 Lancio della issue 03 di EKI magazine + talk con MONOGRID sul tema della
 luce digitale. Per l’occasione Artiglieria ha ospitato MESH spin-off prodotto
@@ -1392,7 +1399,7 @@ da MONOGRID, accompagnata dal Live Coding di Contraddizione.</div>
               </div>
               <div class="gallery-item portrait" data-caption="LIVE SOUNDTRACK | 13-04-2024 | Progetto di sonorizzazione
 cinematografica/audiovisiva live a cura di Marco Miličevič">
-                <img src="images/archivio/10por.webp" alt="Archivio Image 10" />
+                <img src="images/archivio/10por.webp" alt="Archivio Image"  />
                 <div class="gallery-caption">LIVE SOUNDTRACK | 13-04-2024 | Progetto di sonorizzazione
 cinematografica/audiovisiva live a cura di Marco Miličevič</div>
               </div>
