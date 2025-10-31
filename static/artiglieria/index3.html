@@ -4,6 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>ARTIGLIERIA</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap"
+      rel="stylesheet"
+    />
     <style>
       html,
       body {
@@ -34,6 +38,8 @@
           padding: 20px 0px;
           box-sizing: border-box;
           z-index: 1000;
+          opacity: 0;
+          transition: opacity 0.3s ease;
         }
 
         .main-content {
@@ -329,7 +335,7 @@
 
       .about-content {
         max-width: 800px;
-        text-align: center;
+        text-align: left;
         display: flex;
         flex-direction: column;
         align-items: flex-end;
@@ -339,7 +345,7 @@
       }
 
       .about-content h2 {
-        font-size: 3rem;
+        font-size: 2rem;
         margin: 0 0 30px 0;
         font-weight: 700;
         color: #1d1d1f;
@@ -357,7 +363,7 @@
       }
 
       .about-intro {
-        font-size: 1.2rem;
+        font-size: 1rem;
         line-height: 1.6;
         color: #1d1d1f;
         margin: 0 0 20px 0;
@@ -412,12 +418,22 @@
       }
 
       .spazio-content h2 {
-        font-size: 3rem;
-        margin: 0 0 30px 0;
+        font-size: 2rem;
+        margin: 0;
         font-weight: 700;
         color: #1d1d1f;
         text-transform: lowercase;
         letter-spacing: 1px;
+        text-align: right;
+      }
+
+      .subsection {
+        margin: 0 0 30px 0;
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1d1d1f;
+        text-transform: lowercase;
+        letter-spacing: 0.5px;
         text-align: right;
       }
 
@@ -481,7 +497,42 @@
       }
 
       .spazio-intro {
-        font-size: 1.2rem;
+        font-size: 1rem;
+        line-height: 1.6;
+        color: #1d1d1f;
+        margin: 0;
+        text-align: left;
+      }
+
+      /* Archivio Section */
+      .archivio-content {
+        max-width: 1000px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        height: 100%;
+        justify-content: center;
+        position: relative;
+      }
+
+      .archivio-content h2 {
+        font-size: 2rem;
+        margin: 0 0 30px 0;
+        font-weight: 700;
+        color: #1d1d1f;
+        text-transform: lowercase;
+        letter-spacing: 1px;
+        text-align: right;
+      }
+
+      .archivio-text {
+        margin-top: 40px;
+        max-width: 800px;
+      }
+
+      .archivio-intro {
+        font-size: 1rem;
         line-height: 1.6;
         color: #1d1d1f;
         margin: 0;
@@ -584,6 +635,10 @@
           text-align: justify;
         }
 
+        .ink-trail-container {
+          display: none;
+        }
+
         .footer-section {
           padding: 40px 20px 30px 20px;
           margin-top: 40px;
@@ -597,6 +652,18 @@
 
         .footer-links {
           gap: 20px;
+        }
+
+        .archivio-section {
+          padding: 20px;
+        }
+
+        .archivio-content h2 {
+          font-size: 2.5rem;
+        }
+
+        .archivio-intro {
+          font-size: 1.1rem;
         }
       }
     </style>
@@ -619,10 +686,10 @@
       <nav class="nav-menu-sidebar">
         <li><a href="#about">About Us</a></li>
         <li><a href="#spazio">Spazio</a></li>
-        <li><a href="#coworking">Coworking</a></li>
         <li><a href="#servizi">Servizi</a></li>
         <li><a href="#archivio">Archivio</a></li>
         <li><a href="#podcast">Podcast</a></li>
+        <li><a href="#news">News</a></li>
         <li><a href="#contatti">Contatti</a></li>
       </nav>
     </aside>
@@ -644,10 +711,10 @@
         <button class="nav-close" id="navClose">✕</button>
         <li><a href="#about">About Us</a></li>
         <li><a href="#spazio">Spazio</a></li>
-        <li><a href="#coworking">Coworking</a></li>
         <li><a href="#servizi">Servizi</a></li>
         <li><a href="#archivio">Archivio</a></li>
         <li><a href="#podcast">Podcast</a></li>
+        <li><a href="#news">News</a></li>
         <li><a href="#contatti">Contatti</a></li>
       </nav>
 
@@ -658,7 +725,15 @@
       <!-- Ink Trail -->
       <div class="ink-trail-container">
         <svg class="ink-trail-svg" id="inkTrailSvg">
-          <path id="inkTrailPath"></path>
+          <path
+            id="inkTrailPath"
+            stroke="#1d1d1f"
+            stroke-width="2"
+            fill="none"
+            opacity="1"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          ></path>
         </svg>
       </div>
 
@@ -686,10 +761,15 @@
             <h2>About Us</h2>
             <div class="about-text">
               <p class="about-intro">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat.
+                Artiglieria è un <b>project space</b> attivo dal 2020 che opera
+                nella promozione e nella diffusione dell’arte contemporanea,
+                attraverso mostre, eventi e progetti artistici orientati alla
+                sperimentazione. Come <b>associazione culturale</b>, promuoviamo
+                workshop, corsi e attività multidisciplinari, creando
+                connessioni tra linguaggi, artistə e pubblici diversi. La nostra
+                sede ospita uno <b>studio</b> con postazioni di coworking
+                dedicate ad artistə attivə in diversi ambiti artistici, in un
+                ambiente condiviso e dinamico.
               </p>
 
               <div class="about-more" id="aboutMore">
@@ -721,6 +801,7 @@
         <section class="base-section spazio-section" id="spazio">
           <div class="spazio-content">
             <h2>Spazio</h2>
+            <p class="subsection">eventi</p>
             <div class="carousel-container">
               <button
                 class="carousel-arrow carousel-arrow-left"
@@ -769,6 +850,177 @@
             </div>
             <div class="spazio-text">
               <p class="spazio-intro">
+                Lo <b>spazio eventi</b> si configura come luogo polifunzionale
+                progettato per essere un contenitore di ricerche diverse, capace
+                di accogliere molteplici linguaggi espressivi. La sua
+                particolarità sta nella versatilità di questo ambiente: uno
+                spazio che muta e si reinventa, adattandosi a scenografie,
+                rappresentazioni ed opere sempre nuove.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section class="base-section spazio-section" id="spazio2">
+          <div class="spazio-content">
+            <h2>Spazio</h2>
+            <p class="subsection">coworking</p>
+            <div class="carousel-container">
+              <button
+                class="carousel-arrow carousel-arrow-left"
+                id="carouselLeft"
+              >
+                ‹
+              </button>
+              <div class="carousel-wrapper">
+                <div class="carousel-track" id="carouselTrack">
+                  <div class="carousel-slide">
+                    <img
+                      src="images/spazio_1.webp"
+                      alt="Spazio Image 1"
+                      class="carousel-image"
+                    />
+                  </div>
+                  <div class="carousel-slide">
+                    <img
+                      src="images/spazio_2.webp"
+                      alt="Spazio Image 2"
+                      class="carousel-image"
+                    />
+                  </div>
+                  <div class="carousel-slide">
+                    <img
+                      src="images/spazio_3.webp"
+                      alt="Spazio Image 3"
+                      class="carousel-image"
+                    />
+                  </div>
+                  <div class="carousel-slide">
+                    <img
+                      src="images/spazio_4.webp"
+                      alt="Spazio Image 4"
+                      class="carousel-image"
+                    />
+                  </div>
+                </div>
+              </div>
+              <button
+                class="carousel-arrow carousel-arrow-right"
+                id="carouselRight"
+              >
+                ›
+              </button>
+            </div>
+            <div class="spazio-text">
+              <p class="spazio-intro">
+                Il <b>coworking</b> ospita circa 12 postazioni di lavoro dedicate a
+                diversi ambiti artistici — dalla grafica alla pittura, dalla
+                stencil art alla scultura, fino alla fotografia e al video
+                making. Le postazioni sono disponibili per affitti di
+                medio-lungo periodo, pensate per artistə che desiderano uno
+                spazio stabile di ricerca e produzione all’interno di una
+                comunità creativa. Lo studio rappresenta un luogo di scambio e
+                collaborazione, dove prendono forma progetti e idee che fanno
+                crescere la comunità di Artiglieria.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Archivio Section -->
+        <section class="base-section archivio-section" id="archivio">
+          <div class="archivio-content">
+            <h2>Archivio</h2>
+            <div class="carousel-container">
+              <button
+                class="carousel-arrow carousel-arrow-left"
+                id="archivioCarouselLeft"
+              >
+                ‹
+              </button>
+              <div class="carousel-wrapper">
+                <div class="carousel-track" id="archivioCarouselTrack">
+                  <div class="carousel-slide">
+                    <img
+                      src="images/archivio/1.webp"
+                      alt="Archivio Image 1"
+                      class="carousel-image"
+                    />
+                  </div>
+                  <div class="carousel-slide">
+                    <img
+                      src="images/archivio/2.webp"
+                      alt="Archivio Image 2"
+                      class="carousel-image"
+                    />
+                  </div>
+                  <div class="carousel-slide">
+                    <img
+                      src="images/archivio/3.webp"
+                      alt="Archivio Image 3"
+                      class="carousel-image"
+                    />
+                  </div>
+                  <div class="carousel-slide">
+                    <img
+                      src="images/archivio/4.webp"
+                      alt="Archivio Image 4"
+                      class="carousel-image"
+                    />
+                  </div>
+                  <div class="carousel-slide">
+                    <img
+                      src="images/archivio/5.webp"
+                      alt="Archivio Image 5"
+                      class="carousel-image"
+                    />
+                  </div>
+                  <div class="carousel-slide">
+                    <img
+                      src="images/archivio/6.webp"
+                      alt="Archivio Image 6"
+                      class="carousel-image"
+                    />
+                  </div>
+                  <div class="carousel-slide">
+                    <img
+                      src="images/archivio/7.webp"
+                      alt="Archivio Image 7"
+                      class="carousel-image"
+                    />
+                  </div>
+                  <div class="carousel-slide">
+                    <img
+                      src="images/archivio/8.webp"
+                      alt="Archivio Image 8"
+                      class="carousel-image"
+                    />
+                  </div>
+                  <div class="carousel-slide">
+                    <img
+                      src="images/archivio/9.webp"
+                      alt="Archivio Image 9"
+                      class="carousel-image"
+                    />
+                  </div>
+                  <div class="carousel-slide">
+                    <img
+                      src="images/archivio/10.webp"
+                      alt="Archivio Image 10"
+                      class="carousel-image"
+                    />
+                  </div>
+                </div>
+              </div>
+              <button
+                class="carousel-arrow carousel-arrow-right"
+                id="archivioCarouselRight"
+              >
+                ›
+              </button>
+            </div>
+            <div class="archivio-text">
+              <p class="archivio-intro">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
                 eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
                 enim ad minim veniam, quis nostrud exercitation ullamco laboris
@@ -782,7 +1034,12 @@
         <footer class="footer-section">
           <div class="footer-content">
             <div class="footer-logo">
-              <object data="logo.svg" type="image/svg+xml" class="footer-logo-svg" aria-label="Footer Logo"></object>
+              <object
+                data="logo.svg"
+                type="image/svg+xml"
+                class="footer-logo-svg"
+                aria-label="Footer Logo"
+              ></object>
             </div>
             <div class="footer-info">
               <p>© 2024 Artiglieria. Cultural Association.</p>
@@ -1001,6 +1258,91 @@
 
       // Initialize ink trail functionality
       document.addEventListener("DOMContentLoaded", initInkTrail);
+
+      // Sidebar opacity control
+      function initSidebarOpacity() {
+        const sidebar = document.querySelector(".sidebar");
+        if (!sidebar) return;
+
+        function updateSidebarOpacity() {
+          const scrollY = window.scrollY;
+          const viewportHeight = window.innerHeight;
+          const maxScroll = viewportHeight * 0.5; // 50vh
+
+          // Calculate opacity (0 to 1) based on scroll position
+          const opacity = Math.min(scrollY / maxScroll, 1);
+          sidebar.style.opacity = opacity;
+        }
+
+        // Update on scroll
+        window.addEventListener("scroll", updateSidebarOpacity);
+
+        // Initial check
+        updateSidebarOpacity();
+      }
+
+      // Initialize sidebar opacity functionality
+      document.addEventListener("DOMContentLoaded", initSidebarOpacity);
+
+      // Archivio Carousel functionality
+      function initArchivioCarousel() {
+        const carouselTrack = document.getElementById("archivioCarouselTrack");
+        const leftArrow = document.getElementById("archivioCarouselLeft");
+        const rightArrow = document.getElementById("archivioCarouselRight");
+
+        if (!carouselTrack || !leftArrow || !rightArrow) return;
+
+        let currentIndex = 0;
+        const slides = carouselTrack.children;
+        const totalSlides = slides.length;
+
+        // Determine slides per view based on screen size
+        function getSlidesPerView() {
+          return window.innerWidth <= 768 ? 1 : 2;
+        }
+
+        function updateCarousel() {
+          const slidesPerView = getSlidesPerView();
+          const maxIndex = totalSlides - slidesPerView;
+          const translateX = -(currentIndex * (100 / slidesPerView));
+
+          carouselTrack.style.transform = `translateX(${translateX}%)`;
+
+          // Update arrow states
+          leftArrow.disabled = currentIndex === 0;
+          rightArrow.disabled = currentIndex >= maxIndex;
+        }
+
+        function moveLeft() {
+          if (currentIndex > 0) {
+            currentIndex--;
+            updateCarousel();
+          }
+        }
+
+        function moveRight() {
+          const slidesPerView = getSlidesPerView();
+          const maxIndex = totalSlides - slidesPerView;
+          if (currentIndex < maxIndex) {
+            currentIndex++;
+            updateCarousel();
+          }
+        }
+
+        leftArrow.addEventListener("click", moveLeft);
+        rightArrow.addEventListener("click", moveRight);
+
+        // Handle window resize
+        window.addEventListener("resize", () => {
+          updateCarousel();
+        });
+
+        // Initialize
+        updateCarousel();
+      }
+
+      // Initialize archivio carousel functionality
+      document.addEventListener("DOMContentLoaded", initArchivioCarousel);
     </script>
   </body>
 </html>

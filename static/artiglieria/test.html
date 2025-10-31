@@ -3,16 +3,16 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Watery Ink Trail (mobile-friendly)</title>
+<title>Neon Glow Trail (mobile-friendly)</title>
 <style>
   html, body { margin:0; padding:0; }
   body {
     font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-    background: #0f1115; /* dark base so the trail shows over both light/dark tiles below */
+    background: #0f1115;
     color: #e6e6e6;
   }
 
-  /* Demo content so you can verify visibility over text & images */
+  /* Demo content so you can see contrast */
   .content {
     max-width: 64rem;
     margin: 0 auto;
@@ -32,24 +32,24 @@
     overflow: hidden;
     background: center/cover no-repeat;
   }
-  .tile:nth-child(1){ background-image:url(https://picsum.photos/800/600?random=201); }
-  .tile:nth-child(2){ background-image:url(https://picsum.photos/800/600?random=202); }
-  .tile:nth-child(3){ background-image:url(https://picsum.photos/800/600?random=203); }
-  .tile:nth-child(4){ background-image:url(https://picsum.photos/800/600?random=204); }
-  .tile:nth-child(5){ background-image:url(https://picsum.photos/800/600?random=205); }
-  .tile:nth-child(6){ background-image:url(https://picsum.photos/800/600?random=206); }
+  .tile:nth-child(1){ background-image:url(https://picsum.photos/800/600?blur=0&random=11); }
+  .tile:nth-child(2){ background-image:url(https://picsum.photos/800/600?blur=0&random=12); }
+  .tile:nth-child(3){ background-image:url(https://picsum.photos/800/600?blur=0&random=13); }
+  .tile:nth-child(4){ background-image:url(https://picsum.photos/800/600?blur=0&random=14); }
+  .tile:nth-child(5){ background-image:url(https://picsum.photos/800/600?blur=0&random=15); }
+  .tile:nth-child(6){ background-image:url(https://picsum.photos/800/600?blur=0&random=16); }
 
-  /* --------- Watery Ink Trail Overlay --------- */
+  /* --------- Neon Trail Overlay --------- */
 
-  /* Absolute overlay, visually pinned to viewport via JS translateY(scrollY) */
+  /* Absolutely positioned overlay, pinned to viewport via JS translateY */
   .trail-container {
-    position: absolute;     /* not fixed -> fewer mobile quirks */
+    position: absolute;   /* not fixed -> avoids blend/backdrop quirks */
     top: 0;
     right: 0;
-    width: 96px;            /* trail strip width */
-    height: 100vh;
-    pointer-events: none;   /* allow clicks through */
-    z-index: 9999;          /* above everything */
+    width: 100px;         /* trail strip width (change as you like) */
+    height: 100vh;        /* viewport height */
+    pointer-events: none; /* allow clicks through */
+    z-index: 9999;        /* above content */
   }
 
   .trail-svg {
@@ -58,111 +58,66 @@
     display: block;
   }
 
-  /* LAYERS:
-     - bleed: soft diffuse pool under the stroke
-     - main: inky stroke with roughened edges
-     - highlight: faint watery gloss on top
-  */
-  #trailBleed {
+  /* The path is visible by itself; no blending/backdrop needed */
+  #trailPath {
     fill: none;
-    stroke: #0b2545;        /* deep ink */
-    stroke-opacity: 0.35;
-    stroke-width: 28;       /* bigger than main -> pool/bleed around it */
+    stroke: url(#neonStroke);
+    stroke-width: 6;              /* core stroke width */
     stroke-linecap: round;
     stroke-linejoin: round;
-    filter: url(#inkBleed);
+    /* Extra glow using CSS drop-shadows (GPU-friendly on mobile) */
+    filter:
+      drop-shadow(0 0 2px rgba(0,255,200,.9))
+      drop-shadow(0 0 8px rgba(0,255,200,.7))
+      drop-shadow(0 0 18px rgba(0,180,255,.8));
   }
 
-  #trailMain {
+  /* Optional: on very bright content, add a thin dark outline to increase legibility */
+  #trailOutline {
     fill: none;
-    stroke: #133a73;        /* main ink color */
-    stroke-opacity: 0.9;
-    stroke-width: 14;
+    stroke: rgba(0,0,0,.5);
+    stroke-width: 1.5;
     stroke-linecap: round;
     stroke-linejoin: round;
-    filter: url(#edgeRoughen);
   }
 
-  #trailHighlight {
-    fill: none;
-    stroke: #d8e6ff;        /* watery highlight */
-    stroke-opacity: 0.18;
-    stroke-width: 8;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    filter: url(#inkShine);
-  }
-
-  /* Mobile tweak */
+  /* Mobile tweak – keep the strip a bit narrower if you want */
   @media (max-width: 768px) {
     .trail-container { width: 80px; right: 10px; }
-    #trailBleed     { stroke-width: 24; }
-    #trailMain      { stroke-width: 12; }
-    #trailHighlight { stroke-width: 7; }
   }
 </style>
 </head>
 <body>
 
-<!-- Watery Ink trail overlay -->
+<!-- Neon trail overlay -->
 <div class="trail-container" id="trailContainer" aria-hidden="true">
   <!-- viewBox gives stable coordinates; tall so we can draw long curves -->
   <svg class="trail-svg" id="trailSvg" viewBox="0 0 100 2000" preserveAspectRatio="none">
     <defs>
-      <!-- Soft diffuse bleed (blur + slight spread) -->
-      <filter id="inkBleed" x="-20%" y="-5%" width="140%" height="110%">
-        <!-- blur -->
-        <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"/>
-        <!-- a touch of extra spread by boosting alpha -->
-        <feColorMatrix in="blur" type="matrix"
-          values="1 0 0 0 0
-                  0 1 0 0 0
-                  0 0 1 0 0
-                  0 0 0 1.6 0" result="bloom"/>
-        <feMerge>
-          <feMergeNode in="bloom"/>
-        </feMerge>
-      </filter>
-
-      <!-- Roughen the stroke edge (tiny displacement with fractal noise) -->
-      <filter id="edgeRoughen" x="-5%" y="-2%" width="110%" height="104%">
-        <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="1" seed="5" result="noise"/>
-        <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.6" xChannelSelector="R" yChannelSelector="G" result="rough"/>
-        <feGaussianBlur in="rough" stdDeviation="0.3" result="soften"/>
-        <feMerge>
-          <feMergeNode in="soften"/>
-        </feMerge>
-        <!-- subtle motion in the water (animate seed) -->
-        <animate xlink:href="#edgeRoughen feTurbulence"
-                 attributeName="seed" from="5" to="25" dur="12s" repeatCount="indefinite"/>
-      </filter>
-
-      <!-- Watery highlight: slight blur + faint glow -->
-      <filter id="inkShine" x="-5%" y="-2%" width="110%" height="104%">
-        <feGaussianBlur in="SourceGraphic" stdDeviation="0.8" result="g1"/>
-        <feMerge>
-          <feMergeNode in="g1"/>
-        </feMerge>
-      </filter>
+      <!-- Gradient stroke for the neon core -->
+      <linearGradient id="neonStroke" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%"   stop-color="#00ffd5"/>
+        <stop offset="50%"  stop-color="#00b8ff"/>
+        <stop offset="100%" stop-color="#7a5cff"/>
+      </linearGradient>
     </defs>
-
-    <!-- Layer order: bleed under, main stroke, highlight on top -->
-    <path id="trailBleed" d=""></path>
-    <path id="trailMain" d=""></path>
-    <path id="trailHighlight" d=""></path>
+    <!-- Outline below the glow to improve text/background contrast -->
+    <path id="trailOutline" d=""></path>
+    <!-- Main neon path -->
+    <path id="trailPath" d=""></path>
   </svg>
 </div>
 
 <!-- Page content -->
 <div class="content">
-  <h1>Watery Ink Trail</h1>
-  <p>Scroll to “draw” the trail on the right. It rides above text and images and looks like diffusing watercolor/ink.</p>
+  <h1>Neon Glow Trail</h1>
+  <p>Scroll to “draw” the trail on the right. It sits above all content and remains crisp on mobile.</p>
   <div class="grid">
     <div class="tile"></div><div class="tile"></div><div class="tile"></div>
     <div class="tile"></div><div class="tile"></div><div class="tile"></div>
   </div>
   <h1>More Content</h1>
-  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus vitae lorem quis arcu accumsan sagittis. Suspendisse potenti. Pellentesque habitant morbi tristique senectus et netus.</p>
+  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus vitae lorem quis arcu accumsan sagittis. Suspendisse potenti.</p>
   <div class="grid">
     <div class="tile"></div><div class="tile"></div><div class="tile"></div>
   </div>
@@ -170,22 +125,22 @@
 
 <script>
 /*
-  Watery ink trail:
-  - Overlay is absolute, pinned to viewport via translateY(scrollY)
+  Neon trail:
+  - Overlay is absolute, pinned to viewport with translateY(scrollY)
   - Path grows with scroll progress (smooth Bezier)
-  - Visual is layered: bleed (blurred), main stroke (roughened), highlight
-  - No mix-blend-mode / backdrop-filter -> robust on mobile
+  - No mix-blend-mode / backdrop-filter, so it’s robust on mobile
 */
-(function initWateryInkTrail() {
+(function initNeonTrail() {
   const container = document.getElementById('trailContainer');
-  const bleed = document.getElementById('trailBleed');
-  const main  = document.getElementById('trailMain');
-  const hi    = document.getElementById('trailHighlight');
-  if (!container || !bleed || !main || !hi) return;
+  const path = document.getElementById('trailPath');
+  const outline = document.getElementById('trailOutline');
+  if (!container || !path || !outline) return;
 
-  // Pin overlay to viewport (acts like fixed without fixed)
+  // Pin overlay to viewport (behaves like fixed, without the drawbacks)
   let pinRAF = 0;
-  function pin() { container.style.transform = `translateY(${window.scrollY}px)`; }
+  function pin() {
+    container.style.transform = `translateY(${window.scrollY}px)`;
+  }
   function onScrollPin() {
     if (pinRAF) return;
     pinRAF = requestAnimationFrame(() => { pinRAF = 0; pin(); });
@@ -195,11 +150,11 @@
   pin();
 
   // Path generation
-  const maxPoints = 150;  // more points => smoother
-  const vbH = 2000;       // match viewBox height
-  const centerX = 58;     // center in the 100px strip
-  const ampMain = 18;     // main wave amplitude
-  const ampJitter = 3;    // fine jitter
+  const maxPoints = 160;  // increase for smoother curve
+  const vbH = 2000;       // must match viewBox height
+  const centerX = 60;     // center of the 100px strip
+  const ampMain = 20;     // main horizontal wave amplitude
+  const ampJitter = 3;    // small jitter for “ink” feel
 
   function bezier(points) {
     if (points.length < 2) return '';
@@ -208,7 +163,7 @@
       const p0 = points[i - 1];
       const p1 = points[i];
       const p2 = points[i + 1] || p1;
-      const t = 0.38;
+      const t = 0.4; // tension
       const dx = p2.x - p0.x;
       const dy = p2.y - p0.y;
       const cp1x = p0.x + dx * t;
@@ -237,9 +192,8 @@
 
     const d = bezier(pts);
     if (d) {
-      bleed.setAttribute('d', d);
-      main.setAttribute('d', d);
-      hi.setAttribute('d', d);
+      outline.setAttribute('d', d);
+      path.setAttribute('d', d);
     }
   }
 
@@ -251,11 +205,9 @@
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', updatePath);
 
-  // Initial visible mark (so you immediately see something)
-  const start = `M ${centerX} 0 L ${centerX} 1`;
-  bleed.setAttribute('d', start);
-  main.setAttribute('d', start);
-  hi.setAttribute('d', start);
+  // Initial visible line (so you immediately see something)
+  outline.setAttribute('d', `M ${centerX} 0 L ${centerX} 1`);
+  path.setAttribute('d', `M ${centerX} 0 L ${centerX} 1`);
   updatePath();
 })();
 </script>

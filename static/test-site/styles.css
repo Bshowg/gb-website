@@ -127,7 +127,7 @@ nav a {
 }
 
 .hero .logo-container img {
-    width: 100%;
+    width: 50%;
     height: auto;
     filter: drop-shadow(2px 2px 4px rgba(256,256,256,1));
     display: block;
@@ -261,7 +261,7 @@ section p {
 }
 
 .highlight-box {
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    background-color: var(--primary);
     color: white;
     padding: 1.5rem;
     border-radius: 10px;
@@ -280,76 +280,60 @@ section p {
 }
 
 
-/* Compass Wheel */
-.compass-container {
+/* Insieme Section */
+.insieme-container {
     display: flex;
     justify-content: center;
     margin: 2rem 0;
+    flex-direction: column;
 }
 
-.compass-section {
+.insieme-section {
     display: flex;
     align-items: center;
+
     gap: 3rem;
     margin: 2rem 0;
     justify-content: center;
 }
+.insieme-card{
+    background: var(--primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(90, 125, 140, 0.3);
+    transition: transform 0.3s, box-shadow 0.3s;
+    flex: 1;
+    text-align: left;
+    margin-bottom:1rem;
+}
+.insieme-card::before{
+    content: "\2022";
+    font-size: 1.5rem;
+    margin-right: 0.5rem;
+    color: white;
+}
 
-.compass-text-content {
+.insieme-text-content {
     flex: 1;
     max-width: 500px;
 }
 
-.compass-wheel {
-    width: 400px;
-    height: 400px;
-    max-width: 90vw;
-    max-height: 90vw;
-}
 
-.compass-segment {
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.compass-segment:hover {
-    filter: brightness(1.1);
-    transform-origin: center;
-}
-
-.compass-text {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    fill: white;
-    text-anchor: middle;
-    dominant-baseline: central;
-}
-
-.compass-center {
-    fill: #6b7280;
-}
-
-.compass-icon {
-    font-size: 24px;
-    fill: white;
-}
 
 @media (max-width: 768px) {
-    .compass-section {
+    .insieme-section {
         flex-direction: column;
         gap: 2rem;
     }
+    .insieme-card{
+        font-size: small;
+        padding: 0.5rem 0.5rem;
+    }
 
-    .compass-wheel {
-        width: 350px;
-        height: 350px;
-    }
-    
-    .compass-text {
-        font-size: 13px;
-        font-weight: 500;
-    }
+
 }
 /* Info Steps */
 .info-steps {
@@ -533,7 +517,7 @@ section p {
 }
 
 .funziona-card {
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    background-color: var(--primary);
     color: white;
     padding: 2rem;
     border-radius: 10px;
