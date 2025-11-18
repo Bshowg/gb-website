@@ -924,8 +924,8 @@ footer a {
     margin: 0.5rem 0;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+/* Responsive NAV */
+@media (max-width: 1069px) {
     nav .container {
         justify-content: space-between;
     }
@@ -976,7 +976,10 @@ footer a {
         display: block;
         padding: 1rem 2rem;
     }
+}
 
+/* Responsive */
+@media (max-width: 768px) {
     .hero .logo-container img {
         width: 100%;
     }

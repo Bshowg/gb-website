@@ -26,10 +26,66 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Form submission handler
-document.querySelector('form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    alert('Grazie per il tuo interesse. Questa è una demo del form. In un sito reale, i dati verrebbero inviati al server.');
+// Form submission handler with AJAX
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('contactForm');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const submitButton = this.querySelector('button[type="submit"]');
+            const formMessage = document.getElementById('formMessage');
+            
+            // Disable submit button during request
+            submitButton.disabled = true;
+            submitButton.textContent = 'Invio in corso...';
+            
+            // Send AJAX request
+            fetch('send_email.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display message
+                formMessage.style.display = 'block';
+                formMessage.textContent = data.message;
+                
+                if (data.status === 'success') {
+                    formMessage.style.backgroundColor = '#d4edda';
+                    formMessage.style.color = '#155724';
+                    formMessage.style.border = '1px solid #c3e6cb';
+                    // Reset form on success
+                    form.reset();
+                } else {
+                    formMessage.style.backgroundColor = '#f8d7da';
+                    formMessage.style.color = '#721c24';
+                    formMessage.style.border = '1px solid #f5c6cb';
+                }
+                
+                // Hide message after 5 seconds
+                setTimeout(() => {
+                    formMessage.style.display = 'none';
+                }, 5000);
+            })
+            .catch(error => {
+                // Handle network errors
+                formMessage.style.display = 'block';
+                formMessage.textContent = 'Errore di connessione. Riprova più tardi.';
+                formMessage.style.backgroundColor = '#f8d7da';
+                formMessage.style.color = '#721c24';
+                formMessage.style.border = '1px solid #f5c6cb';
+                
+                console.error('Error:', error);
+            })
+            .finally(() => {
+                // Re-enable submit button
+                submitButton.disabled = false;
+                submitButton.textContent = 'Invia la tua richiesta';
+            });
+        });
+    }
 });
 
 // Carousel functionality
