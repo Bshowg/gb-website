@@ -1,0 +1,470 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-green: #2d5a3d;
+    --light-green: #5a8f6b;
+    --cream: #f5f2ed;
+    --dark-text: #1a1a1a;
+    --light-text: #666;
+    --white: #ffffff;
+    --shadow: rgba(0, 0, 0, 0.1);
+}
+
+body {
+    font-family: 'Georgia', serif;
+    line-height: 1.6;
+    color: var(--dark-text);
+    overflow-x: hidden;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Hero Section */
+.hero {
+    height: 100vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: url('https://images.unsplash.com/photo-1511497584788-876760111969?w=1920&auto=format') center/cover;
+    background-attachment: fixed;
+    overflow: hidden;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.5) 100%);
+}
+
+.hero-content {
+    text-align: center;
+    color: var(--white);
+    z-index: 1;
+}
+
+.hero-title {
+    font-size: 4rem;
+    font-weight: 300;
+    letter-spacing: 2px;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    opacity: 0;
+    animation: fadeInUp 1s ease 0.2s forwards;
+}
+
+.hero-subtitle {
+    font-size: 1.8rem;
+    font-style: italic;
+    margin-bottom: 0.5rem;
+    opacity: 0;
+    animation: fadeInUp 1s ease 0.4s forwards;
+}
+
+.hero-description {
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+    opacity: 0;
+    animation: fadeInUp 1s ease 0.6s forwards;
+}
+
+.scroll-indicator {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    animation: bounce 2s infinite;
+    animation-delay: 1.5s;
+    opacity: 0;
+    animation-fill-mode: both;
+}
+
+.scroll-indicator span {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.arrow-down {
+    opacity: 0.8;
+}
+
+/* Sections */
+.section-title {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 3rem;
+    color: var(--primary-green);
+    font-weight: 300;
+    position: relative;
+    padding-bottom: 1rem;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 2px;
+    background: var(--light-green);
+}
+
+/* Project Description */
+.project-description {
+    padding: 100px 0;
+    background: var(--cream);
+}
+
+.description-content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: justify;
+}
+
+.intro-text {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    margin-bottom: 2rem;
+    color: var(--primary-green);
+}
+
+.description-content p {
+    margin-bottom: 1.5rem;
+    line-height: 1.8;
+}
+
+/* Central Message */
+.central-message {
+    padding: 100px 0;
+    background: var(--white);
+}
+
+.message-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 4rem;
+}
+
+.message-card {
+    padding: 2rem;
+    background: var(--cream);
+    border-left: 3px solid var(--light-green);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.message-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px var(--shadow);
+}
+
+.message-card h3 {
+    color: var(--primary-green);
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+}
+
+.philosophy-text {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+blockquote {
+    background: linear-gradient(135deg, var(--cream) 0%, rgba(245, 242, 237, 0.5) 100%);
+    padding: 2rem 3rem;
+    border-left: 4px solid var(--primary-green);
+    margin: 2rem 0;
+    font-style: italic;
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
+.nature-wisdom {
+    margin-top: 3rem;
+}
+
+.nature-wisdom p {
+    margin-bottom: 1.5rem;
+    line-height: 1.8;
+}
+
+.highlight-text {
+    font-size: 1.1rem;
+    color: var(--primary-green);
+    padding: 1.5rem;
+    background: var(--cream);
+    border-radius: 5px;
+    margin: 2rem 0;
+}
+
+.conclusion {
+    text-align: center;
+    font-size: 1.2rem;
+    margin-top: 2rem;
+    padding: 2rem;
+    background: linear-gradient(to right, transparent, var(--cream), transparent);
+}
+
+/* Visual Section */
+.visual-section {
+    padding: 100px 0;
+    background: var(--cream);
+}
+
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.gallery-item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 5px;
+    height: 350px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.gallery-item:hover {
+    transform: scale(1.02);
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.gallery-item:hover img {
+    transform: scale(1.1);
+}
+
+.gallery-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    color: var(--white);
+    padding: 2rem 1rem 1rem;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+}
+
+.gallery-item:hover .gallery-overlay {
+    transform: translateY(0);
+}
+
+.gallery-overlay p {
+    font-size: 1.1rem;
+    font-style: italic;
+}
+
+/* Newsletter */
+.newsletter {
+    padding: 100px 0;
+    background: linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%);
+    color: var(--white);
+    text-align: center;
+}
+
+.newsletter .section-title {
+    color: var(--white);
+}
+
+.newsletter .section-title::after {
+    background: var(--white);
+}
+
+.newsletter-description {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    opacity: 0.95;
+}
+
+.newsletter-form {
+    max-width: 500px;
+    margin: 0 auto;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.email-input {
+    flex: 1;
+    min-width: 250px;
+    padding: 1rem 1.5rem;
+    border: 2px solid transparent;
+    border-radius: 50px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.email-input:focus {
+    outline: none;
+    border-color: var(--white);
+    background: var(--white);
+}
+
+.submit-btn {
+    padding: 1rem 2.5rem;
+    background: var(--white);
+    color: var(--primary-green);
+    border: 2px solid var(--white);
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+    background: transparent;
+    color: var(--white);
+}
+
+.form-message {
+    margin-top: 1rem;
+    font-size: 0.95rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.form-message.show {
+    opacity: 1;
+}
+
+/* Footer */
+.footer {
+    padding: 3rem 0;
+    background: var(--dark-text);
+    color: var(--white);
+    text-align: center;
+}
+
+.footer p {
+    margin-bottom: 0.5rem;
+    opacity: 0.8;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes bounce {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px);
+    }
+    10% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+    20%, 50%, 80%, 100% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+    40% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(-10px);
+    }
+    60% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(-5px);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.3rem;
+    }
+    
+    .hero-description {
+        font-size: 1rem;
+        padding: 0 20px;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+    }
+    
+    .message-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .gallery {
+        grid-template-columns: 1fr;
+    }
+    
+    .newsletter-form {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .email-input {
+        width: 100%;
+    }
+    
+    blockquote {
+        padding: 1.5rem;
+    }
+    
+    .description-content {
+        text-align: left;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.1rem;
+    }
+    
+    .section-title {
+        font-size: 1.8rem;
+    }
+    
+    .intro-text {
+        font-size: 1.1rem;
+    }
+    
+    .message-card {
+        padding: 1.5rem;
+    }
+}
