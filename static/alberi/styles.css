@@ -32,7 +32,7 @@ body {
     height: 100vh;
     position: relative;
     display: flex;
-    background-image: url('imgs/hero.jpeg');
+    background-image: url('imgs/hero.jpg');
     align-items: center;
     justify-content: center;
     background-size: cover;
@@ -67,10 +67,32 @@ body {
 }
 
 .hero-quote {
-    margin: 1.5rem 0;
+    margin: 1.5rem auto;
     max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
+    opacity: 0;
+    animation: fadeInUp 1s ease 0.4s forwards;
+    background: transparent;
+    padding: 0;
+    border: none;
+}
+
+.hero-quote p {
+    font-family: 'Spectral', serif;
+    font-size: 1.4rem;
+    font-style: italic;
+    color: var(--white);
+    line-height: 1.6;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.hero-quote cite {
+    display: block;
+    margin-top: 1rem;
+    font-family: 'Spectral', serif;
+    font-size: 1.1rem;
+    font-style: normal;
+    color: var(--white);
+    opacity: 0.9;
 }
 
 .hero-subtitle {
@@ -195,6 +217,14 @@ body {
     text-align: justify;
 }
 
+.description-content p {
+    font-family: 'Spectral', serif;
+    color: var(--primary-green);
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+}
+
 .intro-text {
     font-size: 1.2rem;
     line-height: 1.8;
@@ -211,6 +241,23 @@ body {
 .chi-siamo {
     padding: 100px 0;
     background: var(--white);
+    position: relative;
+}
+
+.chi-siamo-content p {
+    font-family: 'Spectral', serif;
+    color: var(--primary-green);
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+}
+
+.chi-siamo .lupus-signature {
+    font-family: 'Pinyon Script', cursive;
+    font-size: 1.8rem;
+    color: var(--primary-green);
+    margin:20px 10px;
+    display: flex;
 }
 
 .chi-siamo-content {
@@ -226,23 +273,32 @@ body {
 }
 
 .intro-statement {
-    font-size: 1.4rem !important;
+    font-family: 'Spectral', serif;
+    font-size: 1.1rem;
     color: var(--primary-green);
-    font-weight: 300;
-    margin-bottom: 2rem !important;
+    text-align: justify;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
 }
 .content-statement{
-    font-size: 1.1rem !important;
+    font-family: 'Spectral', serif;
+    font-size: 1.1rem;
+    color: var(--primary-green);
     text-align: justify;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
 }
 .chi-siamo .emphasis {
-    font-size: 1.15rem !important;
+    font-family: 'Spectral', serif;
+    font-size: 1.1rem;
     color: var(--primary-green);
-    margin: 2.5rem 0 !important;
-    padding: 2rem;
-    background: var(--cream);
-    border-radius: 5px;
-    font-style: italic;
+    margin: 2.5rem 0;
+    font-style: normal;
+    text-align: center;
+}
+
+.chi-siamo .emphasis strong {
+    font-weight: 600;
 }
 
 .signature-module {
@@ -299,6 +355,30 @@ body {
     bottom: 2px;
     left: 10px;
     transform: rotate(-1deg);
+}
+
+/* Wave Separator Container */
+.wave-separator-container {
+    position: relative;
+    height: 100px;
+    background: var(--white);
+    overflow: hidden;
+    margin: -1px 0;
+}
+
+.wave-separator-svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.wave-separator-svg path {
+    animation: gentleWave 20s ease-in-out infinite;
+    transform-origin: center;
+}
+
+.wave-separator-svg path:nth-child(2) {
+    animation-delay: -5s;
 }
 
 /* Spinoza Section */
@@ -367,7 +447,7 @@ body {
     padding: 80px 0;
     position: relative;
     overflow: hidden;
-    background: linear-gradient(to bottom, var(--white) 0%, var(--cream) 50%, var(--cream) 100%);
+    background: linear-gradient(to bottom, var(--white) 0%, var(--cream) 40%, var(--cream) 100%);
 }
 
 .floating-elements {
@@ -511,7 +591,7 @@ blockquote {
 
 .conclusion {
     text-align: center;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     margin-top: 2rem;
     padding: 2rem;
     background: linear-gradient(to right, transparent, var(--cream), transparent);
@@ -584,8 +664,11 @@ blockquote {
 }
 
 .philosophy-content p {
-    margin-bottom: 1.5rem;
+    font-family: 'Spectral', serif;
+    color: var(--primary-green);
+    font-size: 1.1rem;
     line-height: 1.8;
+    margin-bottom: 1.5rem;
 }
 
 .philosophy-intro {
@@ -749,6 +832,10 @@ blockquote {
     opacity: 0.8;
 }
 
+.footer-signature {
+    display: none;
+}
+
 /* First Letter Style - Miniature */
 .firstLetter::first-letter {
     float: left;
@@ -817,6 +904,15 @@ blockquote {
         padding: 0 20px;
     }
     
+    .hero-quote p {
+        font-size: 1.1rem;
+        padding: 0 20px;
+    }
+    
+    .hero-quote cite {
+        font-size: 0.95rem;
+    }
+    
     .hero-navigation {
         flex-wrap: wrap;
         justify-content: center;
@@ -863,6 +959,15 @@ blockquote {
     
     .hero-subtitle {
         font-size: 1.1rem;
+    }
+    
+    .hero-quote p {
+        font-size: 1rem;
+        padding: 0 15px;
+    }
+    
+    .hero-quote cite {
+        font-size: 0.9rem;
     }
     
     .section-title {

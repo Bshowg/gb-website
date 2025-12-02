@@ -1,0 +1,2333 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes" />
+    <title>ARTIGLIERIA - Project Space • Art Studio • Cultural Association</title>
+    <meta name="description" content="Artiglieria è un project space attivo dal 2020, dedicato alla promozione della cultura e dell'arte contemporanea attraverso eventi e progetti orientati alla sperimentazione. Firenze, Via Cittadella 4." />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://artiglieria.it/" />
+    <meta property="og:title" content="ARTIGLIERIA - Project Space • Art Studio • Cultural Association" />
+    <meta property="og:description" content="Artiglieria è un project space attivo dal 2020, dedicato alla promozione della cultura e dell'arte contemporanea attraverso eventi e progetti orientati alla sperimentazione. Firenze, Via Cittadella 4." />
+    <meta property="og:image" content="https://artiglieria.it/images/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="it_IT" />
+    <meta property="og:site_name" content="Artiglieria" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://artiglieria.it/" />
+    <meta name="twitter:title" content="ARTIGLIERIA - Project Space • Art Studio • Cultural Association" />
+    <meta name="twitter:description" content="Artiglieria è un project space attivo dal 2020, dedicato alla promozione della cultura e dell'arte contemporanea attraverso eventi e progetti orientati alla sperimentazione. Firenze, Via Cittadella 4." />
+    <meta name="twitter:image" content="https://artiglieria.it/images/og-image.jpg" />
+
+    <!-- Additional SEO -->
+    <meta name="keywords" content="artiglieria, project space, art studio, firenze, arte contemporanea, cultura, eventi, coworking artistico, associazione culturale" />
+    <meta name="author" content="Artiglieria" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://artiglieria.it/" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+    --width:1000px
+}
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+      }
+      body {
+        background: #f5f5f7;
+        color: #1d1d1f;
+        font: 16px/1.4 Helvetica, Arial, sans-serif;
+        position: relative;
+      }
+
+      /* Main layout */
+      @media (min-width: 769px) {
+        .sidebar {
+          position: fixed;
+          left: 0;
+          top: 0;
+          width: 15vw;
+          height: 100vh;
+          background: rgba(245, 245, 247, 0.95);
+          backdrop-filter: blur(10px);
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          padding: 20px 0px;
+          box-sizing: border-box;
+          z-index: 1000;
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
+
+        .main-content {
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          position: relative;
+          left: calc(-15vw / 2);
+        }
+
+        .content-wrapper {
+          margin-left: 15vw;
+          width: 85vw;
+          max-width: 85vw;
+        }
+
+        .nav-header {
+          display: none;
+        }
+
+        .hero-svg {
+          width: 100%;
+          max-width: 400px;
+          height: auto;
+          display: block;
+        }
+      }
+
+      /* Mobile layout */
+      @media (max-width: 768px) {
+        .sidebar {
+          display: none;
+        }
+
+        .main-content {
+          width: 100vw;
+          min-height: 100svh;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .hero-svg {
+          width: 100%;
+          max-width: 720px;
+          height: auto;
+          display: block;
+        }
+
+        /* Mobile Navigation Header */
+        .nav-header {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          background: rgba(245, 245, 247, 0.95);
+          backdrop-filter: blur(10px);
+          padding: 12px 20px;
+          z-index: 1000;
+          transform: translateY(-100%);
+          transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          border-bottom: 1px solid rgba(29, 29, 31, 0.1);
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        .nav-header.visible {
+          transform: translateY(0);
+        }
+
+        .nav-logo-mobile {
+          height: 40px;
+          width: auto;
+        }
+
+        .nav-toggle {
+          display: block;
+          background: none;
+          border: none;
+          color: #1d1d1f;
+          font-size: 24px;
+          cursor: pointer;
+          padding: 5px;
+          z-index: 10000;
+          position: relative;
+        }
+
+        .nav-menu-mobile {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
+          background: #f5f5f7;
+          flex-direction: column;
+          gap: 0;
+          padding: 80px 30px 30px 30px;
+          transform: translateX(-100%);
+          opacity: 1;
+          visibility: visible;
+          transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          z-index: 9999;
+          justify-content: flex-start;
+          align-items: stretch;
+          text-align: right;
+          display: flex;
+          list-style: none;
+          margin: 0;
+        }
+
+        .nav-menu-mobile.open {
+          transform: translateX(0);
+        }
+
+        .nav-menu-mobile li {
+          padding: 20px 0;
+          border-bottom: 1px solid #1d1d1f;
+          margin: 0;
+        }
+
+        .nav-menu-mobile li:last-child {
+          border-bottom: 1px solid #1d1d1f;
+        }
+
+        .nav-menu-mobile a {
+          font-size: 18px;
+          font-weight: 600;
+          color: #1d1d1f;
+          display: block;
+          width: 100%;
+          text-align: left;
+          text-decoration: none;
+          text-transform: lowercase;
+          letter-spacing: 0.5px;
+        }
+
+        .nav-menu-mobile a:hover {
+          color: #000000;
+        }
+
+        .nav-close {
+          position: absolute;
+          top: 20px;
+          left: 30px;
+          background: none;
+          border: none;
+          color: #1d1d1f;
+          font-size: 24px;
+          cursor: pointer;
+          z-index: 10001;
+          padding: 5px;
+          display: block;
+        }
+
+        .nav-close:hover {
+          color: #000000;
+        }
+      }
+
+      /* Sidebar styles for desktop */
+      .logo-container {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        height: auto;
+      }
+
+      .sidebar-address {
+        position: absolute;
+        bottom: 20px;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-size: 11px;
+        color: #1d1d1f;
+        opacity: 0.7;
+        padding: 0 10px;
+        line-height: 1.3;
+      }
+
+      .logo-container a {
+        display: block;
+        cursor: pointer;
+      }
+
+      .sidebar-logo {
+        height: 60px;
+        width: auto;
+        max-width: 100%;
+        pointer-events: none;
+      }
+
+      .nav-menu-sidebar {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0px;
+        text-align: right;
+        margin-top: 20px;
+        border-right: 1px solid black;
+        padding-right: 20px;
+      }
+
+      .nav-menu-sidebar li {
+        margin: 0;
+      }
+      .nav-menu-sidebar li:last-child a {
+        margin-bottom: 0;
+      }
+
+      .nav-menu-sidebar a {
+        color: #1d1d1f;
+        text-decoration: none;
+        font-size: 18px;
+        font-weight: 500;
+        text-transform: lowercase;
+        letter-spacing: 0.5px;
+        display: block;
+        padding: 2px 0;
+        transition: color 0.3s ease;
+      }
+
+      .nav-menu-sidebar a:hover {
+        color: #000000;
+      }
+
+      /* Home taglines */
+      .home-taglines {
+        margin-top: 40px;
+      }
+
+      /* Desktop layout for taglines */
+      @media (min-width: 769px) {
+        .home-taglines {
+          display: flex;
+          gap: 30px;
+          justify-content: center;
+          align-items: flex-end;
+        }
+
+        .tagline {
+          font-size: 30px;
+          color: #1d1d1f;
+          font-weight: 200;
+          letter-spacing: 0.5px;
+        }
+      }
+
+      /* Mobile layout for taglines */
+      @media (max-width: 768px) {
+        .home-taglines {
+          display: flex;
+          flex-direction: row;
+          align-items: flex-end;
+          text-align: right;
+          gap: 8px;
+        }
+
+        .tagline {
+          font-size: 16px;
+          color: #1d1d1f;
+          font-weight: 400;
+          letter-spacing: 0.5px;
+        }
+      }
+
+      /* Ink Trail */
+
+      .blend-root {
+        position: relative;
+        background: #f5f5f7;
+        isolation: isolate;
+        min-height: 100vh;
+      }
+      .ink-trail-container {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 100px;
+        height: 100vh;
+        pointer-events: none;
+        z-index: 9999;
+      }
+      .ink-trail-svg {
+        width: 100%;
+        height: 100%;
+      }
+
+      #inkTrailPath {
+        /* Put the blend on the PATH for Safari/WebKit */
+        stroke: #1d1d1f;
+        stroke-width: 2;
+        fill: none;
+        opacity: 1;
+      }
+      /* Base Section */
+      .base-section {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        margin:20px;
+        border-top: 1px solid #1d1d1f;
+        box-sizing: border-box;
+        background: #f5f5f7;
+      }
+
+      /* About Us Section */
+
+      .about-content {
+        max-width: var(--width);
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        height: 80vh;
+        justify-content: center;
+        position: relative;
+      }
+
+      .about-content h2 {
+        font-size: 2rem;
+        margin: 0 0 30px 0;
+        font-weight: 700;
+        color: #1d1d1f;
+        letter-spacing: 1px;
+        text-align: right;
+      }
+
+      .about-text {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-bottom: 40px;
+      }
+
+      .about-intro {
+        font-size: 1rem;
+        line-height: 1.6;
+        color: #1d1d1f;
+        margin: 0 0 20px 0;
+      }
+
+      .about-more {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s ease-in-out;
+      }
+
+      .about-more.expanded {
+
+        max-height: 1000px;
+      }
+
+      .about-more p {
+        font-size: 1rem;
+        line-height: 1.6;
+        color: #1d1d1f;
+        margin: 15px 0;
+        opacity: 0.9;
+      }
+
+      .read-more-btn {
+        background: none;
+        color: #1d1d1f;
+        border: 2px solid #1d1d1f;
+        padding: 12px 24px;
+        font-size: 16px;
+        font-weight: bold;
+        text-transform: lowercase;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        align-self: center;
+      }
+
+      .read-more-btn:hover {
+        background: #1d1d1f;
+        color: #f5f5f7;
+      }
+
+      .spazio-content {
+        max-width: 1000px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        height: 100%;
+        justify-content: center;
+        position: relative;
+      }
+
+      .spazio-content h2 {
+        font-size: 2rem;
+        margin: 0;
+        font-weight: 700;
+        color: #1d1d1f;
+        letter-spacing: 1px;
+        text-align: right;
+      }
+
+      .subsection {
+        margin: 0 0 30px 0;
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1d1d1f;
+        letter-spacing: 0.5px;
+        text-align: right;
+      }
+
+      .carousel-container {
+        flex: 1;
+        position: relative;
+        width: 100%;
+        max-width: var(--width);
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .carousel-wrapper {
+        flex: 1;
+        overflow: hidden;
+      }
+
+      .carousel-track {
+        display: flex;
+        transition: transform 0.4s ease;
+        gap: 10px;
+      }
+
+      .carousel-slide {
+        flex: 0 0 calc(50% - 5px);
+        min-width: calc(50% - 5px);
+      }
+
+      .carousel-image {
+        width: 100%;
+        height: 350px;
+        object-fit: cover;
+        cursor: pointer;
+        transition: opacity 0.3s ease;
+      }
+
+      .carousel-image:hover {
+        opacity: 0.95;
+      }
+
+      .carousel-arrow {
+        background: none;
+        color: #1d1d1f;
+        border: none;
+        height: 80px;
+        font-size: 40px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: color 0.3s ease;
+        flex-shrink: 0;
+      }
+
+      .carousel-arrow:hover {
+        color: #000000;
+      }
+
+      .carousel-arrow:disabled {
+        opacity: 0;
+        cursor: not-allowed;
+      }
+
+      .spazio-text {
+        margin-top: 40px;
+        max-width: var(--width);
+      }
+
+      .spazio-intro {
+        font-size: 1rem;
+        line-height: 1.6;
+        color: #1d1d1f;
+        margin: 0;
+        text-align: left;
+      }
+
+      /* Podcast Section */
+      .podcast-content {
+        max-width: var(--width);
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        height: 80vh;
+        justify-content: center;
+        position: relative;
+      }
+
+      .podcast-content h2 {
+        font-size: 2rem;
+        margin: 0 0 30px 0;
+        font-weight: 700;
+        color: #1d1d1f;
+        letter-spacing: 1px;
+        text-align: right;
+      }
+
+      .podcast-text {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-bottom: 40px;
+      }
+
+      .podcast-intro {
+        font-size: 1rem;
+        line-height: 1.6;
+        color: #1d1d1f;
+        margin: 0 0 20px 0;
+      }
+
+      .podcast-btn {
+        background: none;
+        color: #1d1d1f;
+        padding: 12px 24px;
+        font-size: 16px;
+        border: 2px solid #1d1d1f;
+        font-weight: bold;
+        text-transform: lowercase;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        align-self: center;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .podcast-btn:hover {
+        background: #1d1d1f;
+        color: #f5f5f7;
+      }
+
+      .podcast-btn:hover .substack-icon {
+        color: #f5f5f7;
+      }
+
+      .substack-icon {
+        width: 16px;
+        height: 16px;
+        transition: color 0.3s ease;
+      }
+
+      /* News Section */
+      .news-content {
+        max-width: var(--width);
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        width: 100%;
+        height: 80vh;
+        justify-content: center;
+        position: relative;
+      }
+
+      .news-content h2 {
+        font-size: 2rem;
+        margin: 0 0 30px 0;
+        font-weight: 700;
+        color: #1d1d1f;
+        letter-spacing: 1px;
+        text-align: right;
+      }
+
+      .news-text {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-bottom: 40px;
+        width: 100%;
+      }
+
+      .news-intro {
+        font-size: 1rem;
+        line-height: 1.6;
+        color: #1d1d1f;
+        margin: 0 0 20px 0;
+        text-align: center;
+      }
+
+      .news-btn {
+        background: none;
+        color: #1d1d1f;
+        padding: 12px 24px;
+        font-size: 16px;
+        border: 2px solid #1d1d1f;
+        font-weight: bold;
+        text-transform: lowercase;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        align-self: center;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .news-btn:hover {
+        background: #1d1d1f;
+        color: #f5f5f7;
+      }
+
+      .news-btn:hover .linktree-icon {
+        color: #f5f5f7;
+      }
+
+      .linktree-icon {
+        width: 16px;
+        height: 16px;
+        transition: color 0.3s ease;
+      }
+
+      /* Contatti Section */
+      .contatti-content {
+        max-width: var(--width);
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        height: 80vh;
+        width: 100%;
+        justify-content: center;
+        position: relative;
+      }
+
+      @media (min-width: 769px) {
+        .contatti-section {
+          position: relative;
+          left: calc(-15vw / 2);
+          width: 100vw;
+          margin-left: calc(-15vw / 2);
+        }
+      }
+
+      .contatti-content h2 {
+        font-size: 2rem;
+        margin: 0 0 40px 0;
+        font-weight: 700;
+        color: #1d1d1f;
+        letter-spacing: 1px;
+        text-align: right;
+        width: 100%;
+      }
+
+      .contatti-wrapper {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 60px;
+        width: 100%;
+      }
+
+      .contatti-logo {
+        width: 60%;
+        height: auto;
+        flex-shrink: 0;
+      }
+
+      .contatti-links {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        flex: 1;
+      }
+
+      .contact-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        color: #1d1d1f;
+        text-decoration: none;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        padding: 10px 0;
+        border-bottom: 1px solid transparent;
+      }
+
+      .contact-item:hover {
+        transform: translateX(10px);
+        border-bottom: 1px solid #1d1d1f;
+      }
+
+      .contact-icon {
+        width: 24px;
+        height: 24px;
+        flex-shrink: 0;
+      }
+
+      .contact-item span {
+        font-weight: 500;
+        letter-spacing: 0.3px;
+      }
+      @media (max-width: 768px) {
+        .carousel-container {
+          gap: 10px;
+        }
+
+        .carousel-wrapper {
+          width: 100%;
+        }
+
+        .carousel-track {
+          gap: 0;
+        }
+        
+        .carousel-slide {
+          flex: 0 0 100%;
+          min-width: 100%;
+          width: 100%;
+        }
+
+        .carousel-image {
+          height: 250px;
+          width: 100%;
+          object-fit: cover;
+        }
+
+        .carousel-arrow {
+          font-size: 30px;
+          padding: 0 10px;
+        }
+      }
+
+      /* Archivio Section */
+      .archivio-content {
+        max-width: 1000px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        height: 100%;
+        margin-top:100px;
+        margin-bottom:100px;
+        justify-content: center;
+        position: relative;
+      }
+
+      .archivio-content h2 {
+        font-size: 2rem;
+        margin: 0 0 30px 0;
+        font-weight: 700;
+        color: #1d1d1f;
+        letter-spacing: 1px;
+        text-align: right;
+      }
+
+      /* Gallery Grid */
+      .archivio-gallery {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-auto-rows: minmax(140px, auto);
+        gap: 20px;
+        margin-bottom: 40px;
+        contain: layout;
+      }
+
+      .gallery-item {
+        position: relative;
+        cursor: pointer;
+        overflow: hidden;
+        background: #f0f0f0;
+        contain: layout paint;
+      }
+
+      .gallery-item.portrait {
+        grid-row: span 2;
+        aspect-ratio: 5/6;
+      }
+
+      .gallery-item.landscape {
+        aspect-ratio: 16/9;
+      }
+
+      .gallery-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .gallery-item:hover {
+        cursor: pointer;
+      }
+
+      .gallery-caption {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+        color: white;
+        padding: 20px 15px 15px;
+        font-size: 14px;
+        line-height: 1.4;
+        display: -webkit-box;
+        text-align: justify;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      /* Modal - Optimized for performance */
+      .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.95);
+        z-index: 10000;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        margin-left: 15vw;
+        width: 85vw;
+        visibility: hidden;
+        opacity: 0;
+        display: flex;
+        contain: layout style paint;
+      }
+
+      .modal.active {
+        visibility: visible;
+        opacity: 1;
+      }
+
+      .modal-content {
+        max-width: 90vw;
+        max-height: 90vh;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .modal-image {
+        max-width: 100%;
+        max-height: 70vh;
+        object-fit: contain;
+        display: block;
+      }
+
+      /* Modal navigation arrows */
+      .modal-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        color: white;
+        border: none;
+        font-size: 24px;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: opacity 0.3s ease;
+        z-index: 10002;
+        padding: 0;
+      }
+
+      .modal-nav:hover {
+        opacity: 0.7;
+      }
+
+      .modal-nav.disabled {
+        opacity: 0.2;
+        cursor: not-allowed;
+      }
+
+      .modal-nav-prev {
+        left: 40px;
+      }
+
+      .modal-nav-next {
+        right: 40px;
+      }
+
+      /* Hide mobile navigation on desktop */
+      .modal-navigation {
+        display: none;
+      }
+
+      /* Hide desktop navigation on mobile */
+      @media (min-width: 769px) {
+        .mobile-only {
+          display: none !important;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .desktop-only {
+          display: none !important;
+        }
+        
+        .modal-navigation {
+          display: flex;
+          gap: 60px;
+          justify-content: center;
+          position: fixed;
+          bottom: 30px;
+          left: 50%;
+          transform: translateX(-50%);
+          z-index: 10003;
+        }
+        
+        .modal-navigation .modal-nav {
+          position: static;
+          transform: none;
+          margin: 0;
+          font-size: 28px;
+          width: 44px;
+          height: 44px;
+        }
+      }
+      
+      .modal-loader {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 50px;
+        height: 50px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-top-color: white;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        z-index: 1;
+      }
+      
+      @keyframes spin {
+        to { transform: translate(-50%, -50%) rotate(360deg); }
+      }
+
+      .modal-text {
+        color: white;
+        margin-top: 20px;
+        max-width: 600px;
+        text-align: center;
+        font-size: 16px;
+        line-height: 1.6;
+      }
+
+      .modal-close {
+        position: absolute;
+        top: 0px;
+        right: 60px;
+        color: white;
+        font-size: 40px;
+        cursor: pointer;
+        background: none;
+        border: none;
+        z-index: 10001;
+        transition: opacity 0.3s;
+      }
+
+      .modal-close:hover {
+        opacity: 0.7;
+      }
+
+      .archivio-text {
+        margin-top: 40px;
+        max-width: var(--width);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .archivio-intro {
+        font-size: 1rem;
+        line-height: 1.6;
+        color: #1d1d1f;
+        margin: 0;
+        text-align: left;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s ease-in-out;
+        width: 100%;
+      }
+
+      .archivio-intro.expanded {
+        max-height: 500px;
+        margin-bottom: 20px;
+      }
+
+      .archivio-btn {
+        background: none;
+        color: #1d1d1f;
+        border: 2px solid #1d1d1f;
+        padding: 12px 24px;
+        font-size: 16px;
+        font-weight: bold;
+        text-transform: lowercase;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        align-self: center;
+      }
+
+      .archivio-btn:hover {
+        background: #1d1d1f;
+        color: #f5f5f7;
+      }
+
+      /* Footer Section */
+      .footer-section {
+        background: #1d1d1f;
+        color: #f5f5f7;
+        padding: 60px 40px 40px 40px;
+        margin-top: 80px;
+      }
+
+      @media (min-width: 769px) {
+        .footer-section {
+          position: relative;
+          left: calc(-15vw / 2);
+          width: 100vw;
+          margin-left: calc(-15vw / 2);
+        }
+      }
+
+      /* Sidebar hidden state */
+      .sidebar.hidden {
+        opacity: 0 !important;
+        pointer-events: none;
+      }
+
+      .footer-content {
+        max-width: 1000px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 40px;
+      }
+
+      .footer-logo-svg {
+        height: 50px;
+        width: auto;
+        filter: invert(1);
+      }
+
+      .footer-info p {
+        margin: 5px 0;
+        font-size: 14px;
+        opacity: 0.8;
+      }
+
+      .footer-links {
+        display: flex;
+        gap: 30px;
+      }
+
+      .footer-links a {
+        color: #f5f5f7;
+        text-decoration: none;
+        font-size: 14px;
+        text-transform: lowercase;
+        letter-spacing: 0.5px;
+        transition: opacity 0.3s ease;
+      }
+
+      .footer-links a:hover {
+        opacity: 0.7;
+      }
+
+      /* Mobile adjustments for about section */
+      @media (max-width: 768px) {
+        .content-wrapper {
+          margin-left: 0;
+          width: 100vw;
+        }
+
+        .about-section {
+          padding: 20px;
+        }
+        .about-content {
+            height: auto;
+            min-height: 80vh;;
+        }
+
+        .about-content h2 {
+          font-size: 2.5rem;
+        }
+
+        .about-intro {
+          font-size: 1rem;
+        }
+
+        .about-more p {
+          font-size: 1rem;
+        }
+
+        .spazio-section {
+          padding: 20px;
+        }
+
+        .spazio-content h2 {
+          font-size: 2.5rem;
+        }
+
+
+
+        .spazio-intro {
+          font-size: 1rem;
+        }
+
+        .base-section {
+          min-height: calc(100vh - 73px);
+          padding-top: 93px;
+          text-align: justify;
+        }
+
+        .ink-trail-container {
+          display: none;
+        }
+
+        .footer-section {
+          padding: 40px 20px 30px 20px;
+          margin-top: 40px;
+        }
+
+        .footer-content {
+          flex-direction: column;
+          text-align: center;
+          gap: 30px;
+        }
+
+        .footer-links {
+          gap: 20px;
+        }
+
+        .archivio-section {
+          padding: 20px;
+        }
+
+        .archivio-content h2 {
+          font-size: 2.5rem;
+        }
+
+        .archivio-gallery {
+          grid-template-columns: 1fr;
+          gap: 15px;
+          grid-auto-rows: auto;
+        }
+        .gallery-caption {
+            font-size:11px;
+
+        }
+
+        .gallery-item {
+          height: auto;
+          min-height: 200px;
+        }
+
+        .gallery-item.portrait {
+          grid-row: span 1;
+          aspect-ratio: 3/4;
+        }
+
+        .gallery-item.landscape {
+          grid-row: span 1;
+          aspect-ratio: auto;
+          max-height: 300px;
+        }
+
+        .gallery-item img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+        .modal {
+          margin-left: 0px;
+          width: unset;
+        }
+
+        .modal-close {
+          top: 80px;
+          right: 10px;
+          font-size: 30px;
+        }
+
+
+        .archivio-intro {
+          font-size: 1.1rem;
+        }
+
+
+        .podcast-content h2 {
+          font-size: 2.5rem;
+        }
+
+        .podcast-intro {
+          font-size: 1rem;
+        }
+
+
+        .news-content h2 {
+          font-size: 2.5rem;
+        }
+
+        .news-intro {
+          text-align: left;
+          font-size: 1rem;
+        }
+
+        .contatti-section {
+          padding: 20px;
+        }
+
+        .contatti-content h2 {
+          font-size: 2.5rem;
+        }
+
+        .contatti-wrapper {
+          flex-direction: column;
+          gap: 30px;
+        }
+
+        .contatti-logo {
+          display: none;
+        }
+
+        .contatti-links {
+          gap: 15px;
+          width: 100%;
+        }
+
+        .contact-item {
+          font-size: 14px;
+        }
+
+        .contact-item:hover {
+          transform: translateX(5px);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Desktop Sidebar -->
+    <aside class="sidebar">
+      <div class="logo-container">
+        <a href="#home">
+          <object
+            data="logo.svg"
+            type="image/svg+xml"
+            class="sidebar-logo"
+            id="sidebar_logo"
+            aria-label="Sidebar logo"
+          ></object>
+        </a>
+      </div>
+
+      <nav class="nav-menu-sidebar">
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#spazio">Spazio</a></li>
+        <!-- <li><a href="#servizi">Servizi</a></li> -->
+        <li><a href="#archivio">Archivio</a></li>
+        <li><a href="#podcast">Podcast</a></li>
+        <li><a href="#news">eventi</a></li>
+        <li><a href="#contatti">Contatti</a></li>
+      </nav>
+    </aside>
+
+    <!-- Mobile Navigation Header -->
+    <header class="nav-header" id="navHeader">
+      <a href="#home">
+        <object
+          data="logo.svg"
+          type="image/svg+xml"
+          class="nav-logo-mobile"
+          id="nav_logo"
+          aria-label="Navigation logo"
+        ></object>
+      </a>
+
+      <!-- Mobile Navigation Menu -->
+      <nav class="nav-menu-mobile" id="navMenuMobile">
+        <button class="nav-close" id="navClose">✕</button>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#spazio">Spazio</a></li>
+        <!-- <li><a href="#servizi">Servizi</a></li> -->
+        <li><a href="#archivio">Archivio</a></li>
+        <li><a href="#podcast">Podcast</a></li>
+        <li><a href="#news">eventi</a></li>
+        <li><a href="#contatti">Contatti</a></li>
+      </nav>
+
+      <!-- Mobile Toggle Button -->
+      <button class="nav-toggle" id="navToggle">☰</button>
+    </header>
+    <div class="blend-root">
+      <!-- Ink Trail
+      <div class="ink-trail-container">
+        <svg class="ink-trail-svg" id="inkTrailSvg">
+          <path
+            id="inkTrailPath"
+            stroke="#1d1d1f"
+            stroke-width="2"
+            fill="none"
+            opacity="1"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          ></path>
+        </svg>
+      </div> -->
+
+      <!-- Main Content Area -->
+      <main class="content-wrapper">
+        <!-- Home Section -->
+        <section class="main-content" id="home">
+          <object
+            data="logo.svg"
+            type="image/svg+xml"
+            class="hero-svg"
+            id="hero_svg"
+            aria-label="Hero Logo"
+          ></object>
+          <div class="home-taglines">
+            <span class="tagline">Project Space.</span>
+            <span class="tagline">Art Studio.</span>
+            <span class="tagline">Cultural Association.</span>
+          </div>
+        </section>
+
+        <!-- About Us Section -->
+        <section class="base-section about-section" id="about">
+          <div class="about-content">
+            <h2>About Us</h2>
+            <div class="about-text">
+              <p class="about-intro">
+               Artiglieria è un <b>project space</b> attivo dal 2020, dedicato alla promozione della cultura e dell’arte
+contemporanea attraverso eventi e progetti orientati alla sperimentazione.
+Come <b>associazione</b>, realizziamo workshop, attività multidisciplinari e offriamo servizi che mettono
+in dialogo linguaggi, artistə e pubblici diversi.
+La nostra sede ospita anche uno <b>studio</b> con postazioni di coworking rivolte ad artistə attivə in
+differenti ambiti creativi, offrendo un ambiente condiviso e dinamico in cui lavorare e collaborare.
+              </p>
+
+              <div class="about-more" id="aboutMore">
+                <p>
+                  <b>La nostra mission</b><br>
+                  Artiglieria favorisce un <b>ecosistema creativo inclusivo</b>, offrendo un ambiente in cui idee e pratiche
+                  artistiche possono prendere forma e trovare relazione con la comunità.
+                  Promuoviamo partecipazione e integrazione attraverso l'arte e la cultura, con uno <b>sguardo attento
+                  alle dinamiche contemporanee</b>.
+                  Sosteniamo progetti e idee che valorizzano e rinnovano la scena artistica fiorentina, favorendo
+                  l'<b>accessibilità agli eventi e incentivando il coinvolgimento attivo della collettività</b>. Il nostro
+                  impegno è creare legami autentici tra chi produce arte e la cittadinanza, in un territorio dove gli
+                  spazi dedicati all'arte indipendente sono ancora limitati.
+                </p>
+                <p>
+                  <b>La nostra vision</b><br>
+                  Vogliamo generare nuove forme di socialità attraverso modalità innovative di fruizione dell'arte,
+                  creando luoghi di incontro, dialogo e trasformazione sia individuale che collettiva.
+                  Il nostro obiettivo è <b>sviluppare opportunità di lavoro autonome</b> e contribuire alla nascita di
+                  nuove professionalità, costruendo un contesto creativo capace di autosostenersi e di <b>produrre
+                  valore sociale</b>.
+                </p>
+              </div>
+            </div>
+
+            <button class="read-more-btn" id="readMoreBtn">leggi di più</button>
+          </div>
+        </section>
+
+        <!-- Spazio Section -->
+        <section class="base-section spazio-section" id="spazio">
+          <div class="spazio-content">
+            <h2>Spazio</h2>
+            <p class="subsection">/eventi</p>
+            <div class="carousel-container">
+              <button
+                class="carousel-arrow carousel-arrow-left"
+                id="carouselLeft"
+              >
+                ‹
+              </button>
+              <div class="carousel-wrapper">
+                <div class="carousel-track" id="carouselTrack">
+                  <div class="carousel-slide" data-caption="">
+                    <img
+                      src="images/spazio_1.webp"
+                      alt="Spazio Image 1"
+                      class="carousel-image" loading="lazy"
+                    />
+                  </div>
+                  <div class="carousel-slide" data-caption="">
+                    <img
+                      src="images/spazio_2.webp"
+                      alt="Spazio Image 2"
+                      class="carousel-image" loading="lazy"
+                    />
+                  </div>
+                  <div class="carousel-slide" data-caption="">
+                    <img
+                      src="images/spazio_3.webp"
+                      alt="Spazio Image 3"
+                      class="carousel-image" loading="lazy"
+                    />
+                  </div>
+                  <div class="carousel-slide" data-caption="">
+                    <img
+                      src="images/spazio_4.webp"
+                      alt="Spazio Image 4"
+                      class="carousel-image" loading="lazy"
+                    />
+                  </div>
+                </div>
+              </div>
+              <button
+                class="carousel-arrow carousel-arrow-right"
+                id="carouselRight"
+              >
+                ›
+              </button>
+            </div>
+            <div class="spazio-text">
+              <p class="spazio-intro">
+                Lo <b>spazio eventi</b> è un ambiente <b>polifunzionale</b> pensato per accogliere ricerche e <b>linguaggi
+espressivi diversi</b>. La sua forza risiede nella <b>versatilità</b>: uno spazio che cambia e si reinventa,
+adattandosi di volta in volta a scenografie, installazioni e opere sempre nuove.
+È un luogo dinamico, capace di trasformarsi in base alle esigenze di artisti, curatori e pubblico,
+offrendo ogni volta un’esperienza unica. Grazie alla sua natura flessibile, diventa un vero
+laboratorio creativo, dove idee e progetti possono prendere forma in un processo di
+sperimentazione continua.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section class="base-section spazio-section" id="spazio2">
+          <div class="spazio-content">
+            <h2>Spazio</h2>
+            <p class="subsection">/coworking</p>
+            <div class="carousel-container">
+              <button
+                class="carousel-arrow carousel-arrow-left"
+                id="coworkingCarouselLeft"
+              >
+                ‹
+              </button>
+              <div class="carousel-wrapper">
+                <div class="carousel-track" id="coworkingCarouselTrack">
+                  <div class="carousel-slide" data-caption="a">
+                    <img
+                      src="images/coworking/3.webp"
+                      alt="Spazio Image 1"
+                      class="carousel-image" loading="lazy"
+                    />
+                  </div>
+                  <div class="carousel-slide" data-caption="">
+                    <img
+                      src="images/coworking/2.webp"
+                      alt="Spazio Image 2"
+                      class="carousel-image" loading="lazy"
+                    />
+                  </div>
+                  <div class="carousel-slide" data-caption="">
+                    <img
+                      src="images/coworking/1.webp"
+                      alt="Spazio Image 3"
+                      class="carousel-image" loading="lazy"
+                    />
+                  </div>
+                  <div class="carousel-slide" data-caption="">
+                    <img
+                      src="images/coworking/4.webp"
+                      alt="Spazio Image 4"
+                      class="carousel-image" loading="lazy"
+                    />
+                  </div>
+                </div>
+              </div>
+              <button
+                class="carousel-arrow carousel-arrow-right"
+                id="coworkingCarouselRight"
+              >
+                ›
+              </button>
+            </div>
+            <div class="spazio-text">
+              <p class="spazio-intro">
+                Il <b>coworking</b> ospita <b>dodici postazioni</b> di lavoro dedicate a <b>diversi ambiti artistici</b> — dalla grafica
+alla pittura, dalla stencil art alla scultura, fino alla fotografia e alla performance.
+Le postazioni sono disponibili per <b>affitti di medio-lungo periodo</b> e pensate per artistə che
+cercano uno spazio stabile di ricerca e produzione all’interno di una comunità creativa.
+Lo studio è un luogo di scambio e collaborazione, dove progetti e idee prendono forma,
+contribuendo alla crescita della comunità.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Archivio Section -->
+        <section class="base-section archivio-section" id="archivio">
+          <div class="archivio-content">
+            <h2>Archivio</h2>
+            <div class="archivio-gallery" id="archivioGallery">
+              <div class="gallery-item landscape" data-caption="SIKSA live - collab. w/ Phase e Biodiversità Records | febbraio 2022 | ph. Luca Graziani - editing Giulio Guidi">
+                <img src="images/archivio/1.webp" alt="Archivio Image" />
+                <div class="gallery-caption">SIKSA live - collab. w/ Phase e Biodiversità Records | febbraio 2022 | ph. Luca Graziani - editing Giulio Guidi</div>
+              </div>
+              <div class="gallery-item landscape" data-caption="NZIRIA live (XXYBRID album) &amp; lightscapes by Bianca Peruzzi | rassegna BOCCADAFUOCO | aprile 2022 | ph. Patrizio Marcocci">
+                <img src="images/archivio/2.webp" alt="Archivio Image" />
+                <div class="gallery-caption">NZIRIA live (XXYBRID album) &amp; lightscapes by Bianca Peruzzi | rassegna BOCCADAFUOCO | aprile 2022 | ph. Patrizio Marcocci</div>
+              </div>
+              <div class="gallery-item portrait" data-caption="Launch issue 03 di Eki Magazine - in collaborazione con MONOGRID e Live coding di Musicislogicisgeometry | marzo 2023 | ph. Alexandru Eugen Bonta">
+                <img src="images/archivio/6por.webp" alt="Archivio Image" />
+                <div class="gallery-caption">Launch issue 03 di Eki Magazine - in collaborazione con MONOGRID e Live coding di Musicislogicisgeometry | marzo 2023 | ph. Alexandru Eugen Bonta</div>
+              </div>
+              <div class="gallery-item landscape" data-caption="L'animale nella fossa - live performance di Gaia Ginevra Giorgi | rassegna BOCCADAFUOCO | maggio 2022 | ph. Luca Graziani">
+                <img src="images/archivio/3.webp" alt="Archivio Image" />
+                <div class="gallery-caption">L'animale nella fossa - live performance di Gaia Ginevra Giorgi | rassegna BOCCADAFUOCO | maggio 2022 | ph. Luca Graziani</div>
+              </div>
+              <div class="gallery-item landscape" data-caption="APNEA - performance A/V di Abo Carcassi e Anna Grenman | rassegna BOCCADAFUOCO | giugno 2022 | ph. Giulio Guidi">
+                <img src="images/archivio/4.webp" alt="Archivio Image" />
+                <div class="gallery-caption">APNEA - performance A/V di Abo Carcassi e Anna Grenman | rassegna BOCCADAFUOCO | giugno 2022 | ph. Giulio Guidi</div>
+              </div>
+              <div class="gallery-item landscape" data-caption="Presentazione del magazine Archivio contemporaneo a cura di Visioni Parallele | rassegna BOCCADAFUOCO | giugno 2022 | ph. Brigida Brancale">
+                <img src="images/archivio/5.webp" alt="Archivio Image" />
+                <div class="gallery-caption">Presentazione del magazine Archivio contemporaneo a cura di Visioni Parallele | rassegna BOCCADAFUOCO | giugno 2022 | ph. Brigida Brancale</div>
+              </div>
+              <div class="gallery-item landscape" data-caption="Sub-liminale by Artiglieria | rassegna Scenari - collab. w/ Innesco e Eterotopie | ottobre 2023 | ph. Giulia De Riso">
+                <img src="images/archivio/7.webp" alt="Archivio Image" />
+                <div class="gallery-caption">Sub-liminale by Artiglieria | rassegna Scenari - collab. w/ Innesco e Eterotopie | ottobre 2023 | ph. Giulia De Riso</div>
+              </div>
+              <div class="gallery-item portrait" data-caption="Self Euphoria di Sofia Talanti | gennaio 2024 | ph. Giulia De Riso">
+                <img src="images/archivio/8por.webp" alt="Archivio Image" />
+                <div class="gallery-caption">Self Euphoria di Sofia Talanti | gennaio 2024 | ph. Giulia De Riso</div>
+              </div>
+              <div class="gallery-item portrait" data-caption="Giulia De Riso x 3° anniversario di Artiglieria | febbraio 2024 | ph. Maiko Farris">
+                <img src="images/archivio/9por.webp" alt="Archivio Image" />
+                <div class="gallery-caption">Giulia De Riso x 3° anniversario di Artiglieria | febbraio 2024 | ph. Maiko Farris</div>
+              </div>
+              <div class="gallery-item portrait" data-caption="Lorenzo Passaniti &amp; Federico Primerano x 3° anniversario di Artiglieria | febbraio 2024 | ph. Maiko Farris">
+                <img src="images/archivio/10por.webp" alt="Archivio Image" />
+                <div class="gallery-caption">Lorenzo Passaniti &amp; Federico Primerano x 3° anniversario di Artiglieria | febbraio 2024 | ph. Maiko Farris</div>
+              </div>
+            </div>
+            <div class="archivio-text">
+              <p class="archivio-intro" id="archivioIntro">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                nisi ut aliquip ex ea commodo consequat.
+              </p>
+              <button class="archivio-btn" id="archivioBtn" style="display:none;">scopri di più</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Podcast Section -->
+        <section class="base-section podcast-section" id="podcast">
+          <div class="podcast-content">
+            <h2>Podcast</h2>
+            <div class="podcast-text">
+              <p class="podcast-intro">
+                Scopri tutti i contenuti dei talk, live e progetti che Artiglieria ospita nei propri spazi attraverso il nostro canale podcast e rimani
+sempre aggiornatə sulle nostre ultime iniziative.
+              </p>
+            </div>
+            <a href="https://artiglieria.substack.com/podcast/archive?sort=new" target="_blank" class="podcast-btn">
+              <svg class="substack-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/>
+              </svg>
+              canale podcast
+            </a>
+          </div>
+        </section>
+
+        <!-- News Section -->
+        <section class="base-section news-section" id="news">
+          <div class="news-content">
+            <h2>Eventi</h2>
+            <div class="news-text">
+              <p class="news-intro">
+                Per conoscere i prossimi eventi di Artiglieria e le attività in corso visita la pagina dedicata.
+              </p>
+            </div>
+            <a href="https://linktr.ee/artiglieria?fbclid=PAdGRleANvApJleHRuA2FlbQIxMQABp66bMwzb4nBMyF9h9MC983CXyfkhVAGmt7YvdL-X1_fko2E9ujrj8Iz7nRsE_aem_byxiSEdbg3OH_IPa_h10gQ" target="_blank" class="news-btn">
+              <svg class="linktree-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="m13.511 5.853 4.005-4.117 2.325 2.381-4.201 4.005h5.909v3.305h-5.937l4.229 4.108-2.325 2.334-5.741-5.769-5.741 5.769-2.325-2.325 4.229-4.108H2V8.122h5.909L3.708 4.117l2.325-2.381 4.005 4.117V0h3.473v5.853zM10.038 16.16h3.473v7.842h-3.473V16.16z"/>
+              </svg>
+              clicca qui
+            </a>
+          </div>
+        </section>
+
+        <!-- Contatti Section -->
+        <section class="base-section contatti-section" id="contatti">
+          <div class="contatti-content">
+            <h2>Contatti</h2>
+            <div class="contatti-wrapper">
+              <object
+                data="logo.svg"
+                type="image/svg+xml"
+                class="contatti-logo"
+                aria-label="Contatti Logo"
+              ></object>
+              <div class="contatti-links">
+              <a href="https://www.instagram.com/art.iglieria/" target="_blank" class="contact-item">
+                <svg class="contact-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM5.838 12a6.162 6.162 0 1 1 12.324 0 6.162 6.162 0 0 1-12.324 0zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm4.965-10.405a1.44 1.44 0 1 1 2.881.001 1.44 1.44 0 0 1-2.881-.001z"/>
+                </svg>
+                <span>Instagram</span>
+              </a>
+              <a href="mailto:artiglieriac4@gmail.com" class="contact-item">
+                <svg class="contact-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 12.713l-11.985-9.713h23.97l-11.985 9.713zm0 2.574l-12-9.725v15.438h24v-15.438l-12 9.725z"/>
+                </svg>
+                <span>artiglieriac4@gmail.com</span>
+              </a>
+              <a href="https://t.me/artiglieriaaps" target="_blank" class="contact-item">
+                <svg class="contact-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.941z"/>
+                </svg>
+                <span>Telegram</span>
+              </a>
+              <a href="https://form.jotform.com/250121684888363" target="_blank" class="contact-item">
+                <svg class="contact-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm0 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0 3c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm0 4c-2.67 0-8 1.34-8 4v1h16v-1c0-2.66-5.33-4-8-4z"/>
+                </svg>
+                <span>Tesseramento Associazione</span>
+              </a>
+              <a href="https://artiglieria.substack.com/" target="_blank" class="contact-item">
+                <svg class="contact-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/>
+                </svg>
+                <span>Newsletter</span>
+              </a>
+              <a href="https://maps.app.goo.gl/E4fgQqLrk2dcazV39" target="_blank" class="contact-item">
+                <svg class="contact-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/>
+                </svg>
+                <span>Via Cittadella 4, Firenze</span>
+              </a>
+            </div>
+            
+            </div>
+          </div>
+        </section>
+
+        <!-- Modal -->
+        <div class="modal" id="imageModal">
+          <button class="modal-close" id="modalClose">&times;</button>
+          <button class="modal-nav modal-nav-prev desktop-only" id="modalPrev">‹</button>
+          <button class="modal-nav modal-nav-next desktop-only" id="modalNext">›</button>
+          <div class="modal-content">
+            <div class="modal-loader" id="modalLoader"></div>
+            <img class="modal-image" id="modalImage" alt="Gallery image" />
+            <p class="modal-text" id="modalText"></p>
+            <div class="modal-navigation mobile-only">
+              <button class="modal-nav modal-nav-prev" id="modalPrevMobile">‹</button>
+              <button class="modal-nav modal-nav-next" id="modalNextMobile">›</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer Section -->
+        <footer class="footer-section">
+          <div class="footer-content">
+            <div class="footer-logo">
+              <object
+                data="logo.svg"
+                type="image/svg+xml"
+                class="footer-logo-svg"
+                aria-label="Footer Logo"
+              ></object>
+            </div>
+            <div class="footer-info">
+              <p>© 2025 Artiglieria. Cultural Association.</p>
+              <p>Via Cittadella 4, 50144 Firenze</p>
+              <p>Project Space • Art Studio • Community</p>
+            </div>
+            <div class="footer-links">
+              <a href="#about">About</a>
+              <a href="#spazio">Spazio</a>
+              <a href="#contatti">Contact</a>
+            </div>
+          </div>
+        </footer>
+      </main>
+    </div>
+    <script>
+      // Mobile navigation functionality
+      function initMobileNav() {
+        const navToggle = document.getElementById("navToggle");
+        const navMenu = document.getElementById("navMenuMobile");
+        const navClose = document.getElementById("navClose");
+
+        function closeMenu() {
+          navMenu.classList.remove("open");
+        }
+
+        function openMenu() {
+          navMenu.classList.add("open");
+        }
+
+        if (navToggle && navMenu) {
+          navToggle.addEventListener("click", openMenu);
+
+          if (navClose) {
+            navClose.addEventListener("click", closeMenu);
+          }
+
+          navMenu.addEventListener("click", (e) => {
+            if (e.target.tagName === "A") {
+              closeMenu();
+            }
+          });
+
+          document.addEventListener("click", (e) => {
+            if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+              closeMenu();
+            }
+          });
+        }
+      }
+
+      // Show mobile nav header immediately
+      const navHeader = document.getElementById("navHeader");
+      if (navHeader) {
+        navHeader.classList.add("visible");
+      }
+
+      // Initialize mobile navigation
+      document.addEventListener("DOMContentLoaded", initMobileNav);
+
+      // Read more functionality
+      function initReadMore() {
+        const readMoreBtn = document.getElementById("readMoreBtn");
+        const aboutMore = document.getElementById("aboutMore");
+
+        if (readMoreBtn && aboutMore) {
+          readMoreBtn.addEventListener("click", () => {
+            const isExpanded = aboutMore.classList.contains("expanded");
+
+            if (isExpanded) {
+              aboutMore.classList.remove("expanded");
+              readMoreBtn.textContent = "leggi di più";
+            } else {
+              aboutMore.classList.add("expanded");
+              readMoreBtn.textContent = "leggi di meno";
+            }
+          });
+        }
+      }
+
+      // Initialize read more functionality
+      document.addEventListener("DOMContentLoaded", initReadMore);
+
+      // Carousel functionality
+      function initCarousel(id_track, id_left, id_right) {
+        const carouselTrack = document.getElementById(id_track);
+        const leftArrow = document.getElementById(id_left);
+        const rightArrow = document.getElementById(id_right);
+
+        _initCarousel(carouselTrack, leftArrow, rightArrow);
+      }
+
+      function _initCarousel(carouselTrack,leftArrow,rightArrow) {
+
+        if (!carouselTrack || !leftArrow || !rightArrow) return;
+
+        let currentIndex = 0;
+        const slides = carouselTrack.children;
+        const totalSlides = slides.length;
+
+        // Determine slides per view based on screen size
+        function getSlidesPerView() {
+          return window.innerWidth <= 768 ? 1 : 2;
+        }
+
+        function updateCarousel() {
+          const slidesPerView = getSlidesPerView();
+          const maxIndex = totalSlides - slidesPerView;
+          
+          // Calculate translation accounting for gap
+          let translateX;
+          if (slidesPerView === 1) {
+            // Mobile: no gap, full width slides
+            translateX = -(currentIndex * 100);
+          } else {
+            // Desktop: account for gap between slides
+            const slideWidth = (100 - 1) / slidesPerView; // Subtract 1% for gap
+            const gapWidth = 1 / slidesPerView;
+            translateX = -(currentIndex * (slideWidth + gapWidth));
+          }
+
+          carouselTrack.style.transform = `translateX(${translateX}%)`;
+
+          // Update arrow states
+          leftArrow.disabled = currentIndex === 0;
+          rightArrow.disabled = currentIndex >= maxIndex;
+        }
+
+        function moveLeft() {
+          if (currentIndex > 0) {
+            currentIndex--;
+            updateCarousel();
+          }
+        }
+
+        function moveRight() {
+          const slidesPerView = getSlidesPerView();
+          const maxIndex = totalSlides - slidesPerView;
+          if (currentIndex < maxIndex) {
+            currentIndex++;
+            updateCarousel();
+          }
+        }
+
+        leftArrow.addEventListener("click", moveLeft);
+        rightArrow.addEventListener("click", moveRight);
+
+        // Handle window resize
+        window.addEventListener("resize", () => {
+          updateCarousel();
+        });
+
+        // Initialize
+        updateCarousel();
+      }
+      // Initialize carousel functionality
+      document.addEventListener("DOMContentLoaded", () => {
+        initCarousel("carouselTrack", "carouselLeft", "carouselRight");
+        initCarousel("coworkingCarouselTrack", "coworkingCarouselLeft", "coworkingCarouselRight");
+      });
+
+      // Ink Trail functionality
+      function initInkTrail() {
+        const inkTrailSvg = document.getElementById("inkTrailSvg");
+        const inkTrailPath = document.getElementById("inkTrailPath");
+
+        if (!inkTrailSvg || !inkTrailPath) return;
+
+        let points = [];
+        const maxPoints = 100;
+        const svgHeight = window.innerHeight;
+        const svgWidth = 100;
+
+        function generateBezierPath(points) {
+          if (points.length < 2) return "";
+
+          let path = `M ${points[0].x} ${points[0].y}`;
+
+          for (let i = 1; i < points.length; i++) {
+            const prev = points[i - 1];
+            const curr = points[i];
+            const next = points[i + 1] || curr;
+
+            // Calculate smooth control points using adjacent points
+            const tension = 0.4;
+
+            // Vector from previous to next point
+            const dx = next.x - prev.x;
+            const dy = next.y - prev.y;
+
+            // Control points for smoother curves
+            const cp1x = prev.x + dx * tension;
+            const cp1y = prev.y + dy * tension;
+            const cp2x = curr.x - dx * tension;
+            const cp2y = curr.y - dy * tension;
+
+            path += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${curr.x} ${curr.y}`;
+          }
+
+          return path;
+        }
+
+        function updateInkTrail() {
+          const scrollPercent =
+            window.scrollY /
+            (document.documentElement.scrollHeight - window.innerHeight);
+          const scrollProgress = Math.min(scrollPercent, 1);
+
+          // Calculate how many points we should have based on scroll
+          const targetPoints = Math.floor(scrollProgress * maxPoints);
+
+          // Generate points from start to current scroll position
+          points = [];
+          for (let i = 0; i <= targetPoints; i++) {
+            const progress = i / maxPoints;
+            const y = progress * svgHeight;
+            const x =
+              30 +
+              Math.sin(progress * Math.PI * 4) * 20 +
+              Math.sin(progress * 10) * 3;
+            points.push({ x, y });
+          }
+
+          // Generate and apply path
+          const pathData = generateBezierPath(points);
+          inkTrailPath.setAttribute("d", pathData);
+        }
+
+        // Update on scroll
+        window.addEventListener("scroll", updateInkTrail);
+
+        // Initial draw
+        updateInkTrail();
+      }
+
+      // Initialize ink trail functionality
+      document.addEventListener("DOMContentLoaded", initInkTrail);
+
+      // Sidebar opacity control
+      function initSidebarOpacity() {
+        const sidebar = document.querySelector(".sidebar");
+        if (!sidebar) return;
+
+        function updateSidebarOpacity() {
+          const scrollY = window.scrollY;
+          const viewportHeight = window.innerHeight;
+          const maxScroll = viewportHeight * 0.5; // 50vh
+
+          // Calculate opacity (0 to 1) based on scroll position
+          const opacity = Math.min(scrollY / maxScroll, 1);
+          sidebar.style.opacity = opacity;
+        }
+
+        // Update on scroll
+        window.addEventListener("scroll", updateSidebarOpacity);
+
+        // Initial check
+        updateSidebarOpacity();
+      }
+
+      // Initialize sidebar opacity functionality
+      document.addEventListener("DOMContentLoaded", initSidebarOpacity);
+
+      // Hide sidebar when in contatti section
+      function initContattiSectionObserver() {
+        const sidebar = document.querySelector('.sidebar');
+        const contattiSection = document.getElementById('contatti');
+        const footerSection = document.querySelector('.footer-section');
+        
+        if (!sidebar || !contattiSection) return;
+
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting && entry.intersectionRatio > 0.1) {
+              sidebar.classList.add('hidden');
+            } else {
+              // Check if footer is not in view before showing sidebar
+              const footerRect = footerSection?.getBoundingClientRect();
+              const windowHeight = window.innerHeight;
+              
+              if (!footerRect || footerRect.top > windowHeight) {
+                sidebar.classList.remove('hidden');
+              }
+            }
+          });
+        }, {
+          threshold: [0.3, 0.7]
+        });
+
+        observer.observe(contattiSection);
+
+        // Also observe footer
+        if (footerSection) {
+          const footerObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                sidebar.classList.add('hidden');
+              }
+            });
+          }, {
+            threshold: 0.3
+          });
+          
+          footerObserver.observe(footerSection);
+        }
+      }
+
+      // Initialize contatti section observer
+      document.addEventListener("DOMContentLoaded", initContattiSectionObserver);
+
+
+      // Store active modal instance
+      let activeModalInstance = null;
+
+      // Generic modal functionality for any image collection
+      function initImageModal(containerElement, itemSelector) {
+        const modal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        const modalText = document.getElementById('modalText');
+        const modalClose = document.getElementById('modalClose');
+        const modalLoader = document.getElementById('modalLoader');
+        const modalPrev = document.getElementById('modalPrev');
+        const modalNext = document.getElementById('modalNext');
+        const modalPrevMobile = document.getElementById('modalPrevMobile');
+        const modalNextMobile = document.getElementById('modalNextMobile');
+
+        if (!containerElement || !modal) return;
+        
+        // Create a local instance for this specific gallery
+        const instance = {
+          isModalOpen: false,
+          currentImageIndex: 0,
+          imageItems: [],
+          containerElement: containerElement
+        };
+
+        // Get all image items for this specific container
+        function updateImageItems() {
+          instance.imageItems = Array.from(containerElement.querySelectorAll(itemSelector));
+        }
+        updateImageItems();
+
+        // Load image into modal
+        function loadModalImage(index) {
+          if (index < 0 || index >= instance.imageItems.length) return;
+          
+          instance.currentImageIndex = index;
+          const item = instance.imageItems[index];
+          const img = item.querySelector('img') || item;
+          const src = img.src;
+          const caption = item.dataset.caption || item.closest('[data-caption]')?.dataset.caption || '';
+          
+          // Update navigation buttons state
+          modalPrev.classList.toggle('disabled', index === 0);
+          modalNext.classList.toggle('disabled', index === instance.imageItems.length - 1);
+          modalPrevMobile?.classList.toggle('disabled', index === 0);
+          modalNextMobile?.classList.toggle('disabled', index === instance.imageItems.length - 1);
+          
+          // Show loader
+          modalLoader.style.display = 'block';
+          modalImage.style.display = 'none';
+          modalText.textContent = caption;
+          
+          // Load image
+          if (img.complete && img.src === src) {
+            modalImage.src = src;
+            modalImage.style.display = 'block';
+            modalLoader.style.display = 'none';
+          } else {
+            const tempImg = new Image();
+            tempImg.onload = () => {
+              modalImage.src = src;
+              modalImage.style.display = 'block';
+              modalLoader.style.display = 'none';
+            };
+            tempImg.onerror = () => {
+              modalImage.src = src;
+              modalImage.style.display = 'block';
+              modalLoader.style.display = 'none';
+            };
+            tempImg.src = src;
+          }
+        }
+
+        // Navigate to previous image
+        function navigatePrev() {
+          if (instance.currentImageIndex > 0) {
+            loadModalImage(instance.currentImageIndex - 1);
+          }
+        }
+
+        // Navigate to next image
+        function navigateNext() {
+          if (instance.currentImageIndex < instance.imageItems.length - 1) {
+            loadModalImage(instance.currentImageIndex + 1);
+          }
+        }
+        
+        // Handle clicks on images
+        containerElement.addEventListener('click', (e) => {
+          if (activeModalInstance && activeModalInstance.isModalOpen) return;
+          
+          // Check if clicked element matches selector or is within it
+          const clickedItem = e.target.closest(itemSelector);
+          if (!clickedItem) return;
+          
+          // Check if it's an image or contains an image
+          const img = clickedItem.tagName === 'IMG' ? clickedItem : clickedItem.querySelector('img');
+          if (!img) return;
+          
+          e.preventDefault();
+          
+          // Find index of clicked item
+          const index = instance.imageItems.indexOf(clickedItem);
+          if (index === -1) return;
+          
+          // Set this instance as active
+          activeModalInstance = instance;
+          instance.isModalOpen = true;
+          
+          // Show modal and load image
+          modal.classList.add('active');
+          document.body.style.overflow = 'hidden';
+          loadModalImage(index);
+        }, { passive: false });
+
+        // Store navigation functions on the instance
+        instance.navigatePrev = navigatePrev;
+        instance.navigateNext = navigateNext;
+        
+        // Return the instance with its methods
+        return instance;
+      }
+
+      // Global modal controls (initialized once)
+      let modalControlsInitialized = false;
+
+      function initGlobalModalControls() {
+        if (modalControlsInitialized) return;
+        modalControlsInitialized = true;
+
+        const modal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        const modalClose = document.getElementById('modalClose');
+        const modalLoader = document.getElementById('modalLoader');
+        const modalPrev = document.getElementById('modalPrev');
+        const modalNext = document.getElementById('modalNext');
+        const modalPrevMobile = document.getElementById('modalPrevMobile');
+        const modalNextMobile = document.getElementById('modalNextMobile');
+
+        // Close modal function
+        function closeModal() {
+          if (!activeModalInstance || !activeModalInstance.isModalOpen) return;
+          
+          activeModalInstance.isModalOpen = false;
+          activeModalInstance = null;
+          modal.classList.remove('active');
+          document.body.style.overflow = '';
+          
+          // Clean up after transition
+          setTimeout(() => {
+            modalImage.src = '';
+            modalImage.style.display = 'none';
+            modalLoader.style.display = 'none';
+          }, 200);
+        }
+
+        // Navigation button handlers
+        modalPrev?.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (activeModalInstance) activeModalInstance.navigatePrev();
+        });
+
+        modalNext?.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (activeModalInstance) activeModalInstance.navigateNext();
+        });
+
+        modalPrevMobile?.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (activeModalInstance) activeModalInstance.navigatePrev();
+        });
+
+        modalNextMobile?.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (activeModalInstance) activeModalInstance.navigateNext();
+        });
+
+        // Close button
+        modalClose?.addEventListener('click', closeModal, { passive: true });
+
+        // Click outside to close
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) closeModal();
+        }, { passive: true });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+          if (!activeModalInstance || !activeModalInstance.isModalOpen) return;
+          
+          switch(e.key) {
+            case 'Escape':
+              closeModal();
+              break;
+            case 'ArrowLeft':
+              e.preventDefault();
+              if (activeModalInstance) activeModalInstance.navigatePrev();
+              break;
+            case 'ArrowRight':
+              e.preventDefault();
+              if (activeModalInstance) activeModalInstance.navigateNext();
+              break;
+          }
+        }, { passive: false });
+      }
+
+      // Initialize all gallery modal functionality
+      document.addEventListener("DOMContentLoaded", () => {
+        // Initialize global modal controls first
+        initGlobalModalControls();
+        
+        // Archivio gallery
+        const archivioGallery = document.getElementById('archivioGallery');
+        if (archivioGallery) {
+          initImageModal(archivioGallery, '.gallery-item');
+        }
+        
+        // Spazio carousel
+        const spazioCarousel = document.getElementById('carouselTrack');
+        if (spazioCarousel) {
+          initImageModal(spazioCarousel, '.carousel-slide');
+        }
+        
+        // Coworking carousel
+        const coworkingCarousel = document.getElementById('coworkingCarouselTrack');
+        if (coworkingCarousel) {
+          initImageModal(coworkingCarousel, '.carousel-slide');
+        }
+      });
+
+      // Archivio read more functionality
+      function initArchivioReadMore() {
+        const archivioBtn = document.getElementById('archivioBtn');
+        const archivioIntro = document.getElementById('archivioIntro');
+
+        if (archivioBtn && archivioIntro) {
+          archivioBtn.addEventListener('click', () => {
+            const isExpanded = archivioIntro.classList.contains('expanded');
+
+            if (isExpanded) {
+              archivioIntro.classList.remove('expanded');
+              archivioBtn.textContent = 'scopri di più';
+            } else {
+              archivioIntro.classList.add('expanded');
+              archivioBtn.textContent = 'scopri di meno';
+            }
+          });
+        }
+      }
+
+      // Initialize archivio read more functionality
+      document.addEventListener("DOMContentLoaded", initArchivioReadMore);
+    </script>
+  </body>
+</html>
