@@ -938,11 +938,30 @@
         display: block;
       }
 
+      .modal-text-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 20px;
+        position: relative;
+        width: 100%;
+      }
+
+      .modal-text {
+        color: white;
+        max-width: 600px;
+        text-align: center;
+        font-size: 16px;
+        line-height: 1.6;
+        margin: 0;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
       /* Modal navigation arrows */
       .modal-nav {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
         background: none;
         color: white;
         border: none;
@@ -956,6 +975,7 @@
         transition: opacity 0.3s ease;
         z-index: 10002;
         padding: 0;
+        flex-shrink: 0;
       }
 
       .modal-nav:hover {
@@ -967,12 +987,11 @@
         cursor: not-allowed;
       }
 
-      .modal-nav-prev {
-        left: 40px;
-      }
-
-      .modal-nav-next {
-        right: 40px;
+      /* Desktop: arrows positioned beside text */
+      @media (min-width: 769px) {
+        .modal-text-container {
+          gap: 30px;
+        }
       }
 
       /* Hide mobile navigation on desktop */
@@ -1031,14 +1050,6 @@
         to { transform: translate(-50%, -50%) rotate(360deg); }
       }
 
-      .modal-text {
-        color: white;
-        margin-top: 20px;
-        max-width: 600px;
-        text-align: center;
-        font-size: 16px;
-        line-height: 1.6;
-      }
 
       .modal-close {
         position: absolute;
@@ -1541,7 +1552,7 @@ sperimentazione continua.
               </button>
               <div class="carousel-wrapper">
                 <div class="carousel-track" id="coworkingCarouselTrack">
-                  <div class="carousel-slide" data-caption="a">
+                  <div class="carousel-slide" data-caption="">
                     <img
                       src="images/coworking/3.webp"
                       alt="Spazio Image 1"
@@ -1743,12 +1754,14 @@ sempre aggiornatə sulle nostre ultime iniziative.
         <!-- Modal -->
         <div class="modal" id="imageModal">
           <button class="modal-close" id="modalClose">&times;</button>
-          <button class="modal-nav modal-nav-prev desktop-only" id="modalPrev">‹</button>
-          <button class="modal-nav modal-nav-next desktop-only" id="modalNext">›</button>
           <div class="modal-content">
             <div class="modal-loader" id="modalLoader"></div>
             <img class="modal-image" id="modalImage" alt="Gallery image" />
-            <p class="modal-text" id="modalText"></p>
+            <div class="modal-text-container">
+              <button class="modal-nav modal-nav-prev desktop-only" id="modalPrev">‹</button>
+              <p class="modal-text" id="modalText"></p>
+              <button class="modal-nav modal-nav-next desktop-only" id="modalNext">›</button>
+            </div>
             <div class="modal-navigation mobile-only">
               <button class="modal-nav modal-nav-prev" id="modalPrevMobile">‹</button>
               <button class="modal-nav modal-nav-next" id="modalNextMobile">›</button>
