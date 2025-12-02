@@ -340,7 +340,7 @@
         }
 
         .tagline {
-          font-size: 16px;
+          font-size: 14px;
           color: #1d1d1f;
           font-weight: 400;
           letter-spacing: 0.5px;
@@ -1247,7 +1247,7 @@
         }
 
         .archivio-section {
-          padding: 20px;
+          padding: 20px 0px;
         }
 
         .archivio-content h2 {
@@ -1287,7 +1287,7 @@
 
         .gallery-item.landscape {
           grid-row: span 1;
-          aspect-ratio: 16/10;
+          aspect-ratio: auto;
           height: auto;
         }
 
@@ -1298,33 +1298,7 @@
           display: block;
         }
 
-        /* iPhone 13 Pro Max specific fixes */
-        @media screen and (max-width: 428px) and (-webkit-min-device-pixel-ratio: 3) {
-          .archivio-gallery {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-bottom: 30px;
-          }
-          
-          .gallery-item {
-            grid-row: unset;
-            width: 100%;
-            height: auto;
-            min-height: 250px;
-            max-height: none;
-          }
-          
-          .gallery-item.portrait {
-            aspect-ratio: 3/4;
-            max-height: 350px;
-          }
-          
-          .gallery-item.landscape {
-            aspect-ratio: 16/9;
-            max-height: 250px;
-          }
-        }
+        
         .modal {
           margin-left: 0px;
           width: unset;
