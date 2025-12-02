@@ -1010,13 +1010,19 @@
         .desktop-only {
           display: none !important;
         }
+
+        .modal-text {
+          font-size: 14px;
+          line-height: 1.4;
+          max-width: 90%;
+        }
         
         .modal-navigation {
           display: flex;
           gap: 60px;
           justify-content: center;
           position: fixed;
-          bottom: 30px;
+          bottom: 80px;
           left: 50%;
           transform: translateX(-50%);
           z-index: 10003;
@@ -1241,7 +1247,7 @@
         }
 
         .archivio-section {
-          padding: 20px;
+          padding: 20px 0px;
         }
 
         .archivio-content h2 {
@@ -1258,26 +1264,66 @@
 
         }
 
+        .archivio-content {
+          margin-bottom: 20px;
+        }
+
+        .archivio-gallery {
+          margin-bottom: 20px;
+        }
+
         .gallery-item {
           height: auto;
           min-height: 200px;
+          overflow: hidden;
+          contain: layout;
         }
 
         .gallery-item.portrait {
           grid-row: span 1;
           aspect-ratio: 3/4;
+          height: auto;
         }
 
         .gallery-item.landscape {
           grid-row: span 1;
-          aspect-ratio: auto;
-          max-height: 300px;
+          aspect-ratio: 16/10;
+          height: auto;
         }
 
         .gallery-item img {
           width: 100%;
           height: 100%;
           object-fit: cover;
+          display: block;
+        }
+
+        /* iPhone 13 Pro Max specific fixes */
+        @media screen and (max-width: 428px) and (-webkit-min-device-pixel-ratio: 3) {
+          .archivio-gallery {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+          }
+          
+          .gallery-item {
+            grid-row: unset;
+            width: 100%;
+            height: auto;
+            min-height: 250px;
+            max-height: none;
+          }
+          
+          .gallery-item.portrait {
+            aspect-ratio: 3/4;
+            max-height: 350px;
+          }
+          
+          .gallery-item.landscape {
+            aspect-ratio: 16/9;
+            max-height: 250px;
+          }
         }
         .modal {
           margin-left: 0px;
