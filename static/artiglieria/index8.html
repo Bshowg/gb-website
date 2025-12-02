@@ -842,15 +842,12 @@
         text-align: right;
       }
 
-      /* Gallery Grid - Simplified */
+      /* Gallery - CSS Columns Masonry Layout */
       .archivio-gallery {
         width: 100%;
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        /* NO grid-auto-rows - let items size naturally */
-        gap: 20px;
+        column-count: 2;
+        column-gap: 20px;
         margin-bottom: 40px;
-        align-items: start;
       }
 
       .gallery-item {
@@ -859,10 +856,12 @@
         overflow: hidden;
         background: #f0f0f0;
         width: 100%;
+        break-inside: avoid;
+        margin-bottom: 20px;
+        display: inline-block;
       }
 
       .gallery-item.portrait {
-        /* NO grid-row span */
         aspect-ratio: 3/4;
       }
 
@@ -1256,9 +1255,8 @@
         }
 
         .archivio-gallery {
-          grid-template-columns: 1fr;
-          gap: 15px;
-          /* NO grid-auto-rows */
+          column-count: 1;
+          column-gap: 0;
         }
 
         .gallery-caption {
@@ -1271,17 +1269,15 @@
         }
 
         .gallery-item {
-          /* Simplified - let aspect ratio handle sizing */
           width: 100%;
+          margin-bottom: 15px;
         }
 
         .gallery-item.portrait {
-          /* NO grid-row span */
           aspect-ratio: 3/4;
         }
 
         .gallery-item.landscape {
-          /* NO grid-row span */  
           aspect-ratio: 16/9;
         }
 
