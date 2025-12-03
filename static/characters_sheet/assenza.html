@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assenza - Monaco Livello 16</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #1e1e2e 0%, #2d2d44 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 10px;
+            padding-bottom: 20px;
+        }
+
+        .sheet-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(30, 30, 46, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+
+        .header {
+            background: url('assenza.png') center/contain no-repeat;
+            padding: 80px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .character-name {
+            font-size: 4em;
+            font-weight: 400;
+            letter-spacing: 5px;
+            margin-bottom: 15px;
+            color: rgba(30, 30, 46, 0.95);
+            position: relative;
+        }
+
+        .character-title {
+            font-size: 1.4em;
+            color: #e0e0f0;
+            font-style: italic;
+            font-weight: 700;
+            text-align: center;
+            padding: 20px;
+            background: rgba(40, 40, 60, 0.8);
+            border-bottom: 1px solid rgba(106, 90, 205, 0.3);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .content-area {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .card {
+            background: rgba(40, 40, 60, 0.8);
+            border: 1px solid rgba(106, 90, 205, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(106, 90, 205, 0.2);
+            border-color: rgba(106, 90, 205, 0.5);
+        }
+
+        .card-title {
+            font-size: 1.3em;
+            color: #9d88ff;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(106, 90, 205, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ability-scores {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .ability-box {
+            text-align: center;
+            padding: 10px;
+            background: rgba(50, 50, 70, 0.5);
+            border-radius: 10px;
+            border: 1px solid rgba(106, 90, 205, 0.2);
+        }
+
+        .ability-name {
+            font-size: 0.8em;
+            color: #a0a0b0;
+            text-transform: uppercase;
+        }
+
+        .ability-score {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #ffffff;
+            margin: 5px 0;
+        }
+
+        .ability-mod {
+            font-size: 1.1em;
+            color: #9d88ff;
+        }
+
+        .combat-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .stat-item {
+            padding: 15px;
+            background: rgba(50, 50, 70, 0.5);
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: #a0a0b0;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #9d88ff;
+        }
+
+        .ki-tracker {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .ki-points {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .ki-point {
+            width: 25px;
+            height: 25px;
+            border: 2px solid #9d88ff;
+            border-radius: 50%;
+            background: rgba(157, 136, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .ki-point.used {
+            background: #9d88ff;
+            box-shadow: 0 0 10px rgba(157, 136, 255, 0.5);
+        }
+
+        .ki-point:hover {
+            transform: scale(1.2);
+        }
+
+        .attack-card {
+            background: rgba(60, 50, 80, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .attack-name {
+            font-weight: bold;
+            color: #9d88ff;
+            margin-bottom: 8px;
+        }
+
+        .attack-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9em;
+        }
+
+        .feature-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .feature-item {
+            padding: 10px;
+            background: rgba(50, 50, 70, 0.3);
+            border-left: 3px solid #9d88ff;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .feature-item:hover {
+            background: rgba(50, 50, 70, 0.5);
+            transform: translateX(5px);
+        }
+
+        .feature-description {
+            display: none;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(106, 90, 205, 0.3);
+            font-size: 0.9em;
+            color: #b0b0c0;
+        }
+
+        .feature-item.expanded .feature-description {
+            display: block;
+        }
+
+        .saves-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .save-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px;
+            background: rgba(50, 50, 70, 0.3);
+            border-radius: 5px;
+        }
+
+        .save-bonus {
+            color: #9d88ff;
+            font-weight: bold;
+        }
+
+        .equipment-item {
+            padding: 12px;
+            background: rgba(50, 50, 70, 0.3);
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .item-name {
+            font-weight: bold;
+            color: #ffd700;
+            margin-bottom: 5px;
+        }
+
+        .item-rarity {
+            font-size: 0.8em;
+            color: #a0a0b0;
+            text-transform: uppercase;
+        }
+
+        .item-effect {
+            font-size: 0.9em;
+            color: #c0c0d0;
+            margin-top: 5px;
+        }
+
+        .story-text {
+            line-height: 1.8;
+            color: #c0c0d0;
+            font-style: italic;
+            padding: 15px;
+            background: rgba(40, 40, 60, 0.5);
+            border-radius: 10px;
+            border-left: 3px solid #9d88ff;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #6a5acd, #483d8b);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(106, 90, 205, 0.4);
+        }
+
+        .astral-indicator {
+            display: inline-block;
+            padding: 5px 10px;
+            background: rgba(157, 136, 255, 0.2);
+            border: 1px solid #9d88ff;
+            border-radius: 20px;
+            font-size: 0.8em;
+            margin-left: 10px;
+        }
+
+        .astral-indicator.active {
+            background: #9d88ff;
+            color: #1e1e2e;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 5px rgba(157, 136, 255, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(157, 136, 255, 0.8); }
+        }
+
+        .footer {
+            background: rgba(40, 40, 60, 0.8);
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid rgba(106, 90, 205, 0.3);
+            color: #a0a0b0;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 5px;
+                padding-bottom: 30px;
+            }
+
+            .sheet-container {
+                border-radius: 10px;
+            }
+
+            .header {
+                padding: 40px 15px;
+                min-height: 500px;
+                background: url('assenza.png') center/cover !important;
+                justify-content: center;
+            }
+
+            .character-name {
+                font-size: 2.5em;
+                letter-spacing: 3px;
+                font-weight: 900;
+                color: rgba(30, 30, 46, 0.95);
+            }
+
+            .character-title {
+                font-size: 1.1em;
+                padding: 15px;
+            }
+
+            .main-content {
+                grid-template-columns: 1fr;
+                padding: 10px;
+                gap: 10px;
+            }
+
+            .sidebar, .content-area {
+                gap: 10px;
+            }
+
+            .card {
+                padding: 15px;
+                border-radius: 10px;
+            }
+
+            .card-title {
+                font-size: 1.1em;
+            }
+
+            .ability-scores {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+
+            .ability-box {
+                padding: 8px;
+            }
+
+            .ability-score {
+                font-size: 1.5em;
+            }
+
+            .combat-stats {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .stat-value {
+                font-size: 1.5em;
+            }
+
+            .ki-point {
+                width: 20px;
+                height: 20px;
+            }
+
+            .saves-grid {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .action-btn {
+                width: 100%;
+                padding: 12px;
+            }
+
+            .attack-stats {
+                flex-direction: column;
+                gap: 5px;
+                text-align: left;
+            }
+
+            .story-text {
+                padding: 10px;
+                font-size: 0.95em;
+            }
+
+            .equipment-item {
+                padding: 10px;
+            }
+
+            .feature-item {
+                padding: 8px;
+            }
+
+            .footer {
+                padding: 15px 10px;
+                font-size: 0.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="sheet-container">
+        <div class="header">
+            <h1 class="character-name">ASSENZA</h1>
+        </div>
+        <div class="character-title">Monaco della Via del Sè Astrale - Livello 16</div>
+
+        <div class="main-content">
+            <div class="sidebar">
+                <!-- Ability Scores -->
+                <div class="card">
+                    <h2 class="card-title">Caratteristiche</h2>
+                    <div class="ability-scores">
+                        <div class="ability-box">
+                            <div class="ability-name">FOR</div>
+                            <div class="ability-score">8</div>
+                            <div class="ability-mod">-1</div>
+                        </div>
+                        <div class="ability-box">
+                            <div class="ability-name">DES</div>
+                            <div class="ability-score">17</div>
+                            <div class="ability-mod">+3</div>
+                        </div>
+                        <div class="ability-box">
+                            <div class="ability-name">COS</div>
+                            <div class="ability-score">19</div>
+                            <div class="ability-mod">+4</div>
+                        </div>
+                        <div class="ability-box">
+                            <div class="ability-name">INT</div>
+                            <div class="ability-score">10</div>
+                            <div class="ability-mod">+0</div>
+                        </div>
+                        <div class="ability-box">
+                            <div class="ability-name">SAG</div>
+                            <div class="ability-score">20</div>
+                            <div class="ability-mod">+5</div>
+                        </div>
+                        <div class="ability-box">
+                            <div class="ability-name">CAR</div>
+                            <div class="ability-score">10</div>
+                            <div class="ability-mod">+0</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Astral Self Status -->
+                <div class="card">
+                    <h2 class="card-title">
+                         Sè Astrale
+                        <span class="astral-indicator" id="astral-arms">Braccia</span>
+                        <span class="astral-indicator" id="astral-visage">Volto</span>
+                        <span class="astral-indicator" id="astral-body">Corpo</span>
+                    </h2>
+                    <div class="action-buttons">
+                        <button class="action-btn" onclick="toggleAstralArms()">Attiva/Disattiva Braccia</button>
+                        <button class="action-btn" onclick="toggleAstralVisage()">Attiva/Disattiva Volto</button>
+                        <button class="action-btn" onclick="activateFullAstral()">Forma Completa</button>
+                    </div>
+                </div>
+
+                <!-- Combat Stats -->
+                <div class="card">
+                    <h2 class="card-title">Statistiche di Combattimento</h2>
+                    <div class="combat-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">Classe Armatura</div>
+                            <div class="stat-value" id="ac-value">23</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Punti Ferita</div>
+                            <div class="stat-value">176</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Iniziativa</div>
+                            <div class="stat-value">+3</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Velocità</div>
+                            <div class="stat-value">40 ft</div>
+                        </div>
+                    </div>
+                    <div class="stat-item" style="margin-top: 15px;">
+                        <div class="stat-label">CD Colpo Stordente</div>
+                        <div class="stat-value">18</div>
+                    </div>
+                </div>
+
+                <!-- Ki Points -->
+                <div class="card">
+                    <h2 class="card-title">/ Punti Ki</h2>
+                    <div class="ki-tracker">
+                        <div class="ki-points" id="ki-points">
+                            <!-- Ki points will be generated by JavaScript -->
+                        </div>
+                    </div>
+                    <div style="text-align: center; color: #9d88ff;">
+                        <span id="ki-counter">16/16</span> Punti Ki
+                    </div>
+                </div>
+
+                <!-- Saving Throws -->
+                <div class="card">
+                    <h2 class="card-title">Tiri Salvezza</h2>
+                    <div class="saves-grid">
+                        <div class="save-item">
+                            <span>Forza</span>
+                            <span class="save-bonus">+4</span>
+                        </div>
+                        <div class="save-item">
+                            <span>Destrezza</span>
+                            <span class="save-bonus">+8</span>
+                        </div>
+                        <div class="save-item">
+                            <span>Costituzione</span>
+                            <span class="save-bonus">+9</span>
+                        </div>
+                        <div class="save-item">
+                            <span>Intelligenza</span>
+                            <span class="save-bonus">+5</span>
+                        </div>
+                        <div class="save-item">
+                            <span>Saggezza</span>
+                            <span class="save-bonus">+10</span>
+                        </div>
+                        <div class="save-item">
+                            <span>Carisma</span>
+                            <span class="save-bonus">+5</span>
+                        </div>
+                    </div>
+                    <div style="margin-top: 10px; text-align: center; font-size: 0.9em; color: #9d88ff;">
+                        Anima di Diamante Attiva
+                    </div>
+                </div>
+
+                <!-- Skills -->
+                <div class="card">
+                    <h2 class="card-title">Abilità</h2>
+                    <div class="saves-grid">
+                        <div class="save-item">
+                            <span>Acrobazia</span>
+                            <span class="save-bonus">+8</span>
+                        </div>
+                        <div class="save-item">
+                            <span>Intuizione</span>
+                            <span class="save-bonus">+10</span>
+                        </div>
+                        <div class="save-item">
+                            <span>Percezione</span>
+                            <span class="save-bonus">+10</span>
+                        </div>
+                        <div class="save-item">
+                            <span>Medicina</span>
+                            <span class="save-bonus">+5</span>
+                        </div>
+                        <div class="save-item">
+                            <span>Religione</span>
+                            <span class="save-bonus">+5</span>
+                        </div>
+                        <div class="save-item">
+                            <span>Furtività</span>
+                            <span class="save-bonus">+8</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-area">
+                
+
+                <!-- Attacks -->
+                <div class="card">
+                    <h2 class="card-title">Attacchi</h2>
+                    <div class="attack-card">
+                        <div class="attack-name">Colpo Senz'armi Astrale</div>
+                        <div class="attack-stats">
+                            <span>Attacco: +11</span>
+                            <span>Danno: 1d8+6 forza</span>
+                            <span>Portata: 10 ft</span>
+                        </div>
+                    </div>
+                    <div class="attack-card">
+                        <div class="attack-name">Colpo Senz'armi Normale</div>
+                        <div class="attack-stats">
+                            <span>Attacco: +9</span>
+                            <span>Danno: 1d10+4 contundente</span>
+                            <span>Portata: 5 ft</span>
+                        </div>
+                    </div>
+                    <div class="attack-card">
+                        <div class="attack-name">Raffica di Colpi</div>
+                        <div class="attack-stats">
+                            <span>Costo: 1 Ki</span>
+                            <span>2 attacchi bonus</span>
+                            <span>Azione bonus</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Features -->
+                <div class="card">
+                    <h2 class="card-title">Capacità del Monaco</h2>
+                    <div class="feature-list">
+                        <div class="feature-item" onclick="toggleFeature(this)">
+                            <strong>Braccia del Sè Astrale</strong>
+                            <div class="feature-description">
+                                Azione bonus per attivare. Portata 10 ft, usa Saggezza per attacco e danno. Il danno diventa forza.
+                            </div>
+                        </div>
+                        <div class="feature-item" onclick="toggleFeature(this)">
+                            <strong>Volto del Sè Astrale</strong>
+                            <div class="feature-description">
+                                Vedi invisibilità (1 ki), vantaggio su Intuizione, comunicazione telepatica.
+                            </div>
+                        </div>
+                        <div class="feature-item" onclick="toggleFeature(this)">
+                            <strong>Corpo del Sè Astrale</strong>
+                            <div class="feature-description">
+                                +2 CA quando Braccia e Volto sono attivi. Deviare Energia come reazione.
+                            </div>
+                        </div>
+                        <div class="feature-item" onclick="toggleFeature(this)">
+                            <strong>Corpo Vuoto</strong>
+                            <div class="feature-description">
+                                4 ki: invisibile per 1 minuto. 8 ki: forma eterea.
+                            </div>
+                        </div>
+                        <div class="feature-item" onclick="toggleFeature(this)">
+                            <strong>Anima di Diamante</strong>
+                            <div class="feature-description">
+                                Competenza in tutti i tiri salvezza. Spendi 1 ki per ritirare un TS fallito.
+                            </div>
+                        </div>
+                        <div class="feature-item" onclick="toggleFeature(this)">
+                            <strong>Deviare Proiettili</strong>
+                            <div class="feature-description">
+                                Reazione: riduci danno di 1d10+21. Se ridotto a 0, puoi rilanciarlo (1 ki).
+                            </div>
+                        </div>
+                        <div class="feature-item" onclick="toggleFeature(this)">
+                            <strong>Evasione</strong>
+                            <div class="feature-description">
+                                TS Destrezza riuscito = nessun danno. TS fallito = metà danno.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Equipment -->
+                <div class="card">
+                    <h2 class="card-title">Equipaggiamento Magico</h2>
+                    <div class="equipment-item">
+                        <div class="item-name">Bracciali della Difesa</div>
+                        <div class="item-rarity">Molto Raro</div>
+                        <div class="item-effect">+3 CA mentre non indossi armatura</div>
+                    </div>
+                    <div class="equipment-item">
+                        <div class="item-name">Insegna degli Artigli</div>
+                        <div class="item-rarity">Raro</div>
+                        <div class="item-effect">+1 attacco e danno con colpi senz'armi</div>
+                    </div>
+                    <div class="equipment-item">
+                        <div class="item-name">Mantello dello Spostamento</div>
+                        <div class="item-rarity">Raro</div>
+                        <div class="item-effect">Svantaggio agli attacchi contro di te finché non vieni colpito</div>
+                    </div>
+                </div>
+
+                <!-- Incipit -->
+                <div class="card">
+                    <h2 class="card-title">Incipit</h2>
+                    <div class="story-text">
+                        Quando Mordenkainen mostrò i due artefatti la zucca coriacea e il dolce perfettamente levigato una vibrazione silenziosa percorse la sala. Non un suono. Non un movimento. Un'assenza.
+                        <br><br>
+                        Fu allora che "Assenza", come veniva chiamato dai pochi che conoscevano il suo nome monastico, aprì gli occhi. Era rimasto immobile fino a quel momento, in piedi vicino ad una delle enormi librerie, talmente quieto da sembrare parte dell'arredamento.
+                        <br><br>
+                        <em>"Se il flusso vacilla," disse con voce calma, "E' perchè uno dei due poli ha imparato a trattenere più di quanto concede."</em>
+                        <br><br>
+                        Le sue parole non erano un'opinione. Erano un'esperienza.
+                    </div>
+                </div>
+
+                <!-- Origini -->
+                
+
+            </div>
+        </div>
+
+        <!-- Origini - Full Width -->
+        <div class="card" style="margin: 20px;">
+            <h2 class="card-title">Origini</h2>
+            <div class="story-text">
+                Assenza non nacque con quel nome. Nessuno ricorda più il suo vero nome, o il nome del monastero in cui si formò.
+                <br><br>
+                Cresciuto tra lezioni di respirazione, contemplazione cosmica, dimostrò presto una capacità inconsueta: percepiva il flusso energetico delle cose non per la loro forza ma per la loro assenza, per la loro negazione.
+                <br><br>
+                Dove gli altri si sforzavano, lui si fermava.<br>
+                Dove gli altri parlavano, lui contemplava.<br>
+                Dove gli altri colpivano, lui ascoltava.
+                <br><br>
+                Quando raggiunse la maturità monastica, il suo Maestro gli diede un titolo che non era un elogio, ma un compito:<br>
+                <em>"Assenza."</em><br>
+                <em>"Diventa ciò che il mondo dimentica," gli disse.</em><br>
+                <em>"Ricorda ciò che l'universo sacrifica."</em>
+                <br><br>
+                Con queste ultime parole del Maestro, lasciò il monastero senza meta ma sapendo esattamente dove andare.
+                <br><br>
+                Sono ormai passati molti anni da quel giorno, e Assenza continua a compiere il proprio dovere trovandosi sempre nel posto giusto al momento giusto.
+            </div>
+        </div>
+        </div>
+            
+        <div class="footer">
+            <p>Per Master Baggia il 03/12/2025</p>
+        </div>
+    </div>
+
+    <script>
+        // Ki Points Management
+        const totalKi = 16;
+        let currentKi = 16;
+        let astralArmsActive = false;
+        let astralVisageActive = false;
+
+        function initializeKiPoints() {
+            const container = document.getElementById('ki-points');
+            for (let i = 0; i < totalKi; i++) {
+                const point = document.createElement('div');
+                point.className = 'ki-point used';
+                point.onclick = () => toggleKiPoint(i);
+                container.appendChild(point);
+            }
+        }
+
+        function toggleKiPoint(index) {
+            const points = document.querySelectorAll('.ki-point');
+            if (index < currentKi) {
+                currentKi = index;
+            } else {
+                currentKi = index + 1;
+            }
+            updateKiDisplay();
+        }
+
+        function updateKiDisplay() {
+            const points = document.querySelectorAll('.ki-point');
+            points.forEach((point, index) => {
+                if (index < currentKi) {
+                    point.classList.add('used');
+                } else {
+                    point.classList.remove('used');
+                }
+            });
+            document.getElementById('ki-counter').textContent = `${currentKi}/${totalKi}`;
+        }
+
+        function spendKi(amount) {
+            if (currentKi >= amount) {
+                currentKi -= amount;
+                updateKiDisplay();
+                return true;
+            }
+            return false;
+        }
+
+        // Astral Self Management
+        function toggleAstralArms() {
+            const element = document.getElementById('astral-arms');
+            astralArmsActive = !astralArmsActive;
+            if (astralArmsActive) {
+                element.classList.add('active');
+                if (!spendKi(1)) {
+                    astralArmsActive = false;
+                    element.classList.remove('active');
+                    alert('Ki insufficienti!');
+                }
+            } else {
+                element.classList.remove('active');
+            }
+            updateAC();
+        }
+
+        function toggleAstralVisage() {
+            const element = document.getElementById('astral-visage');
+            astralVisageActive = !astralVisageActive;
+            if (astralVisageActive) {
+                element.classList.add('active');
+                if (!spendKi(1)) {
+                    astralVisageActive = false;
+                    element.classList.remove('active');
+                    alert('Ki insufficienti!');
+                }
+            } else {
+                element.classList.remove('active');
+            }
+            updateAC();
+        }
+
+        function activateFullAstral() {
+            if (currentKi >= 2) {
+                if (!astralArmsActive) toggleAstralArms();
+                if (!astralVisageActive) toggleAstralVisage();
+                document.getElementById('astral-body').classList.add('active');
+                updateAC();
+            } else {
+                alert('Ki insufficienti per la forma completa!');
+            }
+        }
+
+        function updateAC() {
+            const baseAC = 23;
+            let currentAC = baseAC;
+            
+            if (astralArmsActive && astralVisageActive) {
+                currentAC = 25;
+                document.getElementById('astral-body').classList.add('active');
+            } else {
+                document.getElementById('astral-body').classList.remove('active');
+            }
+            
+            document.getElementById('ac-value').textContent = currentAC;
+        }
+
+        // Feature Toggle
+        function toggleFeature(element) {
+            element.classList.toggle('expanded');
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeKiPoints();
+        });
+    </script>
+</body>
+</html>
