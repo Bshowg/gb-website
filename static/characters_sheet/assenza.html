@@ -593,6 +593,9 @@
                     <div style="margin-top: 15px; padding: 10px; background: rgba(50, 50, 70, 0.3); border-radius: 8px; font-size: 0.9em; color: #b0b0c0;">
                         <strong>Recupero Ki:</strong> Tutti i punti Ki vengono recuperati completando un riposo breve o lungo.
                     </div>
+                    <div style="margin-top: 10px; text-align: center;">
+                        <button class="action-btn" onclick="restoreAllKi()" style="background: linear-gradient(135deg, #6a5acd, #483d8b); padding: 8px 16px; font-size: 0.9em;">🔄 Ripristina Ki</button>
+                    </div>
                 </div>
 
                 <!-- Saving Throws -->
@@ -963,6 +966,12 @@
         // Feature Toggle
         function toggleFeature(element) {
             element.classList.toggle('expanded');
+        }
+
+        // Restore all Ki points
+        function restoreAllKi() {
+            currentKi = totalKi;
+            updateKiDisplay();
         }
 
         // Initialize on load
