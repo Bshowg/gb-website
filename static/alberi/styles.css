@@ -841,10 +841,29 @@ blockquote {
     font-size: 0.95rem;
     opacity: 0;
     transition: opacity 0.3s ease;
+    padding: 0.5rem;
+    border-radius: 4px;
 }
 
 .form-message.show {
     opacity: 1;
+}
+
+.form-message.success {
+    background-color: rgba(76, 175, 80, 0.1);
+    border: 1px solid rgba(76, 175, 80, 0.3);
+    color: white;
+}
+
+.form-message.error {
+    background-color: rgba(244, 67, 54, 0.1);
+    border: 1px solid rgba(244, 67, 54, 0.3);
+    color: white;
+}
+
+.submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 /* Footer */

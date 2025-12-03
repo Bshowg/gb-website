@@ -49,23 +49,59 @@ document.addEventListener('DOMContentLoaded', () => {
     const emailInput = document.getElementById('emailInput');
 
     if (newsletterForm) {
-        newsletterForm.addEventListener('submit', (e) => {
+        newsletterForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            // Simulate form submission
             const email = emailInput.value;
+            const submitBtn = newsletterForm.querySelector('.submit-btn');
             
-            // Show success message
-            formMessage.textContent = 'Grazie per la tua iscrizione! Ti terremo aggiornato sul progetto.';
-            formMessage.classList.add('show');
+            // Detect language from URL or page content
+            const language = document.documentElement.lang || 'it';
             
-            // Reset form
-            emailInput.value = '';
+            // Disable button and show loading
+            submitBtn.disabled = true;
+            submitBtn.textContent = language === 'en' ? 'Sending...' : 'Invio...';
             
-            // Hide message after 5 seconds
-            setTimeout(() => {
-                formMessage.classList.remove('show');
-            }, 5000);
+            try {
+                // Send data to PHP
+                const formData = new FormData();
+                formData.append('email', email);
+                formData.append('language', language);
+                
+                const response = await fetch('send_email.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                // Show message
+                formMessage.textContent = result.message;
+                formMessage.classList.add('show');
+                formMessage.className = `form-message show ${result.status}`;
+                
+                if (result.status === 'success') {
+                    emailInput.value = '';
+                }
+                
+            } catch (error) {
+                // Fallback error message
+                const errorMsg = language === 'en' ? 
+                    'An error occurred. Please try again later.' : 
+                    'Si è verificato un errore. Riprova più tardi.';
+                formMessage.textContent = errorMsg;
+                formMessage.classList.add('show');
+                formMessage.className = 'form-message show error';
+            } finally {
+                // Re-enable button
+                submitBtn.disabled = false;
+                submitBtn.textContent = language === 'en' ? 'Subscribe' : 'Iscriviti';
+                
+                // Hide message after 5 seconds
+                setTimeout(() => {
+                    formMessage.classList.remove('show');
+                }, 5000);
+            }
         });
     }
 
