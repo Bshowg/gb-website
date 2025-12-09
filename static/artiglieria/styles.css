@@ -1378,3 +1378,31 @@
         opacity: 0.5;
       }
 
+      /* Hero Language Selector */
+      .hero-language-selector {
+        text-align: center;
+        font-size: 14px;
+        margin-bottom: 30px;
+      }
+
+      .hero-language-selector a {
+        color: #1d1d1f;
+        text-decoration: none;
+        font-weight: 500;
+        transition: opacity 0.3s ease;
+      }
+
+      .hero-language-selector a:hover {
+        opacity: 0.7;
+      }
+
+      .hero-language-selector a.lang-active {
+        font-weight: 700;
+      }
+
+      .hero-language-selector .lang-separator {
+        color: #1d1d1f;
+        margin: 0 8px;
+        opacity: 0.5;
+      }
+
