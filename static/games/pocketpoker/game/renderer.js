@@ -75,6 +75,9 @@ export class GameRenderer {
         this.camera.position.z = cameraDistance;
         this.camera.updateProjectionMatrix();
         
+        // Update table size for new viewport
+        this.updateTableSize();
+        
         // Update card positions for current viewport
         this.updateCardPositions();
     }
@@ -122,15 +125,34 @@ export class GameRenderer {
     }
     
     createTable() {
-        const geometry = new THREE.PlaneGeometry(30, 20);
+        const viewport = this.getViewportDimensions();
+        // Make table slightly larger than viewport to ensure full coverage
+        const tableWidth = viewport.width * 1.2;
+        const tableHeight = viewport.height * 1.2;
+        
+        const geometry = new THREE.PlaneGeometry(tableWidth, tableHeight);
         const material = new THREE.MeshBasicMaterial({ 
             color: 0x0d4028,
             side: THREE.DoubleSide 
         });
-        const table = new THREE.Mesh(geometry, material);
-        table.position.z = -0.5;
-        this.scene.add(table);
-        console.log('Table created');
+        this.table = new THREE.Mesh(geometry, material);
+        this.table.position.z = -0.5;
+        this.scene.add(this.table);
+        console.log('Table created with size:', tableWidth, 'x', tableHeight);
+    }
+    
+    updateTableSize() {
+        if (this.table) {
+            const viewport = this.getViewportDimensions();
+            // Make table slightly larger than viewport to ensure full coverage
+            const tableWidth = viewport.width * 1.2;
+            const tableHeight = viewport.height * 1.2;
+            
+            // Update geometry
+            this.table.geometry.dispose(); // Clean up old geometry
+            this.table.geometry = new THREE.PlaneGeometry(tableWidth, tableHeight);
+            console.log('Table size updated to:', tableWidth, 'x', tableHeight);
+        }
     }
     
     createTextures() {
@@ -152,27 +174,11 @@ export class GameRenderer {
     }
     
     createBackTexture() {
-        const canvas = document.createElement('canvas');
-        canvas.width = 256;
-        canvas.height = 358;
-        const ctx = canvas.getContext('2d');
-        
-        ctx.fillStyle = '#2563eb';
-        ctx.fillRect(0, 0, 256, 358);
-        
-        ctx.strokeStyle = '#1e40af';
-        ctx.lineWidth = 8;
-        ctx.strokeRect(4, 4, 248, 350);
-        
-        ctx.strokeStyle = '#3b82f6';
-        ctx.lineWidth = 2;
-        for (let i = 0; i < 8; i++) {
-            ctx.beginPath();
-            ctx.arc(128, 179, 20 + i * 15, 0, Math.PI * 2);
-            ctx.stroke();
-        }
-        
-        const texture = new THREE.CanvasTexture(canvas);
+        // Load custom card back image
+        const loader = new THREE.TextureLoader();
+        const texture = loader.load('./images/card_back.webp');
+        texture.minFilter = THREE.LinearFilter;
+        texture.magFilter = THREE.LinearFilter;
         return texture;
     }
     
@@ -182,30 +188,82 @@ export class GameRenderer {
         canvas.height = 358;
         const ctx = canvas.getContext('2d');
         
-        ctx.fillStyle = '#ffffff';
+        // Flip the canvas horizontally to compensate for Y-axis rotation
+        ctx.scale(-1, 1);
+        ctx.translate(-256, 0);
+        
+        ctx.fillStyle = '#000000';
         ctx.fillRect(0, 0, 256, 358);
         
-        ctx.strokeStyle = '#000000';
+        ctx.strokeStyle = '#ffffff';
         ctx.lineWidth = 4;
         ctx.strokeRect(2, 2, 252, 354);
         
         const isRed = suit === 'h' || suit === 'd';
-        ctx.fillStyle = isRed ? '#dc2626' : '#000000';
+        ctx.fillStyle = isRed ? '#dc2626' : '#ffffff';
         
+        const suitSymbols = { c: '♣', d: '♦', h: '♥', s: '♠' };
+        const suitCenterY = 179;
+        const rankDistance = 71; // Distance from suit center to rank
+        
+        // Rank above the suit symbol
         ctx.font = 'bold 64px Arial';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(rank, 128, 80);
+        ctx.fillText(rank, 128, suitCenterY - rankDistance);
         
-        const suitSymbols = { c: '♣', d: '♦', h: '♥', s: '♠' };
+        // Suit symbol in center
         ctx.font = 'bold 96px Arial';
-        ctx.fillText(suitSymbols[suit], 128, 179);
+        ctx.fillText(suitSymbols[suit], 128, suitCenterY);
         
+        // Add mirrored rank below the suit symbol
         ctx.save();
-        ctx.translate(128, 358);
+        ctx.translate(128, suitCenterY + rankDistance);
+        ctx.scale(-1, -1); // Mirror vertically
+        ctx.font = 'bold 64px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(rank, 0, 0);
+        ctx.restore();
+        
+        // Add small rank and suit in corners
+        ctx.font = 'bold 24px Arial';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'top';
+        
+        // Top-left corner
+        ctx.fillText(rank, 15, 15);
+        ctx.font = 'bold 20px Arial';
+        ctx.fillText(suitSymbols[suit], 15, 45);
+        
+        // Top-right corner
+        ctx.textAlign = 'right';
+        ctx.font = 'bold 24px Arial';
+        ctx.fillText(rank, 241, 15);
+        ctx.font = 'bold 20px Arial';
+        ctx.fillText(suitSymbols[suit], 241, 45);
+        
+        // Bottom corners (rotated)
+        ctx.save();
+        ctx.translate(128, 179);
         ctx.rotate(Math.PI);
-        ctx.font = 'bold 48px Arial';
-        ctx.fillText(rank, 0, -278);
+        
+        ctx.font = 'bold 24px Arial';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'top';
+        
+        // Bottom-left (when rotated)
+        ctx.fillText(rank, -113, -164);
+        ctx.font = 'bold 20px Arial';
+        ctx.fillText(suitSymbols[suit], -113, -134);
+        
+        // Bottom-right (when rotated)
+        ctx.textAlign = 'right';
+        ctx.font = 'bold 24px Arial';
+        ctx.fillText(rank, 113, -164);
+        ctx.font = 'bold 20px Arial';
+        ctx.fillText(suitSymbols[suit], 113, -134);
+        
         ctx.restore();
         
         const texture = new THREE.CanvasTexture(canvas);
@@ -263,7 +321,6 @@ export class GameRenderer {
         
         const isShowdown = gameState.street === 'showdown' || gameState.players.some(p => p.folded);
         const viewport = this.getViewportDimensions();
-        const cardOverlap = 1.4 * 0.8; // 20% overlap between cards
         const cardHeight = 1.96; // Card height
         const cardOffsetOut = cardHeight * -0.6; // 20% of card height outside
         const playerCardScale = 1.5;
@@ -312,7 +369,7 @@ export class GameRenderer {
         if (gameState.board.length > 0) {
             console.log('Adding board cards:', gameState.board);
             // Use overlapping layout that fits all cards on screen
-            const boardCardScale = 1.5;
+            const boardCardScale = 1.3;
             const scaledCardWidth = 2 * boardCardScale;
             const maxCardSpacing = Math.min(scaledCardWidth * 1.6, viewport.width * 0.2); // Max spacing based on viewport
             const cardSpacing = Math.min(maxCardSpacing, viewport.width * 0.9 / gameState.board.length); // Fit in 70% of screen width
@@ -322,6 +379,8 @@ export class GameRenderer {
             gameState.board.forEach((card, i) => {
                 const mesh = this.createCardMesh(card, true, boardCardScale);
                 mesh.position.set(boardStartX + i * cardSpacing, 0, 0.1 + i * 0.01);
+                // Rotate board cards 180 degrees around Y-axis to show correctly with flipped texture
+                mesh.rotation.y = Math.PI;
                 this.scene.add(mesh);
                 this.cardMeshes.board.push(mesh);
                 console.log(`Added board card ${i} at`, mesh.position);
@@ -412,12 +471,28 @@ export class GameRenderer {
     updatePlayerCardsRotation(owner, rotationDegrees) {
         const cards = this.getPlayerCards(owner);
         const rotationRadians = rotationDegrees * Math.PI / 180;
+        const isFullyRevealed = rotationDegrees >= 180;
         
-        
-        cards.forEach(cardMesh => {
+        cards.forEach((cardMesh, i) => {
             // Copy base rotation and add slide rotation around Y axis
             const base = cardMesh.userData.baseRotation;
             cardMesh.rotation.set(base.x, base.y + rotationRadians, base.z);
+            
+            // Store original z position if not already stored
+            if (cardMesh.userData.originalZ === undefined) {
+                cardMesh.userData.originalZ = cardMesh.position.z;
+            }
+            
+            // Manage z-index based on rotation state
+            if (rotationDegrees > 0) {
+                // During rotation (0-180°): invert z-index for proper card stacking
+                const originalZ = cardMesh.userData.originalZ;
+                const maxZ = Math.max(...cards.map(c => c.userData.originalZ));
+                cardMesh.position.z = maxZ - originalZ + 0.1; // Invert and elevate for visibility
+            } else {
+                // On touch release (0°): restore original z position
+                cardMesh.position.z = cardMesh.userData.originalZ;
+            }
             
             // Update texture based on rotation threshold
             const isRevealed = rotationDegrees > 90; // Revealed when past 90 degrees
@@ -435,5 +510,98 @@ export class GameRenderer {
     
     render() {
         this.renderer.render(this.scene, this.camera);
+    }
+    
+    startCardDrag(owner, scale = 1.5) {
+        const cards = this.getPlayerCards(owner);
+        
+        if (cards.length === 0) return;
+        
+        // Calculate center point of all cards for group movement
+        let centerX = 0, centerY = 0;
+        cards.forEach(cardMesh => {
+            centerX += cardMesh.position.x;
+            centerY += cardMesh.position.y;
+        });
+        centerX /= cards.length;
+        centerY /= cards.length;
+        
+        cards.forEach(cardMesh => {
+            // Store original scale and position if not already stored
+            if (!cardMesh.userData.originalScale) {
+                cardMesh.userData.originalScale = cardMesh.scale.clone();
+            }
+            if (!cardMesh.userData.originalPosition) {
+                cardMesh.userData.originalPosition = cardMesh.position.clone();
+            }
+            
+            // Store relative offset from group center
+            if (!cardMesh.userData.groupOffset) {
+                cardMesh.userData.groupOffset = {
+                    x: cardMesh.position.x - centerX,
+                    y: cardMesh.position.y - centerY,
+                    z: cardMesh.position.z
+                };
+            }
+            
+            // Scale up the cards
+            cardMesh.scale.multiplyScalar(scale);
+            
+            // Move cards to front with significant z-index boost for visibility
+            cardMesh.position.z += 5; // Increased from 2 to 5 for better visibility
+            
+            // Mark as being dragged
+            cardMesh.userData.isDragging = true;
+        });
+        
+        // Store group center for movement calculations
+        this.dragGroupCenter = { x: centerX, y: centerY };
+        
+        console.log(`Started card drag for player ${owner} with scale ${scale}, group center: (${centerX.toFixed(2)}, ${centerY.toFixed(2)})`);
+    }
+    
+    updateCardDragPosition(owner, normalizedX, normalizedY) {
+        const cards = this.getPlayerCards(owner);
+        const viewport = this.getViewportDimensions();
+        
+        // Convert normalized screen coordinates to world coordinates
+        const worldX = (normalizedX - 0.5) * viewport.width;
+        const worldY = (0.5 - normalizedY) * viewport.height; // Flip Y axis
+        
+        cards.forEach(cardMesh => {
+            if (cardMesh.userData.isDragging && cardMesh.userData.groupOffset) {
+                // Maintain relative positioning within the group
+                cardMesh.position.x = worldX + cardMesh.userData.groupOffset.x;
+                cardMesh.position.y = worldY + cardMesh.userData.groupOffset.y;
+                // Keep the elevated z position for visibility
+            }
+        });
+    }
+    
+    resetCardDrag(owner) {
+        const cards = this.getPlayerCards(owner);
+        
+        cards.forEach(cardMesh => {
+            if (cardMesh.userData.isDragging) {
+                // Restore original scale
+                if (cardMesh.userData.originalScale) {
+                    cardMesh.scale.copy(cardMesh.userData.originalScale);
+                }
+                
+                // Restore original position
+                if (cardMesh.userData.originalPosition) {
+                    cardMesh.position.copy(cardMesh.userData.originalPosition);
+                }
+                
+                // Clear drag state and group offset
+                cardMesh.userData.isDragging = false;
+                cardMesh.userData.groupOffset = null;
+            }
+        });
+        
+        // Clear group center reference
+        this.dragGroupCenter = null;
+        
+        console.log(`Reset card drag for player ${owner}`);
     }
 }

@@ -12,18 +12,137 @@
 </head>
 <body>
     <div id="app">
-        <canvas id="gameCanvas"></canvas>
-        
-        <div id="ui-overlay">
-            <div id="top-player-info" class="player-info">
+        <!-- Start Screen -->
+        <div id="start-screen">
+            <div class="start-screen-content">
+                <h1 class="game-title">Pocket Poker</h1>
+                <p class="game-subtitle">Two-Player Texas Hold'em</p>
                 
+                <div class="start-buttons">
+                    <button id="new-game-btn" class="action-btn primary large">New Game</button>
+                    <button id="continue-game-btn" class="action-btn secondary large hidden">Continue Game</button>
+                    <button id="start-settings-btn" class="action-btn secondary">Settings</button>
+                    <button id="install-app-btn" class="action-btn install-btn hidden">📱 Download App</button>
+                </div>
+                
+                <div class="start-instructions">
+                    <p>Two players share one device</p>
+                    <p>Touch and drag cards to reveal them</p>
+                    <p>Hold cards for 3s to drag and fold</p>
+                    <p>Press Pot to go to next hand</p>
+                    <p>T is Ten (10)</p>
+                </div>
+                
+                <div class="version-info">
+                    <span class="version-number">v1.4.0</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- End Screen -->
+        <div id="end-screen" class="hidden">
+            <div class="end-screen-content">
+                <!-- Celebration Animation -->
+                <div id="celebration-animation" class="celebration-animation">
+                    <div class="confetti"></div>
+                    <div class="confetti"></div>
+                    <div class="confetti"></div>
+                    <div class="confetti"></div>
+                    <div class="confetti"></div>
+                </div>
+                
+                <!-- Winner Announcement -->
+                <div class="winner-section">
+                    <h1 id="winner-title" class="winner-title">🎉 Player 1 Wins! 🎉</h1>
+                    <p id="winner-subtitle" class="winner-subtitle">Congratulations on your victory!</p>
+                </div>
+                
+                <!-- Match Statistics -->
+                <div class="match-stats">
+                    <h3>Match Summary</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <span class="stat-label">Hands Played</span>
+                            <span id="stat-hands" class="stat-value">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Total Duration</span>
+                            <span id="stat-duration" class="stat-value">0:00</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Biggest Pot</span>
+                            <span id="stat-biggest-pot" class="stat-value">$0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Final Chips</span>
+                            <span id="stat-final-chips" class="stat-value">$0</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Player Final Standings -->
+                <div class="final-standings">
+                    <h3>Final Standings</h3>
+                    <div class="standings-list">
+                        <div class="standing-item winner">
+                            <div class="standing-rank">🥇</div>
+                            <div class="standing-info">
+                                <div id="winner-name" class="standing-name">Player 1</div>
+                                <div id="winner-chips" class="standing-chips">$1500</div>
+                            </div>
+                        </div>
+                        <div class="standing-item">
+                            <div class="standing-rank">🥈</div>
+                            <div class="standing-info">
+                                <div id="loser-name" class="standing-name">Player 2</div>
+                                <div id="loser-chips" class="standing-chips">$500</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="end-screen-actions">
+                    <button id="play-again-btn" class="action-btn primary large">Play Again</button>
+                    <button id="back-to-menu-btn" class="action-btn secondary large">Back to Menu</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Game Canvas and UI (initially hidden) -->
+        <div id="game-container" class="hidden">
+            <canvas id="gameCanvas"></canvas>
+            
+            <div id="ui-overlay">
+            <!-- Player 1 Game Info (Right Side, Rotated 180°) -->
+            <div id="top-game-info" class="player-game-info right-info">
+                <div id="top-stack-display" class="stack-display">Stack: $0</div>
+                <div id="top-pot-display" class="pot-display">Pot: $0</div>
+                <div id="top-street-display" class="street-display"></div>
+                <div id="top-dealer-button" class="dealer-button">D</div>
+            </div>
+            
+            <!-- Player 0 Game Info (Left Side) -->
+            <div id="bottom-game-info" class="player-game-info left-info">
+                <div id="bottom-stack-display" class="stack-display">Stack: $0</div>
+                <div id="bottom-pot-display" class="pot-display">Pot: $0</div>
+                <div id="bottom-street-display" class="street-display"></div>
+                <div id="bottom-dealer-button" class="dealer-button">D</div>
+            </div>
+            
+            <div id="top-player-info" class="player-info">
                 <div id="top-player-controls" class="player-controls top-controls disabled">
                     <div class="control-group">
-                        <div class="player-stack"></div>
-                        <button id="top-fold-btn" class="action-btn fold-btn">Fold</button>
                         <div class="bet-control">
-                            <input type="range" id="top-bet-slider" class="bet-slider" min="0" max="100" step="1" >
-                            <div id="top-slider-value" class="slider-value">$0</div>
+                                <div class="wheel" role="slider" aria-label="Player 1 Bet" tabindex="0"
+                                    data-roller
+                                    data-min="0" data-max="100" data-step="1" data-pixels-per-step="8"
+                                    data-accel-max="6" data-accel-threshold-ms="120"
+                                    data-color-a="#eb4034" data-color-b="#ffffff"
+                                    id="top-bet-wheel">
+                                    <span class="sr-only">Drag left/right to roll. Home/End jump to limits; arrows adjust by step.</span>
+                                </div>
+                            
                         </div>
                         <button id="top-action-btn" class="action-btn primary">Check</button>
                     </div>
@@ -31,21 +150,19 @@
                 </div>
             </div>
             
-            <div id="center-info">
-                <div id="pot-display">Pot: $0</div>
-                <div id="street-display"></div>
-                <div id="dealer-button" class="button-marker">D</div>
-            </div>
-            
             <div id="bottom-player-info" class="player-info">
-                
                 <div id="bottom-player-controls" class="player-controls bottom-controls disabled">
                     <div class="control-group">
-                        <div class="player-stack"></div>
-                        <button id="bottom-fold-btn" class="action-btn fold-btn">Fold</button>
                         <div class="bet-control">
-                            <input type="range" id="bottom-bet-slider" class="bet-slider" min="0" max="100" step="1" >
-                            <div id="bottom-slider-value" class="slider-value">$0</div>
+                                <div class="wheel" role="slider" aria-label="Player 0 Bet" tabindex="0"
+                                    data-roller
+                                    data-min="0" data-max="100" data-step="1" data-pixels-per-step="8"
+                                    data-accel-max="6" data-accel-threshold-ms="120"
+                                    data-color-a="#ffffff" data-color-b="#00a603"
+                                    id="bottom-bet-wheel">
+                                    <span class="sr-only">Drag left/right to roll. Home/End jump to limits; arrows adjust by step.</span>
+                               
+                            </div>
                         </div>
                         <button id="bottom-action-btn" class="action-btn primary">Check</button>
                     </div>
@@ -61,10 +178,89 @@
             <div id="result-overlay" class="hidden">
                 <div id="result-message"></div>
             </div>
+            
+            <button id="settings-toggle" class="icon-btn" title="Settings">⚙️</button>
         </div>
         
-        <button id="qa-toggle" class="icon-btn" title="QA Debug">⚙️</button>
+        <!-- Game Settings Overlay -->
+        <div id="settings-overlay" class="hidden">
+            <div class="settings-content">
+                <h3>Game Settings</h3>
+                
+                <div class="settings-section">
+                    <h4>Match Control</h4>
+                    <button id="end-match-btn" class="action-btn secondary full-width">End Current Match</button>
+                    <button id="return-start-btn" class="action-btn secondary full-width">Return to Start Screen</button>
+                </div>
+                
+                <div class="settings-section">
+                    <h4>Game Options</h4>
+                    
+                    <div class="setting-item">
+                        <label for="starting-stack">Starting Stack</label>
+                        <select id="starting-stack">
+                            <option value="500">$500</option>
+                            <option value="1000" selected>$1000</option>
+                            <option value="2000">$2000</option>
+                            <option value="5000">$5000</option>
+                        </select>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="blind-level">Blinds</label>
+                        <select id="blind-level">
+                            <option value="2-5">$2/$5</option>
+                            <option value="5-10" selected>$5/$10</option>
+                            <option value="10-20">$10/$20</option>
+                            <option value="25-50">$25/$50</option>
+                        </select>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="auto-hide-time">Card Auto-Hide (ms)</label>
+                        <select id="auto-hide-time">
+                            <option value="0">Never</option>
+                            <option value="800">800ms</option>
+                            <option value="1200" selected>1200ms</option>
+                            <option value="2000">2000ms</option>
+                            <option value="3000">3000ms</option>
+                        </select>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="turn-gate">Card Peek Mode</label>
+                        <select id="turn-gate">
+                            <option value="freePeek" selected>Free Peek</option>
+                            <option value="ownerOnly">Owner Only</option>
+                            <option value="turnOnly">Turn Only</option>
+                        </select>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="long-press-duration">Drag Hold Duration (ms)</label>
+                        <select id="long-press-duration">
+                            <option value="1000">1000ms (1s)</option>
+                            <option value="2000">2000ms (2s)</option>
+                            <option value="3000" selected>3000ms (3s)</option>
+                            <option value="4000">4000ms (4s)</option>
+                            <option value="5000">5000ms (5s)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <h4>Data Management</h4>
+                    <button id="clear-save-btn" class="action-btn secondary full-width">Clear Saved Game</button>
+                    <button id="reset-defaults-btn" class="action-btn secondary full-width">Reset to Defaults</button>
+                </div>
+                
+                <div class="settings-actions">
+                    <button id="settings-close" class="action-btn primary">Close</button>
+                </div>
+            </div>
+        </div>
         
+        <!-- QA Debug Overlay (kept for debugging) -->
         <div id="qa-overlay" class="hidden">
             <h3>QA Debug</h3>
             <div id="qa-content">
@@ -77,12 +273,185 @@
             <button id="qa-close" class="action-btn">Close</button>
         </div>
         
+        <!-- Confirmation Dialog -->
+        <div id="confirmation-overlay" class="hidden">
+            <div class="confirmation-content">
+                <h3 id="confirmation-title">Confirm Action</h3>
+                <p id="confirmation-message">Are you sure you want to proceed?</p>
+                <div class="confirmation-actions">
+                    <button id="confirmation-cancel" class="action-btn secondary">Cancel</button>
+                    <button id="confirmation-confirm" class="action-btn primary">Confirm</button>
+                </div>
+            </div>
+        </div>
+        
         <div id="install-prompt" class="hidden">
             <p>Add to Home Screen for best experience</p>
             <button id="install-dismiss">Dismiss</button>
         </div>
+        </div> <!-- Close game-container -->
     </div>
     
+    <!-- Virtual Roller (Wheel Component) Library -->
+    <script>
+    (function(global){
+        const INSTANCE = new WeakMap();
+
+        class VirtualRoller {
+            constructor(el){
+                this.el = el;
+                this.valueEl = el.parentElement?.querySelector('[data-bind="value"]') || null;
+                this.conf = {
+                    min: Number(el.dataset.min ?? 0),
+                    max: Number(el.dataset.max ?? 100),
+                    step: Number(el.dataset.step ?? 1),
+                    pixelsPerStep: Number(el.dataset.pixelsPerStep ?? 8),
+                    accelMax: Number(el.dataset.accelMax ?? 6),
+                    accelThresholdMs: Number(el.dataset.accelThresholdMs ?? 120),
+                };
+                // Colors from attributes
+                this.el.style.setProperty('--stripe-a', el.dataset.colorA || '#fde68a');
+                this.el.style.setProperty('--stripe-b', el.dataset.colorB || '#fca5a5');
+
+                this.value = Number(el.getAttribute('aria-valuenow') || this.conf.min) || this.conf.min;
+                this.pointerActive = false;
+                this.lastX = 0;
+                this.pixelBank = 0;
+                this.accel = { dir: 0, multiplier: 1, lastStepTime: 0 };
+
+                this.render();
+                this.bind();
+            }
+
+            clamp(v){ return Math.min(this.conf.max, Math.max(this.conf.min, v)); }
+            atMin(){ return this.value <= this.conf.min; }
+            atMax(){ return this.value >= this.conf.max; }
+
+            render(){
+                if (this.valueEl) this.valueEl.textContent = this.value;
+                this.el.setAttribute('aria-valuenow', String(this.value));
+                const ratio = (this.value - this.conf.min) / (this.conf.max - this.conf.min || 1);
+                const textureX = Math.round(ratio * 600);
+                this.el.style.setProperty('--texture-x', textureX + 'px');
+            }
+
+            setValue(next){
+                const clamped = this.clamp(next);
+                if (clamped === this.value) return false;
+                this.value = clamped;
+                this.render();
+                this.el.dispatchEvent(new CustomEvent('rollerchange', { detail: { value: this.value } }));
+                return true;
+            }
+
+            nudge(deltaSteps){ this.setValue(this.value + deltaSteps * this.conf.step); }
+
+            updateAccel(sign){
+                const now = performance.now();
+                const within = (now - this.accel.lastStepTime) <= this.conf.accelThresholdMs;
+                if (this.accel.dir === sign && within) {
+                    this.accel.multiplier = Math.min(this.accel.multiplier + 1, this.conf.accelMax);
+                } else {
+                    this.accel.multiplier = 1; this.accel.dir = sign;
+                }
+                this.accel.lastStepTime = now;
+            }
+            resetAccel(){ this.accel.multiplier = 1; this.accel.dir = 0; this.accel.lastStepTime = 0; }
+
+            beginInteraction(x){
+                this.pointerActive = true;
+                this.lastX = x;
+                this.pixelBank = 0;
+                if (performance.now() - this.accel.lastStepTime > this.conf.accelThresholdMs * 2) this.resetAccel();
+            }
+            moveInteraction(x){
+                if (!this.pointerActive) return;
+                const dx = x - this.lastX;
+                this.lastX = x;
+                this.pixelBank += dx;
+                while (Math.abs(this.pixelBank) >= this.conf.pixelsPerStep) {
+                    const sign = this.pixelBank > 0 ? 1 : -1;
+                    this.updateAccel(sign);
+                    const stepDelta = sign * this.accel.multiplier;
+                    this.nudge(stepDelta);
+                    this.pixelBank -= this.conf.pixelsPerStep * sign;
+                    if ((this.atMin() && sign < 0) || (this.atMax() && sign > 0)) { this.pixelBank = 0; this.resetAccel(); break; }
+                }
+            }
+            endInteraction(){
+                this.pointerActive = false;
+                this.pixelBank = 0;
+                setTimeout(() => { if (!this.pointerActive) this.resetAccel(); }, this.conf.accelThresholdMs * 2);
+            }
+
+            bind(){
+                const el = this.el;
+                // Pointer events
+                el.addEventListener('pointerdown', (e) => { el.setPointerCapture?.(e.pointerId); this.beginInteraction(e.clientX); });
+                el.addEventListener('pointermove', (e) => this.moveInteraction(e.clientX));
+                const endPointer = (e) => { try{ el.releasePointerCapture?.(e.pointerId); }catch{} this.endInteraction(); };
+                el.addEventListener('pointerup', endPointer);
+                el.addEventListener('pointercancel', endPointer);
+                el.addEventListener('lostpointercapture', () => this.endInteraction());
+                // Touch fallback
+                el.addEventListener('touchstart', (e) => { if (e.touches?.length){ e.preventDefault(); this.beginInteraction(e.touches[0].clientX); } }, { passive:false });
+                el.addEventListener('touchmove',  (e) => { if (e.touches?.length){ e.preventDefault(); this.moveInteraction(e.touches[0].clientX); } }, { passive:false });
+                el.addEventListener('touchend',   (e) => { e.preventDefault(); this.endInteraction(); }, { passive:false });
+                el.addEventListener('touchcancel',() => this.endInteraction());
+                // Keyboard
+                el.addEventListener('keydown', (e) => {
+                    switch (e.key) {
+                        case 'ArrowRight': case 'ArrowUp': e.preventDefault(); this.updateAccel(1); this.nudge(1 * this.accel.multiplier); break;
+                        case 'ArrowLeft': case 'ArrowDown': e.preventDefault(); this.updateAccel(-1); this.nudge(-1 * this.accel.multiplier); break;
+                        case 'PageUp': e.preventDefault(); this.resetAccel(); this.nudge(10); break;
+                        case 'PageDown': e.preventDefault(); this.resetAccel(); this.nudge(-10); break;
+                        case 'Home': e.preventDefault(); this.resetAccel(); this.setValue(this.conf.min); break;
+                        case 'End': e.preventDefault(); this.resetAccel(); this.setValue(this.conf.max); break;
+                    }
+                });
+            }
+
+            configure(opts={}){
+                if ('min' in opts) this.conf.min = Number(opts.min);
+                if ('max' in opts) this.conf.max = Number(opts.max);
+                if ('step' in opts) this.conf.step = Number(opts.step);
+                if ('pixelsPerStep' in opts) this.conf.pixelsPerStep = Number(opts.pixelsPerStep);
+                if ('accelMax' in opts) this.conf.accelMax = Number(opts.accelMax);
+                if ('accelThresholdMs' in opts) this.conf.accelThresholdMs = Number(opts.accelThresholdMs);
+                if ('colorA' in opts) this.el.style.setProperty('--stripe-a', opts.colorA);
+                if ('colorB' in opts) this.el.style.setProperty('--stripe-b', opts.colorB);
+                this.el.setAttribute('aria-valuemin', String(this.conf.min));
+                this.el.setAttribute('aria-valuemax', String(this.conf.max));
+                this.render();
+            }
+        }
+
+        function create(el){
+            if (!el) throw new Error('VirtualRoller.create requires an element');
+            if (INSTANCE.has(el)) return INSTANCE.get(el);
+            const inst = new VirtualRoller(el);
+            INSTANCE.set(el, inst);
+            return inst;
+        }
+
+        function initAll(root){
+            if (!root) root = document;
+            const nodes = root.querySelectorAll('[data-roller]');
+            return Array.from(nodes).map(create);
+        }
+
+        // Expose a minimal API for app.js wiring
+        global.VirtualRoller = {
+            create, initAll,
+            get: (el) => INSTANCE.get(el),
+        };
+
+        // Auto-init when used inline without app.js
+        if (document.readyState !== 'loading') initAll(document);
+        else document.addEventListener('DOMContentLoaded', () => initAll(document));
+    })(window);
+    </script>
+
     <script type="module" src="./app.js"></script>
 </body>
 </html>

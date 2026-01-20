@@ -28,7 +28,7 @@
             
             <div x-show="!loading && cheatsheets.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <template x-for="cheatsheet in cheatsheets" :key="cheatsheet.name">
-                    <div class="bg-black text-white p-6 rounded-lg shadow-lg m-6 h-44">
+                    <div class="bg-black text-white p-6 rounded-lg shadow-lg m-6 h-50">
                         <h3 class="text-2xl font-bold mb-4" x-text="cheatsheet.title"></h3>
                         <p class="mb-4" x-text="cheatsheet.description"></p>
                         <a :href="cheatsheet.path" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-full">
