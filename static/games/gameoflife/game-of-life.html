@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game of Life</title>
-    <link rel="stylesheet" href="../../style.css">
-    <link href="../../output.css" rel="stylesheet"></link>
+    <link rel="stylesheet" href="../../../style.css">
+    <link href="../../../output.css" rel="stylesheet"></link>
     <script defer src="../../scripts/main.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script type="importmap">
@@ -20,7 +20,7 @@
 <body class="notebook">
 
     <!-- Include the new header component -->
-    <div x-data x-init="$el.innerHTML = await (await fetch('../../components/header.html')).text().then(html => html.replace('{{ title }}', 'GAME OF LIFE').replace('{{ subtitle }}', ''))"></div>
+    <div x-data x-init="$el.innerHTML = await (await fetch('../../../components/header.html')).text().then(html => html.replace('{{ title }}', 'GAME OF LIFE').replace('{{ subtitle }}', ''))"></div>
 
     <main class="max-w-4xl mx-auto py-8 text-center mb-5 bg-white">
         <h1 class="text-4xl font-bold mb-8">Game of Life</h1>
@@ -30,7 +30,7 @@
     </main>
     
     <!-- Include the footer component -->
-    <div x-data x-init="$el.innerHTML = await (await fetch('../../components/footer.html')).text()"></div>
+    <div x-data x-init="$el.innerHTML = await (await fetch('../../../components/footer.html')).text()"></div>
 
 </body>
 </html>
