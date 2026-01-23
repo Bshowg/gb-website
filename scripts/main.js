@@ -29,7 +29,7 @@ function articleLoader() {
             const articles = await getArticlesPhp(articlesPerPage, (currentPage - 1) * articlesPerPage);
             console.log(articles);
             const parser = new DOMParser();
-            const articlePromises = articles.map(article => fetch(`articles/${article.file}`).then(response => response.text()));
+            const articlePromises = articles.map(article => fetch(`articles/${article.file}?v=${Date.now()}`).then(response => response.text()));
             const articleContents = await Promise.all(articlePromises);
             const articleData = articles.map((article, index) => ({ ...article, content: articleContents[index] }));
             articleData.sort((a, b) => a.order - b.order);
