@@ -667,12 +667,24 @@ section h2 {
     gap: 1.5rem;
 }
 
+/* Make the first image span 2 columns on larger screens */
+@media (min-width: 768px) {
+    .gallery-item:first-child {
+        grid-column: span 2;
+    }
+    
+    .gallery-item:first-child img {
+        height: 400px;
+    }
+}
+
 .gallery-item {
     position: relative;
     overflow: hidden;
     border-radius: 10px;
     box-shadow: var(--shadow-sm);
     transition: var(--transition);
+    cursor: pointer;
 }
 
 .gallery-item:hover {
@@ -680,11 +692,80 @@ section h2 {
     box-shadow: var(--shadow-md);
 }
 
+.gallery-item::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.3));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.gallery-item:hover::after {
+    opacity: 1;
+}
+
 .gallery-item img {
     width: 100%;
     height: 250px;
     object-fit: cover;
     display: block;
+    transition: transform 0.3s ease;
+}
+
+.gallery-item:hover img {
+    transform: scale(1.05);
+}
+
+/* Lightbox styles */
+.lightbox {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.95);
+    z-index: 10000;
+    cursor: zoom-out;
+}
+
+.lightbox.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lightbox img {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+    animation: zoomIn 0.3s ease;
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    font-size: 3rem;
+    color: white;
+    cursor: pointer;
+    z-index: 10001;
+}
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 /* Contacts Section */
