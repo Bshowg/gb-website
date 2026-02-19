@@ -18,11 +18,6 @@ function initNavigation() {
     const navMenu = document.getElementById('navMenu');
     const navbar = document.getElementById('navbar');
     
-    // Initially hide navbar
-    navbar.style.opacity = '0';
-    navbar.style.transform = 'translateY(-100%)';
-    navbar.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-    
     // Flag to track if navbar has been shown
     let navbarShown = false;
     
@@ -30,8 +25,7 @@ function initNavigation() {
     function showNavbar() {
         if (!navbarShown) {
             navbarShown = true;
-            navbar.style.opacity = '1';
-            navbar.style.transform = 'translateY(0)';
+            navbar.classList.add('visible');
         }
     }
     
