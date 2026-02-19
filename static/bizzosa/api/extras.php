@@ -77,102 +77,72 @@ function getDefaultExtras($lang) {
     $extras = [
         [
             'id' => 1,
-            'name' => $lang === 'it' ? 'Skipper Professionista' : 'Professional Skipper',
+            'name' => $lang === 'it' ? 'Imbarco/Sbarco Porto di Salivoli' : 'Embarkation/Disembarkation Port of Salivoli',
             'description' => $lang === 'it' 
-                ? 'Skipper esperto per la navigazione' 
-                : 'Experienced skipper for navigation',
-            'price' => 200.00,
-            'price_type' => 'per_day',
-            'is_active' => true
-        ],
-        [
-            'id' => 2,
-            'name' => $lang === 'it' ? 'Hostess di Bordo' : 'Onboard Hostess',
-            'description' => $lang === 'it' 
-                ? 'Servizio di hostess professionale' 
-                : 'Professional hostess service',
-            'price' => 150.00,
-            'price_type' => 'per_day',
-            'is_active' => true
-        ],
-        [
-            'id' => 3,
-            'name' => $lang === 'it' ? 'Cuoco a Bordo' : 'Onboard Chef',
-            'description' => $lang === 'it' 
-                ? 'Chef professionista per i pasti' 
-                : 'Professional chef for meals',
-            'price' => 250.00,
-            'price_type' => 'per_day',
-            'is_active' => true
-        ],
-        [
-            'id' => 4,
-            'name' => $lang === 'it' ? 'Tender con Motore' : 'Tender with Engine',
-            'description' => $lang === 'it' 
-                ? 'Gommone tender 3.5m con motore 15HP' 
-                : '3.5m tender dinghy with 15HP engine',
-            'price' => 100.00,
-            'price_type' => 'per_day',
-            'is_active' => true
-        ],
-        [
-            'id' => 5,
-            'name' => $lang === 'it' ? 'Stand Up Paddle (SUP)' : 'Stand Up Paddle (SUP)',
-            'description' => $lang === 'it' 
-                ? 'Tavola SUP con pagaia e kit sicurezza' 
-                : 'SUP board with paddle and safety kit',
-            'price' => 50.00,
-            'price_type' => 'per_day',
-            'is_active' => true
-        ],
-        [
-            'id' => 6,
-            'name' => $lang === 'it' ? 'Attrezzatura Snorkeling' : 'Snorkeling Equipment',
-            'description' => $lang === 'it' 
-                ? 'Set completo maschera, boccaglio e pinne' 
-                : 'Complete set with mask, snorkel and fins',
-            'price' => 20.00,
-            'price_type' => 'per_person',
-            'is_active' => true
-        ],
-        [
-            'id' => 7,
-            'name' => $lang === 'it' ? 'Cambusa Premium' : 'Premium Galley',
-            'description' => $lang === 'it' 
-                ? 'Rifornimento cambusa con prodotti selezionati' 
-                : 'Galley provisioning with selected products',
-            'price' => 300.00,
-            'price_type' => 'flat',
-            'is_active' => true
-        ],
-        [
-            'id' => 8,
-            'name' => $lang === 'it' ? 'Trasferimento Aeroporto' : 'Airport Transfer',
-            'description' => $lang === 'it' 
-                ? 'Transfer da/per aeroporto di Pisa o Firenze' 
-                : 'Transfer from/to Pisa or Florence airport',
+                ? 'Servizio imbarco o sbarco presso Porto di Salivoli (LI)' 
+                : 'Embarkation or disembarkation service at Port of Salivoli (LI)',
             'price' => 150.00,
             'price_type' => 'per_trip',
             'is_active' => true
         ],
         [
-            'id' => 9,
-            'name' => $lang === 'it' ? 'Pulizia Finale' : 'Final Cleaning',
+            'id' => 2,
+            'name' => $lang === 'it' ? 'Tender' : 'Tender',
             'description' => $lang === 'it' 
-                ? 'Pulizia professionale a fine noleggio' 
-                : 'Professional cleaning at end of charter',
-            'price' => 150.00,
+                ? 'Gommone tender per trasferimenti' 
+                : 'Tender dinghy for transfers',
+            'price' => 50.00,
             'price_type' => 'flat',
             'is_active' => true
         ],
         [
-            'id' => 10,
-            'name' => $lang === 'it' ? 'Biancheria e Asciugamani' : 'Linen and Towels',
+            'id' => 3,
+            'name' => $lang === 'it' ? 'Fuoribordo Tender' : 'Tender Outboard Motor',
             'description' => $lang === 'it' 
-                ? 'Set completo biancheria letto e bagno' 
-                : 'Complete bed linen and bathroom set',
-            'price' => 25.00,
+                ? 'Motore fuoribordo per tender' 
+                : 'Outboard motor for tender',
+            'price' => 120.00,
+            'price_type' => 'flat',
+            'is_active' => true
+        ],
+        [
+            'id' => 4,
+            'name' => $lang === 'it' ? 'Servizio Pranzo a Bordo' : 'Onboard Lunch Service',
+            'description' => $lang === 'it' 
+                ? 'Pranzo completo preparato e servito a bordo' 
+                : 'Complete lunch prepared and served onboard',
+            'price' => 30.00,
             'price_type' => 'per_person',
+            'is_active' => true
+        ],
+        [
+            'id' => 5,
+            'name' => $lang === 'it' ? 'Servizio Aperitivo a Bordo' : 'Onboard Aperitif Service',
+            'description' => $lang === 'it' 
+                ? 'Aperitivo con stuzzichini servito a bordo' 
+                : 'Aperitif with appetizers served onboard',
+            'price' => 15.00,
+            'price_type' => 'per_person',
+            'is_active' => true
+        ],
+        [
+            'id' => 6,
+            'name' => $lang === 'it' ? 'Pernottamento Extra in Porto' : 'Extra Night in Port',
+            'description' => $lang === 'it' 
+                ? 'Notte aggiuntiva in porto - checkout ore 9:00' 
+                : 'Additional night in port - checkout at 9:00 AM',
+            'price' => 150.00,
+            'price_type' => 'per_night',
+            'is_active' => true
+        ],
+        [
+            'id' => 7,
+            'name' => $lang === 'it' ? 'Pernottamento Extra in Rada' : 'Extra Night at Anchor',
+            'description' => $lang === 'it' 
+                ? 'Notte aggiuntiva in rada - sbarco ore 9:00' 
+                : 'Additional night at anchor - disembarkation at 9:00 AM',
+            'price' => 300.00,
+            'price_type' => 'per_night',
             'is_active' => true
         ]
     ];

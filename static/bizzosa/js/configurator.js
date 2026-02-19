@@ -293,11 +293,13 @@ class BookingConfigurator {
     async loadExtras() {
         // For now, use mock data. Will be replaced with API call
         const mockExtras = [
-            { id: 1, name_it: 'Skipper', name_en: 'Skipper', pricing_type: 'FLAT_RATE', price: 150 },
-            { id: 2, name_it: 'Hostess', name_en: 'Hostess', pricing_type: 'PER_DAY', price: 100 },
-            { id: 3, name_it: 'Pranzo a bordo', name_en: 'Lunch on board', pricing_type: 'PER_PERSON', price: 25 },
-            { id: 4, name_it: 'Stand Up Paddle', name_en: 'Stand Up Paddle', pricing_type: 'FLAT_RATE', price: 50 },
-            { id: 5, name_it: 'Attrezzatura snorkeling', name_en: 'Snorkeling equipment', pricing_type: 'PER_PERSON', price: 15 }
+            { id: 1, name_it: 'Imbarco/Sbarco Porto di Salivoli', name_en: 'Embarkation/Disembarkation Port', pricing_type: 'PER_TRIP', price: 150 },
+            { id: 2, name_it: 'Tender', name_en: 'Tender', pricing_type: 'FLAT_RATE', price: 50 },
+            { id: 3, name_it: 'Fuoribordo Tender', name_en: 'Tender Outboard Motor', pricing_type: 'FLAT_RATE', price: 120 },
+            { id: 4, name_it: 'Servizio Pranzo a Bordo', name_en: 'Onboard Lunch Service', pricing_type: 'PER_PERSON', price: 30 },
+            { id: 5, name_it: 'Servizio Aperitivo a Bordo', name_en: 'Onboard Aperitif Service', pricing_type: 'PER_PERSON', price: 15 },
+            { id: 6, name_it: 'Pernottamento Extra in Porto', name_en: 'Extra Night in Port', pricing_type: 'PER_NIGHT', price: 150 },
+            { id: 7, name_it: 'Pernottamento Extra in Rada', name_en: 'Extra Night at Anchor', pricing_type: 'PER_NIGHT', price: 300 }
         ];
 
         this.renderExtras(mockExtras);
@@ -390,6 +392,12 @@ class BookingConfigurator {
                     break;
                 case 'PER_PERSON':
                     extrasTotal += parseFloat(extra.price) * this.state.guests;
+                    break;
+                case 'PER_TRIP':
+                    extrasTotal += parseFloat(extra.price);
+                    break;
+                case 'PER_NIGHT':
+                    extrasTotal += parseFloat(extra.price);
                     break;
             }
         });
