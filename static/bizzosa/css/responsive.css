@@ -213,10 +213,6 @@
         grid-template-columns: 1fr;
     }
 
-    .gallery-item img {
-        height: 200px;
-    }
-
     /* Footer */
     .footer {
         padding: 1.5rem 0;
