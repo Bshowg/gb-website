@@ -65,18 +65,26 @@ function initVideoBackground() {
         const videoSrc = isMobile ? 'videos/video_mobile.mp4' : 'videos/video_desktop.mp4';
         const posterUrl = isMobile ? 'images/hero/hero-poster-mobile.jpg' : 'images/hero/hero-poster.jpg';
         
+        console.log('Setting up video:', videoSrc, 'Poster:', posterUrl);
+        
         // Set poster first - this shows immediately
         video.poster = posterUrl;
+        video.style.backgroundImage = `url(${posterUrl})`;
+        video.style.backgroundSize = 'cover';
+        video.style.backgroundPosition = 'center';
         
         // Set video source
         video.src = videoSrc;
         
         // Wait for video to be fully ready before playing
         video.addEventListener('canplaythrough', function onReady() {
-            video.removeEventListener('canplaythrough', onReady);
+            console.log('Video ready, starting playback');
             // Video is ready, start playing
-            video.play().catch(err => {
-                console.log('Autoplay blocked, poster remains visible');
+            video.play().then(() => {
+                console.log('Video playing successfully');
+                video.style.backgroundImage = 'none';
+            }).catch(err => {
+                console.log('Autoplay blocked, poster remains visible:', err);
             });
         }, { once: true });
         

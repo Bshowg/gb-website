@@ -10,11 +10,17 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/responsive.css">
     
-    <!-- Preload critical resources - Posters first for immediate display -->
+    <!-- Preload poster images -->
     <link rel="preload" as="image" href="images/hero/hero-poster.jpg">
     <link rel="preload" as="image" href="images/hero/hero-poster-mobile.jpg">
-    <!-- Note: Preloading video is often not recommended due to large file sizes -->
-    <!-- Videos will load on demand based on viewport -->
+    
+    <!-- Prevent scroll restoration on reload -->
+    <script>
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+        window.scrollTo(0, 0);
+    </script>
 </head>
 <body>
     <!-- Navigation -->
