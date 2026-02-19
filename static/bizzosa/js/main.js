@@ -50,11 +50,14 @@ function initNavigation() {
 }
 
 /**
- * Video background with responsive source switching
+ * Video background with responsive source switching and ping-pong loop
  */
 function initVideoBackground() {
     const video = document.getElementById('heroVideo');
     if (!video) return;
+    
+    let playingBackward = false;
+    let animationFrameId = null;
     
     // Function to set appropriate video source and poster
     function setVideoSource() {
@@ -70,6 +73,13 @@ function initVideoBackground() {
             video.src = videoSrc;
             video.load();
             
+            // Reset ping-pong state
+            playingBackward = false;
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+                animationFrameId = null;
+            }
+            
             // Attempt to play video
             video.play().catch(err => {
                 console.log('Video autoplay failed, showing poster:', err);
@@ -77,6 +87,66 @@ function initVideoBackground() {
             });
         }
     }
+    
+    // Ping-pong loop functionality
+    function handlePingPongLoop() {
+        if (playingBackward) {
+            // Playing backward
+            if (video.currentTime <= 0.1) {
+                // Reached the beginning, play forward
+                playingBackward = false;
+                video.playbackRate = 1;
+                video.play();
+            } else {
+                // Continue playing backward
+                video.currentTime -= 0.033; // ~30fps backward playback
+                animationFrameId = requestAnimationFrame(handlePingPongLoop);
+            }
+        }
+    }
+    
+    // Handle video ended event
+    video.addEventListener('ended', () => {
+        if (!playingBackward) {
+            // Start playing backward
+            playingBackward = true;
+            video.pause();
+            animationFrameId = requestAnimationFrame(handlePingPongLoop);
+        }
+    });
+    
+    // Alternative smoother backward playback using playbackRate (if browser supports negative rates)
+    // Note: Not all browsers support negative playbackRate
+    function initPingPongWithPlaybackRate() {
+        video.addEventListener('ended', () => {
+            if (video.playbackRate > 0) {
+                // Try to play backward (may not work in all browsers)
+                video.playbackRate = -1;
+                video.play().catch(() => {
+                    // Fallback to manual backward playback
+                    playingBackward = true;
+                    video.pause();
+                    animationFrameId = requestAnimationFrame(handlePingPongLoop);
+                });
+            } else {
+                // Was playing backward, now play forward
+                video.playbackRate = 1;
+                video.currentTime = 0;
+                video.play();
+            }
+        });
+        
+        // Check when video reaches the beginning while playing backward
+        video.addEventListener('timeupdate', () => {
+            if (video.playbackRate < 0 && video.currentTime <= 0.1) {
+                video.playbackRate = 1;
+                video.play();
+            }
+        });
+    }
+    
+    // Remove the standard loop attribute to handle custom looping
+    video.removeAttribute('loop');
     
     // Set initial source
     setVideoSource();
