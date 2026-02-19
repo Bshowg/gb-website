@@ -166,6 +166,8 @@ a:hover {
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    /* Prevent collapse - use poster image as background fallback */
+    background-color: #1e3a5f;
 }
 
 .video-container {
@@ -174,9 +176,10 @@ a:hover {
     left: 0;
     width: 100%;
     height: 100%;
+    min-height: 600px;
     z-index: -1;
-    /* Fallback gradient background while video loads */
-    background: linear-gradient(135deg, #667eea 0%, #4a90e2 50%, #1e3a5f 100%);
+    /* Simple dark background - poster will show immediately */
+    background: #1e3a5f;
     overflow: hidden;
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
@@ -184,31 +187,19 @@ a:hover {
     backface-visibility: hidden;
 }
 
-.video-container::before {
-    content: '';
+/* Removed decorative pattern to prevent visual artifacts */
+
+.video-container video {
     position: absolute;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: 
-        repeating-linear-gradient(
-            45deg,
-            transparent,
-            transparent 35px,
-            rgba(255,255,255,0.02) 35px,
-            rgba(255,255,255,0.02) 70px
-        );
-    z-index: 1;
-}
-
-.video-container video {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    position: relative;
     z-index: 2;
     /* No transitions - instant display */
+    /* Ensure video doesn't cause layout shift */
+    display: block;
 }
 
 .video-overlay {
@@ -228,18 +219,7 @@ a:hover {
     background-position: center;
 }
 
-/* Video loading state */
-.video-container.loading::after {
-    content: 'Loading video...';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-    font-size: 1.5rem;
-    z-index: 4;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-}
+/* Video states - No loading animation needed */
 
 .hero-content {
     text-align: center;
@@ -862,8 +842,8 @@ section h2 {
     text-align: center;
 }
 
-/* Loading States */
-.loading {
+/* Loading States - Only for specific components, not video */
+.spinner-loading {
     display: inline-block;
     width: 20px;
     height: 20px;
