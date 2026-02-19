@@ -54,108 +54,130 @@ function initNavigation() {
  */
 function initVideoBackground() {
     const video = document.getElementById('heroVideo');
+    const container = document.querySelector('.video-container');
     if (!video) return;
     
-    let playingBackward = false;
-    let animationFrameId = null;
+    let isReversing = false;
+    let reverseInterval = null;
+    let currentSource = '';
+    let isTransitioning = false;
     
     // Function to set appropriate video source and poster
-    function setVideoSource() {
+    function setVideoSource(forceReload = false) {
         const isMobile = window.innerWidth < 768;
         const videoSrc = isMobile ? 'videos/video_mobile.mp4' : 'videos/video_desktop.mp4';
         const posterUrl = isMobile ? 'images/hero/hero-poster-mobile.jpg' : 'images/hero/hero-poster.jpg';
         
-        // Set poster image
-        video.poster = posterUrl;
+        // Prevent unnecessary reloads
+        if (currentSource === videoSrc && !forceReload) {
+            return;
+        }
         
-        // Only change source if it's different
-        if (video.src !== videoSrc) {
-            video.src = videoSrc;
-            video.load();
+        // Add transitioning class to prevent flicker
+        if (currentSource !== videoSrc && currentSource !== '') {
+            isTransitioning = true;
+            container?.classList.add('transitioning');
+            video.style.opacity = '0';
             
-            // Reset ping-pong state
-            playingBackward = false;
-            if (animationFrameId) {
-                cancelAnimationFrame(animationFrameId);
-                animationFrameId = null;
-            }
-            
-            // Attempt to play video
-            video.play().catch(err => {
-                console.log('Video autoplay failed, showing poster:', err);
-                // If autoplay fails, the poster will be shown
-            });
+            setTimeout(() => {
+                updateVideoSource(videoSrc, posterUrl);
+            }, 300);
+        } else {
+            updateVideoSource(videoSrc, posterUrl);
         }
     }
     
-    // Ping-pong loop functionality
-    function handlePingPongLoop() {
-        if (playingBackward) {
-            // Playing backward
+    function updateVideoSource(videoSrc, posterUrl) {
+        currentSource = videoSrc;
+        
+        // Stop any ongoing reverse playback
+        if (reverseInterval) {
+            clearInterval(reverseInterval);
+            reverseInterval = null;
+            isReversing = false;
+        }
+        
+        // Set poster and source
+        video.poster = posterUrl;
+        video.src = videoSrc;
+        video.load();
+        
+        // Play when ready
+        video.addEventListener('loadeddata', function onLoad() {
+            video.removeEventListener('loadeddata', onLoad);
+            
+            video.play().then(() => {
+                // Fade video back in
+                setTimeout(() => {
+                    video.style.opacity = '1';
+                    container?.classList.remove('transitioning');
+                    isTransitioning = false;
+                }, 100);
+            }).catch(err => {
+                console.log('Video autoplay failed:', err);
+                video.style.opacity = '1';
+                container?.classList.remove('transitioning');
+                isTransitioning = false;
+            });
+        });
+    }
+    
+    // Improved ping-pong effect
+    function startReversePlayback() {
+        if (isReversing || isTransitioning) return;
+        
+        isReversing = true;
+        const fps = 30;
+        const frameTime = 1000 / fps;
+        const step = 1 / fps;
+        
+        reverseInterval = setInterval(() => {
             if (video.currentTime <= 0.1) {
-                // Reached the beginning, play forward
-                playingBackward = false;
-                video.playbackRate = 1;
+                // Reached beginning, play forward again
+                clearInterval(reverseInterval);
+                reverseInterval = null;
+                isReversing = false;
+                video.currentTime = 0;
                 video.play();
             } else {
-                // Continue playing backward
-                video.currentTime -= 0.033; // ~30fps backward playback
-                animationFrameId = requestAnimationFrame(handlePingPongLoop);
+                // Step backward
+                video.currentTime = Math.max(0, video.currentTime - step);
             }
-        }
+        }, frameTime);
     }
     
-    // Handle video ended event
+    // Handle video ended event for ping-pong
     video.addEventListener('ended', () => {
-        if (!playingBackward) {
-            // Start playing backward
-            playingBackward = true;
+        if (!isReversing && !isTransitioning) {
             video.pause();
-            animationFrameId = requestAnimationFrame(handlePingPongLoop);
+            startReversePlayback();
         }
     });
     
-    // Alternative smoother backward playback using playbackRate (if browser supports negative rates)
-    // Note: Not all browsers support negative playbackRate
-    function initPingPongWithPlaybackRate() {
-        video.addEventListener('ended', () => {
-            if (video.playbackRate > 0) {
-                // Try to play backward (may not work in all browsers)
-                video.playbackRate = -1;
-                video.play().catch(() => {
-                    // Fallback to manual backward playback
-                    playingBackward = true;
-                    video.pause();
-                    animationFrameId = requestAnimationFrame(handlePingPongLoop);
-                });
-            } else {
-                // Was playing backward, now play forward
-                video.playbackRate = 1;
-                video.currentTime = 0;
-                video.play();
-            }
-        });
-        
-        // Check when video reaches the beginning while playing backward
-        video.addEventListener('timeupdate', () => {
-            if (video.playbackRate < 0 && video.currentTime <= 0.1) {
-                video.playbackRate = 1;
-                video.play();
-            }
-        });
-    }
-    
-    // Remove the standard loop attribute to handle custom looping
+    // Remove the standard loop attribute
     video.removeAttribute('loop');
     
     // Set initial source
-    setVideoSource();
+    setVideoSource(true);
     
-    // Handle resize events with debouncing
+    // Handle resize events with better debouncing
     let resizeTimer;
+    let lastWidth = window.innerWidth;
+    
     window.addEventListener('resize', () => {
         clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(setVideoSource, 250);
+        
+        resizeTimer = setTimeout(() => {
+            const currentWidth = window.innerWidth;
+            const wasMobile = lastWidth < 768;
+            const isMobile = currentWidth < 768;
+            
+            // Only reload if crossing the mobile/desktop boundary
+            if (wasMobile !== isMobile) {
+                lastWidth = currentWidth;
+                setVideoSource();
+            }
+        }, 500);
     });
     
     // Create poster fallback if video fails to load
