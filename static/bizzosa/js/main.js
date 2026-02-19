@@ -18,9 +18,55 @@ function initNavigation() {
     const navMenu = document.getElementById('navMenu');
     const navbar = document.getElementById('navbar');
     
+    // Initially hide navbar
+    navbar.style.opacity = '0';
+    navbar.style.transform = 'translateY(-100%)';
+    navbar.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    
+    // Flag to track if navbar has been shown
+    let navbarShown = false;
+    
+    // Function to show navbar
+    function showNavbar() {
+        if (!navbarShown) {
+            navbarShown = true;
+            navbar.style.opacity = '1';
+            navbar.style.transform = 'translateY(0)';
+        }
+    }
+    
+    // Show navbar on first scroll
+    let scrollListener = function() {
+        if (window.pageYOffset > 20) {
+            showNavbar();
+            // Remove listener after first trigger
+            window.removeEventListener('scroll', scrollListener);
+        }
+    };
+    
+    // Show navbar on first touch/mouse movement in top area
+    let interactionListener = function(e) {
+        // Check if interaction is in top 25% of screen or any touch event
+        const isTouchEvent = e.type.includes('touch');
+        const isTopArea = e.clientY < window.innerHeight * 0.25;
+        
+        if (isTouchEvent || isTopArea) {
+            showNavbar();
+            // Remove listeners after first trigger
+            document.removeEventListener('mousemove', interactionListener);
+            document.removeEventListener('touchstart', interactionListener);
+        }
+    };
+    
+    // Add event listeners for first interaction
+    window.addEventListener('scroll', scrollListener);
+    document.addEventListener('mousemove', interactionListener);
+    document.addEventListener('touchstart', interactionListener);
+    
     // Hamburger menu toggle
     if (hamburger && navMenu) {
         hamburger.addEventListener('click', () => {
+            showNavbar(); // Ensure navbar is shown when hamburger is clicked
             hamburger.classList.toggle('active');
             navMenu.classList.toggle('active');
         });
@@ -34,9 +80,11 @@ function initNavigation() {
         });
     }
     
-    // Navbar scroll effect
+    // Navbar scroll effect (only after navbar is shown)
     let lastScroll = 0;
     window.addEventListener('scroll', () => {
+        if (!navbarShown) return;
+        
         const currentScroll = window.pageYOffset;
         
         if (currentScroll > 100) {
@@ -54,10 +102,30 @@ function initNavigation() {
  */
 function initVideoBackground() {
     const video = document.getElementById('heroVideo');
+    const container = document.querySelector('.video-container');
     if (!video) return;
     
     let isReversing = false;
     let reverseInterval = null;
+    
+    // Immediately set correct poster before anything else
+    function setInitialPoster() {
+        const isMobile = window.innerWidth < 768;
+        const posterUrl = isMobile ? 'images/hero/hero-poster-mobile.jpg' : 'images/hero/hero-poster.jpg';
+        
+        // Set poster on both video and container to prevent flash
+        video.poster = posterUrl;
+        video.style.backgroundImage = `url(${posterUrl})`;
+        video.style.backgroundSize = 'cover';
+        video.style.backgroundPosition = 'center';
+        
+        // Also set on container as backup
+        if (container) {
+            container.style.backgroundImage = `url(${posterUrl})`;
+            container.style.backgroundSize = 'cover';
+            container.style.backgroundPosition = 'center';
+        }
+    }
     
     // Set up video with poster showing first
     function setupVideo() {
@@ -67,11 +135,9 @@ function initVideoBackground() {
         
         console.log('Setting up video:', videoSrc, 'Poster:', posterUrl);
         
-        // Set poster first - this shows immediately
+        // Update poster if needed
         video.poster = posterUrl;
         video.style.backgroundImage = `url(${posterUrl})`;
-        video.style.backgroundSize = 'cover';
-        video.style.backgroundPosition = 'center';
         
         // Set video source
         video.src = videoSrc;
@@ -82,7 +148,13 @@ function initVideoBackground() {
             // Video is ready, start playing
             video.play().then(() => {
                 console.log('Video playing successfully');
-                video.style.backgroundImage = 'none';
+                // Keep background image until first frame is painted
+                setTimeout(() => {
+                    video.style.backgroundImage = 'none';
+                    if (container) {
+                        container.style.backgroundImage = 'none';
+                    }
+                }, 100);
             }).catch(err => {
                 console.log('Autoplay blocked, poster remains visible:', err);
             });
@@ -127,6 +199,9 @@ function initVideoBackground() {
     // Remove the standard loop attribute
     video.removeAttribute('loop');
     
+    // Set initial poster immediately (before DOM ready)
+    setInitialPoster();
+    
     // Initial setup
     setupVideo();
     
@@ -145,6 +220,8 @@ function initVideoBackground() {
                 reverseInterval = null;
                 isReversing = false;
             }
+            // Update poster immediately for new size
+            setInitialPoster();
             // Reload video for new size
             setupVideo();
         }
