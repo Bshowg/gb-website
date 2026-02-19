@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sailing Bizzosa - Noleggio barche a vela e charter nel Mar Tirreno">
+    <title>Sailing Bizzosa - Charter & Sailing Experience</title>
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" as="video" href="videos/video_desktop.mp4" media="(min-width: 768px)">
+    <link rel="preload" as="video" href="videos/video_mobile.mp4" media="(max-width: 767px)">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="#hero">Sailing Bizzosa</a>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#hero" data-i18n-key="nav.home">Home</a></li>
+                <li><a href="#about" data-i18n-key="nav.about">Chi Siamo</a></li>
+                <li><a href="#plan" data-i18n-key="nav.plan">Pianifica</a></li>
+                <li><a href="#gallery" data-i18n-key="nav.gallery">Galleria</a></li>
+                <li><a href="#contacts" data-i18n-key="nav.contacts">Contatti</a></li>
+            </ul>
+            <div class="nav-extras">
+                <div class="language-toggle">
+                    <button class="lang-btn active" data-lang="it">IT</button>
+                    <span>|</span>
+                    <button class="lang-btn" data-lang="en">EN</button>
+                </div>
+                <button class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero-section">
+        <div class="video-container">
+            <video id="heroVideo" autoplay muted loop playsinline preload="metadata">
+                <source src="" type="video/mp4">
+            </video>
+            <div class="video-overlay"></div>
+        </div>
+        <div class="hero-content">
+            <h1 data-i18n-key="hero.title">Vivi il Mare con Sailing Bizzosa</h1>
+            <p data-i18n-key="hero.subtitle">Charter esclusivo e esperienze di navigazione nel Mar Tirreno</p>
+            <a href="#plan" class="cta-button" data-i18n-key="hero.cta">Pianifica la Tua Avventura</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <h2 data-i18n-key="about.title">Chi Siamo</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p data-i18n-key="about.description1">
+                        Bizzosa è una storia d'amore. Per il vento e per il mare. 
+                        Un'amore iniziato negli anni '70 da un gruppo di amici con il sogno della barca a vela.
+                    </p>
+                    <p data-i18n-key="about.description2">
+                        Da prototipo natante autoprodotto, oggi Bizzosa è un Grand Soleil di 46.3 piedi costruito dal Cantiere Del Pardo.
+                        Una barca con 25 anni di storia di vela agonistica in giro per il Mediterraneo, dalla Giraglia Rolex Cup, Les Voiles de Saint-Tropez, alla Barcolana, tra voli di vela d'altura e inshore.
+                    </p>
+                    <p data-i18n-key="about.description3">
+                        La prima volta che sono salito sulla Bizzosa avevo 6 anni, non capivo niente di vela, ma amavo tanto respirarla.
+                        Oggi gran parte di quello che ho capito lo rifletto nel rispetto che sento nelle mani quando la barca va di bolina stretta con 20 nodi di Libeccio e va chiamata una virata.
+                    </p>
+                    <p data-i18n-key="about.description4">
+                        Ho capito che in mare la vita è lenta ma veloce, che si impara ogni giorno, se accetti il cambiamento, che il vento parla chiaro se lo sai ascoltare e che puoi asciugarla quanto vuoi, ma un po' d'acqua in sentina ci sarà sempre, ma soprattutto ho capito che se non ci sono dei problemi da risolvere probabilmente sei fermo.
+                    </p>
+                    <p class="about-signature" data-i18n-key="about.signature">
+                        Filippo<br>
+                        Sailing Bizzosa
+                    </p>
+                </div>
+                <div class="about-features">
+                    <div class="feature">
+                        <h3 data-i18n-key="about.feature1.title">Esperienza</h3>
+                        <p data-i18n-key="about.feature1.desc">Equipaggio professionale e certificato</p>
+                    </div>
+                    <div class="feature">
+                        <h3 data-i18n-key="about.feature2.title">Sicurezza</h3>
+                        <p data-i18n-key="about.feature2.desc">Imbarcazioni moderne e attrezzate</p>
+                    </div>
+                    <div class="feature">
+                        <h3 data-i18n-key="about.feature3.title">Flessibilit�</h3>
+                        <p data-i18n-key="about.feature3.desc">Pacchetti personalizzabili per ogni esigenza</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Plan Your Sail Section -->
+    <section id="plan" class="plan-section">
+        <div class="container">
+            <h2 data-i18n-key="plan.title">Pianifica la Tua Navigazione</h2>
+            
+            <div class="boat-description">
+                <p data-i18n-key="plan.boat_description">
+                    Bizzosa è un Grand Soleil di 46.3 piedi con scafo in vetroresina, interni interamente rivestiti in legno e coperta in teak originale del Cantiere del Pardo trattato ogni anno con amore. 
+                    La barca, provvista di ombreggianti esterni è armata con Fiocco e Randa da vela sportiva con una mano di terzaroli. 
+                    Sotto coperta, tre cabine matrimoniali di cui una armatoriale molto ampia, due bagni con scarico a pompa e ampia dinette con cucina completa e zona carteggio.
+                </p>
+            </div>
+            
+            <div class="configurator">
+                <!-- Package Selector -->
+                <div class="form-group package-selector">
+                    <label data-i18n-key="plan.package">Scegli il Pacchetto</label>
+                    <div class="package-options">
+                        <div class="package-card" data-package="DAY_SAIL">
+                            <h3 data-i18n-key="plan.day_sail.title">Day Sail</h3>
+                            <p data-i18n-key="plan.day_sail.desc">Giornata in barca (10:00 - 19:00)</p>
+                            <ul>
+                                <li data-i18n-key="plan.day_sail.guests">Max 8 ospiti</li>
+                                <li data-i18n-key="plan.day_sail.crew">Equipaggio incluso</li>
+                            </ul>
+                        </div>
+                        <div class="package-card" data-package="DAILY_CHARTER">
+                            <h3 data-i18n-key="plan.daily_charter.title">Daily Charter</h3>
+                            <p data-i18n-key="plan.daily_charter.desc">2-6 giorni di navigazione</p>
+                            <ul>
+                                <li data-i18n-key="plan.daily_charter.guests">Max 8 ospiti</li>
+                                <li data-i18n-key="plan.daily_charter.crew">Equipaggio incluso</li>
+                            </ul>
+                        </div>
+                        <div class="package-card" data-package="WEEKLY_CHARTER">
+                            <h3 data-i18n-key="plan.weekly_charter.title">Weekly Charter</h3>
+                            <p data-i18n-key="plan.weekly_charter.desc">7+ giorni di crociera</p>
+                            <ul>
+                                <li data-i18n-key="plan.weekly_charter.guests">Max 6 ospiti</li>
+                                <li data-i18n-key="plan.weekly_charter.discount">Sconto 20%</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Date Picker -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="startDate" data-i18n-key="plan.start_date">Data Partenza</label>
+                        <input type="date" id="startDate" class="date-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="endDate" data-i18n-key="plan.end_date">Data Ritorno</label>
+                        <input type="date" id="endDate" class="date-input">
+                    </div>
+                </div>
+
+                <!-- Destinations -->
+                <div class="form-group">
+                    <label data-i18n-key="plan.destinations">Destinazioni</label>
+                    <div class="destinations-grid" id="destinationsGrid">
+                        <!-- Will be populated dynamically -->
+                    </div>
+                </div>
+
+                <!-- Guests -->
+                <div class="form-group">
+                    <label for="guestsCount" data-i18n-key="plan.guests">Numero Ospiti</label>
+                    <div class="guest-counter">
+                        <button type="button" class="counter-btn" id="guestsMinus">-</button>
+                        <input type="number" id="guestsCount" value="2" min="1" max="8" readonly>
+                        <button type="button" class="counter-btn" id="guestsPlus">+</button>
+                    </div>
+                </div>
+
+                <!-- Extras -->
+                <div class="form-group">
+                    <label data-i18n-key="plan.extras">Servizi Extra</label>
+                    <div class="extras-list" id="extrasList">
+                        <!-- Will be populated from API -->
+                    </div>
+                </div>
+
+                <!-- Price Summary -->
+                <div class="price-summary">
+                    <h3 data-i18n-key="plan.summary">Riepilogo Preventivo</h3>
+                    <div class="price-details">
+                        <div class="price-line">
+                            <span data-i18n-key="plan.base_price">Prezzo Base</span>
+                            <span id="basePrice">� 0</span>
+                        </div>
+                        <div class="price-line">
+                            <span data-i18n-key="plan.extras_total">Servizi Extra</span>
+                            <span id="extrasTotal">� 0</span>
+                        </div>
+                        <div class="price-line total">
+                            <span data-i18n-key="plan.total">Totale</span>
+                            <span id="totalPrice">� 0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Buttons -->
+                <div class="submit-buttons">
+                    <button type="button" class="btn-email" id="requestEmail" data-i18n-key="plan.request_email">
+                        Richiedi Preventivo via Email
+                    </button>
+                    <button type="button" class="btn-whatsapp" id="requestWhatsApp" data-i18n-key="plan.request_whatsapp">
+                        Richiedi via WhatsApp
+                    </button>
+                </div>
+
+                <!-- Email Modal -->
+                <div class="modal" id="emailModal">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <h3 data-i18n-key="plan.email_title">Inserisci la tua Email</h3>
+                        <input type="email" id="customerEmail" placeholder="tua@email.com">
+                        <button type="button" id="submitEmail" data-i18n-key="plan.submit">Invia Richiesta</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="gallery-section">
+        <div class="container">
+            <h2 data-i18n-key="gallery.title">Galleria</h2>
+            <div class="gallery-grid">
+                <!-- Images will be added here -->
+                <div class="gallery-item">
+                    <img src="images/gallery/placeholder1.jpg" alt="Sailing Experience" loading="lazy">
+                </div>
+                <div class="gallery-item">
+                    <img src="images/gallery/placeholder2.jpg" alt="Sailing Experience" loading="lazy">
+                </div>
+                <div class="gallery-item">
+                    <img src="images/gallery/placeholder3.jpg" alt="Sailing Experience" loading="lazy">
+                </div>
+                <div class="gallery-item">
+                    <img src="images/gallery/placeholder4.jpg" alt="Sailing Experience" loading="lazy">
+                </div>
+                <div class="gallery-item">
+                    <img src="images/gallery/placeholder5.jpg" alt="Sailing Experience" loading="lazy">
+                </div>
+                <div class="gallery-item">
+                    <img src="images/gallery/placeholder6.jpg" alt="Sailing Experience" loading="lazy">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contacts Section -->
+    <section id="contacts" class="contacts-section">
+        <div class="container">
+            <h2 data-i18n-key="contacts.title">Contatti</h2>
+            <div class="contacts-content">
+                <div class="contact-info">
+                    <h3 data-i18n-key="contacts.info_title">Informazioni</h3>
+                    <div class="contact-item">
+                        <strong data-i18n-key="contacts.phone">Telefono:</strong>
+                        <a href="tel:+393331234567">+39 333 123 4567</a>
+                    </div>
+                    <div class="contact-item">
+                        <strong data-i18n-key="contacts.email">Email:</strong>
+                        <a href="mailto:info@sailingbizzosa.it">info@sailingbizzosa.it</a>
+                    </div>
+                    <div class="contact-item">
+                        <strong data-i18n-key="contacts.address">Indirizzo:</strong>
+                        <p>Porto di Salivoli<br>Piombino (LI), Italia</p>
+                    </div>
+                    <div class="contact-item">
+                        <strong data-i18n-key="contacts.hours">Orari:</strong>
+                        <p data-i18n-key="contacts.hours_text">Lun-Dom: 9:00 - 19:00</p>
+                    </div>
+                </div>
+                <div class="contact-map">
+                    <!-- Map iframe or interactive map will go here -->
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2934.5!2d10.5!3d42.9!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDLCsDU0JzAwLjAiTiAxMMKwMzAnMDAuMCJF!5e0!3m2!1sen!2sit!4v1234567890"
+                        width="100%" 
+                        height="400" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Sailing Bizzosa. <span data-i18n-key="footer.rights">Tutti i diritti riservati.</span></p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Files -->
+    <script src="js/i18n.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/configurator.js"></script>
+</body>
+</html>

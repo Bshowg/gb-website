@@ -1,0 +1,106 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About Us",
+    "plan": "Plan Your Sail",
+    "gallery": "Gallery",
+    "contacts": "Contacts"
+  },
+  "hero": {
+    "title": "Experience the Sea with Sailing Bizzosa",
+    "subtitle": "Exclusive charters and sailing experiences in the Tyrrhenian Sea",
+    "cta": "Plan Your Adventure"
+  },
+  "about": {
+    "title": "About Us",
+    "description1": "Bizzosa is a love story. For the wind and the sea. A love that began in the 70s by a group of friends with the dream of sailing.",
+    "description2": "From a self-produced prototype boat, today Bizzosa is a Grand Soleil 46.3 feet built by Cantiere Del Pardo. A boat with 25 years of competitive sailing history around the Mediterranean, from the Giraglia Rolex Cup, Les Voiles de Saint-Tropez, to the Barcolana, between offshore and inshore sailing.",
+    "description3": "The first time I boarded Bizzosa I was 6 years old, I didn't understand anything about sailing, but I loved to breathe it. Today much of what I've understood is reflected in the respect I feel in my hands when the boat goes close-hauled with 20 knots of Libeccio and a tack needs to be called.",
+    "description4": "I've understood that at sea life is slow but fast, that you learn every day if you accept change, that the wind speaks clearly if you know how to listen, and that you can dry it as much as you want, but there will always be some water in the bilge, but above all I've understood that if there are no problems to solve, you're probably standing still.",
+    "signature": "Filippo<br>Sailing Bizzosa",
+    "feature1": {
+      "title": "Experience",
+      "desc": "Professional and certified crew"
+    },
+    "feature2": {
+      "title": "Safety",
+      "desc": "Modern and equipped boats"
+    },
+    "feature3": {
+      "title": "Flexibility",
+      "desc": "Customizable packages for every need"
+    }
+  },
+  "plan": {
+    "title": "Plan Your Sail",
+    "boat_description": "Bizzosa is a Grand Soleil 46.3 feet with fiberglass hull, interiors entirely covered in wood and original teak deck from Cantiere del Pardo treated every year with love. The boat, equipped with external sun shades, is rigged with Jib and Mainsail for sport sailing with one reef. Below deck, three double cabins including a very spacious master cabin, two bathrooms with pump discharge and large dinette with complete galley and chart table.",
+    "package": "Choose Package",
+    "day_sail": {
+      "title": "Day Sail",
+      "desc": "Day on boat (10:00 AM - 7:00 PM)",
+      "guests": "Max 8 guests",
+      "crew": "Crew included"
+    },
+    "daily_charter": {
+      "title": "Daily Charter",
+      "desc": "2-6 days sailing",
+      "guests": "Max 8 guests",
+      "crew": "Crew included"
+    },
+    "weekly_charter": {
+      "title": "Weekly Charter",
+      "desc": "7+ days cruise",
+      "guests": "Max 6 guests",
+      "discount": "20% discount"
+    },
+    "start_date": "Departure Date",
+    "end_date": "Return Date",
+    "destinations": "Destinations",
+    "guests": "Number of Guests",
+    "extras": "Extra Services",
+    "summary": "Quote Summary",
+    "base_price": "Base Price",
+    "extras_total": "Extra Services",
+    "total": "Total",
+    "request_email": "Request Quote via Email",
+    "request_whatsapp": "Request via WhatsApp",
+    "email_title": "Enter your Email",
+    "submit": "Send Request",
+    "destinations_list": {
+      "elba": "Elba",
+      "baratti": "Baratti",
+      "buca_fate": "Buca delle Fate",
+      "capraia": "Capraia",
+      "giglio": "Giglio",
+      "corsica": "Corsica (SE)",
+      "sardegna": "Sardinia (La Maddalena)"
+    }
+  },
+  "gallery": {
+    "title": "Gallery"
+  },
+  "contacts": {
+    "title": "Contacts",
+    "info_title": "Information",
+    "phone": "Phone:",
+    "email": "Email:",
+    "address": "Address:",
+    "hours": "Hours:",
+    "hours_text": "Mon-Sun: 9:00 AM - 7:00 PM"
+  },
+  "footer": {
+    "rights": "All rights reserved."
+  },
+  "messages": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Operation completed successfully",
+    "invalid_dates": "Invalid dates",
+    "select_package": "Select a package",
+    "email_required": "Email required",
+    "booking_sent": "Request sent successfully",
+    "min_guests": "Minimum 1 guest",
+    "max_guests": "Maximum {max} guests",
+    "select_destination": "Select at least one destination"
+  }
+}
