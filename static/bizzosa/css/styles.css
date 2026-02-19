@@ -175,12 +175,34 @@ a:hover {
     width: 100%;
     height: 100%;
     z-index: -1;
+    /* Fallback gradient background while video loads */
+    background: linear-gradient(135deg, #667eea 0%, #4a90e2 50%, #1e3a5f 100%);
+}
+
+.video-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 35px,
+            rgba(255,255,255,0.02) 35px,
+            rgba(255,255,255,0.02) 70px
+        );
+    z-index: 1;
 }
 
 .video-container video {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    position: relative;
+    z-index: 2;
 }
 
 .video-overlay {
@@ -190,6 +212,20 @@ a:hover {
     width: 100%;
     height: 100%;
     background: linear-gradient(rgba(30, 58, 95, 0.5), rgba(30, 58, 95, 0.3));
+    z-index: 3;
+}
+
+/* Video loading state */
+.video-container.loading::after {
+    content: 'Loading video...';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 1.5rem;
+    z-index: 4;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
 }
 
 .hero-content {
