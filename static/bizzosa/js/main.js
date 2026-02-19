@@ -54,58 +54,34 @@ function initNavigation() {
  */
 function initVideoBackground() {
     const video = document.getElementById('heroVideo');
-    const container = document.querySelector('.video-container');
     if (!video) return;
     
     let isReversing = false;
     let reverseInterval = null;
-    let currentSource = '';
     
-    // Preload poster images immediately
-    function preloadPosters() {
-        const desktopPoster = new Image();
-        const mobilePoster = new Image();
-        desktopPoster.src = 'images/hero/hero-poster.jpg';
-        mobilePoster.src = 'images/hero/hero-poster-mobile.jpg';
-    }
-    
-    // Function to set appropriate video source and poster
-    function setVideoSource(forceReload = false) {
+    // Set up video with poster showing first
+    function setupVideo() {
         const isMobile = window.innerWidth < 768;
         const videoSrc = isMobile ? 'videos/video_mobile.mp4' : 'videos/video_desktop.mp4';
         const posterUrl = isMobile ? 'images/hero/hero-poster-mobile.jpg' : 'images/hero/hero-poster.jpg';
         
-        // Prevent unnecessary reloads
-        if (currentSource === videoSrc && !forceReload) {
-            return;
-        }
-        
-        updateVideoSource(videoSrc, posterUrl);
-    }
-    
-    function updateVideoSource(videoSrc, posterUrl) {
-        currentSource = videoSrc;
-        
-        // Stop any ongoing reverse playback
-        if (reverseInterval) {
-            clearInterval(reverseInterval);
-            reverseInterval = null;
-            isReversing = false;
-        }
-        
-        // Set poster immediately - no transitions
+        // Set poster first - this shows immediately
         video.poster = posterUrl;
-        video.src = videoSrc;
-        video.load();
         
-        // Play when ready - no fade effects
-        video.addEventListener('loadeddata', function onLoad() {
-            video.removeEventListener('loadeddata', onLoad);
-            
+        // Set video source
+        video.src = videoSrc;
+        
+        // Wait for video to be fully ready before playing
+        video.addEventListener('canplaythrough', function onReady() {
+            video.removeEventListener('canplaythrough', onReady);
+            // Video is ready, start playing
             video.play().catch(err => {
-                console.log('Video autoplay failed, poster will remain visible:', err);
+                console.log('Autoplay blocked, poster remains visible');
             });
-        });
+        }, { once: true });
+        
+        // Load the video
+        video.load();
     }
     
     // Improved ping-pong effect
@@ -143,30 +119,27 @@ function initVideoBackground() {
     // Remove the standard loop attribute
     video.removeAttribute('loop');
     
-    // Preload posters immediately
-    preloadPosters();
+    // Initial setup
+    setupVideo();
     
-    // Set initial source
-    setVideoSource(true);
-    
-    // Handle resize events with better debouncing
-    let resizeTimer;
+    // Handle resize - only reload if crossing mobile/desktop boundary
     let lastWidth = window.innerWidth;
-    
     window.addEventListener('resize', () => {
-        clearTimeout(resizeTimer);
+        const currentWidth = window.innerWidth;
+        const wasMobile = lastWidth < 768;
+        const isMobile = currentWidth < 768;
         
-        resizeTimer = setTimeout(() => {
-            const currentWidth = window.innerWidth;
-            const wasMobile = lastWidth < 768;
-            const isMobile = currentWidth < 768;
-            
-            // Only reload if crossing the mobile/desktop boundary
-            if (wasMobile !== isMobile) {
-                lastWidth = currentWidth;
-                setVideoSource();
+        if (wasMobile !== isMobile) {
+            lastWidth = currentWidth;
+            // Stop any reverse playback
+            if (reverseInterval) {
+                clearInterval(reverseInterval);
+                reverseInterval = null;
+                isReversing = false;
             }
-        }, 500);
+            // Reload video for new size
+            setupVideo();
+        }
     });
     
     // Create poster fallback if video fails to load
