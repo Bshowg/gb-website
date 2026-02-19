@@ -208,8 +208,7 @@ a:hover {
     object-fit: cover;
     position: relative;
     z-index: 2;
-    transition: opacity 0.3s ease;
-    will-change: opacity;
+    /* No transitions - instant display */
 }
 
 .video-overlay {
@@ -223,16 +222,10 @@ a:hover {
     pointer-events: none;
 }
 
-/* Prevent flicker during transition */
-.video-container.transitioning::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: inherit;
-    z-index: 1;
+/* Ensure poster is visible immediately */
+.video-container video[poster] {
+    background-size: cover;
+    background-position: center;
 }
 
 /* Video loading state */

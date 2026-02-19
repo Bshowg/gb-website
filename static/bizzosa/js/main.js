@@ -60,7 +60,14 @@ function initVideoBackground() {
     let isReversing = false;
     let reverseInterval = null;
     let currentSource = '';
-    let isTransitioning = false;
+    
+    // Preload poster images immediately
+    function preloadPosters() {
+        const desktopPoster = new Image();
+        const mobilePoster = new Image();
+        desktopPoster.src = 'images/hero/hero-poster.jpg';
+        mobilePoster.src = 'images/hero/hero-poster-mobile.jpg';
+    }
     
     // Function to set appropriate video source and poster
     function setVideoSource(forceReload = false) {
@@ -73,18 +80,7 @@ function initVideoBackground() {
             return;
         }
         
-        // Add transitioning class to prevent flicker
-        if (currentSource !== videoSrc && currentSource !== '') {
-            isTransitioning = true;
-            container?.classList.add('transitioning');
-            video.style.opacity = '0';
-            
-            setTimeout(() => {
-                updateVideoSource(videoSrc, posterUrl);
-            }, 300);
-        } else {
-            updateVideoSource(videoSrc, posterUrl);
-        }
+        updateVideoSource(videoSrc, posterUrl);
     }
     
     function updateVideoSource(videoSrc, posterUrl) {
@@ -97,34 +93,24 @@ function initVideoBackground() {
             isReversing = false;
         }
         
-        // Set poster and source
+        // Set poster immediately - no transitions
         video.poster = posterUrl;
         video.src = videoSrc;
         video.load();
         
-        // Play when ready
+        // Play when ready - no fade effects
         video.addEventListener('loadeddata', function onLoad() {
             video.removeEventListener('loadeddata', onLoad);
             
-            video.play().then(() => {
-                // Fade video back in
-                setTimeout(() => {
-                    video.style.opacity = '1';
-                    container?.classList.remove('transitioning');
-                    isTransitioning = false;
-                }, 100);
-            }).catch(err => {
-                console.log('Video autoplay failed:', err);
-                video.style.opacity = '1';
-                container?.classList.remove('transitioning');
-                isTransitioning = false;
+            video.play().catch(err => {
+                console.log('Video autoplay failed, poster will remain visible:', err);
             });
         });
     }
     
     // Improved ping-pong effect
     function startReversePlayback() {
-        if (isReversing || isTransitioning) return;
+        if (isReversing) return;
         
         isReversing = true;
         const fps = 30;
@@ -148,7 +134,7 @@ function initVideoBackground() {
     
     // Handle video ended event for ping-pong
     video.addEventListener('ended', () => {
-        if (!isReversing && !isTransitioning) {
+        if (!isReversing) {
             video.pause();
             startReversePlayback();
         }
@@ -156,6 +142,9 @@ function initVideoBackground() {
     
     // Remove the standard loop attribute
     video.removeAttribute('loop');
+    
+    // Preload posters immediately
+    preloadPosters();
     
     // Set initial source
     setVideoSource(true);
