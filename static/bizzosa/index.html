@@ -10,7 +10,9 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/responsive.css">
     
-    <!-- Preload critical resources -->
+    <!-- Preload critical resources - Posters first for immediate display -->
+    <link rel="preload" as="image" href="images/hero/hero-poster.jpg" media="(min-width: 768px)">
+    <link rel="preload" as="image" href="images/hero/hero-poster-mobile.jpg" media="(max-width: 767px)">
     <link rel="preload" as="video" href="videos/video_desktop.mp4" media="(min-width: 768px)">
     <link rel="preload" as="video" href="videos/video_mobile.mp4" media="(max-width: 767px)">
 </head>
