@@ -200,8 +200,37 @@ class NoteSystem {
 }
 
 // Initialize the note system
-const noteSystem = new NoteSystem();
+let noteSystem = new NoteSystem();
 
 // Export for use in other scripts if needed
 window.NoteSystem = NoteSystem;
 window.noteSystemInstance = noteSystem;
+
+// Reinitialize when content changes (for SPAs)
+document.addEventListener('DOMContentLoaded', () => {
+    // Watch for content changes
+    const observer = new MutationObserver((mutations) => {
+        // Check if article content has changed
+        if (document.querySelector('.footnotes-section')) {
+            // Reinitialize the note system
+            noteSystem = new NoteSystem();
+            window.noteSystemInstance = noteSystem;
+        }
+    });
+    
+    // Start observing the document with the configured parameters
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
+});
+
+// Also reinitialize on history changes (for SPA navigation)
+window.addEventListener('popstate', () => {
+    setTimeout(() => {
+        if (document.querySelector('.footnotes-section')) {
+            noteSystem = new NoteSystem();
+            window.noteSystemInstance = noteSystem;
+        }
+    }, 100);
+});
