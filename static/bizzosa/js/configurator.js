@@ -32,11 +32,11 @@ class BookingConfigurator {
                 duration: { min: 2, max: 6 },
                 maxGuests: 8,
                 destinations: {
-                    2: ['elba'],
-                    3: ['elba', 'capraia', 'giglio'],
-                    4: ['elba', 'capraia', 'giglio'],
-                    5: ['elba', 'capraia', 'giglio'],
-                    6: ['elba', 'capraia', 'giglio']
+                    2: ['elba','baratti', 'buca_fate'],
+                    3: ['elba', 'capraia', 'giglio','baratti', 'buca_fate'],
+                    4: ['elba', 'capraia', 'giglio','baratti', 'buca_fate'],
+                    5: ['elba', 'capraia', 'giglio','baratti', 'buca_fate'],
+                    6: ['elba', 'capraia', 'giglio','baratti', 'buca_fate']
                 },
                 boarding: '11:00',
                 disembark: '18:00'
@@ -45,7 +45,7 @@ class BookingConfigurator {
                 name: 'Weekly Charter',
                 duration: { min: 7, max: 30 },
                 maxGuests: 6,
-                destinations: ['elba', 'capraia', 'giglio', 'corsica', 'sardegna'],
+                destinations: ['elba', 'capraia', 'giglio', 'corsica', 'sardegna','baratti', 'buca_fate'],
                 boarding: '11:00',
                 disembark: '18:00',
                 discount: 0.2
@@ -295,7 +295,7 @@ class BookingConfigurator {
         const mockExtras = [
             { id: 1, name_it: 'Imbarco/Sbarco Porto di Salivoli', name_en: 'Embarkation/Disembarkation Port', pricing_type: 'PER_TRIP', price: 150 },
             { id: 2, name_it: 'Tender', name_en: 'Tender', pricing_type: 'FLAT_RATE', price: 50 },
-            { id: 3, name_it: 'Fuoribordo Tender', name_en: 'Tender Outboard Motor', pricing_type: 'FLAT_RATE', price: 120 },
+            { id: 3, name_it: 'Fuoribordo Tender', name_en: 'Tender Outboard Motor', pricing_type: 'FLAT_RATE', price: 70 },
             { id: 4, name_it: 'Servizio Pranzo a Bordo', name_en: 'Onboard Lunch Service', pricing_type: 'PER_PERSON', price: 30 },
             { id: 5, name_it: 'Servizio Aperitivo a Bordo', name_en: 'Onboard Aperitif Service', pricing_type: 'PER_PERSON', price: 15 },
             { id: 6, name_it: 'Pernottamento Extra in Porto', name_en: 'Extra Night in Port', pricing_type: 'PER_NIGHT', price: 150 },
