@@ -200,37 +200,57 @@ class NoteSystem {
 }
 
 // Initialize the note system
-let noteSystem = new NoteSystem();
+let noteSystem;
+
+function initializeNoteSystem() {
+    try {
+        // Only initialize if there are footnotes on the page
+        if (document.querySelector('.footnotes-section') || document.querySelector('.note-ref')) {
+            noteSystem = new NoteSystem();
+            window.noteSystemInstance = noteSystem;
+        }
+    } catch (e) {
+        console.warn('Note system initialization skipped:', e.message);
+    }
+}
 
 // Export for use in other scripts if needed
 window.NoteSystem = NoteSystem;
-window.noteSystemInstance = noteSystem;
+window.initializeNoteSystem = initializeNoteSystem;
+
+// Initialize on first load
+initializeNoteSystem();
 
 // Reinitialize when content changes (for SPAs)
-document.addEventListener('DOMContentLoaded', () => {
-    // Watch for content changes
+if (typeof MutationObserver !== 'undefined') {
+    let debounceTimer;
     const observer = new MutationObserver((mutations) => {
-        // Check if article content has changed
-        if (document.querySelector('.footnotes-section')) {
-            // Reinitialize the note system
-            noteSystem = new NoteSystem();
-            window.noteSystemInstance = noteSystem;
-        }
+        // Debounce to avoid multiple reinitializations
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+            if (document.querySelector('.footnotes-section')) {
+                initializeNoteSystem();
+            }
+        }, 200);
     });
     
-    // Start observing the document with the configured parameters
-    observer.observe(document.body, {
-        childList: true,
-        subtree: true
-    });
-});
+    // Start observing only when DOM is ready
+    if (document.body) {
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    } else {
+        document.addEventListener('DOMContentLoaded', () => {
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true
+            });
+        });
+    }
+}
 
 // Also reinitialize on history changes (for SPA navigation)
 window.addEventListener('popstate', () => {
-    setTimeout(() => {
-        if (document.querySelector('.footnotes-section')) {
-            noteSystem = new NoteSystem();
-            window.noteSystemInstance = noteSystem;
-        }
-    }, 100);
+    setTimeout(initializeNoteSystem, 100);
 });
