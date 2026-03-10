@@ -43,14 +43,6 @@ window.addEventListener('load', async () => {
             return response.text();
         });
         document.querySelector('#app').innerHTML = html;
-        
-        // Initialize note system if it exists
-        if (window.initializeNoteSystem) {
-            setTimeout(() => {
-                window.initializeNoteSystem();
-            }, 50);
-        }
-        
         let js_path="scripts"+path+".js"
         const js=await fetch(js_path).then(response=>{
             if(response.ok){
