@@ -53,13 +53,16 @@ function addArticle(parser, html, article) {
     const excerpt = doc.querySelector('p') ? doc.querySelector('p').innerText : 'No excerpt available';
     const img = doc.querySelector('img') ? doc.querySelector('img').src : 'No img available';
     const articleHTML = `
-                        <article class="bg-black">
+                        <article class="bg-black rounded-xl overflow-hidden 
+                        shadow-[0_0_12px_rgba(255,255,255,0.35)] 
+                        hover:shadow-[0_0_30px_rgba(255,255,255,0.9)] 
+                        transition-shadow duration-300">
 
                             <div x-data="{ isLoading: true }" class="relative">
                                 <!-- Skeleton Loader -->
                                 <div
                                     x-show="isLoading"
-                                    class="  w-full aspect-[16/9] absolute bg-black "
+                                    class="w-full aspect-[16/9] absolute bg-black"
                                 ></div>
 
                                 <!-- Image -->
@@ -67,18 +70,27 @@ function addArticle(parser, html, article) {
                                     src=${img}
                                     @load="isLoading = false"
                                     x-show="!isLoading"
-                                    class="w-full h-full object-cover"
+                                    class="w-full aspect-[16/9] object-cover"
                                     alt=${img}
                                 />
                             </div>
-                            <div class=" p-6">
+
+                            <div class="p-6">
                                 <h3 class="text-xl font-bold mb-4 text-white">${title}</h3>
                                 <p class="mb-4 text-white">${excerpt}</p>
+
                                 <div class="flex flex-row justify-between">
-                                <button onclick="location.href='${article.src}'" class="bg-white text-black px-3 py-1 font-bold">READ MORE</button>
-                                <span class="align-baseline font-bold text-white">${article.date}<span>
+                                    <button onclick="location.href='${article.src}'"
+                                        class="bg-white text-black px-3 py-1 font-bold">
+                                        READ MORE
+                                    </button>
+
+                                    <span class="align-baseline font-bold text-white">
+                                        ${article.date}
+                                    </span>
                                 </div>
                             </div>
+
                         </article>
                     `;
     document.getElementById('articlesContainer').innerHTML += articleHTML;
