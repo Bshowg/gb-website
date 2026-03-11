@@ -4,15 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gbwebsite</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="output.css" rel="stylesheet"></link>
-    <link rel="stylesheet" href="static/css/notes.css">
     <script>
-        // Add timestamp to CSS files to force refresh
-        document.querySelectorAll('link[rel="stylesheet"]').forEach(link => {
-            link.href = link.href + '?v=' + Date.now();
-        });
+        // Add CSS files with timestamp to prevent caching
+        const timestamp = Date.now();
+        document.write('<link rel="stylesheet" href="style.css?v=' + timestamp + '">');
+        document.write('<link href="output.css?v=' + timestamp + '" rel="stylesheet">');
+        document.write('<link rel="stylesheet" href="static/css/notes.css?v=' + timestamp + '">');
     </script>
+    <noscript>
+        <!-- Fallback for no JavaScript -->
+        <link rel="stylesheet" href="style.css">
+        <link href="output.css" rel="stylesheet">
+        <link rel="stylesheet" href="static/css/notes.css">
+    </noscript>
     <!-- the scripts have to be called before Alpine  http-server -p 8080 --spa-->
     <script defer src="scripts/router.js" ></script> <!-- Simple router script -->
     <script defer src="scripts/main.js" ></script> <!-- Main JavaScript for handling articles -->
