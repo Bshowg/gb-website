@@ -21,7 +21,7 @@ define('ENVIRONMENT', 'development');
 // - DB_PASS: The password you created for the database
 
 define('DB_HOST', 'gianmd-bizzosa.db.tb-hosting.com'); // Change to your Register.it MySQL server (e.g., 'mysql.register.it')
-define('DB_NAME', 'sailing_bizzosa'); // Your Register.it database name
+define('DB_NAME', 'gianmd_bizzosa'); // Your Register.it database name
 define('DB_USER', 'gianmd_bizzosa'); // Your Register.it database username
 define('DB_PASS', 'malleolo92'); // Your Register.it database password
 define('DB_CHARSET', 'utf8mb4');
