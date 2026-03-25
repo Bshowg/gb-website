@@ -56,7 +56,7 @@ try {
                 check_out_date as end_date,
                 'Booking' as reason
             FROM bookings 
-            WHERE status IN ('confirmed', 'pending')
+            WHERE status IN ('confirmed')
             AND check_out_date >= :start_date 
             AND check_in_date <= :end_date
             ORDER BY check_in_date";

@@ -71,6 +71,9 @@ class BookingConfigurator {
         this.initSubmitButtons();
         this.loadAvailability();
         this.loadExtras();
+        
+        // Preselect Daily Charter package on load
+        this.preselectDailyCharter();
     }
 
     // Package Selector
@@ -121,6 +124,22 @@ class BookingConfigurator {
                 this.updatePriceDisplay(0, 0, 0);
             });
         });
+    }
+
+    preselectDailyCharter() {
+        // Find the Daily Charter tab
+        const dailyCharterTab = document.querySelector('[data-package="DAILY_CHARTER"]');
+        
+        if (dailyCharterTab) {
+            // Set state
+            this.state.packageType = 'DAILY_CHARTER';
+            
+            // Add selected class (it should already have it from HTML)
+            dailyCharterTab.classList.add('selected');
+            
+            // Update form for this package
+            this.updateFormForPackage('DAILY_CHARTER');
+        }
     }
 
     updateFormForPackage(packageType) {
@@ -543,39 +562,126 @@ class BookingConfigurator {
     }
 
     async submitBookingRequest(email) {
-        // For now, just show success. Will be replaced with API call
-        const bookingData = {
-            ...this.state,
-            customer_email: email
-        };
+        const submitButton = document.getElementById('submitEmail');
+        const originalText = submitButton?.textContent;
         
-        console.log('Booking request:', bookingData);
-        showMessage(i18n?.formatMessage('messages.booking_sent') || 'Richiesta inviata con successo', 'success');
-        
-        // Reset form after submission
-        setTimeout(() => this.resetForm(), 2000);
+        try {
+            // Show loading state
+            if (submitButton) {
+                submitButton.disabled = true;
+                submitButton.textContent = this.currentLang === 'it' ? 'Invio...' : 'Sending...';
+            }
+            
+            // Save booking with email
+            const data = await this.saveBookingToDatabase('email', email);
+
+            if (data.success) {
+                showMessage(i18n?.formatMessage('messages.booking_sent') || 'Richiesta inviata con successo!', 'success');
+                
+                // Reset form after successful submission
+                setTimeout(() => {
+                    this.resetForm();
+                    // Hide booking details section
+                    const detailsSection = document.getElementById('booking-details');
+                    if (detailsSection) detailsSection.style.display = 'none';
+                }, 2000);
+            } else {
+                throw new Error(data.message || 'Errore durante l\'invio');
+            }
+
+        } catch (error) {
+            console.error('Booking request error:', error);
+            showMessage(
+                error.message || 
+                (this.currentLang === 'it' ? 'Errore durante l\'invio. Riprova.' : 'Error sending request. Please try again.'), 
+                'error'
+            );
+        } finally {
+            // Restore button state
+            if (submitButton) {
+                submitButton.disabled = false;
+                submitButton.textContent = originalText;
+            }
+        }
     }
 
-    sendWhatsAppMessage() {
-        const pkg = this.packages[this.state.packageType];
-        const duration = this.calculateDuration();
+    async sendWhatsAppMessage() {
+        try {
+            // First save to database
+            await this.saveBookingToDatabase('whatsapp');
+            
+            // Then send WhatsApp message
+            const pkg = this.packages[this.state.packageType];
+            const duration = this.calculateDuration();
+            
+            let message = `Richiesta Preventivo Sailing Bizzosa\n\n`;
+            message += `Pacchetto: ${pkg.name}\n`;
+            message += `Date: ${this.state.startDate} - ${this.state.endDate} (${duration} giorni)\n`;
+            message += `Ospiti: ${this.state.guests}\n`;
+            message += `Destinazione: ${this.destinationNames[this.state.destination]}\n`;
+            
+            if (this.state.extras.length > 0) {
+                message += `Extra: ${this.state.extras.map(e => e.name_it).join(', ')}\n`;
+            }
+            
+            message += `\nPrezzo stimato: €${this.state.totalPrice.toFixed(2)}`;
+            
+            const whatsappNumber = '+393934830048'; 
+            const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+            
+            window.open(url, '_blank');
+            
+            showMessage(i18n?.formatMessage('messages.booking_sent') || 'Richiesta salvata e WhatsApp aperto!', 'success');
+            
+            // Reset form after successful submission
+            setTimeout(() => {
+                this.resetForm();
+                const detailsSection = document.getElementById('booking-details');
+                if (detailsSection) detailsSection.style.display = 'none';
+            }, 2000);
+            
+        } catch (error) {
+            console.error('WhatsApp booking error:', error);
+            showMessage(
+                this.currentLang === 'it' ? 'Errore nel salvare la richiesta' : 'Error saving request', 
+                'error'
+            );
+        }
+    }
+
+    async saveBookingToDatabase(source = 'web', customerEmail = '') {
+        const bookingData = {
+            package_type: this.state.packageType,
+            start_date: this.state.startDate,
+            end_date: this.state.endDate,
+            guests: this.state.guests,
+            destination: this.state.destination,
+            extras: this.state.extras.map(e => e.id),
+            customer_email: customerEmail,
+            customer_name: '',
+            customer_phone: source === 'whatsapp' ? '+393934830048' : '',
+            notes: `Richiesta tramite ${source} - Destinazione: ${this.destinationNames[this.state.destination]}`,
+            total_price: this.state.totalPrice
+        };
+
+        // Check if we're in development mode (no PHP server)
+        const apiUrl = window.location.protocol + '//' + window.location.host + '/bizzosa/api/request_quote.php';
         
-        let message = `Richiesta Preventivo Sailing Bizzosa\n\n`;
-        message += `Pacchetto: ${pkg.name}\n`;
-        message += `Date: ${this.state.startDate} - ${this.state.endDate} (${duration} giorni)\n`;
-        message += `Ospiti: ${this.state.guests}\n`;
-        message += `Destinazione: ${this.destinationNames[this.state.destination]}\n`;
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(bookingData)
+        });
+
+        const data = await response.json();
         
-        if (this.state.extras.length > 0) {
-            message += `Extra: ${this.state.extras.map(e => e.name_it).join(', ')}\n`;
+        if (!data.success) {
+            throw new Error(data.message || 'Failed to save booking');
         }
         
-        message += `\nPrezzo stimato: €${this.state.totalPrice.toFixed(2)}`;
-        
-        const whatsappNumber = '+393934830048'; // Replace with actual number
-        const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-        
-        window.open(url, '_blank');
+        return data;
     }
 
     resetForm() {

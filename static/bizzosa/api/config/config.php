@@ -6,11 +6,24 @@
 // Environment (development, production)
 define('ENVIRONMENT', 'development');
 
-// Database configuration
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'sailing_bizzosa');
-define('DB_USER', 'your_db_user');
-define('DB_PASS', 'your_db_password');
+// Database configuration for Register.it
+// To find these values in Register.it:
+// 1. Log into your Register.it control panel
+// 2. Go to "Hosting Linux" → "Gestione Database MySQL"
+// 3. You'll find: Server MySQL (host), Nome Database, Nome Utente
+// 4. The password is what you set when creating the database
+// 
+// Typically for Register.it:
+// - DB_HOST: Usually something like 'mysql.register.it' or 'sqlXXX.register.it' 
+//   (NOT 'localhost' for external connections)
+// - DB_NAME: Your database name (e.g., 'Sql123456_1')
+// - DB_USER: Your database username (often same as DB_NAME)
+// - DB_PASS: The password you created for the database
+
+define('DB_HOST', 'gianmd-bizzosa.db.tb-hosting.com'); // Change to your Register.it MySQL server (e.g., 'mysql.register.it')
+define('DB_NAME', 'sailing_bizzosa'); // Your Register.it database name
+define('DB_USER', 'gianmd_bizzosa'); // Your Register.it database username
+define('DB_PASS', 'malleolo92'); // Your Register.it database password
 define('DB_CHARSET', 'utf8mb4');
 
 // Application settings

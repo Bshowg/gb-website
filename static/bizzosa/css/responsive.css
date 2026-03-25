@@ -120,7 +120,6 @@
     }
     
     .nav-extras {
-        position: absolute;
         right: 60px;
         gap: 1rem;
     }

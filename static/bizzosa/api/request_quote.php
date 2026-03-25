@@ -35,8 +35,7 @@ try {
     
     // Validate required fields
     $requiredFields = [
-        'package_type', 'start_date', 'end_date', 'guests',
-        'customer_name', 'customer_email', 'customer_phone'
+        'package_type', 'start_date', 'end_date', 'guests'
     ];
     
     $errors = validateRequired($data, $requiredFields);
@@ -45,10 +44,10 @@ try {
         errorResponse('Validation errors: ' . implode(', ', $errors));
     }
     
-    // Validate email
+    /* Validate email
     if (!validateEmail($data['customer_email'])) {
         errorResponse('Invalid email address');
-    }
+    }*/
     
     // Validate dates
     if (!validateDate($data['start_date']) || !validateDate($data['end_date'])) {
