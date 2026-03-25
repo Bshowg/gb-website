@@ -76,117 +76,107 @@
     <section id="about" class="about-section">
         <div class="container">
             <h2 data-i18n-key="about.title">Chi Siamo</h2>
-            <div class="about-content">
-                <div class="about-text">
-                    <!-- Ship's Log Entry -->
-                    <div class="ship-log">
-                        <div class="log-header">
-                            <span class="log-date" data-i18n-key="about.log_date">Est. 1970</span>
-                            <span class="log-title" data-i18n-key="about.log_title">Diario di Bordo - S/Y Bizzosa</span>
-                        </div>
-                        <div class="log-entry">
-                            <p data-i18n-key="about.description1">
-                                Bizzosa è una storia d'amore. Per il vento e per il mare. 
-                                Un'amore iniziato negli anni '70 da un gruppo di amici con il sogno della barca a vela.
-                            </p>
-                            <p data-i18n-key="about.description2">
-                                Da prototipo natante autoprodotto, oggi Bizzosa è un Grand Soleil di 46.3 piedi costruito dal Cantiere Del Pardo.
-                                Una barca con 25 anni di storia di vela agonistica in giro per il Mediterraneo, dalla Giraglia Rolex Cup, Les Voiles de Saint-Tropez, alla Barcolana, tra voli di vela d'altura e inshore.
-                            </p>
-                        </div>
-                        <div class="log-compass">⚓</div>
-                    </div>
-                    
-                    <!-- Personal Account -->
-                    <div class="personal-account">
-                        <p data-i18n-key="about.description3">
-                            La prima volta che sono salito sulla Bizzosa avevo 6 anni, non capivo niente di vela, ma amavo tanto respirarla.
-                            Oggi gran parte di quello che ho capito lo rifletto nel rispetto che sento nelle mani quando la barca va di bolina stretta con 20 nodi di Libeccio e va chiamata una virata.
-                        </p>
-                        <p data-i18n-key="about.description4">
-                            Ho capito che in mare la vita è lenta ma veloce, che si impara ogni giorno, se accetti il cambiamento, che il vento parla chiaro se lo sai ascoltare e che puoi asciugarla quanto vuoi, ma un po' d'acqua in sentina ci sarà sempre, ma soprattutto ho capito che se non ci sono dei problemi da risolvere probabilmente sei fermo.
-                        </p>
-                        <p class="about-signature" data-i18n-key="about.signature">
-                            Filippo - Sailing Bizzosa
-                        </p>
-                    </div>
-                </div>
-                
-            </div>
+            <p class="about-text" data-i18n-key="about.description1">
+                Bizzosa è una storia d'amore.<br>
+                Per il vento e per il mare.<br>
+                Un' amore iniziato negli anni '70 da un gruppo di amici con il sogno della barca a vela.
+            </p>
+            <p class="about-text" data-i18n-key="about.description2">
+                Da prototipo natante autoprodotto, oggi Bizzosa è un Grand Soleil di 46.3 piedi costruito dal Cantiere Del Pardo.<br>
+                Una barca con 25 anni di storia di vela agonistica in giro per il Mediterraneo, dalla Giraglia Rolex Cup, Les Voiles de<br>
+                Saint-Tropez, alla Barcolana, tra voli di vela d'altura e inshore.
+            </p>
         </div>
     </section>
 
-    <!-- Booking Section - Part 1 -->
-    <section id="plan" class="booking-section-hero">
+    <!-- Booking Header - Title & Boat Description -->
+    <section id="plan" class="booking-header-section">
+        <div class="container container-section">
+            <h2 data-i18n-key="plan.section_title">Prenota ora</h2>
+                <p data-i18n-key="plan.boat_description">
+                    Bizzosa è un Grand Soleil di 46.3 piedi con scafo in vetroresina, interni interamente rivestiti in legno e coperta in teak originale del Cantiere del Pardo trattato ogni anno con amore.
+                    La barca, provvista di ombreggianti esterni è armata con Fiocco e Randa da vela sportiva con una mano di terzaroli.
+                    Sotto coperta, tre cabine matrimoniali di cui una armatoriale molto ampia, due bagni con scarico a pompa e ampia dinette con cucina completa e zona carteggio.
+                </p>
+
+        </div>
+    </section>
+
+    <!-- Booking Section - Form & Image -->
+    <section class="booking-section-hero">
         <div class="booking-form-container">
-            <h2 data-i18n-key="plan.title">Pianifica la Tua Traversata</h2>
-            
+            <h2 data-i18n-key="plan.title">Pianifica la tua esperienza in barca a vela</h2>
+            <p class="booking-subtitle" data-i18n-key="plan.subtitle">Scegli le date e sblocca le destinazioni disponibili</p>
+
+            <div class="booking-destinations-info">
+                <p><strong >Isola d'Elba</strong></p>
+                <p><strong>Capraia e Isola del Giglio</strong> <span data-i18n-key="plan.min_nights_2">min. 2 notti</span></p>
+                <p><strong>Corsica (SE) e Arcipelago della Maddalena (Sardegna)</strong> <span data-i18n-key="plan.min_nights_6">min. 6 notti</span></p>
+            </div>
+
             <div class="booking-form">
-                <!-- Package Selector -->
+                <!-- Package Selector as Tabs -->
+                <div class="package-tabs">
+                    <button type="button" class="package-tab selected" data-package="DAILY_CHARTER">
+                        <strong data-i18n-key="plan.daily_charter.title">Dayli experience</strong>
+                        <span data-i18n-key="plan.daily_charter.desc">da 1 a 3 giorni in barca</span>
+                    </button>
+                    <button type="button" class="package-tab" data-package="WEEKLY_CHARTER">
+                        <strong data-i18n-key="plan.weekly_charter.title">Weekly Charter</strong>
+                        <span data-i18n-key="plan.weekly_charter.desc">minimo 3 notti in criciera</span>
+                    </button>
+                </div>
+
+                <!-- Guests Dropdown -->
                 <div class="form-group">
-                    <label data-i18n-key="plan.package">Tipo di Charter</label>
-                    <div class="package-options">
-                        <div class="package-card" data-package="DAILY_CHARTER">
-                            <h3 data-i18n-key="plan.daily_charter.title">Daily Charter</h3>
-                            <p data-i18n-key="plan.daily_charter.desc">Da 1 a 3 giorni</p>
-                        </div>
-                        <div class="package-card" data-package="WEEKLY_CHARTER">
-                            <h3 data-i18n-key="plan.weekly_charter.title">Weekly Charter</h3>
-                            <p data-i18n-key="plan.weekly_charter.desc">Minimo 3 notti</p>
-                        </div>
-                    </div>
+                    <label for="guestsCount" data-i18n-key="plan.guests">Numero di ospiti</label>
+                    <select id="guestsCount" class="guests-select">
+                        <option value="1">1</option>
+                        <option value="2" selected>2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                    </select>
                 </div>
 
                 <!-- Date Picker -->
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="startDate" data-i18n-key="plan.start_date">Data Partenza</label>
+                        <label for="startDate" data-i18n-key="plan.start_date">Data di inizio</label>
                         <input type="date" id="startDate" class="date-input">
                     </div>
                     <div class="form-group">
-                        <label for="endDate" data-i18n-key="plan.end_date">Data Ritorno</label>
+                        <label for="endDate" data-i18n-key="plan.end_date">Data di fine</label>
                         <input type="date" id="endDate" class="date-input">
                     </div>
                 </div>
 
-                <!-- Guests -->
-                <div class="form-group">
-                    <label for="guestsCount" data-i18n-key="plan.guests">Numero Ospiti</label>
-                    <div class="guest-counter">
-                        <button type="button" class="counter-btn" id="guestsMinus">-</button>
-                        <input type="number" id="guestsCount" value="2" min="1" max="8" readonly>
-                        <button type="button" class="counter-btn" id="guestsPlus">+</button>
-                    </div>
-                </div>
-
-                <!-- Destinations Dropdown -->
+                <!-- Departure Location -->
                 <div class="form-group">
                     <label for="destinationSelect" data-i18n-key="plan.destination">Destinazione</label>
                     <select id="destinationSelect" class="destination-select">
                         <option value="" data-i18n-key="plan.select_destination">Seleziona destinazione</option>
-                        <!-- Will be populated dynamically -->
                     </select>
                 </div>
 
                 <!-- Calculate Button -->
                 <button type="button" class="btn-calculate" id="calculateQuote" data-i18n-key="plan.calculate">
-                    Calcola Preventivo
+                    Calcola preventivo
                 </button>
             </div>
+        </div>
+        <div class="booking-image-side">
+            <img src="images/booking/imagebooking.png" alt="Barca in mare cristallino">
         </div>
     </section>
 
     <!-- Booking Section - Part 2 (Hidden initially) -->
     <section id="booking-details" class="booking-details-section" style="display: none;">
-        <div class="container">
-            <div class="boat-description">
-                <h3 data-i18n-key="plan.boat_title">La Barca</h3>
-                <p data-i18n-key="plan.boat_description">
-                    Bizzosa è un Grand Soleil di 46.3 piedi con scafo in vetroresina, interni interamente rivestiti in legno e coperta in teak originale del Cantiere del Pardo trattato ogni anno con amore. 
-                    La barca, provvista di ombreggianti esterni è armata con Fiocco e Randa da vela sportiva con una mano di terzaroli. 
-                    Sotto coperta, tre cabine matrimoniali di cui una armatoriale molto ampia, due bagni con scarico a pompa e ampia dinette con cucina completa e zona carteggio.
-                </p>
-            </div>
+        <div class="container container-section">
+           
 
             <!-- Price Summary -->
             <div class="price-summary">
@@ -240,7 +230,7 @@
     <!-- Gallery Section -->
     <section id="gallery" class="gallery-section">
         <div class="container">
-            <h2 data-i18n-key="gallery.title">Galleria</h2>
+            <h2 data-i18n-key="gallery.title">BIZZOSA’S LINES</h2>
             <div class="gallery-grid">
                 <div class="gallery-item">
                     <img src="images/gallery/gallery_1.jpg" alt="Bizzosa sailing experience" loading="lazy">
@@ -273,41 +263,155 @@
         </div>
     </section>
 
+    <!-- Bizzosa & Friends Section -->
+    <section id="friends" class="friends-section">
+        <div class="container">
+            <h2 data-i18n-key="friends.title">BIZZOSA&FRENDS</h2>
+            <div class="friends-gallery">
+                <!-- Images -->
+                <div class="media-item">
+                    <img src="images/friends/images/friends_1.jpeg" alt="Bizzosa Friends" loading="lazy">
+                </div>
+                <div class="media-item video-item">
+                    <video muted autoplay loop playsinline preload="metadata">
+                        <source src="images/friends/videos/friends_1.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="media-item">
+                    <img src="images/friends/images/friends_2.jpeg" alt="Bizzosa Friends" loading="lazy">
+                </div>
+                <div class="media-item">
+                    <img src="images/friends/images/friends_3.jpeg" alt="Bizzosa Friends" loading="lazy">
+                </div>
+                <div class="media-item video-item">
+                    <video muted autoplay loop playsinline preload="metadata">
+                        <source src="images/friends/videos/friends_2.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="media-item">
+                    <img src="images/friends/images/friends_4.jpeg" alt="Bizzosa Friends" loading="lazy">
+                </div>
+                <div class="media-item">
+                    <img src="images/friends/images/friends_5.jpeg" alt="Bizzosa Friends" loading="lazy">
+                </div>
+                <div class="media-item video-item">
+                    <video muted autoplay loop playsinline preload="metadata">
+                        <source src="images/friends/videos/friends_3.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="media-item">
+                    <img src="images/friends/images/friends_6.jpeg" alt="Bizzosa Friends" loading="lazy">
+                </div>
+                <div class="media-item">
+                    <img src="images/friends/images/friends_7.jpeg" alt="Bizzosa Friends" loading="lazy">
+                </div>
+                <div class="media-item video-item">
+                    <video muted autoplay loop playsinline preload="metadata">
+                        <source src="images/friends/videos/friends_4.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="media-item">
+                    <img src="images/friends/images/friends_8.jpeg" alt="Bizzosa Friends" loading="lazy">
+                </div>
+                <div class="media-item">
+                    <img src="images/friends/images/friends_9.jpeg" alt="Bizzosa Friends" loading="lazy">
+                </div>
+                <div class="media-item video-item">
+                    <video muted autoplay loop playsinline preload="metadata">
+                        <source src="images/friends/videos/friends_5.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="media-item">
+                    <img src="images/friends/images/friends_10.jpeg" alt="Bizzosa Friends" loading="lazy">
+                </div>
+                <div class="media-item">
+                    <img src="images/friends/images/friends_11.jpeg" alt="Bizzosa Friends" loading="lazy">
+                </div>
+                <div class="media-item video-item">
+                    <video muted autoplay loop playsinline preload="metadata">
+                        <source src="images/friends/videos/friends_6.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="media-item">
+                    <img src="images/friends/images/friends_12.jpeg" alt="Bizzosa Friends" loading="lazy">
+                </div>
+                <div class="media-item">
+                    <img src="images/friends/images/friends_13.jpeg" alt="Bizzosa Friends" loading="lazy">
+                </div>
+                <div class="media-item video-item">
+                    <video muted autoplay loop playsinline preload="metadata">
+                        <source src="images/friends/videos/friends_7.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="media-item">
+                    <img src="images/friends/images/friends_14.jpeg" alt="Bizzosa Friends" loading="lazy">
+                </div>
+                <div class="media-item">
+                    <img src="images/friends/images/friends_15.jpeg" alt="Bizzosa Friends" loading="lazy">
+                </div>
+                <div class="media-item video-item">
+                    <video muted autoplay loop playsinline preload="metadata">
+                        <source src="images/friends/videos/friends_8.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="media-item">
+                    <img src="images/friends/images/friends_16.jpeg" alt="Bizzosa Friends" loading="lazy">
+                </div>
+                <div class="media-item">
+                    <img src="images/friends/images/friends_17.jpeg" alt="Bizzosa Friends" loading="lazy">
+                </div>
+                <div class="media-item video-item">
+                    <video muted autoplay loop playsinline preload="metadata">
+                        <source src="images/friends/videos/friends_9.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="media-item">
+                    <img src="images/friends/images/friends_18.jpeg" alt="Bizzosa Friends" loading="lazy">
+                </div>
+                <div class="media-item">
+                    <img src="images/friends/images/friends_19.jpeg" alt="Bizzosa Friends" loading="lazy">
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Contacts Section -->
     <section id="contacts" class="contacts-section">
         <div class="container">
             <h2 data-i18n-key="contacts.title">Contatti</h2>
             <div class="contacts-content">
+                <!-- Personal Account -->
+                <div class="personal-account">
+                    <p data-i18n-key="about.description3">
+                        La prima volta che sono salito sulla Bizzosa avevo 6 anni, non capivo niente di vela, ma amavo tanto respirarla.
+                        Oggi gran parte di quello che ho capito lo rifletto nel rispetto che sento nelle mani quando la barca va di bolina stretta con 20 nodi di Libeccio e va chiamata una virata.
+                    </p>
+                    <p data-i18n-key="about.description4">
+                        Ho capito che in mare la vita è lenta ma veloce, che si impara ogni giorno, se accetti il cambiamento, che il vento parla chiaro se lo sai ascoltare e che puoi asciugarla quanto vuoi, ma un po' d'acqua in sentina ci sarà sempre, ma soprattutto ho capito che se non ci sono dei problemi da risolvere probabilmente sei fermo.
+                    </p>
+                    <p class="about-signature" data-i18n-key="about.signature">
+                        Filippo - Sailing Bizzosa
+                    </p>
+                </div>
+
                 <div class="contact-info">
                     <h3 data-i18n-key="contacts.info_title">Informazioni</h3>
                     <div class="contact-item">
                         <strong data-i18n-key="contacts.phone">Telefono:</strong>
-                        <a href="tel:+393331234567">+39 333 123 4567</a>
+                        <a href="tel:+393934830048">+39 393 4830048</a>
                     </div>
                     <div class="contact-item">
                         <strong data-i18n-key="contacts.email">Email:</strong>
-                        <a href="mailto:info@sailingbizzosa.it">info@sailingbizzosa.it</a>
+                        <a href="mailto:sailing.bizzosa@gmail.com">sailing.bizzosa@gmail.com</a>
                     </div>
                     <div class="contact-item">
                         <strong data-i18n-key="contacts.address">Indirizzo:</strong>
-                        <p>Porto di Salivoli<br>Piombino (LI), Italia</p>
-                    </div>
-                    <div class="contact-item">
-                        <strong data-i18n-key="contacts.hours">Orari:</strong>
-                        <p data-i18n-key="contacts.hours_text">Lun-Dom: 9:00 - 19:00</p>
+                        <p>Porto ESAOM CESA<br>Portoferraio (LI), Italia</p>
+                        <a href="https://maps.app.goo.gl/Qr73kyaJu2czjuci7?g_st=iw" target="_blank" rel="noopener noreferrer" class="btn-maps" data-i18n-key="contacts.maps_btn">Apri in Maps</a>
                     </div>
                 </div>
-                <div class="contact-map">
-                    <!-- Porto di Salivoli, Piombino -->
-                    <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2943.8796094461586!2d10.553722615437!3d42.93066667915427!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x132867c6f3e9c8ab%3A0x1c39e1c0e5e8f5d7!2sPorto%20di%20Salivoli!5e0!3m2!1sit!2sit!4v1639561234567!5m2!1sit!2sit"
-                        width="100%" 
-                        height="400" 
-                        style="border:0;" 
-                        allowfullscreen="" 
-                        loading="lazy"
-                        title="Porto di Salivoli Location">
-                    </iframe>
+                <div class="contact-image">
+                    <img src="images/contacts/contact-placeholder.jpg" alt="Porto ESAOM CESA, Portoferraio" loading="lazy">
                 </div>
             </div>
         </div>

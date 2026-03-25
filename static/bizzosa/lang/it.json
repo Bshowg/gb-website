@@ -15,8 +15,8 @@
     "title": "Chi Siamo",
     "log_date": "Est. 1970",
     "log_title": "S/Y Bizzosa",
-    "description1": "Bizzosa è una storia d'amore. Per il vento e per il mare. Un'amore iniziato negli anni '70 da un gruppo di amici con il sogno della barca a vela.",
-    "description2": "Da prototipo natante autoprodotto, oggi Bizzosa è un Grand Soleil di 46.3 piedi costruito dal Cantiere Del Pardo. Una barca con 25 anni di storia di vela agonistica in giro per il Mediterraneo, dalla Giraglia Rolex Cup, Les Voiles de Saint-Tropez, alla Barcolana, tra voli di vela d'altura e inshore.",
+    "description1": "Bizzosa è una storia d'amore.<br>Per il vento e per il mare.<br>Un' amore iniziato negli anni '70 da un gruppo di amici con il sogno della barca a vela.",
+    "description2": "Da prototipo natante autoprodotto, oggi Bizzosa è un Grand Soleil di 46.3 piedi costruito dal Cantiere Del Pardo.<br>Una barca con 25 anni di storia di vela agonistica in giro per il Mediterraneo, dalla Giraglia Rolex Cup, Les Voiles de<br>Saint-Tropez, alla Barcolana, tra voli di vela d'altura e inshore.",
     "description3": "La prima volta che sono salito sulla Bizzosa avevo 6 anni, non capivo niente di vela, ma amavo tanto respirarla. Oggi gran parte di quello che ho capito lo rifletto nel rispetto che sento nelle mani quando la barca va di bolina stretta con 20 nodi di Libeccio e va chiamata una virata.",
     "description4": "Ho capito che in mare la vita è lenta ma veloce, che si impara ogni giorno, se accetti il cambiamento, che il vento parla chiaro se lo sai ascoltare e che puoi asciugarla quanto vuoi, ma un po' d'acqua in sentina ci sarà sempre, ma soprattutto ho capito che se non ci sono dei problemi da risolvere probabilmente sei fermo.",
     "signature": "Filippo - Sailing Bizzosa",
@@ -34,7 +34,8 @@
     }
   },
   "plan": {
-    "title": "Pianifica la Tua Traversata",
+    "section_title": "Prenota Ora",
+    "title": "Pianifica la tua esperienza su misura in barca a vela",
     "boat_description": "Bizzosa è un Grand Soleil di 46.3 piedi con scafo in vetroresina, interni interamente rivestiti in legno e coperta in teak originale del Cantiere del Pardo trattato ogni anno con amore. La barca, provvista di ombreggianti esterni è armata con Fiocco e Randa da vela sportiva con una mano di terzaroli. Sotto coperta, tre cabine matrimoniali di cui una armatoriale molto ampia, due bagni con scarico a pompa e ampia dinette con cucina completa e zona carteggio.",
     "package": "Scegli il Pacchetto",
     "day_sail": {
@@ -79,7 +80,10 @@
     }
   },
   "gallery": {
-    "title": "Galleria"
+    "title": "BIZZOSA’S LINES"
+  },
+  "friends": {
+    "title": "BIZZOSA&FRIENDS"
   },
   "contacts": {
     "title": "Contatti",
@@ -88,7 +92,8 @@
     "email": "Email:",
     "address": "Indirizzo:",
     "hours": "Orari:",
-    "hours_text": "Lun-Dom: 9:00 - 19:00"
+    "hours_text": "Lun-Dom: 9:00 - 19:00",
+    "maps_btn": "Apri in Maps"
   },
   "footer": {
     "rights": "Tutti i diritti riservati."

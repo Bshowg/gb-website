@@ -32,10 +32,10 @@ class BookingConfigurator {
                 disembark: '18:00'
             },
             WEEKLY_CHARTER: {
-                name: 'Weekly Charter', 
+                name: 'Weekly Charter',
                 duration: { min: 3, max: 30 }, // Minimum 3 nights
-                maxGuests: 8, // Updated to 8 guests
-                destinations: ['elba', 'capraia', 'giglio', 'corsica', 'sardegna','baratti', 'buca_fate'],
+                maxGuests: 8,
+                destinations: 'by_duration', // Filtered by duration like DAILY_CHARTER
                 boarding: '11:00',
                 disembark: '18:00',
                 discount: 0.2
@@ -75,25 +75,50 @@ class BookingConfigurator {
 
     // Package Selector
     initPackageSelector() {
-        const packageCards = document.querySelectorAll('.package-card');
-        
-        packageCards.forEach(card => {
-            card.addEventListener('click', () => {
-                // Remove selected from all cards
-                packageCards.forEach(c => c.classList.remove('selected'));
-                
-                // Add selected to clicked card
-                card.classList.add('selected');
-                
-                // Update state
-                const packageType = card.dataset.package;
+        const packageTabs = document.querySelectorAll('.package-tab');
+
+        packageTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const packageType = tab.dataset.package;
+
+                // Skip if same package is already selected
+                if (this.state.packageType === packageType) return;
+
+                // Remove selected from all tabs
+                packageTabs.forEach(t => t.classList.remove('selected'));
+
+                // Add selected to clicked tab
+                tab.classList.add('selected');
+
+                // Reset form fields
+                this.state.startDate = null;
+                this.state.endDate = null;
+                this.state.destination = '';
+                this.state.extras = [];
+                this.state.guests = 2;
+                this.state.basePrice = 0;
+                this.state.extrasTotal = 0;
+                this.state.totalPrice = 0;
+
+                document.getElementById('startDate').value = '';
+                document.getElementById('endDate').value = '';
+                document.getElementById('guestsCount').value = 2;
+                const destSelect = document.getElementById('destinationSelect');
+                if (destSelect) destSelect.value = '';
+                document.querySelectorAll('#extrasList input[type="checkbox"]').forEach(c => c.checked = false);
+
+                // Hide booking details section
+                const detailsSection = document.getElementById('booking-details');
+                if (detailsSection) detailsSection.style.display = 'none';
+
+                // Update state with new package
                 this.state.packageType = packageType;
-                
+
                 // Update form based on package
                 this.updateFormForPackage(packageType);
-                
-                // Recalculate price
-                this.calculatePrice();
+
+                // Update price display
+                this.updatePriceDisplay(0, 0, 0);
             });
         });
     }
@@ -186,8 +211,7 @@ class BookingConfigurator {
     // Destination Selector
     initDestinationSelector() {
         this.renderDestinationDropdown();
-        
-        // Add change listener for dropdown
+
         const select = document.getElementById('destinationSelect');
         select?.addEventListener('change', (e) => {
             this.state.destination = e.target.value;
@@ -200,7 +224,7 @@ class BookingConfigurator {
 
         // Keep the first "Select destination" option
         select.innerHTML = select.options[0].outerHTML;
-        
+
         // Add all destinations
         Object.keys(this.destinationNames).forEach(key => {
             const option = document.createElement('option');
@@ -208,6 +232,24 @@ class BookingConfigurator {
             option.textContent = this.destinationNames[key];
             select.appendChild(option);
         });
+    }
+
+    // Destinations available based on minimum number of days
+    getDestinationsForDuration(duration) {
+        // Base destinations always available (1+ days)
+        const destinations = ['elba', 'baratti', 'buca_fate'];
+
+        // 2+ days: unlock Capraia, Giglio
+        if (duration >= 2) {
+            destinations.push('capraia', 'giglio');
+        }
+
+        // 6+ days: unlock Corsica, Sardegna
+        if (duration >= 6) {
+            destinations.push('corsica', 'sardegna');
+        }
+
+        return destinations;
     }
 
     updateAvailableDestinations() {
@@ -218,16 +260,15 @@ class BookingConfigurator {
         const duration = this.calculateDuration();
         let availableDestinations = [];
 
-        if (this.state.packageType === 'DAILY_CHARTER' && pkg.destinations[duration]) {
-            availableDestinations = pkg.destinations[duration];
-        } else if (Array.isArray(pkg.destinations)) {
-            availableDestinations = pkg.destinations;
+        if (duration > 0) {
+            availableDestinations = this.getDestinationsForDuration(duration);
         }
 
         // Update dropdown options
+        const firstOption = select.options[0].outerHTML;
         const currentValue = select.value;
-        select.innerHTML = select.options[0].outerHTML; // Keep "Select destination" option
-        
+        select.innerHTML = firstOption;
+
         // Add only available destinations
         availableDestinations.forEach(key => {
             if (this.destinationNames[key]) {
@@ -237,7 +278,7 @@ class BookingConfigurator {
                 select.appendChild(option);
             }
         });
-        
+
         // Restore selection if still available
         if (availableDestinations.includes(currentValue)) {
             select.value = currentValue;
@@ -246,27 +287,13 @@ class BookingConfigurator {
         }
     }
 
-    // Guest Counter
+    // Guest Counter (now a dropdown select)
     initGuestCounter() {
-        const minus = document.getElementById('guestsMinus');
-        const plus = document.getElementById('guestsPlus');
-        const input = document.getElementById('guestsCount');
+        const select = document.getElementById('guestsCount');
 
-        minus?.addEventListener('click', () => {
-            if (this.state.guests > 1) {
-                this.state.guests--;
-                if (input) input.value = this.state.guests;
-                this.calculatePrice();
-            }
-        });
-
-        plus?.addEventListener('click', () => {
-            const max = this.state.packageType ? this.packages[this.state.packageType].maxGuests : 8;
-            if (this.state.guests < max) {
-                this.state.guests++;
-                if (input) input.value = this.state.guests;
-                this.calculatePrice();
-            }
+        select?.addEventListener('change', () => {
+            this.state.guests = parseInt(select.value, 10);
+            this.calculatePrice();
         });
     }
 
@@ -545,7 +572,7 @@ class BookingConfigurator {
         
         message += `\nPrezzo stimato: €${this.state.totalPrice.toFixed(2)}`;
         
-        const whatsappNumber = '393331234567'; // Replace with actual number
+        const whatsappNumber = '+393934830048'; // Replace with actual number
         const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
         
         window.open(url, '_blank');
@@ -566,7 +593,7 @@ class BookingConfigurator {
         };
 
         // Reset UI
-        document.querySelectorAll('.package-card').forEach(c => c.classList.remove('selected'));
+        document.querySelectorAll('.package-tab').forEach(c => c.classList.remove('selected'));
         document.getElementById('startDate').value = '';
         document.getElementById('endDate').value = '';
         document.getElementById('guestsCount').value = 2;

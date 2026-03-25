@@ -18,49 +18,9 @@ function initNavigation() {
     const navMenu = document.getElementById('navMenu');
     const navbar = document.getElementById('navbar');
     
-    // Flag to track if navbar has been shown
-    let navbarShown = false;
-    
-    // Function to show navbar
-    function showNavbar() {
-        if (!navbarShown) {
-            navbarShown = true;
-            navbar.classList.add('visible');
-        }
-    }
-    
-    // Show navbar on first scroll
-    let scrollListener = function() {
-        if (window.pageYOffset > 20) {
-            showNavbar();
-            // Remove listener after first trigger
-            window.removeEventListener('scroll', scrollListener);
-        }
-    };
-    
-    // Show navbar on first touch/mouse movement in top area
-    let interactionListener = function(e) {
-        // Check if interaction is in top 25% of screen or any touch event
-        const isTouchEvent = e.type.includes('touch');
-        const isTopArea = e.clientY < window.innerHeight * 0.25;
-        
-        if (isTouchEvent || isTopArea) {
-            showNavbar();
-            // Remove listeners after first trigger
-            document.removeEventListener('mousemove', interactionListener);
-            document.removeEventListener('touchstart', interactionListener);
-        }
-    };
-    
-    // Add event listeners for first interaction
-    window.addEventListener('scroll', scrollListener);
-    document.addEventListener('mousemove', interactionListener);
-    document.addEventListener('touchstart', interactionListener);
-    
     // Hamburger menu toggle
     if (hamburger && navMenu) {
         hamburger.addEventListener('click', () => {
-            showNavbar(); // Ensure navbar is shown when hamburger is clicked
             hamburger.classList.toggle('active');
             navMenu.classList.toggle('active');
         });
@@ -74,11 +34,8 @@ function initNavigation() {
         });
     }
     
-    // Navbar scroll effect (only after navbar is shown)
-    let lastScroll = 0;
+    // Navbar scroll effect for glassmorphism enhancement
     window.addEventListener('scroll', () => {
-        if (!navbarShown) return;
-        
         const currentScroll = window.pageYOffset;
         
         if (currentScroll > 100) {
@@ -86,8 +43,6 @@ function initNavigation() {
         } else {
             navbar.classList.remove('scrolled');
         }
-        
-        lastScroll = currentScroll;
     });
 }
 
