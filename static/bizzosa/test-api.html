@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Test</title>
+</head>
+<body>
+    <h1>Bizzosa API Test</h1>
+    <button onclick="testAPI()">Test API Connection</button>
+    <div id="result"></div>
+
+    <script>
+    async function testAPI() {
+        const resultDiv = document.getElementById('result');
+        resultDiv.innerHTML = 'Testing...';
+        
+        try {
+            // Test the simple test endpoint first
+            const response = await fetch('/static/bizzosa/api/test.php');
+            const data = await response.json();
+            
+            resultDiv.innerHTML = `
+                <h3>✅ API Test Success!</h3>
+                <pre>${JSON.stringify(data, null, 2)}</pre>
+            `;
+        } catch (error) {
+            resultDiv.innerHTML = `
+                <h3>❌ API Test Failed</h3>
+                <pre>Error: ${error.message}</pre>
+            `;
+        }
+    }
+    </script>
+</body>
+</html>

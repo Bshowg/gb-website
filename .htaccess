@@ -25,20 +25,8 @@ RewriteCond %{REQUEST_URI} !^/static/bizzosa/api/
 RewriteRule ^ index.html [L]
 
 # API Routes for Bizzosa (clean URLs)
-RewriteRule ^static/bizzosa/api/test/?$ static/bizzosa/api/test.php [L,QSA]
-RewriteRule ^static/bizzosa/api/availability/?$ static/bizzosa/api/availability.php [L,QSA]
-RewriteRule ^static/bizzosa/api/extras/?$ static/bizzosa/api/extras.php [L,QSA]
-RewriteRule ^static/bizzosa/api/quote/?$ static/bizzosa/api/quote.php [L,QSA]
-RewriteRule ^static/bizzosa/api/request-quote/?$ static/bizzosa/api/request_quote.php [L,QSA]
-
-# CORS Headers for Bizzosa API
-<LocationMatch "^/static/bizzosa/api/">
-    Header always set Access-Control-Allow-Origin "*"
-    Header always set Access-Control-Allow-Methods "GET, POST, OPTIONS, PUT, DELETE"
-    Header always set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
-</LocationMatch>
-
-# Handle OPTIONS requests for CORS preflight
-RewriteCond %{REQUEST_METHOD} OPTIONS
-RewriteCond %{REQUEST_URI} ^/static/bizzosa/api/
-RewriteRule ^(.*)$ - [R=200,L]
+RewriteRule ^static/bizzosa/api/test/?$ static/bizzosa/api/test.php [L]
+RewriteRule ^static/bizzosa/api/availability/?$ static/bizzosa/api/availability.php [L]
+RewriteRule ^static/bizzosa/api/extras/?$ static/bizzosa/api/extras.php [L]
+RewriteRule ^static/bizzosa/api/quote/?$ static/bizzosa/api/quote.php [L]
+RewriteRule ^static/bizzosa/api/request-quote/?$ static/bizzosa/api/request_quote.php [L]

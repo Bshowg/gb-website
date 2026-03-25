@@ -664,8 +664,8 @@ class BookingConfigurator {
             total_price: this.state.totalPrice
         };
 
-        // Use clean API URL (handled by .htaccess)
-        const response = await fetch('/static/bizzosa/api/request-quote', {
+        // Use direct PHP file path (more reliable)
+        const response = await fetch('/static/bizzosa/api/request_quote.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
