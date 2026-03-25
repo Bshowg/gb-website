@@ -580,8 +580,8 @@ class BookingConfigurator {
                 showMessage(i18n?.formatMessage('messages.booking_sent') || 'Richiesta inviata con successo!', 'success');
                 
                 // Show booking confirmation details
-                if (data.data.booking_number) {
-                    const details = `Numero prenotazione: ${data.data.booking_number}`;
+                if (data.data.id) {
+                    const details = `ID prenotazione: ${data.data.id}`;
                     showMessage(details, 'info');
                 }
                 
@@ -630,8 +630,8 @@ class BookingConfigurator {
             const data = await this.saveBookingToDatabase('whatsapp');
             
             // Show booking confirmation details
-            if (data.success && data.data.booking_number) {
-                const details = `Numero prenotazione: ${data.data.booking_number}`;
+            if (data.success && data.data.id) {
+                const details = `ID prenotazione: ${data.data.id}`;
                 showMessage(details, 'info');
             }
             

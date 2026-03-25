@@ -99,16 +99,12 @@ try {
         // Generate UUID for primary key
         $bookingId = generateUUID();
         
-        // Generate booking number
-        $bookingNumber = 'BZ' . date('Y') . str_pad(mt_rand(1, 9999), 4, '0', STR_PAD_LEFT);
-        
         // Prepare destination as single value in JSON format
         $destinationsJson = json_encode([$data['destination'] ?? '']);
         
         // Prepare booking data matching your table structure
         $bookingData = [
             'id' => $bookingId,
-            'booking_number' => $bookingNumber,
             'package_type' => $data['package_type'],
             'start_date' => $data['start_date'],
             'end_date' => $data['end_date'],
@@ -139,7 +135,7 @@ try {
         // Return success response
         successResponse([
             'booking_id' => $bookingId,
-            'booking_number' => $bookingNumber,
+            'id' => $bookingId,
             'status' => 'pending',
             'total_price' => round($totalPrice, 2),
             'currency' => 'EUR',
@@ -168,7 +164,7 @@ try {
 function sendBookingNotification($booking) {
     try {
         // Email content
-        $subject = "New Booking Request - " . $booking['booking_number'];
+        $subject = "New Booking Request - " . $booking['id'];
         
         $message = "
         <html>
@@ -184,7 +180,7 @@ function sendBookingNotification($booking) {
             <h2>New Booking Request</h2>
             <div class='booking-details'>
                 <div class='detail-row'>
-                    <span class='label'>Booking Number:</span> {$booking['booking_number']}
+                    <span class='label'>Booking ID:</span> {$booking['id']}
                 </div>
                 <div class='detail-row'>
                     <span class='label'>Package:</span> {$booking['package_type']}
@@ -226,7 +222,7 @@ function sendBookingNotification($booking) {
         <html>
         <body>
             <h2>Thank you for your booking request!</h2>
-            <p>We have received your booking request (#{$booking['booking_number']}) and will contact you shortly to confirm availability and payment details.</p>
+            <p>We have received your booking request (ID: {$booking['id']}) and will contact you shortly to confirm availability and payment details.</p>
             <p><strong>Your booking details:</strong></p>
             <ul>
                 <li>Package: {$booking['package_type']}</li>
@@ -258,7 +254,7 @@ function generateWhatsAppLink($booking) {
     $phone = WHATSAPP_PHONE;
     
     $message = "Ciao! Vorrei confermare la mia richiesta di prenotazione:\n";
-    $message .= "📋 Numero: {$booking['booking_number']}\n";
+    $message .= "📋 ID: {$booking['id']}\n";
     $message .= "📦 Pacchetto: {$booking['package_type']}\n";
     $message .= "📅 Dal {$booking['start_date']} al {$booking['end_date']}\n";
     $message .= "👥 {$booking['guests']} ospiti\n";
