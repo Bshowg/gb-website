@@ -45,7 +45,24 @@ define('DB_USER', 'Sql123456_1'); // Your username (often same as DB name)
 define('DB_PASS', 'YourPasswordHere'); // Your database password
 ```
 
-## Step 5: Update Other Settings
+## Step 5: Configure .htaccess for Clean URLs
+
+1. **Rename the .htaccess file:**
+   ```bash
+   mv .htaccess-register-it .htaccess
+   ```
+
+2. **The .htaccess file provides:**
+   - Clean API URLs (e.g., `/api/quote` instead of `/api/quote.php`)
+   - CORS headers for API calls
+   - Security headers and file protection
+   - Static asset caching
+   - Gzip compression
+   - HTTPS redirect (when ready)
+
+3. **Upload the .htaccess file** to your Register.it root directory (same level as index.html)
+
+## Step 6: Update Other Settings
 
 Also update these settings in `config.php`:
 

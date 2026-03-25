@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
             submitButton.textContent = 'Invio in corso...';
             
             // Send AJAX request
-            fetch('send_email.php', {
+            fetch('', {
                 method: 'POST',
                 body: formData
             })

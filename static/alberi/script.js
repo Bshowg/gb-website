@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 formData.append('email', email);
                 formData.append('language', language);
                 
-                const response = await fetch('send_email.php', {
+                const response = await fetch('', {
                     method: 'POST',
                     body: formData
                 });
