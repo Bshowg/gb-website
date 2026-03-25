@@ -96,31 +96,34 @@ try {
         
         $totalPrice = $basePrice + $extrasTotal;
         
-        // Prepare booking data
+        // Generate UUID for primary key
+        $bookingId = generateUUID();
+        
+        // Generate booking number
+        $bookingNumber = 'BZ' . date('Y') . str_pad(mt_rand(1, 9999), 4, '0', STR_PAD_LEFT);
+        
+        // Prepare destination as single value in JSON format
+        $destinationsJson = json_encode([$data['destination'] ?? '']);
+        
+        // Prepare booking data matching your table structure
         $bookingData = [
-            'booking_number' => 'BIZ' . date('Ymd') . rand(1000, 9999),
+            'id' => $bookingId,
+            'booking_number' => $bookingNumber,
             'package_type' => $data['package_type'],
-            'check_in_date' => $data['start_date'],
-            'check_out_date' => $data['end_date'],
-            'num_guests' => intval($data['guests']),
-            'destinations' => json_encode($data['destinations'] ?? []),
-            'extras' => json_encode($extrasJson),
-            'base_price' => $basePrice,
-            'extras_price' => $extrasTotal,
+            'start_date' => $data['start_date'],
+            'end_date' => $data['end_date'],
+            'guests' => intval($data['guests']),
+            'destinations_json' => $destinationsJson,
+            'extras_json' => json_encode($extrasJson),
             'total_price' => $totalPrice,
-            'customer_name' => $data['customer_name'],
-            'customer_email' => $data['customer_email'],
-            'customer_phone' => $data['customer_phone'],
-            'customer_message' => $data['customer_message'] ?? '',
-            'status' => 'pending',
-            'created_at' => date('Y-m-d H:i:s'),
-            'ip_address' => $clientIp
+            'customer_email' => $data['customer_email'] ?? '',
+            'status' => 'PENDING'
         ];
         
         // Insert booking
-        $bookingId = $db->insert('bookings', $bookingData);
+        $result = $db->insert('bookings', $bookingData);
         
-        if (!$bookingId) {
+        if (!$result) {
             throw new Exception('Failed to create booking');
         }
         
@@ -136,7 +139,7 @@ try {
         // Return success response
         successResponse([
             'booking_id' => $bookingId,
-            'booking_number' => $bookingData['booking_number'],
+            'booking_number' => $bookingNumber,
             'status' => 'pending',
             'total_price' => round($totalPrice, 2),
             'currency' => 'EUR',
@@ -187,13 +190,13 @@ function sendBookingNotification($booking) {
                     <span class='label'>Package:</span> {$booking['package_type']}
                 </div>
                 <div class='detail-row'>
-                    <span class='label'>Check-in:</span> {$booking['check_in_date']}
+                    <span class='label'>Start Date:</span> {$booking['start_date']}
                 </div>
                 <div class='detail-row'>
-                    <span class='label'>Check-out:</span> {$booking['check_out_date']}
+                    <span class='label'>End Date:</span> {$booking['end_date']}
                 </div>
                 <div class='detail-row'>
-                    <span class='label'>Guests:</span> {$booking['num_guests']}
+                    <span class='label'>Guests:</span> {$booking['guests']}
                 </div>
                 <div class='detail-row'>
                     <span class='label'>Total Price:</span> € {$booking['total_price']}
@@ -201,16 +204,7 @@ function sendBookingNotification($booking) {
                 <hr>
                 <h3>Customer Information</h3>
                 <div class='detail-row'>
-                    <span class='label'>Name:</span> {$booking['customer_name']}
-                </div>
-                <div class='detail-row'>
                     <span class='label'>Email:</span> {$booking['customer_email']}
-                </div>
-                <div class='detail-row'>
-                    <span class='label'>Phone:</span> {$booking['customer_phone']}
-                </div>
-                <div class='detail-row'>
-                    <span class='label'>Message:</span> {$booking['customer_message']}
                 </div>
             </div>
         </body>
@@ -232,13 +226,13 @@ function sendBookingNotification($booking) {
         <html>
         <body>
             <h2>Thank you for your booking request!</h2>
-            <p>Dear {$booking['customer_name']},</p>
             <p>We have received your booking request (#{$booking['booking_number']}) and will contact you shortly to confirm availability and payment details.</p>
             <p><strong>Your booking details:</strong></p>
             <ul>
-                <li>Check-in: {$booking['check_in_date']}</li>
-                <li>Check-out: {$booking['check_out_date']}</li>
-                <li>Number of guests: {$booking['num_guests']}</li>
+                <li>Package: {$booking['package_type']}</li>
+                <li>Start date: {$booking['start_date']}</li>
+                <li>End date: {$booking['end_date']}</li>
+                <li>Number of guests: {$booking['guests']}</li>
                 <li>Estimated total: € {$booking['total_price']}</li>
             </ul>
             <p>If you have any questions, please don't hesitate to contact us.</p>
@@ -265,10 +259,10 @@ function generateWhatsAppLink($booking) {
     
     $message = "Ciao! Vorrei confermare la mia richiesta di prenotazione:\n";
     $message .= "📋 Numero: {$booking['booking_number']}\n";
-    $message .= "📅 Dal {$booking['check_in_date']} al {$booking['check_out_date']}\n";
-    $message .= "👥 {$booking['num_guests']} ospiti\n";
-    $message .= "💶 Totale: €{$booking['total_price']}\n";
-    $message .= "Nome: {$booking['customer_name']}";
+    $message .= "📦 Pacchetto: {$booking['package_type']}\n";
+    $message .= "📅 Dal {$booking['start_date']} al {$booking['end_date']}\n";
+    $message .= "👥 {$booking['guests']} ospiti\n";
+    $message .= "💶 Totale: €{$booking['total_price']}";
     
     $encodedMessage = urlencode($message);
     

@@ -570,6 +570,7 @@ class BookingConfigurator {
             if (submitButton) {
                 submitButton.disabled = true;
                 submitButton.textContent = this.currentLang === 'it' ? 'Invio...' : 'Sending...';
+                submitButton.classList.add('loading');
             }
             
             // Save booking with email
@@ -578,9 +579,16 @@ class BookingConfigurator {
             if (data.success) {
                 showMessage(i18n?.formatMessage('messages.booking_sent') || 'Richiesta inviata con successo!', 'success');
                 
+                // Show booking confirmation details
+                if (data.data.booking_number) {
+                    const details = `Numero prenotazione: ${data.data.booking_number}`;
+                    showMessage(details, 'info');
+                }
+                
                 // Reset form after successful submission
                 setTimeout(() => {
                     this.resetForm();
+                    document.getElementById('customerEmail').value = '';
                     // Hide booking details section
                     const detailsSection = document.getElementById('booking-details');
                     if (detailsSection) detailsSection.style.display = 'none';
@@ -601,14 +609,31 @@ class BookingConfigurator {
             if (submitButton) {
                 submitButton.disabled = false;
                 submitButton.textContent = originalText;
+                submitButton.classList.remove('loading');
             }
         }
     }
 
     async sendWhatsAppMessage() {
+        const whatsappBtn = document.getElementById('requestWhatsApp');
+        const originalText = whatsappBtn?.textContent;
+        
         try {
+            // Show loading state
+            if (whatsappBtn) {
+                whatsappBtn.disabled = true;
+                whatsappBtn.textContent = this.currentLang === 'it' ? 'Salvando...' : 'Saving...';
+                whatsappBtn.classList.add('loading');
+            }
+            
             // First save to database
-            await this.saveBookingToDatabase('whatsapp');
+            const data = await this.saveBookingToDatabase('whatsapp');
+            
+            // Show booking confirmation details
+            if (data.success && data.data.booking_number) {
+                const details = `Numero prenotazione: ${data.data.booking_number}`;
+                showMessage(details, 'info');
+            }
             
             // Then send WhatsApp message
             const pkg = this.packages[this.state.packageType];
@@ -643,9 +668,17 @@ class BookingConfigurator {
         } catch (error) {
             console.error('WhatsApp booking error:', error);
             showMessage(
-                this.currentLang === 'it' ? 'Errore nel salvare la richiesta' : 'Error saving request', 
+                error.message || 
+                (this.currentLang === 'it' ? 'Errore nel salvare la richiesta' : 'Error saving request'), 
                 'error'
             );
+        } finally {
+            // Restore button state
+            if (whatsappBtn) {
+                whatsappBtn.disabled = false;
+                whatsappBtn.textContent = originalText;
+                whatsappBtn.classList.remove('loading');
+            }
         }
     }
 
@@ -673,7 +706,16 @@ class BookingConfigurator {
             body: JSON.stringify(bookingData)
         });
 
-        const data = await response.json();
+        if (!response.ok) {
+            throw new Error(`Server error: ${response.status} ${response.statusText}`);
+        }
+
+        let data;
+        try {
+            data = await response.json();
+        } catch (e) {
+            throw new Error('Invalid response from server');
+        }
         
         if (!data.success) {
             throw new Error(data.message || 'Failed to save booking');
