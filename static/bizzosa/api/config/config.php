@@ -37,13 +37,12 @@ define('PRICE_DAILY_CHARTER_PER_DAY', 700);
 define('PRICE_WEEKLY_CHARTER_PER_DAY', 600);
 define('WEEKLY_DISCOUNT', 0.20); // 20% discount for weekly
 
-// Business rules
-define('MAX_GUESTS_DAY_SAIL', 8);
+// Business rules - Updated for 2 packages
 define('MAX_GUESTS_DAILY_CHARTER', 8);
-define('MAX_GUESTS_WEEKLY_CHARTER', 6);
-define('MIN_DAILY_CHARTER_DAYS', 2);
-define('MAX_DAILY_CHARTER_DAYS', 6);
-define('MIN_WEEKLY_CHARTER_DAYS', 7);
+define('MAX_GUESTS_WEEKLY_CHARTER', 8);
+define('MIN_DAILY_CHARTER_DAYS', 1);
+define('MAX_DAILY_CHARTER_DAYS', 3);
+define('MIN_WEEKLY_CHARTER_DAYS', 3);
 
 // Security
 define('API_RATE_LIMIT', 100); // Requests per minute

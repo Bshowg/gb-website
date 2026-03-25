@@ -1,258 +1,487 @@
-/* ========================================
-   Sailing Bizzosa - Responsive Styles
-   ======================================== */
+/* ============================================
+   RESPONSIVE STYLES - MOBILE & TABLET
+   Sailing Bizzosa - Mobile First Approach
+   ============================================ */
 
-/* Tablet Styles (768px - 1024px) */
-@media screen and (max-width: 1024px) {
-    .container {
-        max-width: 100%;
-        padding: 0 30px;
+/* Mobile Devices (max-width: 768px) */
+@media (max-width: 768px) {
+    /* General Typography */
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.75rem; }
+    h3 { font-size: 1.5rem; }
+    
+    /* Booking Form - Mobile Centered */
+    .booking-section-hero {
+        justify-content: center !important;
+        padding: 1rem !important;
     }
-
-    .hero-content h1 {
-        font-size: 2.5rem;
+    
+    .booking-form-container {
+        width: 95% !important;
+        max-width: 400px !important;
+        min-width: unset !important;
+        padding: 1.5rem !important;
+        margin: 0 auto !important;
     }
-
+    
+    .booking-form-container h2 {
+        font-size: 1.5rem !important;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr !important;
+        gap: 0.75rem !important;
+    }
+    
     .package-options {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
     }
-
-    .gallery-grid {
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    
+    /* Navigation */
+    .navbar .container {
+        padding: 0.75rem 1rem;
     }
-}
-
-/* Mobile Landscape & Small Tablets (576px - 768px) */
-@media screen and (max-width: 768px) {
-    /* Navigation Mobile */
+    
     .nav-menu {
-        display: none;
         position: fixed;
+        left: -100%;
         top: 60px;
-        left: 0;
-        width: 100%;
-        background: white;
         flex-direction: column;
-        padding: 2rem;
-        box-shadow: var(--shadow-md);
+        background: white;
+        width: 100%;
+        text-align: center;
+        transition: 0.3s;
+        box-shadow: 0 10px 27px rgba(0,0,0,0.05);
+        padding: 2rem 0;
+        gap: 1rem;
+        z-index: 999;
     }
-
+    
     .nav-menu.active {
-        display: flex;
+        left: 0;
     }
-
+    
     .hamburger {
-        display: flex;
+        display: block;
+        cursor: pointer;
+        padding: 0.5rem;
     }
-
+    
+    .hamburger span {
+        display: block;
+        width: 25px;
+        height: 3px;
+        margin: 5px 0;
+        background: var(--primary-color);
+        transition: 0.3s;
+    }
+    
     .hamburger.active span:nth-child(1) {
-        transform: rotate(45deg) translate(5px, 5px);
+        transform: rotate(-45deg) translate(-5px, 6px);
     }
-
+    
     .hamburger.active span:nth-child(2) {
         opacity: 0;
     }
-
+    
     .hamburger.active span:nth-child(3) {
-        transform: rotate(-45deg) translate(5px, -5px);
+        transform: rotate(45deg) translate(-5px, -6px);
     }
-
-    /* Hero Section */
-    .hero-content h1 {
-        font-size: 2rem;
-    }
-
-    .hero-content p {
-        font-size: 1.1rem;
-    }
-
-    /* Form Elements */
-    .form-row {
-        grid-template-columns: 1fr;
-    }
-
-    /* Contacts */
-    .contacts-content {
-        grid-template-columns: 1fr;
-    }
-
-    .contact-map {
-        height: 300px;
-    }
-
-    /* Gallery */
-    .gallery-grid {
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    
+    .nav-extras {
+        position: absolute;
+        right: 60px;
         gap: 1rem;
     }
-
-    /* About Features */
-    .about-features {
-        grid-template-columns: 1fr;
+    
+    .language-switcher select {
+        padding: 0.3rem 0.5rem;
+        font-size: 0.9rem;
     }
-
-    /* Submit Buttons */
-    .submit-buttons {
-        flex-direction: column;
-    }
-
-    .btn-email, .btn-whatsapp {
-        width: 100%;
-    }
-}
-
-/* Mobile Portrait (320px - 576px) */
-@media screen and (max-width: 576px) {
-    /* Typography */
-    body {
-        font-size: 14px;
-    }
-
-    h1 { font-size: 1.75rem; }
-    h2 { font-size: 1.5rem; }
-    h3 { font-size: 1.25rem; }
-    h4 { font-size: 1.1rem; }
-
-    /* Container */
-    .container {
-        padding: 0 15px;
-    }
-
-    /* Sections */
-    section {
-        padding: 60px 0;
-    }
-
-    /* Navigation */
-    .navbar .container {
-        padding: 0.75rem 15px;
-    }
-
-    .nav-brand a {
-        font-size: 1.25rem;
-    }
-
-    /* Hero */
-    .hero-section {
-        min-height: 500px;
-    }
-
+    
+    /* Hero Section */
     .hero-content {
         padding: 1rem;
+        max-width: 90%;
     }
-
+    
     .hero-content h1 {
-        font-size: 1.5rem;
+        font-size: 3rem;
         margin-bottom: 1rem;
     }
-
+    
     .hero-content p {
         font-size: 1rem;
         margin-bottom: 1.5rem;
     }
-
-    .cta-button {
+    
+    .hero-cta {
         padding: 0.75rem 1.5rem;
-        font-size: 0.9rem;
-    }
-
-    /* Package Cards */
-    .package-card {
-        padding: 1rem;
-    }
-
-    /* Destinations Grid */
-    .destinations-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 0.5rem;
-    }
-
-    .destination-option {
-        padding: 0.5rem;
-        font-size: 0.9rem;
-    }
-
-    /* Guest Counter */
-    .guest-counter {
-        max-width: 150px;
-    }
-
-    .counter-btn {
-        width: 35px;
-        height: 35px;
         font-size: 1rem;
     }
-
-    /* Extras */
+    
+    /* About Section */
+    .about-section {
+        padding: 3rem 0;
+    }
+    
+    .ship-log {
+        margin: 1rem -1rem;
+        padding: 1.5rem 1rem;
+        transform: none;
+        border-radius: 0;
+    }
+    
+    .ship-log:before {
+        display: none;
+    }
+    
+    .log-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .log-title {
+        font-size: 1rem;
+    }
+    
+    .log-entry p {
+        font-size: 1rem;
+        text-indent: 1rem;
+    }
+    
+    .log-compass {
+        font-size: 1.5rem;
+        top: 5px;
+        right: 5px;
+    }
+    
+    .about-features {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    /* Plan Your Sail */
+    .plan-section {
+        padding: 3rem 0;
+    }
+    
+    .booking-container {
+        padding: 1.5rem;
+        border-radius: 10px;
+    }
+    
+    .packages-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .date-picker {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .date-picker input {
+        width: 100%;
+    }
+    
+    .destinations-grid {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+    
+    .guest-counter {
+        justify-content: space-between;
+    }
+    
+    .extras-grid {
+        gap: 0.75rem;
+    }
+    
     .extra-item {
         padding: 0.75rem;
     }
-
-    .extra-item input[type="checkbox"] {
-        width: 18px;
-        height: 18px;
-    }
-
-    /* Price Summary */
+    
     .price-summary {
-        padding: 1.5rem;
+        padding: 1rem;
+        margin-top: 1.5rem;
     }
-
-    .price-line.total {
-        font-size: 1.1rem;
+    
+    .price-row {
+        font-size: 0.95rem;
     }
-
-    /* Modal */
-    .modal-content {
-        padding: 1.5rem;
-        width: 95%;
+    
+    .price-total {
+        font-size: 1.25rem;
     }
-
-    /* Gallery */
+    
+    .submit-buttons {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .submit-buttons button {
+        width: 100%;
+        padding: 0.875rem;
+    }
+    
+    /* Gallery Section */
+    .gallery-section {
+        padding: 3rem 0;
+    }
+    
     .gallery-grid {
         grid-template-columns: 1fr;
+        gap: 1rem;
     }
-
+    
+    .gallery-item {
+        aspect-ratio: 1;
+    }
+    
+    .gallery-item:first-child {
+        grid-column: 1;
+        grid-row: 1;
+        aspect-ratio: 16/9;
+    }
+    
+    /* Contacts Section */
+    .contacts-section {
+        padding: 3rem 0;
+    }
+    
+    .contacts-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .contact-item {
+        margin-bottom: 1rem;
+        padding-bottom: 0.75rem;
+    }
+    
+    .contact-map {
+        height: 300px;
+        margin-top: 1rem;
+    }
+    
+    .contact-map iframe {
+        height: 300px !important;
+    }
+    
     /* Footer */
     .footer {
         padding: 1.5rem 0;
-        font-size: 0.9rem;
+        margin-top: 2rem;
     }
-}
-
-/* Very Small Devices (Below 320px) */
-@media screen and (max-width: 320px) {
-    .hero-content h1 {
+    
+    .footer p {
+        font-size: 0.85rem;
+    }
+    
+    /* Modals */
+    .modal-content {
+        width: 90%;
+        margin: 10% auto;
+        padding: 1.5rem;
+        border-radius: 10px;
+    }
+    
+    .modal-header h2 {
+        font-size: 1.5rem;
+    }
+    
+    /* Forms */
+    input, select, textarea {
+        font-size: 16px; /* Prevent zoom on iOS */
+    }
+    
+    /* Buttons */
+    .btn {
+        padding: 0.75rem 1.25rem;
+        font-size: 0.95rem;
+    }
+    
+    /* Container padding */
+    .container {
+        padding: 0 1rem;
+    }
+    
+    /* Booking section specifics */
+    .booking-section {
+        margin-bottom: 2rem;
+    }
+    
+    .booking-section h3 {
         font-size: 1.25rem;
-    }
-
-    .destinations-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .language-toggle {
-        font-size: 0.9rem;
+        margin-bottom: 1rem;
     }
 }
 
-/* Print Styles */
-@media print {
-    .navbar,
-    .hamburger,
-    .language-toggle,
-    .cta-button,
-    .submit-buttons,
-    .modal,
-    .footer {
-        display: none !important;
+/* Small mobile devices (max-width: 480px) */
+@media (max-width: 480px) {
+    /* Even smaller typography */
+    h1 { font-size: 1.75rem; }
+    h2 { font-size: 1.5rem; }
+    h3 { font-size: 1.25rem; }
+    
+    .hero-content h1 {
+        font-size: 2.5rem;
+        line-height: 1;
     }
-
-    section {
-        page-break-inside: avoid;
+    
+    .hero-content p {
+        font-size: 0.95rem;
+        line-height: 1.5;
     }
-
-    .price-summary {
-        border: 2px solid #000;
+    
+    /* Smaller buttons */
+    .btn, .hero-cta {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.95rem;
+    }
+    
+    /* Compact forms */
+    input, select, textarea {
+        padding: 0.6rem;
+        font-size: 16px; /* Prevent zoom on iOS */
+    }
+    
+    /* Ship's log on small screens */
+    .ship-log {
+        margin: 1rem -15px;
         padding: 1rem;
+        font-size: 0.95rem;
+    }
+    
+    .log-date {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+    }
+    
+    .log-title {
+        font-size: 0.9rem;
+    }
+    
+    .log-entry p {
+        font-size: 0.95rem;
+        text-indent: 0.5rem;
+    }
+    
+    /* Smaller extras grid */
+    .extra-item {
+        padding: 0.6rem;
+        font-size: 0.9rem;
+    }
+    
+    /* Smaller price display */
+    .price-summary {
+        padding: 0.75rem;
+    }
+    
+    .price-row {
+        font-size: 0.9rem;
+    }
+    
+    .price-total {
+        font-size: 1.1rem;
+    }
+}
+
+/* Tablet portrait (min-width: 481px and max-width: 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+    .packages-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .destinations-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .submit-buttons {
+        flex-direction: row;
+    }
+    
+    .submit-buttons button {
+        width: auto;
+        flex: 1;
+    }
+}
+
+/* Tablet landscape (min-width: 769px and max-width: 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .container {
+        max-width: 900px;
+    }
+    
+    .gallery-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .packages-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .destinations-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .about-features {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Desktop - ensure hamburger is hidden */
+@media (min-width: 769px) {
+    .hamburger {
+        display: none;
+    }
+    
+    .nav-menu {
+        display: flex !important;
+        position: static;
+        flex-direction: row;
+        width: auto;
+        background: transparent;
+        box-shadow: none;
+        padding: 0;
+        left: auto;
+        top: auto;
+    }
+}
+
+/* Large desktop screens (min-width: 1440px) */
+@media (min-width: 1440px) {
+    .container {
+        max-width: 1280px;
+    }
+    
+    .hero-content h1 {
+        font-size: 7rem;
+    }
+    
+    .hero-content p {
+        font-size: 1.5rem;
+    }
+}
+
+/* Print styles */
+@media print {
+    .navbar, .hero-section, .footer {
+        display: none;
+    }
+    
+    .booking-container {
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+    
+    .btn {
+        display: none;
     }
 }

@@ -10,41 +10,31 @@ class BookingConfigurator {
             startDate: null,
             endDate: null,
             guests: 2,
-            destinations: [],
+            destination: '',
             extras: [],
             basePrice: 0,
             extrasTotal: 0,
             totalPrice: 0
         };
 
-        // Package configurations
+        // Package configurations - Updated to 2 options
         this.packages = {
-            DAY_SAIL: {
-                name: 'Day Sail',
-                duration: { min: 1, max: 1 },
-                maxGuests: 8,
-                destinations: ['elba', 'baratti', 'buca_fate'],
-                boarding: '10:00',
-                disembark: '19:00'
-            },
             DAILY_CHARTER: {
                 name: 'Daily Charter',
-                duration: { min: 2, max: 6 },
+                duration: { min: 1, max: 3 },
                 maxGuests: 8,
                 destinations: {
-                    2: ['elba','baratti', 'buca_fate'],
-                    3: ['elba', 'capraia', 'giglio','baratti', 'buca_fate'],
-                    4: ['elba', 'capraia', 'giglio','baratti', 'buca_fate'],
-                    5: ['elba', 'capraia', 'giglio','baratti', 'buca_fate'],
-                    6: ['elba', 'capraia', 'giglio','baratti', 'buca_fate']
+                    1: ['elba','baratti', 'buca_fate'],
+                    2: ['elba', 'capraia', 'baratti', 'buca_fate'],
+                    3: ['elba', 'capraia', 'giglio','baratti', 'buca_fate']
                 },
                 boarding: '11:00',
                 disembark: '18:00'
             },
             WEEKLY_CHARTER: {
-                name: 'Weekly Charter',
-                duration: { min: 7, max: 30 },
-                maxGuests: 6,
+                name: 'Weekly Charter', 
+                duration: { min: 3, max: 30 }, // Minimum 3 nights
+                maxGuests: 8, // Updated to 8 guests
                 destinations: ['elba', 'capraia', 'giglio', 'corsica', 'sardegna','baratti', 'buca_fate'],
                 boarding: '11:00',
                 disembark: '18:00',
@@ -77,6 +67,7 @@ class BookingConfigurator {
         this.initDestinationSelector();
         this.initGuestCounter();
         this.initExtras();
+        this.initCalculateButton();
         this.initSubmitButtons();
         this.loadAvailability();
         this.loadExtras();
@@ -194,53 +185,35 @@ class BookingConfigurator {
 
     // Destination Selector
     initDestinationSelector() {
-        this.renderDestinations();
-    }
-
-    renderDestinations() {
-        const grid = document.getElementById('destinationsGrid');
-        if (!grid) return;
-
-        grid.innerHTML = '';
+        this.renderDestinationDropdown();
         
-        Object.keys(this.destinationNames).forEach(key => {
-            const div = document.createElement('div');
-            div.className = 'destination-option';
-            div.dataset.destination = key;
-            div.textContent = this.destinationNames[key];
-            
-            div.addEventListener('click', () => this.toggleDestination(key));
-            
-            grid.appendChild(div);
+        // Add change listener for dropdown
+        const select = document.getElementById('destinationSelect');
+        select?.addEventListener('change', (e) => {
+            this.state.destination = e.target.value;
         });
     }
 
-    toggleDestination(destination) {
-        const element = document.querySelector(`[data-destination="${destination}"]`);
-        if (!element || element.classList.contains('disabled')) return;
+    renderDestinationDropdown() {
+        const select = document.getElementById('destinationSelect');
+        if (!select) return;
 
-        if (this.state.destinations.includes(destination)) {
-            // Remove destination
-            this.state.destinations = this.state.destinations.filter(d => d !== destination);
-            element.classList.remove('selected');
-        } else {
-            // Add destination
-            this.state.destinations.push(destination);
-            element.classList.add('selected');
-        }
-
-        this.calculatePrice();
+        // Keep the first "Select destination" option
+        select.innerHTML = select.options[0].outerHTML;
+        
+        // Add all destinations
+        Object.keys(this.destinationNames).forEach(key => {
+            const option = document.createElement('option');
+            option.value = key;
+            option.textContent = this.destinationNames[key];
+            select.appendChild(option);
+        });
     }
 
     updateAvailableDestinations() {
         const pkg = this.packages[this.state.packageType];
-        if (!pkg) {
-            // Disable all if no package selected
-            document.querySelectorAll('.destination-option').forEach(el => {
-                el.classList.add('disabled');
-            });
-            return;
-        }
+        const select = document.getElementById('destinationSelect');
+        if (!pkg || !select) return;
 
         const duration = this.calculateDuration();
         let availableDestinations = [];
@@ -251,18 +224,26 @@ class BookingConfigurator {
             availableDestinations = pkg.destinations;
         }
 
-        // Update UI
-        document.querySelectorAll('.destination-option').forEach(el => {
-            const dest = el.dataset.destination;
-            if (availableDestinations.includes(dest)) {
-                el.classList.remove('disabled');
-            } else {
-                el.classList.add('disabled');
-                el.classList.remove('selected');
-                // Remove from state if disabled
-                this.state.destinations = this.state.destinations.filter(d => d !== dest);
+        // Update dropdown options
+        const currentValue = select.value;
+        select.innerHTML = select.options[0].outerHTML; // Keep "Select destination" option
+        
+        // Add only available destinations
+        availableDestinations.forEach(key => {
+            if (this.destinationNames[key]) {
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = this.destinationNames[key];
+                select.appendChild(option);
             }
         });
+        
+        // Restore selection if still available
+        if (availableDestinations.includes(currentValue)) {
+            select.value = currentValue;
+        } else {
+            this.state.destination = '';
+        }
     }
 
     // Guest Counter
@@ -421,6 +402,55 @@ class BookingConfigurator {
         if (totalEl) totalEl.textContent = `€ ${total.toFixed(2)}`;
     }
 
+    // Calculate Button
+    initCalculateButton() {
+        const calculateBtn = document.getElementById('calculateQuote');
+        calculateBtn?.addEventListener('click', () => {
+            if (this.validateFirstStage()) {
+                this.calculateAndShowDetails();
+            }
+        });
+    }
+
+    validateFirstStage() {
+        const errors = [];
+        
+        if (!this.state.packageType) {
+            errors.push('Seleziona un tipo di charter');
+        }
+        
+        if (!this.state.startDate || !this.state.endDate) {
+            errors.push('Seleziona le date');
+        }
+        
+        if (!this.state.destination) {
+            errors.push('Seleziona una destinazione');
+        }
+        
+        if (errors.length > 0) {
+            showMessage(errors.join(', '), 'error');
+            return false;
+        }
+        
+        return true;
+    }
+
+    async calculateAndShowDetails() {
+        // Calculate base price
+        this.calculatePrice();
+        
+        // Show the details section
+        const detailsSection = document.getElementById('booking-details');
+        if (detailsSection) {
+            detailsSection.style.display = 'block';
+            
+            // Smooth scroll to details
+            setTimeout(() => {
+                detailsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+    }
+
     // Submit Buttons
     initSubmitButtons() {
         const emailBtn = document.getElementById('requestEmail');
@@ -473,8 +503,8 @@ class BookingConfigurator {
             return false;
         }
         
-        if (this.state.destinations.length === 0) {
-            showMessage(i18n?.formatMessage('messages.select_destination') || 'Seleziona almeno una destinazione', 'error');
+        if (!this.state.destination) {
+            showMessage(i18n?.formatMessage('messages.select_destination') || 'Seleziona una destinazione', 'error');
             return false;
         }
         
@@ -507,7 +537,7 @@ class BookingConfigurator {
         message += `Pacchetto: ${pkg.name}\n`;
         message += `Date: ${this.state.startDate} - ${this.state.endDate} (${duration} giorni)\n`;
         message += `Ospiti: ${this.state.guests}\n`;
-        message += `Destinazioni: ${this.state.destinations.map(d => this.destinationNames[d]).join(', ')}\n`;
+        message += `Destinazione: ${this.destinationNames[this.state.destination]}\n`;
         
         if (this.state.extras.length > 0) {
             message += `Extra: ${this.state.extras.map(e => e.name_it).join(', ')}\n`;
@@ -528,7 +558,7 @@ class BookingConfigurator {
             startDate: null,
             endDate: null,
             guests: 2,
-            destinations: [],
+            destination: '',
             extras: [],
             basePrice: 0,
             extrasTotal: 0,
@@ -540,7 +570,8 @@ class BookingConfigurator {
         document.getElementById('startDate').value = '';
         document.getElementById('endDate').value = '';
         document.getElementById('guestsCount').value = 2;
-        document.querySelectorAll('.destination-option').forEach(d => d.classList.remove('selected'));
+        const destSelect = document.getElementById('destinationSelect');
+        if (destSelect) destSelect.value = '';
         document.querySelectorAll('#extrasList input[type="checkbox"]').forEach(c => c.checked = false);
         this.updatePriceDisplay(0, 0, 0);
     }

@@ -7,9 +7,9 @@
     "contacts": "Contacts"
   },
   "hero": {
-    "title": "Experience the Sea with Sailing Bizzosa",
+    "title": "Sailing Bizzosa",
     "subtitle": "Exclusive charter and sailing experiences in the Tyrrhenian Sea",
-    "cta": "Plan Your Adventure"
+    "cta": "Book Now"
   },
   "about": {
     "title": "About Us",
@@ -45,15 +45,15 @@
     },
     "daily_charter": {
       "title": "Daily Charter",
-      "desc": "2-6 days sailing",
+      "desc": "1 to 3 days sailing",
       "guests": "Max 8 guests",
       "crew": "Crew included"
     },
     "weekly_charter": {
       "title": "Weekly Charter",
-      "desc": "7+ days cruise",
-      "guests": "Max 6 guests",
-      "discount": "20% discount"
+      "desc": "Minimum 3 nights cruise",
+      "guests": "Max 8 guests",
+      "discount": "Special rates for full weeks"
     },
     "start_date": "Departure Date",
     "end_date": "Return Date",

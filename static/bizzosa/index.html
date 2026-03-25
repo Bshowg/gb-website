@@ -6,6 +6,12 @@
     <meta name="description" content="Sailing Bizzosa - Noleggio barche a vela e charter nel Mar Tirreno">
     <title>Sailing Bizzosa - Charter & Sailing Experience</title>
     
+        <!--Fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Monsieur+La+Doulaise&family=Pinyon+Script&family=Poiret+One&family=Roboto:ital,wght@0,100..900;1,100..900&family=Sacramento&family=Spectral:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=Monsieur+La+Doulaise&family=Pinyon+Script&family=Poiret+One&family=Roboto:ital,wght@0,100..900;1,100..900&family=Sacramento&family=Spectral:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
+
     <!-- CSS Files -->
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/responsive.css">
@@ -60,9 +66,9 @@
             <div class="video-overlay"></div>
         </div>
         <div class="hero-content">
-            <h1 data-i18n-key="hero.title">Vivi il Mare con Sailing Bizzosa</h1>
+            <h1 data-i18n-key="hero.title">Sailing Bizzosa</h1>
             <p data-i18n-key="hero.subtitle">Charter esclusivo e esperienze di navigazione nel Mar Tirreno</p>
-            <!--<a href="#plan" class="cta-button" data-i18n-key="hero.cta">Pianifica la Tua Avventura</a>-->
+            <a href="#plan" class="cta-button" data-i18n-key="hero.cta">Prenota Ora</a>
         </div>
     </section>
 
@@ -110,47 +116,23 @@
         </div>
     </section>
 
-    <!-- Plan Your Sail Section -->
-    <section id="plan" class="plan-section">
-        <div class="container">
+    <!-- Booking Section - Part 1 -->
+    <section id="plan" class="booking-section-hero">
+        <div class="booking-form-container">
             <h2 data-i18n-key="plan.title">Pianifica la Tua Traversata</h2>
             
-            <div class="boat-description">
-                <p data-i18n-key="plan.boat_description">
-                    Bizzosa è un Grand Soleil di 46.3 piedi con scafo in vetroresina, interni interamente rivestiti in legno e coperta in teak originale del Cantiere del Pardo trattato ogni anno con amore. 
-                    La barca, provvista di ombreggianti esterni è armata con Fiocco e Randa da vela sportiva con una mano di terzaroli. 
-                    Sotto coperta, tre cabine matrimoniali di cui una armatoriale molto ampia, due bagni con scarico a pompa e ampia dinette con cucina completa e zona carteggio.
-                </p>
-            </div>
-            
-            <div class="configurator">
+            <div class="booking-form">
                 <!-- Package Selector -->
-                <div class="form-group package-selector">
-                    <label data-i18n-key="plan.package">Scegli il Pacchetto</label>
+                <div class="form-group">
+                    <label data-i18n-key="plan.package">Tipo di Charter</label>
                     <div class="package-options">
-                        <div class="package-card" data-package="DAY_SAIL">
-                            <h3 data-i18n-key="plan.day_sail.title">Day Sail</h3>
-                            <p data-i18n-key="plan.day_sail.desc">Giornata in barca (10:00 - 19:00)</p>
-                            <ul>
-                                <li data-i18n-key="plan.day_sail.guests">Max 8 ospiti</li>
-                                <li data-i18n-key="plan.day_sail.crew">Equipaggio incluso</li>
-                            </ul>
-                        </div>
                         <div class="package-card" data-package="DAILY_CHARTER">
                             <h3 data-i18n-key="plan.daily_charter.title">Daily Charter</h3>
-                            <p data-i18n-key="plan.daily_charter.desc">2-6 giorni di navigazione</p>
-                            <ul>
-                                <li data-i18n-key="plan.daily_charter.guests">Max 8 ospiti</li>
-                                <li data-i18n-key="plan.daily_charter.crew">Equipaggio incluso</li>
-                            </ul>
+                            <p data-i18n-key="plan.daily_charter.desc">Da 1 a 3 giorni</p>
                         </div>
                         <div class="package-card" data-package="WEEKLY_CHARTER">
                             <h3 data-i18n-key="plan.weekly_charter.title">Weekly Charter</h3>
-                            <p data-i18n-key="plan.weekly_charter.desc">7+ giorni di crociera</p>
-                            <ul>
-                                <li data-i18n-key="plan.weekly_charter.guests">Max 6 ospiti</li>
-                                <li data-i18n-key="plan.weekly_charter.discount">Sconto 20%</li>
-                            </ul>
+                            <p data-i18n-key="plan.weekly_charter.desc">Minimo 3 notti</p>
                         </div>
                     </div>
                 </div>
@@ -167,14 +149,6 @@
                     </div>
                 </div>
 
-                <!-- Destinations -->
-                <div class="form-group">
-                    <label data-i18n-key="plan.destinations">Destinazioni</label>
-                    <div class="destinations-grid" id="destinationsGrid">
-                        <!-- Will be populated dynamically -->
-                    </div>
-                </div>
-
                 <!-- Guests -->
                 <div class="form-group">
                     <label for="guestsCount" data-i18n-key="plan.guests">Numero Ospiti</label>
@@ -185,51 +159,79 @@
                     </div>
                 </div>
 
-                <!-- Extras -->
+                <!-- Destinations Dropdown -->
                 <div class="form-group">
-                    <label data-i18n-key="plan.extras">Servizi Extra</label>
-                    <div class="extras-list" id="extrasList">
-                        <!-- Will be populated from API -->
-                    </div>
+                    <label for="destinationSelect" data-i18n-key="plan.destination">Destinazione</label>
+                    <select id="destinationSelect" class="destination-select">
+                        <option value="" data-i18n-key="plan.select_destination">Seleziona destinazione</option>
+                        <!-- Will be populated dynamically -->
+                    </select>
                 </div>
 
-                <!-- Price Summary -->
-                <div class="price-summary">
-                    <h3 data-i18n-key="plan.summary">Riepilogo Preventivo</h3>
-                    <div class="price-details">
-                        <div class="price-line">
-                            <span data-i18n-key="plan.base_price">Prezzo Base</span>
-                            <span id="basePrice">€ 0</span>
-                        </div>
-                        <div class="price-line">
-                            <span data-i18n-key="plan.extras_total">Servizi Extra</span>
-                            <span id="extrasTotal">€ 0</span>
-                        </div>
-                        <div class="price-line total">
-                            <span data-i18n-key="plan.total">Totale</span>
-                            <span id="totalPrice">€ 0</span>
-                        </div>
+                <!-- Calculate Button -->
+                <button type="button" class="btn-calculate" id="calculateQuote" data-i18n-key="plan.calculate">
+                    Calcola Preventivo
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Section - Part 2 (Hidden initially) -->
+    <section id="booking-details" class="booking-details-section" style="display: none;">
+        <div class="container">
+            <div class="boat-description">
+                <h3 data-i18n-key="plan.boat_title">La Barca</h3>
+                <p data-i18n-key="plan.boat_description">
+                    Bizzosa è un Grand Soleil di 46.3 piedi con scafo in vetroresina, interni interamente rivestiti in legno e coperta in teak originale del Cantiere del Pardo trattato ogni anno con amore. 
+                    La barca, provvista di ombreggianti esterni è armata con Fiocco e Randa da vela sportiva con una mano di terzaroli. 
+                    Sotto coperta, tre cabine matrimoniali di cui una armatoriale molto ampia, due bagni con scarico a pompa e ampia dinette con cucina completa e zona carteggio.
+                </p>
+            </div>
+
+            <!-- Price Summary -->
+            <div class="price-summary">
+                <h3 data-i18n-key="plan.summary">Riepilogo Preventivo</h3>
+                <div class="price-details">
+                    <div class="price-line">
+                        <span data-i18n-key="plan.base_price">Prezzo Base</span>
+                        <span id="basePrice">€ 0</span>
+                    </div>
+                    <div class="price-line">
+                        <span data-i18n-key="plan.extras_total">Servizi Extra</span>
+                        <span id="extrasTotal">€ 0</span>
+                    </div>
+                    <div class="price-line total">
+                        <span data-i18n-key="plan.total">Totale</span>
+                        <span id="totalPrice">€ 0</span>
                     </div>
                 </div>
+            </div>
 
-                <!-- Submit Buttons -->
-                <div class="submit-buttons">
-                    <button type="button" class="btn-email" id="requestEmail" data-i18n-key="plan.request_email">
-                        Richiedi Preventivo via Email
-                    </button>
-                    <button type="button" class="btn-whatsapp" id="requestWhatsApp" data-i18n-key="plan.request_whatsapp">
-                        Richiedi via WhatsApp
-                    </button>
+            <!-- Extras -->
+            <div class="extras-section">
+                <h3 data-i18n-key="plan.extras">Servizi Extra</h3>
+                <div class="extras-list" id="extrasList">
+                    <!-- Will be populated from API -->
                 </div>
+            </div>
 
-                <!-- Email Modal -->
-                <div class="modal" id="emailModal">
-                    <div class="modal-content">
-                        <span class="close">&times;</span>
-                        <h3 data-i18n-key="plan.email_title">Inserisci la tua Email</h3>
-                        <input type="email" id="customerEmail" placeholder="tua@email.com">
-                        <button type="button" id="submitEmail" data-i18n-key="plan.submit">Invia Richiesta</button>
-                    </div>
+            <!-- Submit Buttons -->
+            <div class="submit-buttons">
+                <button type="button" class="btn-email" id="requestEmail" data-i18n-key="plan.request_email">
+                    Richiedi Preventivo via Email
+                </button>
+                <button type="button" class="btn-whatsapp" id="requestWhatsApp" data-i18n-key="plan.request_whatsapp">
+                    Richiedi via WhatsApp
+                </button>
+            </div>
+
+            <!-- Email Modal -->
+            <div class="modal" id="emailModal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h3 data-i18n-key="plan.email_title">Inserisci la tua Email</h3>
+                    <input type="email" id="customerEmail" placeholder="tua@email.com">
+                    <button type="button" id="submitEmail" data-i18n-key="plan.submit">Invia Richiesta</button>
                 </div>
             </div>
         </div>

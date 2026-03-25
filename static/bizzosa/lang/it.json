@@ -7,9 +7,9 @@
     "contacts": "Contatti"
   },
   "hero": {
-    "title": "Vivi il Mare con Sailing Bizzosa",
+    "title": "Sailing Bizzosa",
     "subtitle": "Charter esclusivo e esperienze di navigazione nel Mar Tirreno",
-    "cta": "Pianifica la Tua Avventura"
+    "cta": "Prenota Ora"
   },
   "about": {
     "title": "Chi Siamo",
@@ -45,15 +45,15 @@
     },
     "daily_charter": {
       "title": "Daily Charter",
-      "desc": "2-6 giorni di navigazione",
+      "desc": "Da 1 a 3 giorni di navigazione",
       "guests": "Max 8 ospiti",
       "crew": "Equipaggio incluso"
     },
     "weekly_charter": {
       "title": "Weekly Charter",
-      "desc": "7+ giorni di crociera",
-      "guests": "Max 6 ospiti",
-      "discount": "Sconto 20%"
+      "desc": "Minimo 3 notti di crociera",
+      "guests": "Max 8 ospiti",
+      "discount": "Tariffe speciali per settimane intere"
     },
     "start_date": "Data Partenza",
     "end_date": "Data Ritorno",

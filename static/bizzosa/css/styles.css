@@ -18,6 +18,10 @@
     --shadow-md: 0 4px 8px rgba(0,0,0,0.15);
     --shadow-lg: 0 8px 16px rgba(0,0,0,0.2);
     --transition: all 0.3s ease;
+    
+    /* Font families */
+    --font-heading: 'Pinyon Script', cursive;
+    --font-body: 'Libre Caslon Display', serif;
 }
 
 /* Reset & Base */
@@ -32,7 +36,7 @@ html {
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-family: var(--font-body);
     font-size: 16px;
     line-height: 1.6;
     color: var(--text-dark);
@@ -49,7 +53,8 @@ body {
 
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
-    font-weight: 600;
+    font-family: var(--font-body);
+    font-weight: 400;
     line-height: 1.2;
     margin-bottom: 1rem;
 }
@@ -94,6 +99,11 @@ a:hover {
     transform: translateY(0);
 }
 
+.navbar.scrolled {
+    background: rgba(255, 255, 255, 1);
+    box-shadow: var(--shadow-md);
+}
+
 .navbar .container {
     display: flex;
     justify-content: space-between;
@@ -102,9 +112,11 @@ a:hover {
 }
 
 .nav-brand a {
-    font-size: 1.5rem;
-    font-weight: bold;
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 400;
     color: var(--primary-color);
+    letter-spacing: 1px;
 }
 
 .nav-menu {
@@ -232,9 +244,13 @@ a:hover {
 }
 
 .hero-content h1 {
-    font-size: 3rem;
+    font-family: var(--font-heading);
+    font-size: 7rem;
+    font-weight: 400;
     margin-bottom: 1.5rem;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    letter-spacing: 2px;
+    line-height: 1;
 }
 
 .hero-content p {
@@ -422,9 +438,122 @@ section h2 {
     margin-bottom: 1rem;
 }
 
-/* Plan Section */
-.plan-section {
-    background: var(--bg-white);
+/* Booking Section - Hero with Background */
+.booking-section-hero {
+    min-height: 100vh;
+    background-image: url('../images/booking/imagebooking.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 4rem 0;
+}
+
+.booking-section-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(30, 58, 95, 0.5);
+    z-index: 1;
+}
+
+.booking-form-container {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    width: 90%;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 3rem;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.booking-form-container h2 {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+    font-size: 2.5rem;
+    font-family: var(--font-body);
+}
+
+.booking-form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* Destination Dropdown */
+.destination-select {
+    width: 100%;
+    padding: 0.875rem;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.destination-select:hover {
+    border-color: var(--secondary-color);
+}
+
+.destination-select:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+}
+
+/* Destination Dropdown */
+.destination-select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: var(--font-body);
+    background: white;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+.destination-select:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+}
+
+/* Calculate Button */
+.btn-calculate {
+    padding: 1.25rem 2.5rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.25rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+    margin-top: 1rem;
+    width: 100%;
+}
+
+.btn-calculate:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4);
+}
+
+/* Booking Details Section */
+.booking-details-section {
+    padding: 4rem 0;
+    background: var(--bg-light);
 }
 
 .boat-description {
@@ -467,8 +596,10 @@ section h2 {
 /* Package Cards */
 .package-options {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 .package-card {
@@ -510,17 +641,17 @@ section h2 {
 /* Date Inputs */
 .date-input {
     width: 100%;
-    padding: 0.75rem;
-    border: 1px solid var(--border-color);
-    border-radius: 5px;
-    font-size: 1rem;
+    padding: 0.6rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 0.9rem;
     transition: var(--transition);
 }
 
 .date-input:focus {
     outline: none;
     border-color: var(--secondary-color);
-    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.1);
 }
 
 /* Destinations Grid */
@@ -558,33 +689,38 @@ section h2 {
 .guest-counter {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    max-width: 200px;
+    gap: 0.65rem;
+    max-width: 160px;
 }
 
 .counter-btn {
-    width: 40px;
-    height: 40px;
-    border: 1px solid var(--border-color);
-    background: var(--bg-white);
-    border-radius: 5px;
+    width: 32px;
+    height: 32px;
+    border: 2px solid var(--primary-color);
+    background: white;
+    border-radius: 50%;
     cursor: pointer;
-    font-size: 1.25rem;
+    font-size: 1rem;
     transition: var(--transition);
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .counter-btn:hover {
-    background: var(--secondary-color);
+    background: var(--primary-color);
     color: white;
-    border-color: var(--secondary-color);
 }
 
 #guestsCount {
-    flex: 1;
+    width: 45px;
     text-align: center;
-    padding: 0.5rem;
-    border: 1px solid var(--border-color);
-    border-radius: 5px;
+    padding: 0.35rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    background: white;
 }
 
 /* Extras List */
