@@ -279,6 +279,29 @@ class BookingConfigurator {
         
         return days;
     }
+    
+    getSeasonalPrice(date) {
+        // Use default seasonal prices if available from API
+        if (this.defaultPrices) {
+            const month = date.getMonth() + 1; // 1-12
+            
+            // High season: June-August (6-8)
+            if (month >= 6 && month <= 8) {
+                return this.defaultPrices.high_season || 800;
+            }
+            // Mid season: May, September (5, 9)
+            else if (month === 5 || month === 9) {
+                return this.defaultPrices.mid_season || 700;
+            }
+            // Low season: October-April (10-4)
+            else {
+                return this.defaultPrices.low_season || 600;
+            }
+        }
+        
+        // Final fallback
+        return 700;
+    }
 
     // Destination Selector
     initDestinationSelector() {
@@ -442,9 +465,22 @@ class BookingConfigurator {
             
             const data = await response.json();
             
-            if (data.success && data.data.blocked_dates) {
-                this.blockedDates = data.data.blocked_dates;
-                this.updateDatePickersWithBlockedDates();
+            if (data.success) {
+                // Store blocked dates
+                if (data.data.blocked_dates) {
+                    this.blockedDates = data.data.blocked_dates;
+                    this.updateDatePickersWithBlockedDates();
+                }
+                
+                // Store daily prices map for price calculation
+                if (data.data.daily_prices) {
+                    this.dailyPricesMap = data.data.daily_prices;
+                }
+                
+                // Store default prices as fallback
+                if (data.data.default_prices) {
+                    this.defaultPrices = data.data.default_prices;
+                }
             }
         } catch (error) {
             console.error('Error loading availability:', error);
@@ -514,6 +550,24 @@ class BookingConfigurator {
         return this.blockedDatesSet.has(date);
     }
     
+    isAnyDateInRangeBlocked(startDate, endDate) {
+        if (!this.blockedDatesSet || !startDate || !endDate) return false;
+        
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        const current = new Date(start);
+        
+        while (current <= end) {
+            const dateStr = current.toISOString().split('T')[0];
+            if (this.blockedDatesSet.has(dateStr)) {
+                return true;
+            }
+            current.setDate(current.getDate() + 1);
+        }
+        
+        return false;
+    }
+    
     isDateRangeAvailable(startDate, endDate) {
         if (!this.blockedDatesSet || !startDate || !endDate) return true;
         
@@ -580,7 +634,7 @@ class BookingConfigurator {
         return blocked;
     }
     
-    showBlockedDatesCalendar(inputId) {
+    showBlockedDatesCalendar(inputId, monthOffset = 0) {
         // Remove existing calendar if any
         this.hideBlockedDatesCalendar();
         
@@ -589,6 +643,7 @@ class BookingConfigurator {
         
         // Store which input is active
         this.activeCalendarInput = inputId;
+        this.currentMonthOffset = monthOffset;
         
         // Create mini calendar showing next 2 months with blocked dates highlighted
         const calendar = document.createElement('div');
@@ -598,17 +653,51 @@ class BookingConfigurator {
         const today = new Date();
         const monthsToShow = window.innerWidth <= 768 ? 1 : 2; // Show 1 month on mobile
         
+        // Calculate valid date range for end date based on package
+        let minEndDate = null;
+        let maxEndDate = null;
+        if (inputId === 'endDate' && this.state.packageType && this.state.startDate) {
+            const pkg = this.packages[this.state.packageType];
+            const startDate = new Date(this.state.startDate);
+            minEndDate = new Date(startDate);
+            maxEndDate = new Date(startDate);
+            minEndDate.setDate(minEndDate.getDate() + pkg.duration.min - 1);
+            maxEndDate.setDate(maxEndDate.getDate() + pkg.duration.max - 1);
+        }
+        
         let calendarHTML = `
             <div class="calendar-header">
                 <span class="calendar-title">${this.currentLang === 'it' ? 'Seleziona data' : 'Select date'}</span>
                 <button class="calendar-close">&times;</button>
             </div>
+            <div class="calendar-nav">
+                <button class="calendar-nav-prev" ${monthOffset === 0 ? 'disabled' : ''}>&lt;</button>
+                <span class="calendar-nav-current"></span>
+                <button class="calendar-nav-next">&gt;</button>
+            </div>
         `;
+        
+        // Show package constraints info for end date
+        if (inputId === 'endDate' && this.state.packageType && this.state.startDate) {
+            const pkg = this.packages[this.state.packageType];
+            calendarHTML += `
+                <div class="calendar-info">
+                    ${this.currentLang === 'it' ? 
+                        `${pkg.name}: ${pkg.duration.min} - ${pkg.duration.max} giorni` : 
+                        `${pkg.name}: ${pkg.duration.min} - ${pkg.duration.max} days`}
+                </div>
+            `;
+        }
+        
         calendarHTML += '<div class="calendar-months">';
         
+        // Store month names for navigation display
+        let monthNames = [];
+        
         for (let m = 0; m < monthsToShow; m++) {
-            const monthDate = new Date(today.getFullYear(), today.getMonth() + m, 1);
+            const monthDate = new Date(today.getFullYear(), today.getMonth() + monthOffset + m, 1);
             const monthName = monthDate.toLocaleDateString(this.currentLang, { month: 'long', year: 'numeric' });
+            monthNames.push(monthName);
             
             calendarHTML += `<div class="calendar-month">`;
             calendarHTML += `<div class="calendar-month-header">${monthName}</div>`;
@@ -634,25 +723,50 @@ class BookingConfigurator {
             const daysInMonth = new Date(monthDate.getFullYear(), monthDate.getMonth() + 1, 0).getDate();
             for (let day = 1; day <= daysInMonth; day++) {
                 const dateStr = `${monthDate.getFullYear()}-${String(monthDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const dateObj = new Date(dateStr);
                 const isBlocked = this.blockedDatesSet && this.blockedDatesSet.has(dateStr);
-                const isPast = new Date(dateStr) < new Date(today.toISOString().split('T')[0]);
+                const isPast = dateObj < new Date(today.toISOString().split('T')[0]);
+                
+                let isSelectable = !isBlocked && !isPast;
+                let isOutOfRange = false;
+                
+                // For end date, check if it's within the valid range based on package
+                if (inputId === 'endDate' && minEndDate && maxEndDate) {
+                    if (dateObj < minEndDate || dateObj > maxEndDate) {
+                        isSelectable = false;
+                        isOutOfRange = true;
+                    }
+                }
+                
+                // For start date, if package is selected, check minimum availability
+                if (inputId === 'startDate' && this.state.packageType) {
+                    const pkg = this.packages[this.state.packageType];
+                    // Check if minimum duration is available from this date
+                    if (!isPast && !isBlocked) {
+                        const testEndDate = new Date(dateStr);
+                        testEndDate.setDate(testEndDate.getDate() + pkg.duration.min - 1);
+                        // Check if any date in the minimum range is blocked
+                        const rangeBlocked = this.isAnyDateInRangeBlocked(dateStr, testEndDate.toISOString().split('T')[0]);
+                        if (rangeBlocked) {
+                            isSelectable = false;
+                            isOutOfRange = true;
+                        }
+                    }
+                }
                 
                 let className = 'calendar-day';
                 if (isBlocked) className += ' blocked';
                 if (isPast) className += ' past';
+                if (isOutOfRange) className += ' out-of-range';
                 if (dateStr === this.state.startDate || dateStr === this.state.endDate) className += ' selected';
                 
-                calendarHTML += `<div class="${className}" data-date="${dateStr}" data-selectable="${!isBlocked && !isPast}">${day}</div>`;
+                calendarHTML += `<div class="${className}" data-date="${dateStr}" data-selectable="${isSelectable}">${day}</div>`;
             }
             
             calendarHTML += `</div></div>`;
         }
         
         calendarHTML += '</div>';
-        calendarHTML += `<div class="calendar-legend">
-            <span class="legend-item"><span class="legend-box blocked"></span>${this.currentLang === 'it' ? 'Non disponibile' : 'Unavailable'}</span>
-            <span class="legend-item"><span class="legend-box available"></span>${this.currentLang === 'it' ? 'Disponibile' : 'Available'}</span>
-        </div>`;
         
         calendar.innerHTML = calendarHTML;
         
@@ -690,9 +804,29 @@ class BookingConfigurator {
         
         document.body.appendChild(calendar);
         
+        // Update navigation current month display
+        const navCurrent = calendar.querySelector('.calendar-nav-current');
+        if (navCurrent) {
+            navCurrent.textContent = monthNames.join(' - ');
+        }
+        
         // Add event listeners
         calendar.querySelector('.calendar-close')?.addEventListener('click', () => {
             this.hideBlockedDatesCalendar();
+        });
+        
+        // Add navigation event listeners
+        calendar.querySelector('.calendar-nav-prev')?.addEventListener('click', () => {
+            if (monthOffset > 0) {
+                this.showBlockedDatesCalendar(inputId, monthOffset - 1);
+            }
+        });
+        
+        calendar.querySelector('.calendar-nav-next')?.addEventListener('click', () => {
+            // Allow up to 12 months in the future
+            if (monthOffset < 11) {
+                this.showBlockedDatesCalendar(inputId, monthOffset + 1);
+            }
         });
         
         // Add click handlers to selectable dates
@@ -761,18 +895,39 @@ class BookingConfigurator {
 
         const days = this.calculateDuration();
         
-        // Mock daily prices (will be from database)
-        const dailyPrices = {
-            DAY_SAIL: 800,
-            DAILY_CHARTER: 1200,
-            WEEKLY_CHARTER: 1000
-        };
-
-        let basePrice = dailyPrices[this.state.packageType] * days;
+        // Calculate base price using actual daily prices from API
+        let basePrice = 0;
         
-        // Apply weekly charter discount
-        if (this.state.packageType === 'WEEKLY_CHARTER') {
-            basePrice = basePrice * 0.8; // 20% discount
+        if (this.dailyPricesMap && Object.keys(this.dailyPricesMap).length > 0) {
+            // Use actual daily prices from database
+            const start = new Date(this.state.startDate);
+            const end = new Date(this.state.endDate);
+            const current = new Date(start);
+            
+            while (current <= end) {
+                const dateStr = current.toISOString().split('T')[0];
+                if (this.dailyPricesMap[dateStr]) {
+                    // Use specific price for this date
+                    basePrice += parseFloat(this.dailyPricesMap[dateStr]);
+                } else {
+                    // Fall back to seasonal default if no specific price
+                    basePrice += this.getSeasonalPrice(current);
+                }
+                current.setDate(current.getDate() + 1);
+            }
+        } else {
+            // Fallback to default pricing if no API data
+            const defaultPrices = {
+                DAILY_CHARTER: 700,
+                WEEKLY_CHARTER: 600
+            };
+            
+            basePrice = (defaultPrices[this.state.packageType] || 700) * days;
+            
+            // Apply weekly charter discount if applicable
+            if (this.state.packageType === 'WEEKLY_CHARTER' && days >= 7) {
+                basePrice = basePrice * 0.8; // 20% discount
+            }
         }
 
         // Calculate extras
