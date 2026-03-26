@@ -67,7 +67,7 @@ try {
     ]);
     
     // Get daily prices for the period (using intervals)
-    $sql = "SELECT start_date, end_date, price_per_day 
+    $sql = "SELECT start_date, end_date, price 
             FROM daily_prices 
             WHERE end_date >= :start_date 
             AND start_date <= :end_date
@@ -84,7 +84,7 @@ try {
         foreach ($dailyPrices as $priceInterval) {
             $current = new DateTime($priceInterval['start_date']);
             $end = new DateTime($priceInterval['end_date']);
-            $price = floatval($priceInterval['price_per_day']);
+            $price = floatval($priceInterval['price']);
             
             while ($current <= $end) {
                 $dateStr = $current->format('Y-m-d');
