@@ -876,6 +876,9 @@ class BookingConfigurator {
         const input = document.getElementById(this.activeCalendarInput);
         if (!input) return;
         
+        // Hide calendar immediately after selection
+        this.hideBlockedDatesCalendar();
+        
         // Format date for display
         const date = new Date(dateStr);
         const formattedDate = date.toLocaleDateString(this.currentLang, { 
@@ -923,9 +926,6 @@ class BookingConfigurator {
             this.calculatePrice();
             this.validateDateRange();
         }
-        
-        // Hide calendar after selection
-        this.hideBlockedDatesCalendar();
     }
 
     // Price Calculation
