@@ -120,7 +120,21 @@ try {
         $result = $db->insert('bookings', $bookingData);
         
         if (!$result) {
-            throw new Exception('Failed to create booking');
+            // Get detailed error information
+            $errorInfo = $db->errorInfo();
+            $errorMessage = 'Failed to create booking. ';
+            
+            if (isset($errorInfo[2])) {
+                $errorMessage .= 'Database error: ' . $errorInfo[2];
+            }
+            
+                $errorMessage .= ' | Data: ' . json_encode($bookingData);
+                $errorMessage .= ' | PDO Error Code: ' . ($errorInfo[0] ?? 'unknown');
+                $errorMessage .= ' | Driver Error Code: ' . ($errorInfo[1] ?? 'unknown');
+
+            
+            error_log("Booking insert failed: " . $errorMessage);
+            throw new Exception($errorMessage);
         }
         
         // Commit transaction
