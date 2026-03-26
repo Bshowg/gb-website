@@ -66,21 +66,32 @@ try {
         'end_date' => $endDate
     ]);
     
-    // Get daily prices for the period
-    $sql = "SELECT date, price 
+    // Get daily prices for the period (using intervals)
+    $sql = "SELECT start_date, end_date, price_per_day 
             FROM daily_prices 
-            WHERE date BETWEEN :start_date AND :end_date
-            ORDER BY date";
+            WHERE end_date >= :start_date 
+            AND start_date <= :end_date
+            ORDER BY start_date";
     
     $dailyPrices = $db->select($sql, [
         'start_date' => $startDate,
         'end_date' => $endDate
     ]);
     
-    // Format daily prices as key-value pairs
+    // Format daily prices as key-value pairs for each date in the intervals
     $pricesMap = [];
-    foreach ($dailyPrices as $price) {
-        $pricesMap[$price['date']] = floatval($price['price']);
+    if ($dailyPrices && is_array($dailyPrices)) {
+        foreach ($dailyPrices as $priceInterval) {
+            $current = new DateTime($priceInterval['start_date']);
+            $end = new DateTime($priceInterval['end_date']);
+            $price = floatval($priceInterval['price_per_day']);
+            
+            while ($current <= $end) {
+                $dateStr = $current->format('Y-m-d');
+                $pricesMap[$dateStr] = $price;
+                $current->modify('+1 day');
+            }
+        }
     }
     
     // Get current season pricing (if no specific daily prices)
@@ -93,33 +104,37 @@ try {
     // Combine all blocked dates
     $allBlockedDates = [];
     
-    foreach ($blockedPeriods as $period) {
-        $current = new DateTime($period['start_date']);
-        $end = new DateTime($period['end_date']);
-        
-        while ($current <= $end) {
-            $allBlockedDates[] = $current->format('Y-m-d');
-            $current->modify('+1 day');
+    if ($blockedPeriods && is_array($blockedPeriods)) {
+        foreach ($blockedPeriods as $period) {
+            $current = new DateTime($period['start_date']);
+            $end = new DateTime($period['end_date']);
+            
+            while ($current <= $end) {
+                $allBlockedDates[] = $current->format('Y-m-d');
+                $current->modify('+1 day');
+            }
         }
     }
     
-    foreach ($bookings as $booking) {
-        $current = new DateTime($booking['start_date']);
-        $end = new DateTime($booking['end_date']);
-        
-        while ($current <= $end) {
-            $dateStr = $current->format('Y-m-d');
-            if (!in_array($dateStr, $allBlockedDates)) {
-                $allBlockedDates[] = $dateStr;
+    if ($bookings && is_array($bookings)) {
+        foreach ($bookings as $booking) {
+            $current = new DateTime($booking['start_date']);
+            $end = new DateTime($booking['end_date']);
+            
+            while ($current <= $end) {
+                $dateStr = $current->format('Y-m-d');
+                if (!in_array($dateStr, $allBlockedDates)) {
+                    $allBlockedDates[] = $dateStr;
+                }
+                $current->modify('+1 day');
             }
-            $current->modify('+1 day');
         }
     }
     
     // Return response
     successResponse([
-        'blocked_periods' => $blockedPeriods,
-        'bookings' => $bookings,
+        'blocked_periods' => $blockedPeriods ?: [],
+        'bookings' => $bookings ?: [],
         'blocked_dates' => array_unique($allBlockedDates),
         'daily_prices' => $pricesMap,
         'default_prices' => $defaultPrices,

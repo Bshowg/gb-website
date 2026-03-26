@@ -792,7 +792,7 @@ class BookingConfigurator {
             const duration = this.calculateDuration();
             
             let message = `Richiesta Preventivo Sailing Bizzosa\n\n`;
-            message += details
+            message += details ? `${details}\n\n` : '';
             message += `Pacchetto: ${pkg.name}\n`;
             message += `Date: ${this.state.startDate} - ${this.state.endDate} (${duration} giorni)\n`;
             message += `Ospiti: ${this.state.guests}\n`;
