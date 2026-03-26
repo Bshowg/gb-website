@@ -176,6 +176,14 @@ class BookingConfigurator {
         if (startDate) startDate.min = today;
         if (endDate) endDate.min = today;
 
+        startDate?.addEventListener('focus', () => {
+            this.showBlockedDatesCalendar('startDate');
+        });
+        
+        startDate?.addEventListener('blur', () => {
+            setTimeout(() => this.hideBlockedDatesCalendar(), 200);
+        });
+        
         startDate?.addEventListener('change', (e) => {
             const selectedDate = e.target.value;
             
@@ -197,6 +205,14 @@ class BookingConfigurator {
             this.validateDateRange();
         });
 
+        endDate?.addEventListener('focus', () => {
+            this.showBlockedDatesCalendar('endDate');
+        });
+        
+        endDate?.addEventListener('blur', () => {
+            setTimeout(() => this.hideBlockedDatesCalendar(), 200);
+        });
+        
         endDate?.addEventListener('change', (e) => {
             const selectedDate = e.target.value;
             
@@ -437,8 +453,52 @@ class BookingConfigurator {
         // Store blocked dates for validation
         this.blockedDatesSet = new Set(this.blockedDates || []);
         
-        // Add visual indicator for blocked dates (if using a date picker library)
-        // For now, we'll validate on selection
+        // Create a visual calendar overlay showing blocked dates
+        this.addBlockedDatesDisplay();
+        
+        // Add data attributes for CSS styling (limited with native date input)
+        startDateInput.setAttribute('data-blocked-dates', JSON.stringify(this.blockedDates || []));
+        endDateInput.setAttribute('data-blocked-dates', JSON.stringify(this.blockedDates || []));
+    }
+    
+    addBlockedDatesDisplay() {
+        // Add a small info text showing number of blocked dates in the next 30 days
+        const dateContainer = document.querySelector('.date-inputs');
+        if (!dateContainer) return;
+        
+        // Remove existing info if any
+        const existingInfo = document.getElementById('blocked-dates-info');
+        if (existingInfo) existingInfo.remove();
+        
+        // Count blocked dates in next 30 days
+        const today = new Date();
+        const thirtyDaysFromNow = new Date();
+        thirtyDaysFromNow.setDate(today.getDate() + 30);
+        
+        let blockedInNextMonth = 0;
+        if (this.blockedDatesSet) {
+            this.blockedDatesSet.forEach(dateStr => {
+                const date = new Date(dateStr);
+                if (date >= today && date <= thirtyDaysFromNow) {
+                    blockedInNextMonth++;
+                }
+            });
+        }
+        
+        if (blockedInNextMonth > 0) {
+            const info = document.createElement('div');
+            info.id = 'blocked-dates-info';
+            info.className = 'blocked-dates-info';
+            info.innerHTML = `
+                <small class="text-muted">
+                    <i class="fas fa-info-circle"></i>
+                    ${this.currentLang === 'it' ? 
+                        `${blockedInNextMonth} date non disponibili nei prossimi 30 giorni` : 
+                        `${blockedInNextMonth} dates unavailable in the next 30 days`}
+                </small>
+            `;
+            dateContainer.appendChild(info);
+        }
     }
     
     isDateBlocked(date) {
@@ -510,6 +570,90 @@ class BookingConfigurator {
         }
         
         return blocked;
+    }
+    
+    showBlockedDatesCalendar(inputId) {
+        // Remove existing calendar if any
+        this.hideBlockedDatesCalendar();
+        
+        const input = document.getElementById(inputId);
+        if (!input) return;
+        
+        // Create mini calendar showing next 2 months with blocked dates highlighted
+        const calendar = document.createElement('div');
+        calendar.id = 'blocked-dates-calendar';
+        calendar.className = 'blocked-dates-calendar';
+        
+        const today = new Date();
+        const monthsToShow = 2;
+        
+        let calendarHTML = '<div class="calendar-months">';
+        
+        for (let m = 0; m < monthsToShow; m++) {
+            const monthDate = new Date(today.getFullYear(), today.getMonth() + m, 1);
+            const monthName = monthDate.toLocaleDateString(this.currentLang, { month: 'long', year: 'numeric' });
+            
+            calendarHTML += `<div class="calendar-month">`;
+            calendarHTML += `<div class="calendar-month-header">${monthName}</div>`;
+            calendarHTML += `<div class="calendar-grid">`;
+            
+            // Add day headers
+            const dayHeaders = this.currentLang === 'it' ? 
+                ['L', 'M', 'M', 'G', 'V', 'S', 'D'] : 
+                ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+            dayHeaders.forEach(day => {
+                calendarHTML += `<div class="calendar-day-header">${day}</div>`;
+            });
+            
+            // Get first day of month and add empty cells for alignment
+            const firstDay = new Date(monthDate.getFullYear(), monthDate.getMonth(), 1);
+            const startingDayOfWeek = (firstDay.getDay() + 6) % 7; // Convert Sunday=0 to Monday=0
+            
+            for (let i = 0; i < startingDayOfWeek; i++) {
+                calendarHTML += `<div class="calendar-day empty"></div>`;
+            }
+            
+            // Add days of the month
+            const daysInMonth = new Date(monthDate.getFullYear(), monthDate.getMonth() + 1, 0).getDate();
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateStr = `${monthDate.getFullYear()}-${String(monthDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const isBlocked = this.blockedDatesSet && this.blockedDatesSet.has(dateStr);
+                const isPast = new Date(dateStr) < new Date(today.toISOString().split('T')[0]);
+                
+                let className = 'calendar-day';
+                if (isBlocked) className += ' blocked';
+                if (isPast) className += ' past';
+                if (dateStr === this.state.startDate || dateStr === this.state.endDate) className += ' selected';
+                
+                calendarHTML += `<div class="${className}" data-date="${dateStr}">${day}</div>`;
+            }
+            
+            calendarHTML += `</div></div>`;
+        }
+        
+        calendarHTML += '</div>';
+        calendarHTML += `<div class="calendar-legend">
+            <span class="legend-item"><span class="legend-box blocked"></span>${this.currentLang === 'it' ? 'Non disponibile' : 'Unavailable'}</span>
+            <span class="legend-item"><span class="legend-box available"></span>${this.currentLang === 'it' ? 'Disponibile' : 'Available'}</span>
+        </div>`;
+        
+        calendar.innerHTML = calendarHTML;
+        
+        // Position the calendar below the input
+        const rect = input.getBoundingClientRect();
+        calendar.style.position = 'absolute';
+        calendar.style.top = (rect.bottom + window.scrollY + 5) + 'px';
+        calendar.style.left = rect.left + 'px';
+        calendar.style.zIndex = '1000';
+        
+        document.body.appendChild(calendar);
+    }
+    
+    hideBlockedDatesCalendar() {
+        const calendar = document.getElementById('blocked-dates-calendar');
+        if (calendar) {
+            calendar.remove();
+        }
     }
 
     // Price Calculation
