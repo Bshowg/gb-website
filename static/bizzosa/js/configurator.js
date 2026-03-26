@@ -4,6 +4,9 @@
 
 class BookingConfigurator {
     constructor() {
+        // Current language
+        this.currentLang = document.documentElement.lang || 'it';
+        
         // State management
         this.state = {
             packageType: null,
@@ -174,18 +177,44 @@ class BookingConfigurator {
         if (endDate) endDate.min = today;
 
         startDate?.addEventListener('change', (e) => {
-            this.state.startDate = e.target.value;
+            const selectedDate = e.target.value;
+            
+            // Check if date is blocked
+            if (this.isDateBlocked(selectedDate)) {
+                showMessage(this.currentLang === 'it' ? 
+                    'Data non disponibile. Scegli un\'altra data.' : 
+                    'Date not available. Please choose another date.', 'error');
+                e.target.value = '';
+                this.state.startDate = null;
+                return;
+            }
+            
+            this.state.startDate = selectedDate;
             this.updateDateConstraints(this.state.packageType);
             this.calculateDuration();
             this.updateAvailableDestinations();
             this.calculatePrice();
+            this.validateDateRange();
         });
 
         endDate?.addEventListener('change', (e) => {
-            this.state.endDate = e.target.value;
+            const selectedDate = e.target.value;
+            
+            // Check if date is blocked
+            if (this.isDateBlocked(selectedDate)) {
+                showMessage(this.currentLang === 'it' ? 
+                    'Data non disponibile. Scegli un\'altra data.' : 
+                    'Date not available. Please choose another date.', 'error');
+                e.target.value = '';
+                this.state.endDate = null;
+                return;
+            }
+            
+            this.state.endDate = selectedDate;
             this.calculateDuration();
             this.updateAvailableDestinations();
             this.calculatePrice();
+            this.validateDateRange();
         });
     }
 
@@ -380,8 +409,107 @@ class BookingConfigurator {
 
     // Availability
     async loadAvailability() {
-        // For now, all dates are available. Will be replaced with API call
-        // This would check blocked_periods table
+        try {
+            const response = await fetch('/static/bizzosa/api/availability.php');
+            if (!response.ok) {
+                console.error('Failed to load availability');
+                return;
+            }
+            
+            const data = await response.json();
+            
+            if (data.success && data.data.blocked_dates) {
+                this.blockedDates = data.data.blocked_dates;
+                this.updateDatePickersWithBlockedDates();
+            }
+        } catch (error) {
+            console.error('Error loading availability:', error);
+            // Continue without blocking - dates will all be available
+        }
+    }
+    
+    updateDatePickersWithBlockedDates() {
+        const startDateInput = document.getElementById('startDate');
+        const endDateInput = document.getElementById('endDate');
+        
+        if (!startDateInput || !endDateInput) return;
+        
+        // Store blocked dates for validation
+        this.blockedDatesSet = new Set(this.blockedDates || []);
+        
+        // Add visual indicator for blocked dates (if using a date picker library)
+        // For now, we'll validate on selection
+    }
+    
+    isDateBlocked(date) {
+        if (!this.blockedDatesSet) return false;
+        return this.blockedDatesSet.has(date);
+    }
+    
+    isDateRangeAvailable(startDate, endDate) {
+        if (!this.blockedDatesSet || !startDate || !endDate) return true;
+        
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        const current = new Date(start);
+        
+        while (current <= end) {
+            const dateStr = current.toISOString().split('T')[0];
+            if (this.blockedDatesSet.has(dateStr)) {
+                return false;
+            }
+            current.setDate(current.getDate() + 1);
+        }
+        
+        return true;
+    }
+    
+    validateDateRange() {
+        if (!this.state.startDate || !this.state.endDate) return true;
+        
+        if (!this.isDateRangeAvailable(this.state.startDate, this.state.endDate)) {
+            showMessage(
+                this.currentLang === 'it' ? 
+                'Alcune date nel periodo selezionato non sono disponibili.' : 
+                'Some dates in the selected period are not available.', 
+                'warning'
+            );
+            
+            // Find and display the blocked dates in the range
+            const blockedInRange = this.getBlockedDatesInRange(this.state.startDate, this.state.endDate);
+            if (blockedInRange.length > 0) {
+                const datesList = blockedInRange.join(', ');
+                showMessage(
+                    this.currentLang === 'it' ? 
+                    `Date non disponibili: ${datesList}` : 
+                    `Unavailable dates: ${datesList}`, 
+                    'info'
+                );
+            }
+            
+            return false;
+        }
+        
+        return true;
+    }
+    
+    getBlockedDatesInRange(startDate, endDate) {
+        if (!this.blockedDatesSet || !startDate || !endDate) return [];
+        
+        const blocked = [];
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        const current = new Date(start);
+        
+        while (current <= end) {
+            const dateStr = current.toISOString().split('T')[0];
+            if (this.blockedDatesSet.has(dateStr)) {
+                blocked.push(dateStr);
+            }
+            current.setDate(current.getDate() + 1);
+        }
+        
+        return blocked;
     }
 
     // Price Calculation
@@ -549,6 +677,30 @@ class BookingConfigurator {
             return false;
         }
         
+        // Check if dates are available
+        if (!this.isDateRangeAvailable(this.state.startDate, this.state.endDate)) {
+            showMessage(
+                this.currentLang === 'it' ? 
+                'Le date selezionate non sono disponibili. Scegli altre date.' : 
+                'Selected dates are not available. Please choose different dates.', 
+                'error'
+            );
+            
+            // Show which dates are blocked
+            const blockedInRange = this.getBlockedDatesInRange(this.state.startDate, this.state.endDate);
+            if (blockedInRange.length > 0) {
+                const datesList = blockedInRange.join(', ');
+                showMessage(
+                    this.currentLang === 'it' ? 
+                    `Date già prenotate: ${datesList}` : 
+                    `Already booked: ${datesList}`, 
+                    'warning'
+                );
+            }
+            
+            return false;
+        }
+        
         if (!this.state.destination) {
             showMessage(i18n?.formatMessage('messages.select_destination') || 'Seleziona una destinazione', 'error');
             return false;
@@ -628,10 +780,10 @@ class BookingConfigurator {
             
             // First save to database
             const data = await this.saveBookingToDatabase('whatsapp');
-            
+            let details =""
             // Show booking confirmation details
             if (data.success && data.data.id) {
-                const details = `ID prenotazione: ${data.data.id}`;
+                details= `ID prenotazione: ${data.data.id}`;
                 showMessage(details, 'info');
             }
             
@@ -640,6 +792,7 @@ class BookingConfigurator {
             const duration = this.calculateDuration();
             
             let message = `Richiesta Preventivo Sailing Bizzosa\n\n`;
+            message += details
             message += `Pacchetto: ${pkg.name}\n`;
             message += `Date: ${this.state.startDate} - ${this.state.endDate} (${duration} giorni)\n`;
             message += `Ospiti: ${this.state.guests}\n`;

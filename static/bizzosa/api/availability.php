@@ -52,14 +52,14 @@ try {
     // Get confirmed bookings (also blocked)
     $sql = "SELECT 
                 id,
-                check_in_date as start_date, 
-                check_out_date as end_date,
+                start_date, 
+                end_date,
                 'Booking' as reason
             FROM bookings 
-            WHERE status IN ('confirmed')
-            AND check_out_date >= :start_date 
-            AND check_in_date <= :end_date
-            ORDER BY check_in_date";
+            WHERE status = 'CONFIRMED'
+            AND end_date >= :start_date 
+            AND start_date <= :end_date
+            ORDER BY start_date";
     
     $bookings = $db->select($sql, [
         'start_date' => $startDate,
