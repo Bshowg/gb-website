@@ -1336,6 +1336,40 @@ section h2 {
     font-size: 0.9rem;
 }
 
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+.calendar-title {
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.calendar-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #666;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background 0.2s;
+}
+
+.calendar-close:hover {
+    background: #f0f0f0;
+}
+
 .calendar-months {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -1365,14 +1399,25 @@ section h2 {
 
 .calendar-day {
     text-align: center;
-    padding: 0.25rem;
+    padding: 0.5rem;
     cursor: pointer;
     background: white;
     transition: all 0.2s;
+    border-radius: 4px;
+    user-select: none;
 }
 
 .calendar-day:hover:not(.blocked):not(.past) {
     background: #e3f2fd;
+    transform: scale(1.1);
+}
+
+.calendar-day[data-selectable="true"] {
+    cursor: pointer;
+}
+
+.calendar-day[data-selectable="false"] {
+    cursor: not-allowed;
 }
 
 .calendar-day.blocked {
@@ -1438,13 +1483,36 @@ section h2 {
     background: white;
 }
 
+/* Mobile styles for calendar */
 @media (max-width: 768px) {
     .blocked-dates-calendar {
         max-width: 90vw;
+        max-height: 80vh;
+        overflow-y: auto;
+        padding: 0.75rem;
     }
     
     .calendar-months {
         grid-template-columns: 1fr;
+    }
+    
+    .calendar-day {
+        padding: 0.75rem;
+        font-size: 1rem;
+    }
+    
+    .calendar-day-header {
+        padding: 0.5rem;
+        font-size: 0.9rem;
+    }
+    
+    .calendar-legend {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .legend-item {
+        justify-content: center;
     }
 }
 

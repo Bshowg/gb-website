@@ -175,13 +175,24 @@ class BookingConfigurator {
         const today = new Date().toISOString().split('T')[0];
         if (startDate) startDate.min = today;
         if (endDate) endDate.min = today;
-
-        startDate?.addEventListener('focus', () => {
-            this.showBlockedDatesCalendar('startDate');
-        });
         
-        startDate?.addEventListener('blur', () => {
-            setTimeout(() => this.hideBlockedDatesCalendar(), 200);
+        // Convert date inputs to text inputs to prevent native date picker
+        if (startDate) {
+            startDate.type = 'text';
+            startDate.placeholder = this.currentLang === 'it' ? 'Seleziona data' : 'Select date';
+            startDate.readOnly = true;
+            startDate.style.cursor = 'pointer';
+        }
+        if (endDate) {
+            endDate.type = 'text';
+            endDate.placeholder = this.currentLang === 'it' ? 'Seleziona data' : 'Select date';
+            endDate.readOnly = true;
+            endDate.style.cursor = 'pointer';
+        }
+
+        startDate?.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.showBlockedDatesCalendar('startDate');
         });
         
         startDate?.addEventListener('change', (e) => {
@@ -205,12 +216,9 @@ class BookingConfigurator {
             this.validateDateRange();
         });
 
-        endDate?.addEventListener('focus', () => {
+        endDate?.addEventListener('click', (e) => {
+            e.preventDefault();
             this.showBlockedDatesCalendar('endDate');
-        });
-        
-        endDate?.addEventListener('blur', () => {
-            setTimeout(() => this.hideBlockedDatesCalendar(), 200);
         });
         
         endDate?.addEventListener('change', (e) => {
@@ -579,15 +587,24 @@ class BookingConfigurator {
         const input = document.getElementById(inputId);
         if (!input) return;
         
+        // Store which input is active
+        this.activeCalendarInput = inputId;
+        
         // Create mini calendar showing next 2 months with blocked dates highlighted
         const calendar = document.createElement('div');
         calendar.id = 'blocked-dates-calendar';
         calendar.className = 'blocked-dates-calendar';
         
         const today = new Date();
-        const monthsToShow = 2;
+        const monthsToShow = window.innerWidth <= 768 ? 1 : 2; // Show 1 month on mobile
         
-        let calendarHTML = '<div class="calendar-months">';
+        let calendarHTML = `
+            <div class="calendar-header">
+                <span class="calendar-title">${this.currentLang === 'it' ? 'Seleziona data' : 'Select date'}</span>
+                <button class="calendar-close">&times;</button>
+            </div>
+        `;
+        calendarHTML += '<div class="calendar-months">';
         
         for (let m = 0; m < monthsToShow; m++) {
             const monthDate = new Date(today.getFullYear(), today.getMonth() + m, 1);
@@ -625,7 +642,7 @@ class BookingConfigurator {
                 if (isPast) className += ' past';
                 if (dateStr === this.state.startDate || dateStr === this.state.endDate) className += ' selected';
                 
-                calendarHTML += `<div class="${className}" data-date="${dateStr}">${day}</div>`;
+                calendarHTML += `<div class="${className}" data-date="${dateStr}" data-selectable="${!isBlocked && !isPast}">${day}</div>`;
             }
             
             calendarHTML += `</div></div>`;
@@ -639,14 +656,51 @@ class BookingConfigurator {
         
         calendar.innerHTML = calendarHTML;
         
-        // Position the calendar below the input
-        const rect = input.getBoundingClientRect();
-        calendar.style.position = 'absolute';
-        calendar.style.top = (rect.bottom + window.scrollY + 5) + 'px';
-        calendar.style.left = rect.left + 'px';
+        // Position the calendar
+        if (window.innerWidth <= 768) {
+            // Mobile: Fixed position covering most of screen
+            calendar.style.position = 'fixed';
+            calendar.style.top = '50%';
+            calendar.style.left = '50%';
+            calendar.style.transform = 'translate(-50%, -50%)';
+            calendar.style.width = '90vw';
+            calendar.style.maxHeight = '80vh';
+            calendar.style.overflowY = 'auto';
+            
+            // Add overlay
+            const overlay = document.createElement('div');
+            overlay.id = 'calendar-overlay';
+            overlay.style.position = 'fixed';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.right = '0';
+            overlay.style.bottom = '0';
+            overlay.style.background = 'rgba(0,0,0,0.5)';
+            overlay.style.zIndex = '999';
+            overlay.addEventListener('click', () => this.hideBlockedDatesCalendar());
+            document.body.appendChild(overlay);
+        } else {
+            // Desktop: Position below input
+            const rect = input.getBoundingClientRect();
+            calendar.style.position = 'absolute';
+            calendar.style.top = (rect.bottom + window.scrollY + 5) + 'px';
+            calendar.style.left = rect.left + 'px';
+        }
         calendar.style.zIndex = '1000';
         
         document.body.appendChild(calendar);
+        
+        // Add event listeners
+        calendar.querySelector('.calendar-close')?.addEventListener('click', () => {
+            this.hideBlockedDatesCalendar();
+        });
+        
+        // Add click handlers to selectable dates
+        calendar.querySelectorAll('.calendar-day[data-selectable="true"]').forEach(day => {
+            day.addEventListener('click', () => {
+                this.selectDate(day.dataset.date);
+            });
+        });
     }
     
     hideBlockedDatesCalendar() {
@@ -654,6 +708,48 @@ class BookingConfigurator {
         if (calendar) {
             calendar.remove();
         }
+        const overlay = document.getElementById('calendar-overlay');
+        if (overlay) {
+            overlay.remove();
+        }
+    }
+    
+    selectDate(dateStr) {
+        if (!this.activeCalendarInput) return;
+        
+        const input = document.getElementById(this.activeCalendarInput);
+        if (!input) return;
+        
+        // Format date for display
+        const date = new Date(dateStr);
+        const formattedDate = date.toLocaleDateString(this.currentLang, { 
+            year: 'numeric', 
+            month: '2-digit', 
+            day: '2-digit' 
+        });
+        
+        // Set the value
+        input.value = formattedDate;
+        input.setAttribute('data-value', dateStr);
+        
+        // Update state based on which input
+        if (this.activeCalendarInput === 'startDate') {
+            this.state.startDate = dateStr;
+            this.updateDateConstraints(this.state.packageType);
+            this.calculateDuration();
+            this.updateAvailableDestinations();
+            this.calculatePrice();
+            this.validateDateRange();
+        } else if (this.activeCalendarInput === 'endDate') {
+            this.state.endDate = dateStr;
+            this.calculateDuration();
+            this.updateAvailableDestinations();
+            this.calculatePrice();
+            this.validateDateRange();
+        }
+        
+        // Hide calendar
+        this.hideBlockedDatesCalendar();
     }
 
     // Price Calculation
