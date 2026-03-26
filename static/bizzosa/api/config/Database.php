@@ -5,6 +5,7 @@
 class Database {
     private static $instance = null;
     private $connection;
+    private $lastError = null;
     
     private function __construct() {
         try {
@@ -81,6 +82,7 @@ class Database {
             
             return $this->connection->lastInsertId();
         } catch (PDOException $e) {
+            $this->lastError = $e;
             $this->handleError($e, $sql ?? '');
             return false;
         }
@@ -158,6 +160,35 @@ class Database {
         } else {
             error_log("Database Error: " . $exception->getMessage() . " SQL: " . $sql);
         }
+    }
+    
+    /**
+     * Get last error message
+     */
+    public function getLastError() {
+        if ($this->lastError) {
+            return $this->lastError->getMessage();
+        }
+        return null;
+    }
+    
+    /**
+     * Get PDO error info
+     */
+    public function errorInfo() {
+        return $this->connection->errorInfo();
+    }
+    
+    /**
+     * Get full error details
+     */
+    public function getErrorDetails() {
+        $details = [
+            'message' => $this->lastError ? $this->lastError->getMessage() : null,
+            'code' => $this->lastError ? $this->lastError->getCode() : null,
+            'pdo_error' => $this->connection->errorInfo()
+        ];
+        return $details;
     }
     
     /**

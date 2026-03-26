@@ -121,19 +121,23 @@ try {
         
         if (!$result) {
             // Get detailed error information
-            $errorInfo = $db->errorInfo();
+            $errorDetails = $db->getErrorDetails();
             $errorMessage = 'Failed to create booking. ';
             
-            if (isset($errorInfo[2])) {
-                $errorMessage .= 'Database error: ' . $errorInfo[2];
+            // Add the main error message
+            if ($errorDetails['message']) {
+                $errorMessage .= 'Database error: ' . $errorDetails['message'];
             }
             
+            // In development mode, add more details
+            if (ENVIRONMENT === 'development') {
                 $errorMessage .= ' | Data: ' . json_encode($bookingData);
-                $errorMessage .= ' | PDO Error Code: ' . ($errorInfo[0] ?? 'unknown');
-                $errorMessage .= ' | Driver Error Code: ' . ($errorInfo[1] ?? 'unknown');
-
+                $errorMessage .= ' | PDO Error: ' . json_encode($errorDetails['pdo_error']);
+                $errorMessage .= ' | Error Code: ' . $errorDetails['code'];
+            }
             
             error_log("Booking insert failed: " . $errorMessage);
+            error_log("Booking data: " . json_encode($bookingData));
             throw new Exception($errorMessage);
         }
         
