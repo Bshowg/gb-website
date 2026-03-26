@@ -185,9 +185,10 @@ class BookingConfigurator {
         }
         if (endDate) {
             endDate.type = 'text';
-            endDate.placeholder = this.currentLang === 'it' ? 'Seleziona data' : 'Select date';
+            endDate.placeholder = this.currentLang === 'it' ? 'Prima seleziona data inizio' : 'Select start date first';
             endDate.readOnly = true;
             endDate.style.cursor = 'pointer';
+            endDate.style.opacity = '0.6';
         }
 
         startDate?.addEventListener('click', (e) => {
@@ -209,6 +210,15 @@ class BookingConfigurator {
             }
             
             this.state.startDate = selectedDate;
+            
+            // Reset end date when start date changes
+            this.state.endDate = null;
+            endDate.value = '';
+            
+            // Enable end date visually
+            endDate.style.opacity = '1';
+            endDate.placeholder = this.currentLang === 'it' ? 'Seleziona data' : 'Select date';
+            
             this.updateDateConstraints(this.state.packageType);
             this.calculateDuration();
             this.updateAvailableDestinations();
@@ -218,6 +228,18 @@ class BookingConfigurator {
 
         endDate?.addEventListener('click', (e) => {
             e.preventDefault();
+            
+            // Only allow end date selection if start date is set
+            if (!this.state.startDate) {
+                showMessage(
+                    this.currentLang === 'it' ? 
+                    'Seleziona prima la data di inizio' : 
+                    'Please select start date first', 
+                    'warning'
+                );
+                return;
+            }
+            
             this.showBlockedDatesCalendar('endDate');
         });
         
@@ -868,7 +890,27 @@ class BookingConfigurator {
         
         // Update state based on which input
         if (this.activeCalendarInput === 'startDate') {
+            // Check if start date is changing
+            const isChanging = this.state.startDate && this.state.startDate !== dateStr;
+            
             this.state.startDate = dateStr;
+            
+            // Reset end date if start date changed
+            if (isChanging && this.state.endDate) {
+                this.state.endDate = null;
+                const endDateInput = document.getElementById('endDate');
+                if (endDateInput) {
+                    endDateInput.value = '';
+                }
+            }
+            
+            // Enable end date visually
+            const endDateInput = document.getElementById('endDate');
+            if (endDateInput) {
+                endDateInput.style.opacity = '1';
+                endDateInput.placeholder = this.currentLang === 'it' ? 'Seleziona data' : 'Select date';
+            }
+            
             this.updateDateConstraints(this.state.packageType);
             this.calculateDuration();
             this.updateAvailableDestinations();
@@ -882,7 +924,7 @@ class BookingConfigurator {
             this.validateDateRange();
         }
         
-        // Hide calendar
+        // Hide calendar after selection
         this.hideBlockedDatesCalendar();
     }
 
