@@ -78,9 +78,11 @@ class Database {
                     VALUES (" . implode(', ', $values) . ")";
             
             $stmt = $this->connection->prepare($sql);
-            $stmt->execute($data);
+            $result = $stmt->execute($data);
             
-            return $this->connection->lastInsertId();
+            // For UUID primary keys, we return true on success instead of lastInsertId
+            // lastInsertId only works with auto-increment columns
+            return $result;
         } catch (PDOException $e) {
             $this->lastError = $e;
             $this->handleError($e, $sql ?? '');
