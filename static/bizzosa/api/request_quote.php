@@ -128,13 +128,12 @@ try {
             if ($errorDetails['message']) {
                 $errorMessage .= 'Database error: ' . $errorDetails['message'];
             }
+
             
-            // In development mode, add more details
-            if (ENVIRONMENT === 'development') {
-                $errorMessage .= ' | Data: ' . json_encode($bookingData);
-                $errorMessage .= ' | PDO Error: ' . json_encode($errorDetails['pdo_error']);
-                $errorMessage .= ' | Error Code: ' . $errorDetails['code'];
-            }
+            $errorMessage .= ' | Data: ' . json_encode($bookingData);
+            $errorMessage .= ' | PDO Error: ' . json_encode($errorDetails['pdo_error']);
+            $errorMessage .= ' | Error Code: ' . $errorDetails['code'];
+            
             
             error_log("Booking insert failed: " . $errorMessage);
             error_log("Booking data: " . json_encode($bookingData));
