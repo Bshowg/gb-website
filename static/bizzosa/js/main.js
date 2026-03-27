@@ -54,63 +54,8 @@ function initVideoBackground() {
     const container = document.querySelector('.video-container');
     if (!video) return;
     
-    // Simple setup - one video for all devices with simple loop
-    function setupVideo() {
-        const videoSrc = 'videos/video_desktop.mp4';
-        const posterUrl = 'images/hero/hero-poster.jpg';
-        
-        console.log('Setting up video:', videoSrc, 'Poster:', posterUrl);
-        
-        // Clear any existing sources first (in case lazy loading affected it)
-        video.innerHTML = '';
-        video.style.display = 'block';
-        
-        // Set poster on both video and container to prevent flash
-        video.poster = posterUrl;
-        video.style.backgroundImage = `url(${posterUrl})`;
-        video.style.backgroundSize = 'cover';
-        video.style.backgroundPosition = 'center';
-        
-        // Also set on container as backup
-        if (container) {
-            container.style.backgroundImage = `url(${posterUrl})`;
-            container.style.backgroundSize = 'cover';
-            container.style.backgroundPosition = 'center';
-        }
-        
-        // Set video source directly
-        video.src = videoSrc;
-        
-        // Ensure video attributes are set for simple loop
-        video.setAttribute('autoplay', '');
-        video.setAttribute('muted', '');
-        video.setAttribute('playsinline', '');
-        video.setAttribute('loop', '');
-        
-        // Wait for video to be fully ready before playing
-        video.addEventListener('canplaythrough', function onReady() {
-            console.log('Video ready, starting playback');
-            // Video is ready, start playing
-            video.play().then(() => {
-                console.log('Video playing successfully');
-                // Keep background image until first frame is painted
-                setTimeout(() => {
-                    video.style.backgroundImage = 'none';
-                    if (container) {
-                        container.style.backgroundImage = 'none';
-                    }
-                }, 100);
-            }).catch(err => {
-                console.log('Autoplay blocked, poster remains visible:', err);
-            });
-        }, { once: true });
-        
-        // Load the video
-        video.load();
-    }
-    
-    // Initial setup
-    setupVideo();
+    // Since video is set up in HTML, just ensure it's not being interfered with
+    console.log('Hero video element found, should auto-play from HTML');
     
     // Create poster fallback if video fails to load
     video.addEventListener('error', () => {
@@ -136,14 +81,8 @@ function initVideoBackground() {
         video.style.display = 'none';
     });
     
-    // Add loading state
-    video.addEventListener('loadstart', () => {
-        video.classList.add('loading');
-    });
-    
-    video.addEventListener('canplay', () => {
-        video.classList.remove('loading');
-    });
+    // Since video is now set in HTML, no need for loading states
+    // The video will show its poster until it starts playing
 }
 
 /**
@@ -292,14 +231,6 @@ style.textContent = `
     .navbar.scrolled {
         background: rgba(255, 255, 255, 0.98);
         box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    
-    video.loading {
-        opacity: 0;
-    }
-    
-    video {
-        transition: opacity 0.5s ease;
     }
 `;
 document.head.appendChild(style);
