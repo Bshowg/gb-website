@@ -524,6 +524,7 @@ section h2 {
 /* Booking Details Section */
 .booking-details-section {
     padding: 4rem 0;
+    max-width: 800px;
     background: var(--bg-light);
 }
 
