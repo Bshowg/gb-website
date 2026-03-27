@@ -6,6 +6,7 @@
 class LazyMediaLoader {
     constructor() {
         this.videos = [];
+        this.images = [];
         this.observer = null;
         this.init();
     }
@@ -13,20 +14,33 @@ class LazyMediaLoader {
     init() {
         // Wait for DOM to be ready
         if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => this.setupLazyLoading());
+            document.addEventListener('DOMContentLoaded', () => {
+                this.setupLazyLoading();
+                this.setupImageLazyLoading();
+            });
         } else {
             this.setupLazyLoading();
+            this.setupImageLazyLoading();
         }
     }
 
     setupLazyLoading() {
-        // Find all video elements in the friends gallery
-        this.videos = document.querySelectorAll('.friends-gallery video');
+        // Find all video elements in the friends gallery - be very specific with selector
+        const friendsSection = document.querySelector('#bizzosa-friends');
+        if (!friendsSection) return;
+        
+        this.videos = friendsSection.querySelectorAll('.friends-gallery video');
         
         if (this.videos.length === 0) return;
 
         // Prepare videos for lazy loading
         this.videos.forEach(video => {
+            // Skip if already processed or if it's the hero video
+            if (video.dataset.lazyProcessed === 'true' || video.id === 'heroVideo') return;
+            
+            // Mark as processed
+            video.dataset.lazyProcessed = 'true';
+            
             // Remove autoplay initially
             video.removeAttribute('autoplay');
             
@@ -35,12 +49,14 @@ class LazyMediaLoader {
             const sourceData = [];
             
             sources.forEach(source => {
-                sourceData.push({
-                    src: source.src,
-                    type: source.type
-                });
-                // Remove the src to prevent loading
-                source.removeAttribute('src');
+                if (source.src) {
+                    sourceData.push({
+                        src: source.src,
+                        type: source.type
+                    });
+                    // Remove the src to prevent loading
+                    source.removeAttribute('src');
+                }
             });
             
             // Store source data on the video element
@@ -50,14 +66,56 @@ class LazyMediaLoader {
             this.addVideoPlaceholder(video);
             
             // Remove video src if directly set
-            if (video.src) {
+            if (video.src && video.src !== '') {
                 video.dataset.videoSrc = video.src;
                 video.removeAttribute('src');
             }
         });
 
-        // Setup Intersection Observer
-        this.setupObserver();
+        // Setup Intersection Observer for videos
+        this.setupVideoObserver();
+    }
+    
+    setupImageLazyLoading() {
+        // Find all gallery images
+        const gallerySection = document.querySelector('#bizzosa-gallery');
+        if (!gallerySection) return;
+        
+        this.images = gallerySection.querySelectorAll('.gallery-item img');
+        
+        if (this.images.length === 0) return;
+
+        // Prepare images for lazy loading
+        this.images.forEach(img => {
+            // Skip if already processed
+            if (img.dataset.lazyProcessed === 'true') return;
+            
+            // Mark as processed
+            img.dataset.lazyProcessed = 'true';
+            
+            // Store original src and set placeholder
+            if (img.src && !img.src.includes('data:')) {
+                img.dataset.originalSrc = img.src;
+                
+                // Create a simple placeholder
+                const canvas = document.createElement('canvas');
+                canvas.width = 400;
+                canvas.height = 300;
+                const ctx = canvas.getContext('2d');
+                ctx.fillStyle = '#1e3a5f';
+                ctx.fillRect(0, 0, 400, 300);
+                ctx.fillStyle = 'white';
+                ctx.font = '16px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('Loading...', 200, 150);
+                
+                img.src = canvas.toDataURL();
+                img.classList.add('lazy-loading');
+            }
+        });
+
+        // Setup Intersection Observer for images
+        this.setupImageObserver();
     }
 
     addVideoPlaceholder(video) {
@@ -79,7 +137,7 @@ class LazyMediaLoader {
         video.parentElement.appendChild(overlay);
     }
 
-    setupObserver() {
+    setupVideoObserver() {
         // Options for the observer
         const options = {
             root: null, // viewport
@@ -87,7 +145,7 @@ class LazyMediaLoader {
             threshold: 0.01 // Trigger when even 1% is visible
         };
 
-        this.observer = new IntersectionObserver((entries) => {
+        this.videoObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     this.loadVideo(entry.target);
@@ -102,7 +160,29 @@ class LazyMediaLoader {
 
         // Start observing all videos
         this.videos.forEach(video => {
-            this.observer.observe(video);
+            this.videoObserver.observe(video);
+        });
+    }
+    
+    setupImageObserver() {
+        // Options for the observer  
+        const options = {
+            root: null, // viewport
+            rootMargin: '200px', // Start loading 200px before entering viewport
+            threshold: 0.1 // Trigger when 10% is visible
+        };
+
+        this.imageObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    this.loadImage(entry.target);
+                }
+            });
+        }, options);
+
+        // Start observing all images
+        this.images.forEach(img => {
+            this.imageObserver.observe(img);
         });
     }
 
@@ -183,11 +263,51 @@ class LazyMediaLoader {
         
         video.parentElement.appendChild(playBtn);
     }
+    
+    loadImage(img) {
+        // Check if already loaded
+        if (img.dataset.loaded === 'true') return;
+        
+        const originalSrc = img.dataset.originalSrc;
+        if (!originalSrc) return;
+        
+        // Mark as loading
+        img.classList.add('loading');
+        
+        // Create new image to preload
+        const newImg = new Image();
+        
+        newImg.onload = () => {
+            // Image loaded successfully
+            img.src = originalSrc;
+            img.dataset.loaded = 'true';
+            img.classList.remove('lazy-loading', 'loading');
+            img.classList.add('loaded');
+            
+            // Stop observing this image
+            if (this.imageObserver) {
+                this.imageObserver.unobserve(img);
+            }
+        };
+        
+        newImg.onerror = () => {
+            // Failed to load, show fallback
+            img.classList.remove('loading');
+            img.classList.add('error');
+            console.log('Failed to load image:', originalSrc);
+        };
+        
+        // Start loading
+        newImg.src = originalSrc;
+    }
 
-    // Clean up observer when needed
+    // Clean up observers when needed
     destroy() {
-        if (this.observer) {
-            this.observer.disconnect();
+        if (this.videoObserver) {
+            this.videoObserver.disconnect();
+        }
+        if (this.imageObserver) {
+            this.imageObserver.disconnect();
         }
     }
 }
@@ -200,8 +320,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // Re-initialize if new videos are added dynamically
     const friendsSection = document.querySelector('#bizzosa-friends');
     if (friendsSection) {
-        const mutationObserver = new MutationObserver(() => {
-            lazyMediaLoader.setupLazyLoading();
+        const mutationObserver = new MutationObserver((mutations) => {
+            // Only process if videos were actually added
+            for (const mutation of mutations) {
+                for (const node of mutation.addedNodes) {
+                    if (node.nodeType === 1 && (node.tagName === 'VIDEO' || node.querySelector?.('video'))) {
+                        lazyMediaLoader.setupLazyLoading();
+                        return;
+                    }
+                }
+            }
         });
         
         mutationObserver.observe(friendsSection, {

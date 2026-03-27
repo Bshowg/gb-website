@@ -54,13 +54,16 @@ function initVideoBackground() {
     const container = document.querySelector('.video-container');
     if (!video) return;
     
-    let isReversing = false;
-    let reverseInterval = null;
-    
-    // Immediately set correct poster before anything else
-    function setInitialPoster() {
-        const isMobile = window.innerWidth < 768;
-        const posterUrl = isMobile ? 'images/hero/hero-poster-mobile.jpg' : 'images/hero/hero-poster.jpg';
+    // Simple setup - one video for all devices with simple loop
+    function setupVideo() {
+        const videoSrc = 'videos/video_desktop.mp4';
+        const posterUrl = 'images/hero/hero-poster.jpg';
+        
+        console.log('Setting up video:', videoSrc, 'Poster:', posterUrl);
+        
+        // Clear any existing sources first (in case lazy loading affected it)
+        video.innerHTML = '';
+        video.style.display = 'block';
         
         // Set poster on both video and container to prevent flash
         video.poster = posterUrl;
@@ -74,22 +77,15 @@ function initVideoBackground() {
             container.style.backgroundSize = 'cover';
             container.style.backgroundPosition = 'center';
         }
-    }
-    
-    // Set up video with poster showing first
-    function setupVideo() {
-        const isMobile = window.innerWidth < 768;
-        const videoSrc = isMobile ? 'videos/video_mobile.mp4' : 'videos/video_desktop.mp4';
-        const posterUrl = isMobile ? 'images/hero/hero-poster-mobile.jpg' : 'images/hero/hero-poster.jpg';
         
-        console.log('Setting up video:', videoSrc, 'Poster:', posterUrl);
-        
-        // Update poster if needed
-        video.poster = posterUrl;
-        video.style.backgroundImage = `url(${posterUrl})`;
-        
-        // Set video source
+        // Set video source directly
         video.src = videoSrc;
+        
+        // Ensure video attributes are set for simple loop
+        video.setAttribute('autoplay', '');
+        video.setAttribute('muted', '');
+        video.setAttribute('playsinline', '');
+        video.setAttribute('loop', '');
         
         // Wait for video to be fully ready before playing
         video.addEventListener('canplaythrough', function onReady() {
@@ -113,75 +109,13 @@ function initVideoBackground() {
         video.load();
     }
     
-    // Improved ping-pong effect
-    function startReversePlayback() {
-        if (isReversing) return;
-        
-        isReversing = true;
-        const fps = 30;
-        const frameTime = 1000 / fps;
-        const step = 1 / fps;
-        
-        reverseInterval = setInterval(() => {
-            if (video.currentTime <= 0.1) {
-                // Reached beginning, play forward again
-                clearInterval(reverseInterval);
-                reverseInterval = null;
-                isReversing = false;
-                video.currentTime = 0;
-                video.play();
-            } else {
-                // Step backward
-                video.currentTime = Math.max(0, video.currentTime - step);
-            }
-        }, frameTime);
-    }
-    
-    // Handle video ended event for ping-pong
-    video.addEventListener('ended', () => {
-        if (!isReversing) {
-            video.pause();
-            startReversePlayback();
-        }
-    });
-    
-    // Remove the standard loop attribute
-    video.removeAttribute('loop');
-    
-    // Set initial poster immediately (before DOM ready)
-    setInitialPoster();
-    
     // Initial setup
     setupVideo();
-    
-    // Handle resize - only reload if crossing mobile/desktop boundary
-    let lastWidth = window.innerWidth;
-    window.addEventListener('resize', () => {
-        const currentWidth = window.innerWidth;
-        const wasMobile = lastWidth < 768;
-        const isMobile = currentWidth < 768;
-        
-        if (wasMobile !== isMobile) {
-            lastWidth = currentWidth;
-            // Stop any reverse playback
-            if (reverseInterval) {
-                clearInterval(reverseInterval);
-                reverseInterval = null;
-                isReversing = false;
-            }
-            // Update poster immediately for new size
-            setInitialPoster();
-            // Reload video for new size
-            setupVideo();
-        }
-    });
     
     // Create poster fallback if video fails to load
     video.addEventListener('error', () => {
         console.log('Video failed to load, showing poster image');
-        const container = video.parentElement;
-        const isMobile = window.innerWidth < 768;
-        const fallbackPoster = isMobile ? 'images/hero/hero-poster-mobile.jpg' : 'images/hero/hero-poster.jpg';
+        const fallbackPoster = 'images/hero/hero-poster.jpg';
         
         // Create fallback image
         const fallbackImg = document.createElement('div');

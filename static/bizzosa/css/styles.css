@@ -1614,6 +1614,27 @@ section h2 {
     opacity: 0.7;
 }
 
+/* Image lazy loading styles */
+.gallery-item img.lazy-loading {
+    filter: blur(2px);
+    transition: filter 0.3s ease;
+}
+
+.gallery-item img.loading {
+    opacity: 0.7;
+}
+
+.gallery-item img.loaded {
+    filter: none;
+    opacity: 1;
+    transition: filter 0.3s ease, opacity 0.3s ease;
+}
+
+.gallery-item img.error {
+    opacity: 0.5;
+    filter: grayscale(100%);
+}
+
 .video-play-btn {
     position: absolute;
     top: 50%;
