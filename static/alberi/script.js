@@ -216,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Dynamic header on scroll (optional)
+    /* Dynamic header on scroll (optional)
     let lastScroll = 0;
     const header = document.querySelector('.hero');
     
@@ -230,7 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         lastScroll = currentScroll;
-    });
+    });*/
 });
 
 // Text animation is now handled by CSS

@@ -34,16 +34,16 @@ function initNavigation() {
         });
     }
     
-    // Navbar scroll effect for glassmorphism enhancement
+    /* Navbar scroll effect for glassmorphism enhancement
     window.addEventListener('scroll', () => {
         const currentScroll = window.pageYOffset;
         
         if (currentScroll > 100) {
-            navbar.classList.add('scrolled');
+            navbar.classList.add('');
         } else {
             navbar.classList.remove('scrolled');
         }
-    });
+    });*/
 }
 
 /**
