@@ -418,13 +418,15 @@ class BookingConfigurator {
     async loadExtras() {
         // For now, use mock data. Will be replaced with API call
         const mockExtras = [
-            { id: 1, name_it: 'Imbarco/Sbarco Porto di Salivoli', name_en: 'Embarkation/Disembarkation Port', pricing_type: 'PER_TRIP', price: 150 },
-            { id: 2, name_it: 'Tender', name_en: 'Tender', pricing_type: 'FLAT_RATE', price: 50 },
-            { id: 3, name_it: 'Fuoribordo Tender', name_en: 'Tender Outboard Motor', pricing_type: 'FLAT_RATE', price: 70 },
-            { id: 4, name_it: 'Servizio Pranzo a Bordo', name_en: 'Onboard Lunch Service', pricing_type: 'PER_PERSON', price: 30 },
-            { id: 5, name_it: 'Servizio Aperitivo a Bordo', name_en: 'Onboard Aperitif Service', pricing_type: 'PER_PERSON', price: 15 },
-            { id: 6, name_it: 'Pernottamento Extra in Porto', name_en: 'Extra Night in Port', pricing_type: 'PER_NIGHT', price: 150 },
-            { id: 7, name_it: 'Pernottamento Extra in Rada', name_en: 'Extra Night at Anchor', pricing_type: 'PER_NIGHT', price: 300 }
+            { id: 1, name_it: 'Servizio biancheria letto', name_en: 'Bed Linen Service', pricing_type: 'PER_PERSON', price: 20 },
+            { id: 2, name_it: 'Imbarco/sbarco porto di Salivoli (LI)', name_en: 'Embarkation/Disembarkation Salivoli Port', pricing_type: 'PER_TRIP', price: 150 },
+            { id: 3, name_it: 'Tender', name_en: 'Tender', pricing_type: 'FLAT_RATE', price: 50 },
+            { id: 4, name_it: 'Fuoribordo tender (compreso carburante)', name_en: 'Tender Outboard Motor (fuel included)', pricing_type: 'FLAT_RATE', price: 70 },
+            { id: 5, name_it: 'Servizio pranzo a bordo', name_en: 'Onboard Lunch Service', pricing_type: 'PER_PERSON', price: 30 },
+            { id: 6, name_it: 'Servizio aperitivo a bordo', name_en: 'Onboard Aperitif Service', pricing_type: 'PER_PERSON', price: 15 },
+            { id: 7, name_it: 'Pernottamento extra in porto – checkout h. 9.00', name_en: 'Extra Night in Port – checkout 9.00', pricing_type: 'FLAT_RATE', price: 150 },
+            { id: 8, name_it: 'Pernottamento extra in rada – sbarco h. 9.00', name_en: 'Extra Night at Anchor – disembark 9.00', pricing_type: 'FLAT_RATE', price: 300 },
+            { id: 9, name_it: 'Richieste speciali', name_en: 'Special Requests', pricing_type: 'CUSTOM', price: 0 }
         ];
 
         this.renderExtras(mockExtras);
@@ -451,9 +453,15 @@ class BookingConfigurator {
             const lang = i18n?.getCurrentLanguage() || 'it';
             const name = lang === 'it' ? extra.name_it : extra.name_en;
             
-            let priceText = `€${extra.price}`;
-            if (extra.pricing_type === 'PER_DAY') priceText += '/giorno';
-            if (extra.pricing_type === 'PER_PERSON') priceText += '/persona';
+            let priceText = '';
+            if (extra.pricing_type === 'CUSTOM') {
+                priceText = lang === 'it' ? 'a consuntivo' : 'upon request';
+            } else {
+                priceText = `€${extra.price}`;
+                if (extra.pricing_type === 'PER_DAY') priceText += '/giorno';
+                if (extra.pricing_type === 'PER_PERSON') priceText += '/persona';
+                if (extra.pricing_type === 'PER_TRIP') priceText += lang === 'it' ? ' a tratta' : ' per trip';
+            }
             
             label.innerHTML = `${name} <span class="extra-price">${priceText}</span>`;
             
@@ -468,6 +476,26 @@ class BookingConfigurator {
             
             div.appendChild(checkbox);
             div.appendChild(label);
+            
+            // Add textarea for special requests
+            if (extra.pricing_type === 'CUSTOM') {
+                const textarea = document.createElement('textarea');
+                textarea.id = `special-request-${extra.id}`;
+                textarea.className = 'special-request-textarea';
+                textarea.placeholder = lang === 'it' ? 'Descrivi la tua richiesta speciale...' : 'Describe your special request...';
+                textarea.style.display = 'none';
+                textarea.rows = 3;
+                
+                checkbox.addEventListener('change', () => {
+                    textarea.style.display = checkbox.checked ? 'block' : 'none';
+                    if (!checkbox.checked) {
+                        textarea.value = '';
+                    }
+                });
+                
+                div.appendChild(textarea);
+            }
+            
             container.appendChild(div);
         });
     }
@@ -1025,17 +1053,18 @@ class BookingConfigurator {
 
     validateFirstStage() {
         const errors = [];
+        const lang = i18n?.getCurrentLanguage() || 'it';
         
         if (!this.state.packageType) {
-            errors.push('Seleziona un tipo di charter');
+            errors.push(lang === 'it' ? 'Seleziona un tipo di charter' : 'Select a charter type');
         }
         
         if (!this.state.startDate || !this.state.endDate) {
-            errors.push('Seleziona le date');
+            errors.push(lang === 'it' ? 'Seleziona le date' : 'Select dates');
         }
         
         if (!this.state.destination) {
-            errors.push('Seleziona una destinazione');
+            errors.push(lang === 'it' ? 'Seleziona una destinazione' : 'Select a destination');
         }
         
         if (errors.length > 0) {
