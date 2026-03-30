@@ -35,8 +35,14 @@
   },
   "plan": {
     "section_title": "Prenota Ora",
-    "title": "Pianifica la tua esperienza su misura in barca a vela",
+    "title": "Pianifica la tua esperienza in barca a vela",
+    "subtitle": "Scegli le date e sblocca le destinazioni disponibili",
     "boat_description": "Bizzosa è un Grand Soleil di 46.3 piedi con scafo in vetroresina, interni interamente rivestiti in legno e coperta in teak originale del Cantiere del Pardo trattato ogni anno con amore. La barca, provvista di ombreggianti esterni è armata con Fiocco e Randa da vela sportiva con una mano di terzaroli. Sotto coperta, tre cabine matrimoniali di cui una armatoriale molto ampia, due bagni con scarico a pompa e ampia dinette con cucina completa e zona carteggio.",
+    "min_nights_2": "min. 2 notti",
+    "min_nights_6": "min. 6 notti",
+    "calculate": "Calcola preventivo",
+    "destination": "Destinazione",
+    "select_destination": "Seleziona destinazione",
     "package": "Scegli il Pacchetto",
     "day_sail": {
       "title": "Day Sail",
@@ -45,14 +51,14 @@
       "crew": "Equipaggio incluso"
     },
     "daily_charter": {
-      "title": "Daily Charter",
-      "desc": "Da 1 a 3 giorni di navigazione",
+      "title": "Daily Experience",
+      "desc": "da 1 a 3 giorni in barca",
       "guests": "Max 8 ospiti",
       "crew": "Equipaggio incluso"
     },
     "weekly_charter": {
       "title": "Weekly Charter",
-      "desc": "Minimo 3 notti di crociera",
+      "desc": "minimo 3 notti in crociera",
       "guests": "Max 8 ospiti",
       "discount": "Tariffe speciali per settimane intere"
     },
@@ -80,10 +86,10 @@
     }
   },
   "gallery": {
-    "title": "BIZZOSA’S LINES"
+    "title": "Bizzosa's Lines"
   },
   "friends": {
-    "title": "BIZZOSA&FRIENDS"
+    "title": "Bizzosa & Friends"
   },
   "contacts": {
     "title": "Contatti",

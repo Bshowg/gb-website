@@ -34,9 +34,15 @@
     }
   },
   "plan": {
-    "section_title": "Plan Your Sail",
+    "section_title": "Book Now",
     "title": "Plan your sailing experience",
+    "subtitle": "Choose dates and unlock available destinations",
     "boat_description": "Bizzosa is a Grand Soleil 46.3 feet with fiberglass hull, interiors entirely covered in wood and original teak deck from Cantiere del Pardo treated every year with love. The boat, equipped with external sun shades, is rigged with Jib and Mainsail for sport sailing with one reef. Below deck, three double cabins including a very spacious master cabin, two bathrooms with pump discharge and large dinette with complete galley and chart table.",
+    "min_nights_2": "min. 2 nights",
+    "min_nights_6": "min. 6 nights",
+    "calculate": "Calculate quote",
+    "destination": "Destination",
+    "select_destination": "Select destination",
     "package": "Choose Package",
     "day_sail": {
       "title": "Day Sail",
@@ -45,14 +51,14 @@
       "crew": "Crew included"
     },
     "daily_charter": {
-      "title": "Daily Charter",
-      "desc": "1 to 3 days sailing",
+      "title": "Daily Experience",
+      "desc": "from 1 to 3 days on board",
       "guests": "Max 8 guests",
       "crew": "Crew included"
     },
     "weekly_charter": {
       "title": "Weekly Charter",
-      "desc": "Minimum 3 nights cruise",
+      "desc": "minimum 3 nights cruise",
       "guests": "Max 8 guests",
       "discount": "Special rates for full weeks"
     },
@@ -80,10 +86,10 @@
     }
   },
   "gallery": {
-    "title": "BIZZOSA’S LINES"
+    "title": "Bizzosa's Lines"
   },
   "friends": {
-    "title": "BIZZOSA&FRIENDS"
+    "title": "Bizzosa & Friends"
   },
   "contacts": {
     "title": "Contacts",
