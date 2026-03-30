@@ -260,7 +260,7 @@
     /* Friends Gallery */
     .friends-gallery {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        gap: 1rem;
+        gap: 0.5rem;
     }
     
     .media-item:nth-child(7n+1),
