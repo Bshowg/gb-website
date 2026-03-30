@@ -402,7 +402,7 @@ section h2 {
     display: flex;
     align-items: center;
     min-height: 100vh;
-    background-image: url('../images/booking/imagebooking.png');
+    background-image: url('../images/booking/booking.jpeg');
     background-size: cover;
     background-position: center;
     position: relative;
@@ -1209,10 +1209,18 @@ section h2 {
     align-items: start;
 }
 
-.contacts-content .personal-account {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: 0;
+.contact-left {
+    display: flex;
+    flex-direction: column;
+}
+
+.contact-right {
+    display: flex;
+    flex-direction: column;
+}
+
+.contact-right .personal-account {
+    margin-top: 2rem;
 }
 
 .contact-info h3 {
@@ -1248,6 +1256,21 @@ section h2 {
 .contact-item a:hover {
     color: #1e3a5f;
     text-decoration: underline;
+}
+
+.instagram-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #E4405F !important;
+}
+
+.instagram-link:hover {
+    color: #C13584 !important;
+}
+
+.instagram-icon {
+    flex-shrink: 0;
 }
 
 .contact-item p {
