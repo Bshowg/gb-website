@@ -77,6 +77,15 @@ class BookingConfigurator {
         
         // Preselect Daily Charter package on load
         this.preselectDailyCharter();
+        
+        // Listen for language changes
+        window.addEventListener('languageChanged', (e) => {
+            this.currentLang = e.detail.language;
+            // Re-render extras with new language
+            this.loadExtras();
+            // Update date picker placeholders
+            this.updateDatePickerLanguage();
+        });
     }
 
     // Package Selector
@@ -164,6 +173,23 @@ class BookingConfigurator {
         
         // Update available destinations
         this.updateAvailableDestinations();
+    }
+
+    updateDatePickerLanguage() {
+        const startDate = document.getElementById('startDate');
+        const endDate = document.getElementById('endDate');
+        
+        if (startDate && !startDate.value) {
+            startDate.placeholder = this.currentLang === 'it' ? 'Seleziona data' : 'Select date';
+        }
+        
+        if (endDate && !endDate.value) {
+            if (!this.state.startDate) {
+                endDate.placeholder = this.currentLang === 'it' ? 'Prima seleziona data inizio' : 'Select start date first';
+            } else {
+                endDate.placeholder = this.currentLang === 'it' ? 'Seleziona data' : 'Select date';
+            }
+        }
     }
 
     // Date Pickers
@@ -436,6 +462,15 @@ class BookingConfigurator {
         const container = document.getElementById('extrasList');
         if (!container) return;
 
+        // Store currently selected extras IDs and special request texts
+        const selectedExtras = this.state.extras.map(e => e.id);
+        const specialRequestTexts = {};
+        this.state.extras.forEach(e => {
+            if (e.specialRequestText) {
+                specialRequestTexts[e.id] = e.specialRequestText;
+            }
+        });
+
         container.innerHTML = '';
         
         extras.forEach(extra => {
@@ -446,6 +481,11 @@ class BookingConfigurator {
             checkbox.type = 'checkbox';
             checkbox.id = `extra-${extra.id}`;
             checkbox.value = extra.id;
+            
+            // Restore checked state
+            if (selectedExtras.includes(extra.id)) {
+                checkbox.checked = true;
+            }
             
             const label = document.createElement('label');
             label.htmlFor = `extra-${extra.id}`;
@@ -467,12 +507,20 @@ class BookingConfigurator {
             
             checkbox.addEventListener('change', () => {
                 if (checkbox.checked) {
-                    // For special requests, we'll store the text later
-                    const extraData = {...extra};
-                    if (extra.pricing_type === 'CUSTOM') {
-                        extraData.specialRequestText = ''; // Will be updated on input
+                    // Check if already in state (when re-rendering for language change)
+                    const existingExtra = this.state.extras.find(e => e.id === extra.id);
+                    if (!existingExtra) {
+                        // For special requests, we'll store the text later
+                        const extraData = {...extra};
+                        if (extra.pricing_type === 'CUSTOM') {
+                            extraData.specialRequestText = specialRequestTexts[extra.id] || ''; // Restore text if exists
+                        }
+                        this.state.extras.push(extraData);
+                    } else {
+                        // Update the name for the new language
+                        existingExtra.name_it = extra.name_it;
+                        existingExtra.name_en = extra.name_en;
                     }
-                    this.state.extras.push(extraData);
                 } else {
                     this.state.extras = this.state.extras.filter(e => e.id !== extra.id);
                 }
@@ -488,8 +536,17 @@ class BookingConfigurator {
                 textarea.id = `special-request-${extra.id}`;
                 textarea.className = 'special-request-textarea';
                 textarea.placeholder = lang === 'it' ? 'Descrivi la tua richiesta speciale...' : 'Describe your special request...';
-                textarea.style.display = 'none';
                 textarea.rows = 1;
+                
+                // Restore visibility and value
+                if (selectedExtras.includes(extra.id)) {
+                    textarea.style.display = 'block';
+                    if (specialRequestTexts[extra.id]) {
+                        textarea.value = specialRequestTexts[extra.id];
+                    }
+                } else {
+                    textarea.style.display = 'none';
+                }
                 
                 // Update special request text when user types
                 textarea.addEventListener('input', () => {
@@ -1328,24 +1385,17 @@ class BookingConfigurator {
                 return {
                     id: e.id,
                     name: e.name_it,
-                    special_text: e.specialRequestText
+                    special_text: e.specialRequestText,
+                    pricing_type: 'CUSTOM'
                 };
             }
             return {
                 id: e.id,
-                name: e.name_it
+                name: e.name_it,
+                price: e.price,
+                pricing_type: e.pricing_type
             };
         });
-        
-        // Build notes including special requests
-        let notes = `Richiesta tramite ${source} - Destinazione: ${this.destinationNames[this.state.destination]}`;
-        const specialRequests = this.state.extras.filter(e => e.pricing_type === 'CUSTOM' && e.specialRequestText);
-        if (specialRequests.length > 0) {
-            notes += '\n\nRichieste Speciali:\n';
-            specialRequests.forEach(req => {
-                notes += `${req.specialRequestText}\n`;
-            });
-        }
         
         const bookingData = {
             package_type: this.state.packageType,
@@ -1357,7 +1407,7 @@ class BookingConfigurator {
             customer_email: customerEmail,
             customer_name: '',
             customer_phone: source === 'whatsapp' ? '+393934830048' : '',
-            notes: notes,
+            source: source,
             total_price: this.state.totalPrice
         };
 

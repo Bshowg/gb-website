@@ -113,7 +113,6 @@ try {
             'extras_json' => json_encode($extrasJson),
             'total_price' => $totalPrice,
             'customer_email' => $data['customer_email'] ?? '',
-            'notes' => $data['notes'] ?? '',
             'status' => 'PENDING'
         ];
         
@@ -222,11 +221,11 @@ function sendBookingNotification($booking) {
             if (!empty($extras)) {
                 $message .= "
                 <div class='detail-row'>
-                    <span class='label'>Extras:</span><br>
-                    <ul>";
+                    <span class='label'>Servizi Extra:</span><br>
+                    <ul style='margin: 10px 0; padding-left: 20px;'>";
                 foreach ($extras as $extra) {
                     if (isset($extra['special_text']) && !empty($extra['special_text'])) {
-                        $message .= "<li>{$extra['name']}: {$extra['special_text']}</li>";
+                        $message .= "<li><strong>{$extra['name']}:</strong> {$extra['special_text']}</li>";
                     } else {
                         $message .= "<li>{$extra['name']}</li>";
                     }
@@ -234,15 +233,6 @@ function sendBookingNotification($booking) {
                 $message .= "</ul>
                 </div>";
             }
-        }
-        
-        // Add notes if present
-        if (!empty($booking['notes'])) {
-            $message .= "
-                <div class='detail-row'>
-                    <span class='label'>Notes:</span><br>
-                    <pre style='white-space: pre-wrap;'>{$booking['notes']}</pre>
-                </div>";
         }
         
         $message .= "
