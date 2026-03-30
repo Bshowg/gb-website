@@ -113,6 +113,7 @@ try {
             'extras_json' => json_encode($extrasJson),
             'total_price' => $totalPrice,
             'customer_email' => $data['customer_email'] ?? '',
+            'notes' => $data['notes'] ?? '',
             'status' => 'PENDING'
         ];
         
@@ -211,6 +212,40 @@ function sendBookingNotification($booking) {
                 <div class='detail-row'>
                     <span class='label'>Guests:</span> {$booking['guests']}
                 </div>
+                <div class='detail-row'>
+                    <span class='label'>Destinations:</span> {$booking['destinations_json']}
+                </div>";
+        
+        // Add extras if present
+        if (!empty($booking['extras_json'])) {
+            $extras = json_decode($booking['extras_json'], true);
+            if (!empty($extras)) {
+                $message .= "
+                <div class='detail-row'>
+                    <span class='label'>Extras:</span><br>
+                    <ul>";
+                foreach ($extras as $extra) {
+                    if (isset($extra['special_text']) && !empty($extra['special_text'])) {
+                        $message .= "<li>{$extra['name']}: {$extra['special_text']}</li>";
+                    } else {
+                        $message .= "<li>{$extra['name']}</li>";
+                    }
+                }
+                $message .= "</ul>
+                </div>";
+            }
+        }
+        
+        // Add notes if present
+        if (!empty($booking['notes'])) {
+            $message .= "
+                <div class='detail-row'>
+                    <span class='label'>Notes:</span><br>
+                    <pre style='white-space: pre-wrap;'>{$booking['notes']}</pre>
+                </div>";
+        }
+        
+        $message .= "
                 <div class='detail-row'>
                     <span class='label'>Total Price:</span> € {$booking['total_price']}
                 </div>

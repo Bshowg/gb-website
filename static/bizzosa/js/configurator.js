@@ -467,7 +467,12 @@ class BookingConfigurator {
             
             checkbox.addEventListener('change', () => {
                 if (checkbox.checked) {
-                    this.state.extras.push(extra);
+                    // For special requests, we'll store the text later
+                    const extraData = {...extra};
+                    if (extra.pricing_type === 'CUSTOM') {
+                        extraData.specialRequestText = ''; // Will be updated on input
+                    }
+                    this.state.extras.push(extraData);
                 } else {
                     this.state.extras = this.state.extras.filter(e => e.id !== extra.id);
                 }
@@ -484,7 +489,15 @@ class BookingConfigurator {
                 textarea.className = 'special-request-textarea';
                 textarea.placeholder = lang === 'it' ? 'Descrivi la tua richiesta speciale...' : 'Describe your special request...';
                 textarea.style.display = 'none';
-                textarea.rows = 3;
+                textarea.rows = 1;
+                
+                // Update special request text when user types
+                textarea.addEventListener('input', () => {
+                    const extraInState = this.state.extras.find(e => e.id === extra.id);
+                    if (extraInState) {
+                        extraInState.specialRequestText = textarea.value;
+                    }
+                });
                 
                 checkbox.addEventListener('change', () => {
                     textarea.style.display = checkbox.checked ? 'block' : 'none';
@@ -1265,7 +1278,14 @@ class BookingConfigurator {
             message += `Destinazione: ${this.destinationNames[this.state.destination]}\n`;
             
             if (this.state.extras.length > 0) {
-                message += `Extra: ${this.state.extras.map(e => e.name_it).join(', ')}\n`;
+                message += `Extra:\n`;
+                this.state.extras.forEach(e => {
+                    if (e.pricing_type === 'CUSTOM' && e.specialRequestText) {
+                        message += `- ${e.name_it}: ${e.specialRequestText}\n`;
+                    } else {
+                        message += `- ${e.name_it}\n`;
+                    }
+                });
             }
             
             message += `\nPrezzo stimato: €${this.state.totalPrice.toFixed(2)}`;
@@ -1302,17 +1322,42 @@ class BookingConfigurator {
     }
 
     async saveBookingToDatabase(source = 'web', customerEmail = '') {
+        // Build extras data with names and special request text
+        const extrasData = this.state.extras.map(e => {
+            if (e.pricing_type === 'CUSTOM' && e.specialRequestText) {
+                return {
+                    id: e.id,
+                    name: e.name_it,
+                    special_text: e.specialRequestText
+                };
+            }
+            return {
+                id: e.id,
+                name: e.name_it
+            };
+        });
+        
+        // Build notes including special requests
+        let notes = `Richiesta tramite ${source} - Destinazione: ${this.destinationNames[this.state.destination]}`;
+        const specialRequests = this.state.extras.filter(e => e.pricing_type === 'CUSTOM' && e.specialRequestText);
+        if (specialRequests.length > 0) {
+            notes += '\n\nRichieste Speciali:\n';
+            specialRequests.forEach(req => {
+                notes += `${req.specialRequestText}\n`;
+            });
+        }
+        
         const bookingData = {
             package_type: this.state.packageType,
             start_date: this.state.startDate,
             end_date: this.state.endDate,
             guests: this.state.guests,
             destination: this.state.destination,
-            extras: this.state.extras.map(e => e.id),
+            extras: extrasData,
             customer_email: customerEmail,
             customer_name: '',
             customer_phone: source === 'whatsapp' ? '+393934830048' : '',
-            notes: `Richiesta tramite ${source} - Destinazione: ${this.destinationNames[this.state.destination]}`,
+            notes: notes,
             total_price: this.state.totalPrice
         };
 
