@@ -1294,6 +1294,19 @@ section h2 {
     color: #1e3a5f !important;
 }
 
+.contact-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #4a90e2 !important;
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.contact-link:hover {
+    color: #1e3a5f !important;
+}
+
 .instagram-icon {
     flex-shrink: 0;
 }
