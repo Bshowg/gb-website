@@ -410,6 +410,7 @@ section h2 {
 }
 
 .booking-section-hero {
+    font-family: Calibri, 'Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif;
     display: flex;
     align-items: center;
     min-height: 100vh;
@@ -422,6 +423,7 @@ section h2 {
 }
 
 .booking-form-container {
+    font-family: Calibri, 'Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif;
     padding: 2.5rem 3rem;
     background: #fff;
     display: flex;
@@ -560,6 +562,18 @@ section h2 {
 
 .form-group {
     margin-bottom: 0;
+}
+
+/* Ensure all booking form elements use Calibri */
+.booking-form-container input,
+.booking-form-container select,
+.booking-form-container textarea,
+.booking-form-container button,
+.booking-section-hero input,
+.booking-section-hero select,
+.booking-section-hero textarea,
+.booking-section-hero button {
+    font-family: Calibri, 'Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif;
 }
 
 .form-group label {
