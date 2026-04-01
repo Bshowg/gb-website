@@ -124,6 +124,18 @@ a:hover {
     color: var(--primary-color);
     letter-spacing: 1px;
     text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8);
+    display: inline-flex;
+    align-items: center;
+}
+
+.nav-logo {
+    height: 50px;
+    width: auto;
+    transition: transform 0.3s ease;
+}
+
+.nav-logo:hover {
+    transform: scale(1.05);
 }
 
 .nav-menu {
@@ -388,6 +400,7 @@ section h2 {
     margin-bottom: 2rem;
     font-family: 'Calibri Light', 'Calibri', sans-serif;
     font-weight: 700;
+    text-align: left;
 }
 
 .booking-header-section .boat-description {
@@ -1234,6 +1247,7 @@ section h2 {
 
 /* Contacts Section */
 .contacts-section {
+    font-family: Calibri, 'Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif;
     padding: 4rem 0;
     background: #f8f9fa;
 }
@@ -1270,6 +1284,7 @@ section h2 {
 }
 
 .contact-info h3 {
+    font-family: Calibri, 'Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif;
     color: #1e3a5f;
     margin-bottom: 1.5rem;
     font-size: 1.5rem;
