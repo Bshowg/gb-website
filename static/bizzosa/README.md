@@ -50,3 +50,11 @@ Modern browsers block fetch requests to local files (file:// protocol) for secur
 - Default port is 8000, but you can change it if needed
 - Press Ctrl+C to stop the server
 - Changes to files are reflected immediately (just refresh the browser)
+
+calibri in extra
+prezzo stimato senza extra
+extra dopo prezzo stimato
+galleria friends no hover
+testo filippo in carslon
+e info footer
+google maps only desktop in info
