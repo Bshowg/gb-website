@@ -2,6 +2,15 @@
    Sailing Bizzosa - Main Styles
    ======================================== */
 
+/* Local Font Face */
+@font-face {
+    font-family: 'Elegante';
+    src: url('../fonts/elegante/Elegante.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
 /* CSS Variables */
 :root {
     --primary-color: #1e3a5f;
@@ -20,7 +29,7 @@
     --transition: all 0.3s ease;
     
     /* Font families */
-    --font-heading: 'Pinyon Script', cursive;
+    --font-heading: 'Elegante', 'Pinyon Script', cursive;
     --font-body: 'Libre Caslon Display', serif;
 }
 
