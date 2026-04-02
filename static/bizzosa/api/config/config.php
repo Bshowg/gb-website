@@ -20,35 +20,37 @@ define('ENVIRONMENT', 'development');
 // - DB_USER: Your database username (often same as DB_NAME)
 // - DB_PASS: The password you created for the database
 
-define('DB_HOST', 'gianmd-bizzosa.db.tb-hosting.com'); // Change to your Register.it MySQL server (e.g., 'mysql.register.it')
-define('DB_NAME', 'gianmd_bizzosa'); // Your Register.it database name
-define('DB_USER', 'gianmd_bizzosa'); // Your Register.it database username
-define('DB_PASS', 'malleolo92'); // Your Register.it database password
+define('DB_HOST', '31.11.39.161'); // Change to your Register.it MySQL server (e.g., 'mysql.register.it')
+define('DB_NAME', 'Sql1929190_1'); // Your Register.it database name
+define('DB_USER', 'Sql1929190'); // Your Register.it database username
+define('DB_PASS', 'Bizzosa26_'); // Your Register.it database password
 define('DB_CHARSET', 'utf8mb4');
 
 // Application settings
 define('SITE_URL', 'http://localhost:8000');
 define('API_URL', SITE_URL . '/api');
 
-// Email configuration
-define('SMTP_HOST', 'smtp.gmail.com');
-define('SMTP_PORT', 587);
-define('SMTP_USER', 'your_email@gmail.com');
-define('SMTP_PASS', 'your_email_password');
+// Email configuration - Aruba SMTP
+// Try alternative settings: smtps.aruba.it with SSL on port 465
+define('SMTP_HOST', 'smtps.aruba.it'); // Alternative: smtp.aruba.it
+define('SMTP_PORT', 465); // Alternative: 587 for TLS, 465 for SSL, 25 for plain
+define('SMTP_USER', 'info@sailingbizzosa.it');
+define('SMTP_PASS', 'Bizzosa26_'); // IMPORTANT: Update with actual password
 define('SMTP_FROM_EMAIL', 'info@sailingbizzosa.it');
 define('SMTP_FROM_NAME', 'Sailing Bizzosa');
+define('SMTP_SECURE', 'ssl'); // Use 'tls' for port 587 or 'ssl' for port 465
 
-// Admin notification email
-define('ADMIN_EMAIL', 'admin@sailingbizzosa.it');
+// Admin notification email (your Gmail account)
+define('ADMIN_EMAIL', 'flpp.bettarini@gmail.com'); // IMPORTANT: Update with your Gmail address
 
 // WhatsApp configuration
 define('WHATSAPP_PHONE', '393331234567'); // Without + sign
 
 // Pricing configuration (in EUR)
-define('PRICE_DAY_SAIL', 800);
-define('PRICE_DAILY_CHARTER_PER_DAY', 700);
-define('PRICE_WEEKLY_CHARTER_PER_DAY', 600);
-define('WEEKLY_DISCOUNT', 0.20); // 20% discount for weekly
+define('PRICE_DAY_SAIL', 200);
+define('PRICE_DAILY_CHARTER_PER_DAY', 200);
+define('PRICE_WEEKLY_CHARTER_PER_DAY', 150);
+define('WEEKLY_DISCOUNT', 0.10); // 20% discount for weekly
 
 // Business rules - Updated for 2 packages
 define('MAX_GUESTS_DAILY_CHARTER', 8);
