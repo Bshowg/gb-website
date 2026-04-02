@@ -7,6 +7,7 @@
 require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/config/Database.php';
 require_once __DIR__ . '/config/helpers.php';
+require_once __DIR__ . '/config/SMTPMailer.php';
 
 // Set CORS headers
 setCorsHeaders();
@@ -35,7 +36,7 @@ try {
     
     // Validate required fields
     $requiredFields = [
-        'package_type', 'start_date', 'end_date', 'guests'
+        'package_type', 'start_date', 'end_date', 'guests', 'total_price'
     ];
     
     $errors = validateRequired($data, $requiredFields);
@@ -66,35 +67,19 @@ try {
     $db->beginTransaction();
     
     try {
-        // First, calculate the quote to get the total price
-        $days = daysBetween($data['start_date'], $data['end_date']);
+        // Get total price from frontend (already calculated with discounts)
+        $totalPrice = isset($data['total_price']) ? floatval($data['total_price']) : 0;
         
-        // Calculate base price (simplified version - reuse logic from quote.php)
-        $defaultPricePerDay = [
-            'DAY_SAIL' => PRICE_DAY_SAIL,
-            'DAILY_CHARTER' => PRICE_DAILY_CHARTER_PER_DAY,
-            'WEEKLY_CHARTER' => PRICE_WEEKLY_CHARTER_PER_DAY
-        ];
-        
-        $basePrice = $defaultPricePerDay[$data['package_type']] * $days;
-        
-        // Apply weekly discount if applicable
-        if ($data['package_type'] === 'WEEKLY_CHARTER' && $days >= 7) {
-            $basePrice = $basePrice * (1 - WEEKLY_DISCOUNT);
+        // Validate price is provided and reasonable
+        if ($totalPrice <= 0) {
+            throw new Exception('Invalid price provided');
         }
         
-        // Calculate extras (simplified)
-        $extrasTotal = 0;
+        // Get extras data from frontend
         $extrasJson = [];
-        
         if (isset($data['extras']) && is_array($data['extras'])) {
             $extrasJson = $data['extras'];
-            // In production, calculate actual extras total
-            // For now, use a simplified calculation
-            $extrasTotal = count($data['extras']) * 50; // Placeholder
         }
-        
-        $totalPrice = $basePrice + $extrasTotal;
         
         // Generate UUID for primary key
         $bookingId = generateUUID();
@@ -176,112 +161,179 @@ try {
 }
 
 /**
- * Send booking notification email
+ * Send booking notification email using SMTP
  */
 function sendBookingNotification($booking) {
     try {
-        // Email content
-        $subject = "New Booking Request - " . $booking['id'];
+        $mailer = new SMTPMailer();
         
-        $message = "
+        // Prepare admin email content
+        $adminSubject = "Nuova Richiesta Prenotazione - " . $booking['id'];
+        
+        $adminMessage = "
+        <!DOCTYPE html>
         <html>
         <head>
             <style>
-                body { font-family: Arial, sans-serif; }
-                .booking-details { background: #f5f5f5; padding: 20px; border-radius: 5px; }
-                .detail-row { margin: 10px 0; }
-                .label { font-weight: bold; }
+                body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+                .booking-details { background: #f5f5f5; padding: 20px; border-radius: 5px; margin: 20px 0; }
+                .detail-row { margin: 10px 0; padding: 10px; background: white; border-radius: 3px; }
+                .label { font-weight: bold; color: #1e3a5f; }
+                h2 { color: #1e3a5f; }
+                h3 { color: #4a90e2; margin-top: 20px; }
+                ul { margin: 10px 0; padding-left: 20px; }
+                li { margin: 5px 0; }
             </style>
         </head>
         <body>
-            <h2>New Booking Request</h2>
+            <h2>Nuova Richiesta di Prenotazione</h2>
             <div class='booking-details'>
                 <div class='detail-row'>
-                    <span class='label'>Booking ID:</span> {$booking['id']}
+                    <span class='label'>ID Prenotazione:</span> {$booking['id']}
                 </div>
                 <div class='detail-row'>
-                    <span class='label'>Package:</span> {$booking['package_type']}
+                    <span class='label'>Pacchetto:</span> {$booking['package_type']}
                 </div>
                 <div class='detail-row'>
-                    <span class='label'>Start Date:</span> {$booking['start_date']}
+                    <span class='label'>Data Inizio:</span> {$booking['start_date']}
                 </div>
                 <div class='detail-row'>
-                    <span class='label'>End Date:</span> {$booking['end_date']}
+                    <span class='label'>Data Fine:</span> {$booking['end_date']}
                 </div>
                 <div class='detail-row'>
-                    <span class='label'>Guests:</span> {$booking['guests']}
-                </div>
-                <div class='detail-row'>
-                    <span class='label'>Destinations:</span> {$booking['destinations_json']}
+                    <span class='label'>Numero Ospiti:</span> {$booking['guests']}
                 </div>";
+        
+        // Add destination
+        if (!empty($booking['destinations_json'])) {
+            $destinations = json_decode($booking['destinations_json'], true);
+            if (!empty($destinations[0])) {
+                $adminMessage .= "
+                <div class='detail-row'>
+                    <span class='label'>Destinazione:</span> {$destinations[0]}
+                </div>";
+            }
+        }
         
         // Add extras if present
         if (!empty($booking['extras_json'])) {
             $extras = json_decode($booking['extras_json'], true);
             if (!empty($extras)) {
-                $message .= "
+                $adminMessage .= "
                 <div class='detail-row'>
-                    <span class='label'>Servizi Extra:</span><br>
-                    <ul style='margin: 10px 0; padding-left: 20px;'>";
+                    <span class='label'>Servizi Extra Richiesti:</span><br>
+                    <ul>";
                 foreach ($extras as $extra) {
                     if (isset($extra['special_text']) && !empty($extra['special_text'])) {
-                        $message .= "<li><strong>{$extra['name']}:</strong> {$extra['special_text']}</li>";
+                        $adminMessage .= "<li><strong>{$extra['name']}:</strong> {$extra['special_text']}</li>";
                     } else {
-                        $message .= "<li>{$extra['name']}</li>";
+                        $adminMessage .= "<li>{$extra['name']}</li>";
                     }
                 }
-                $message .= "</ul>
+                $adminMessage .= "</ul>
                 </div>";
             }
         }
         
-        $message .= "
+        $adminMessage .= "
                 <div class='detail-row'>
-                    <span class='label'>Total Price:</span> € {$booking['total_price']}
+                    <span class='label'>Prezzo Charter:</span> <strong>€ {$booking['total_price']}</strong>
                 </div>
-                <hr>
-                <h3>Customer Information</h3>
+                
+                <h3>Informazioni Cliente</h3>
                 <div class='detail-row'>
-                    <span class='label'>Email:</span> {$booking['customer_email']}
+                    <span class='label'>Email Cliente:</span> <a href='mailto:{$booking['customer_email']}'>{$booking['customer_email']}</a>
                 </div>
             </div>
+            <p style='margin-top: 20px; font-size: 12px; color: #666;'>
+                Questa email è stata generata automaticamente dal sistema di prenotazione Sailing Bizzosa.
+            </p>
         </body>
-        </html>
-        ";
+        </html>";
         
-        // Headers for HTML email
-        $headers = "MIME-Version: 1.0\r\n";
-        $headers .= "Content-type:text/html;charset=UTF-8\r\n";
-        $headers .= "From: " . SMTP_FROM_EMAIL . "\r\n";
-        $headers .= "Reply-To: " . $booking['customer_email'] . "\r\n";
+        // Send admin email to Gmail account
+        $adminSent = $mailer->sendMail(
+            ADMIN_EMAIL, 
+            $adminSubject, 
+            $adminMessage, 
+            $booking['customer_email']  // Reply-to customer
+        );
         
-        // Send to admin
-        $adminSent = mail(ADMIN_EMAIL, $subject, $message, $headers);
+        if (!$adminSent) {
+            error_log("Failed to send admin email: " . $mailer->getLastError());
+        }
         
-        // Send confirmation to customer
-        $customerSubject = "Booking Confirmation - Sailing Bizzosa";
+        // Prepare customer confirmation email
+        $customerSubject = "Conferma Richiesta - Sailing Bizzosa";
+        
         $customerMessage = "
+        <!DOCTYPE html>
         <html>
+        <head>
+            <style>
+                body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+                h2 { color: #1e3a5f; }
+                .booking-box { 
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    color: white;
+                    padding: 30px;
+                    border-radius: 10px;
+                    margin: 20px 0;
+                }
+                .detail { margin: 10px 0; }
+                .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0; font-size: 14px; color: #666; }
+            </style>
+        </head>
         <body>
-            <h2>Thank you for your booking request!</h2>
-            <p>We have received your booking request (ID: {$booking['id']}) and will contact you shortly to confirm availability and payment details.</p>
-            <p><strong>Your booking details:</strong></p>
+            <h2>Grazie per la tua richiesta di prenotazione!</h2>
+            
+            <p>Ciao,</p>
+            <p>Abbiamo ricevuto la tua richiesta di prenotazione e ti contatteremo al più presto per confermare la disponibilità e i dettagli del pagamento.</p>
+            
+            <div class='booking-box'>
+                <h3 style='color: white; margin-top: 0;'>I tuoi dettagli di prenotazione:</h3>
+                <div class='detail'><strong>ID Prenotazione:</strong> {$booking['id']}</div>
+                <div class='detail'><strong>Pacchetto:</strong> {$booking['package_type']}</div>
+                <div class='detail'><strong>Data inizio:</strong> {$booking['start_date']}</div>
+                <div class='detail'><strong>Data fine:</strong> {$booking['end_date']}</div>
+                <div class='detail'><strong>Numero ospiti:</strong> {$booking['guests']}</div>
+                <div class='detail'><strong>Prezzo stimato:</strong> € {$booking['total_price']}</div>
+            </div>
+            
+            <p>Se hai domande o necessiti di modificare la tua richiesta, non esitare a contattarci:</p>
             <ul>
-                <li>Package: {$booking['package_type']}</li>
-                <li>Start date: {$booking['start_date']}</li>
-                <li>End date: {$booking['end_date']}</li>
-                <li>Number of guests: {$booking['guests']}</li>
-                <li>Estimated total: € {$booking['total_price']}</li>
+                <li>Email: <a href='mailto:info@sailingbizzosa.it'>info@sailingbizzosa.it</a></li>
+                <li>Telefono: +39 393 4830048</li>
+                <li>WhatsApp: <a href='https://wa.me/393934830048'>+39 393 4830048</a></li>
             </ul>
-            <p>If you have any questions, please don't hesitate to contact us.</p>
-            <p>Best regards,<br>Sailing Bizzosa Team</p>
+            
+            <div class='footer'>
+                <p>Cordiali saluti,<br>
+                <strong>Il Team di Sailing Bizzosa</strong></p>
+                <p>Porto ESAOM CESA, Portoferraio (LI), Italia</p>
+                <p style='font-size: 12px;'>
+                    Questa è un'email automatica. Per favore non rispondere direttamente a questo messaggio.
+                </p>
+            </div>
         </body>
-        </html>
-        ";
+        </html>";
         
-        $customerSent = mail($booking['customer_email'], $customerSubject, $customerMessage, $headers);
+        // Send customer confirmation email if email provided
+        $customerSent = true;
+        if (!empty($booking['customer_email'])) {
+            $customerSent = $mailer->sendMail(
+                $booking['customer_email'], 
+                $customerSubject, 
+                $customerMessage,
+                SMTP_FROM_EMAIL  // Reply-to info@sailingbizzosa.it
+            );
+            
+            if (!$customerSent) {
+                error_log("Failed to send customer email: " . $mailer->getLastError());
+            }
+        }
         
-        return $adminSent && $customerSent;
+        return $adminSent || $customerSent;  // Return true if at least one email was sent
         
     } catch (Exception $e) {
         error_log("Email sending failed: " . $e->getMessage());

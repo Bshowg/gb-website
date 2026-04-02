@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Email - Sailing Bizzosa</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+        }
+        
+        h1 {
+            color: #1e3a5f;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        input[type="email"],
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        
+        button {
+            flex: 1;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-test {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-test:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-simple {
+            background: #48bb78;
+            color: white;
+        }
+        
+        .btn-simple:hover {
+            background: #38a169;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(72, 187, 120, 0.4);
+        }
+        
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .result.success {
+            background: #c6f6d5;
+            color: #22543d;
+            border: 1px solid #9ae6b4;
+        }
+        
+        .result.error {
+            background: #fed7d7;
+            color: #742a2a;
+            border: 1px solid #fc8181;
+        }
+        
+        .result.info {
+            background: #bee3f8;
+            color: #2c5282;
+            border: 1px solid #90cdf4;
+        }
+        
+        .result h3 {
+            margin-bottom: 10px;
+        }
+        
+        .result pre {
+            background: rgba(0,0,0,0.05);
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-top: 10px;
+            font-size: 12px;
+        }
+        
+        .config-info {
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .config-info h3 {
+            color: #2d3748;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .config-item {
+            display: flex;
+            margin: 5px 0;
+        }
+        
+        .config-label {
+            font-weight: 600;
+            color: #4a5568;
+            min-width: 120px;
+        }
+        
+        .config-value {
+            color: #718096;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Test Email SMTP</h1>
+        <p class="subtitle">Test della connessione SMTP con Aruba</p>
+        
+        <div class="config-info">
+            <h3>📧 Configurazione Corrente</h3>
+            <div class="config-item">
+                <span class="config-label">SMTP Host:</span>
+                <span class="config-value">smtp.aruba.it</span>
+            </div>
+            <div class="config-item">
+                <span class="config-label">Porta:</span>
+                <span class="config-value">587 (TLS)</span>
+            </div>
+            <div class="config-item">
+                <span class="config-label">Da:</span>
+                <span class="config-value">info@sailingbizzosa.it</span>
+            </div>
+            <div class="config-item">
+                <span class="config-label">Admin Email:</span>
+                <span class="config-value">flpp.bettarini@gmail.com</span>
+            </div>
+        </div>
+        
+        <form id="testForm">
+            <div class="form-group">
+                <label for="testEmail">Email di Test (destinatario):</label>
+                <input type="email" id="testEmail" name="testEmail" required 
+                       placeholder="test@example.com" value="flpp.bettarini@gmail.com">
+            </div>
+            
+            <div class="form-group">
+                <label for="subject">Oggetto:</label>
+                <input type="text" id="subject" name="subject" required 
+                       value="Test SMTP - Sailing Bizzosa">
+            </div>
+            
+            <div class="form-group">
+                <label for="message">Messaggio:</label>
+                <textarea id="message" name="message" required>Questo è un messaggio di test per verificare la configurazione SMTP con Aruba.
+
+Se ricevi questo messaggio, la configurazione email funziona correttamente!
+
+Data test: [TIMESTAMP]</textarea>
+            </div>
+            
+            <div class="button-group">
+                <button type="button" class="btn-simple" onclick="sendSimpleTest()">
+                    📨 Test Semplice
+                </button>
+                <button type="button" class="btn-test" onclick="sendFullTest()">
+                    📧 Test Completo
+                </button>
+            </div>
+        </form>
+        
+        <div id="result" class="result"></div>
+    </div>
+    
+    <script>
+        function showResult(type, title, message, details = null) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.className = 'result ' + type;
+            
+            let html = `<h3>${title}</h3><p>${message}</p>`;
+            if (details) {
+                html += `<pre>${JSON.stringify(details, null, 2)}</pre>`;
+            }
+            
+            resultDiv.innerHTML = html;
+            resultDiv.style.display = 'block';
+        }
+        
+        function disableButtons(disabled) {
+            document.querySelectorAll('button').forEach(btn => {
+                btn.disabled = disabled;
+                if (disabled) {
+                    const originalText = btn.textContent;
+                    btn.innerHTML = '<span class="loading"></span> Invio...';
+                    btn.dataset.originalText = originalText;
+                } else if (btn.dataset.originalText) {
+                    btn.textContent = btn.dataset.originalText;
+                }
+            });
+        }
+        
+        async function sendSimpleTest() {
+            const email = document.getElementById('testEmail').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value.replace('[TIMESTAMP]', new Date().toLocaleString('it-IT'));
+            
+            if (!email) {
+                showResult('error', 'Errore', 'Inserisci un indirizzo email valido');
+                return;
+            }
+            
+            disableButtons(true);
+            showResult('info', 'Invio in corso...', 'Tentativo di connessione SMTP...');
+            
+            try {
+                const response = await fetch('/api/test-email.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        test_type: 'simple',
+                        to_email: email,
+                        subject: subject,
+                        message: message
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showResult('success', '✅ Test Riuscito!', 
+                        'Email inviata correttamente a ' + email, 
+                        data.details || null);
+                } else {
+                    showResult('error', '❌ Test Fallito', 
+                        data.message || 'Errore durante l\'invio', 
+                        data.error || null);
+                }
+            } catch (error) {
+                showResult('error', '❌ Errore di Connessione', 
+                    'Impossibile connettersi al server: ' + error.message);
+            } finally {
+                disableButtons(false);
+            }
+        }
+        
+        async function sendFullTest() {
+            const email = document.getElementById('testEmail').value;
+            
+            if (!email) {
+                showResult('error', 'Errore', 'Inserisci un indirizzo email valido');
+                return;
+            }
+            
+            disableButtons(true);
+            showResult('info', 'Test Completo in corso...', 'Test connessione SMTP e invio email di booking...');
+            
+            try {
+                const response = await fetch('/api/test-email.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        test_type: 'full',
+                        to_email: email
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showResult('success', '✅ Test Completo Riuscito!', 
+                        'Sono state inviate 2 email: una all\'admin e una al cliente di test', 
+                        data.details || null);
+                } else {
+                    showResult('error', '❌ Test Completo Fallito', 
+                        data.message || 'Errore durante l\'invio', 
+                        data.error || null);
+                }
+            } catch (error) {
+                showResult('error', '❌ Errore di Connessione', 
+                    'Impossibile connettersi al server: ' + error.message);
+            } finally {
+                disableButtons(false);
+            }
+        }
+        
+        // Update message timestamp on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const messageField = document.getElementById('message');
+            messageField.value = messageField.value.replace('[TIMESTAMP]', new Date().toLocaleString('it-IT'));
+        });
+    </script>
+</body>
+</html>

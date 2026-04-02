@@ -15,7 +15,7 @@
         
         try {
             // Test the simple test endpoint first
-            const response = await fetch('/static/bizzosa/api/test.php');
+            const response = await fetch('/api/test.php');
             const data = await response.json();
             
             resultDiv.innerHTML = `

@@ -577,7 +577,7 @@ class BookingConfigurator {
     // Availability
     async loadAvailability() {
         try {
-            const response = await fetch('/static/bizzosa/api/availability.php');
+            const response = await fetch('/api/availability.php');
             if (!response.ok) {
                 console.error('Failed to load availability');
                 return;
@@ -1395,7 +1395,7 @@ class BookingConfigurator {
         };
 
         // Use direct PHP file path (more reliable)
-        const response = await fetch('/static/bizzosa/api/request_quote.php', {
+        const response = await fetch('/api/request_quote.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
