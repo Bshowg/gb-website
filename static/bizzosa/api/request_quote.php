@@ -98,6 +98,7 @@ try {
             'extras_json' => json_encode($extrasJson),
             'total_price' => $totalPrice,
             'customer_email' => $data['customer_email'] ?? '',
+            'language' => $data['language'] ?? 'it',
             'status' => 'PENDING'
         ];
         
@@ -166,6 +167,7 @@ try {
 function sendBookingNotification($booking) {
     try {
         $mailer = new SMTPMailer();
+        $language = $booking['language'] ?? 'it';
         
         // Prepare admin email content
         $adminSubject = "Nuova Richiesta Prenotazione - " . $booking['id'];
@@ -263,60 +265,117 @@ function sendBookingNotification($booking) {
             error_log("Failed to send admin email: " . $mailer->getLastError());
         }
         
-        // Prepare customer confirmation email
-        $customerSubject = "Conferma Richiesta - Sailing Bizzosa";
-        
-        $customerMessage = "
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <style>
-                body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-                h2 { color: #1e3a5f; }
-                .booking-box { 
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                    color: white;
-                    padding: 30px;
-                    border-radius: 10px;
-                    margin: 20px 0;
-                }
-                .detail { margin: 10px 0; }
-                .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0; font-size: 14px; color: #666; }
-            </style>
-        </head>
-        <body>
-            <h2>Grazie per la tua richiesta di prenotazione!</h2>
+        // Prepare customer confirmation email based on language
+        if ($language === 'en') {
+            $customerSubject = "Booking Request Confirmation - Sailing Bizzosa";
             
-            <p>Ciao,</p>
-            <p>Abbiamo ricevuto la tua richiesta di prenotazione e ti contatteremo al più presto per confermare la disponibilità e i dettagli del pagamento.</p>
+            $customerMessage = "
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <style>
+                    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+                    h2 { color: #1e3a5f; }
+                    .booking-box { 
+                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                        color: white;
+                        padding: 30px;
+                        border-radius: 10px;
+                        margin: 20px 0;
+                    }
+                    .detail { margin: 10px 0; }
+                    .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0; font-size: 14px; color: #666; }
+                </style>
+            </head>
+            <body>
+                <h2>Thank you for your booking request!</h2>
+                
+                <p>Hello,</p>
+                <p>We have received your booking request and will contact you as soon as possible to confirm availability and payment details.</p>
+                
+                <div class='booking-box'>
+                    <h3 style='color: white; margin-top: 0;'>Your booking details:</h3>
+                    <div class='detail'><strong>Booking ID:</strong> {$booking['id']}</div>
+                    <div class='detail'><strong>Package:</strong> {$booking['package_type']}</div>
+                    <div class='detail'><strong>Start date:</strong> {$booking['start_date']}</div>
+                    <div class='detail'><strong>End date:</strong> {$booking['end_date']}</div>
+                    <div class='detail'><strong>Number of guests:</strong> {$booking['guests']}</div>
+                    <div class='detail'><strong>Estimated price:</strong> € {$booking['total_price']}</div>
+                </div>
+                
+                <p>If you have questions or need to modify your request, don't hesitate to contact us:</p>
+                <ul>
+                    <li>Email: <a href='mailto:info@sailingbizzosa.it'>info@sailingbizzosa.it</a></li>
+                    <li>Phone: +39 393 4830048</li>
+                    <li>WhatsApp: <a href='https://wa.me/393934830048'>+39 393 4830048</a></li>
+                </ul>
+                
+                <div class='footer'>
+                    <p>Best regards,<br>
+                    <strong>The Sailing Bizzosa Team</strong></p>
+                    <p>Porto ESAOM CESA, Portoferraio (LI), Italy</p>
+                    <p style='font-size: 12px;'>
+                        This is an automatic email. Please do not reply directly to this message.
+                    </p>
+                </div>
+            </body>
+            </html>";
+        } else {
+            // Italian (default)
+            $customerSubject = "Conferma Richiesta - Sailing Bizzosa";
             
-            <div class='booking-box'>
-                <h3 style='color: white; margin-top: 0;'>I tuoi dettagli di prenotazione:</h3>
-                <div class='detail'><strong>ID Prenotazione:</strong> {$booking['id']}</div>
-                <div class='detail'><strong>Pacchetto:</strong> {$booking['package_type']}</div>
-                <div class='detail'><strong>Data inizio:</strong> {$booking['start_date']}</div>
-                <div class='detail'><strong>Data fine:</strong> {$booking['end_date']}</div>
-                <div class='detail'><strong>Numero ospiti:</strong> {$booking['guests']}</div>
-                <div class='detail'><strong>Prezzo stimato:</strong> € {$booking['total_price']}</div>
-            </div>
-            
-            <p>Se hai domande o necessiti di modificare la tua richiesta, non esitare a contattarci:</p>
-            <ul>
-                <li>Email: <a href='mailto:info@sailingbizzosa.it'>info@sailingbizzosa.it</a></li>
-                <li>Telefono: +39 393 4830048</li>
-                <li>WhatsApp: <a href='https://wa.me/393934830048'>+39 393 4830048</a></li>
-            </ul>
-            
-            <div class='footer'>
-                <p>Cordiali saluti,<br>
-                <strong>Il Team di Sailing Bizzosa</strong></p>
-                <p>Porto ESAOM CESA, Portoferraio (LI), Italia</p>
-                <p style='font-size: 12px;'>
-                    Questa è un'email automatica. Per favore non rispondere direttamente a questo messaggio.
-                </p>
-            </div>
-        </body>
-        </html>";
+            $customerMessage = "
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <style>
+                    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+                    h2 { color: #1e3a5f; }
+                    .booking-box { 
+                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                        color: white;
+                        padding: 30px;
+                        border-radius: 10px;
+                        margin: 20px 0;
+                    }
+                    .detail { margin: 10px 0; }
+                    .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0; font-size: 14px; color: #666; }
+                </style>
+            </head>
+            <body>
+                <h2>Grazie per la tua richiesta di prenotazione!</h2>
+                
+                <p>Ciao,</p>
+                <p>Abbiamo ricevuto la tua richiesta di prenotazione e ti contatteremo al più presto per confermare la disponibilità e i dettagli del pagamento.</p>
+                
+                <div class='booking-box'>
+                    <h3 style='color: white; margin-top: 0;'>I tuoi dettagli di prenotazione:</h3>
+                    <div class='detail'><strong>ID Prenotazione:</strong> {$booking['id']}</div>
+                    <div class='detail'><strong>Pacchetto:</strong> {$booking['package_type']}</div>
+                    <div class='detail'><strong>Data inizio:</strong> {$booking['start_date']}</div>
+                    <div class='detail'><strong>Data fine:</strong> {$booking['end_date']}</div>
+                    <div class='detail'><strong>Numero ospiti:</strong> {$booking['guests']}</div>
+                    <div class='detail'><strong>Prezzo stimato:</strong> € {$booking['total_price']}</div>
+                </div>
+                
+                <p>Se hai domande o necessiti di modificare la tua richiesta, non esitare a contattarci:</p>
+                <ul>
+                    <li>Email: <a href='mailto:info@sailingbizzosa.it'>info@sailingbizzosa.it</a></li>
+                    <li>Telefono: +39 393 4830048</li>
+                    <li>WhatsApp: <a href='https://wa.me/393934830048'>+39 393 4830048</a></li>
+                </ul>
+                
+                <div class='footer'>
+                    <p>Cordiali saluti,<br>
+                    <strong>Il Team di Sailing Bizzosa</strong></p>
+                    <p>Porto ESAOM CESA, Portoferraio (LI), Italia</p>
+                    <p style='font-size: 12px;'>
+                        Questa è un'email automatica. Per favore non rispondere direttamente a questo messaggio.
+                    </p>
+                </div>
+            </body>
+            </html>";
+        }
         
         // Send customer confirmation email if email provided
         $customerSent = true;

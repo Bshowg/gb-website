@@ -101,6 +101,11 @@
     "hours_text": "Lun-Dom: 9:00 - 19:00",
     "maps_btn": "Apri in Maps"
   },
+  "info_banner": {
+    "embarkation_title": "Imbarco/sbarco incluso",
+    "embarkation_location": "Portoferraio (Isola d'Elba)",
+    "crew_included": "Equipaggio di bordo incluso"
+  },
   "footer": {
     "rights": "Tutti i diritti riservati."
   },

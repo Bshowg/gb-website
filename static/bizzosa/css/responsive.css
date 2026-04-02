@@ -339,6 +339,24 @@
         font-size: 1.25rem;
         margin-bottom: 1rem;
     }
+    
+    /* Info Banner Mobile */
+    .info-banner-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .info-banner-item {
+        padding: 1rem;
+    }
+    
+    .info-banner-item p {
+        font-size: 1rem;
+    }
+    
+    .info-banner-item strong {
+        font-size: 1.1rem;
+    }
 }
 
 /* Small mobile devices (max-width: 480px) */

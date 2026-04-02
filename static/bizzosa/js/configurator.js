@@ -1391,7 +1391,8 @@ class BookingConfigurator {
             customer_name: '',
             customer_phone: source === 'whatsapp' ? '+393934830048' : '',
             source: source,
-            total_price: this.state.totalPrice
+            total_price: this.state.totalPrice,
+            language: this.currentLang
         };
 
         // Use direct PHP file path (more reliable)

@@ -101,6 +101,11 @@
     "hours_text": "Mon-Sun: 9:00 AM - 7:00 PM",
     "maps_btn": "Open in Maps"
   },
+  "info_banner": {
+    "embarkation_title": "Embarkation/Disembarkation included",
+    "embarkation_location": "Portoferraio (Elba Island)",
+    "crew_included": "Onboard crew included"
+  },
   "footer": {
     "rights": "All rights reserved."
   },
