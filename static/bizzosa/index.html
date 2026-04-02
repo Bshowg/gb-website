@@ -179,7 +179,16 @@
     <section id="booking-details" class="booking-details-section" style="display: none;">
         <div class="container container-section">
            
-
+            <!-- Price Summary -->
+            <div class="price-summary">
+                <h3 data-i18n-key="plan.summary">Riepilogo Preventivo</h3>
+                <div class="price-details">
+                    <div class="price-line total">
+                        <span data-i18n-key="plan.base_price">Prezzo Charter</span>
+                        <span id="basePrice">€ 0</span>
+                    </div>
+                </div>
+            </div>
             <!-- Extras -->
             <div class="extras-section">
                 <h3 data-i18n-key="plan.extras">Servizi Extra</h3>
@@ -188,24 +197,7 @@
                 </div>
             </div>
 
-            <!-- Price Summary -->
-            <div class="price-summary">
-                <h3 data-i18n-key="plan.summary">Riepilogo Preventivo</h3>
-                <div class="price-details">
-                    <div class="price-line">
-                        <span data-i18n-key="plan.base_price">Prezzo Base</span>
-                        <span id="basePrice">€ 0</span>
-                    </div>
-                    <div class="price-line">
-                        <span data-i18n-key="plan.extras_total">Servizi Extra</span>
-                        <span id="extrasTotal">€ 0</span>
-                    </div>
-                    <div class="price-line total">
-                        <span data-i18n-key="plan.total">Totale</span>
-                        <span id="totalPrice">€ 0</span>
-                    </div>
-                </div>
-            </div>
+            
 
             <!-- Submit Buttons -->
             <div class="submit-buttons">
@@ -414,6 +406,20 @@
                             <strong data-i18n-key="contacts.address">Indirizzo:</strong>
                             <p>Porto ESAOM CESA<br>Portoferraio (LI), Italia</p>
                             <a href="https://maps.app.goo.gl/Qr73kyaJu2czjuci7?g_st=iw" target="_blank" rel="noopener noreferrer" class="btn-maps" data-i18n-key="contacts.maps_btn">Apri in Maps</a>
+                        </div>
+                        
+                        <!-- Google Maps - Hidden on Mobile -->
+                        <div class="contact-map-container">
+                            <iframe 
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2916.3!2d10.319!3d42.809!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12d61d5f8a7b9c0d%3A0x1234567890abcdef!2sPorto%20ESAOM%20CESA%2C%20Portoferraio%2C%20LI%2C%20Italy!5e0!3m2!1sen!2sit!4v1234567890!5m2!1sen!2sit"
+                                class="contact-map"
+                                width="600"
+                                height="400"
+                                style="border:0;"
+                                allowfullscreen=""
+                                loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
                         </div>
                         
                     </div>

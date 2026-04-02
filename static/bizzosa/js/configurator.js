@@ -1055,6 +1055,11 @@ class BookingConfigurator {
                 }
                 current.setDate(current.getDate() + 1);
             }
+            
+            // Apply weekly charter discount if applicable (for API prices)
+            if (this.state.packageType === 'WEEKLY_CHARTER') {
+                basePrice = basePrice * 0.9; // 10% discount
+            }
         } else {
             // Fallback to default pricing if no API data
             const defaultPrices = {
@@ -1065,50 +1070,28 @@ class BookingConfigurator {
             basePrice = (defaultPrices[this.state.packageType] || 700) * days;
             
             // Apply weekly charter discount if applicable
-            if (this.state.packageType === 'WEEKLY_CHARTER' && days >= 7) {
-                basePrice = basePrice * 0.8; // 20% discount
+            if (this.state.packageType === 'WEEKLY_CHARTER') {
+                basePrice = basePrice * 0.9; // 10% discount
             }
         }
 
-        // Calculate extras
-        let extrasTotal = 0;
-        this.state.extras.forEach(extra => {
-            switch (extra.pricing_type) {
-                case 'FLAT_RATE':
-                    extrasTotal += parseFloat(extra.price);
-                    break;
-                case 'PER_DAY':
-                    extrasTotal += parseFloat(extra.price) * days;
-                    break;
-                case 'PER_PERSON':
-                    extrasTotal += parseFloat(extra.price) * this.state.guests;
-                    break;
-                case 'PER_TRIP':
-                    extrasTotal += parseFloat(extra.price);
-                    break;
-                case 'PER_NIGHT':
-                    extrasTotal += parseFloat(extra.price);
-                    break;
-            }
-        });
-
-        const totalPrice = basePrice + extrasTotal;
+        // Extras are only for information, not added to price
+        // Store extras for invoice purposes but don't calculate their cost
+        
+        const totalPrice = basePrice; // Total is just the base price
         
         this.state.basePrice = basePrice;
-        this.state.extrasTotal = extrasTotal;
+        this.state.extrasTotal = 0; // Extras don't have a price impact
         this.state.totalPrice = totalPrice;
         
-        this.updatePriceDisplay(basePrice, extrasTotal, totalPrice);
+        this.updatePriceDisplay(basePrice, 0, totalPrice);
     }
 
     updatePriceDisplay(base, extras, total) {
         const baseEl = document.getElementById('basePrice');
-        const extrasEl = document.getElementById('extrasTotal');
-        const totalEl = document.getElementById('totalPrice');
         
         if (baseEl) baseEl.textContent = `€ ${base.toFixed(2)}`;
-        if (extrasEl) extrasEl.textContent = `€ ${extras.toFixed(2)}`;
-        if (totalEl) totalEl.textContent = `€ ${total.toFixed(2)}`;
+        // No longer showing extras or separate total
     }
 
     // Calculate Button

@@ -288,6 +288,11 @@
         min-height: 200px;
     }
     
+    /* Hide Google Maps on mobile */
+    .contact-map-container {
+        display: none;
+    }
+    
     /* Footer */
     .footer {
         padding: 1.5rem 0;
