@@ -98,7 +98,7 @@ try {
             'extras_json' => json_encode($extrasJson),
             'total_price' => $totalPrice,
             'customer_email' => $data['customer_email'] ?? '',
-            'language' => $data['language'] ?? 'it',
+            'customer_name' => $data['customer_name'] ?? '',
             'status' => 'PENDING'
         ];
         
@@ -126,11 +126,15 @@ try {
             throw new Exception($errorMessage);
         }
         
-        // Commit transaction
+        // Commit transaction and close database connection
         $db->commit();
         
+        // Close database connection before sending emails to prevent timeouts
+        $db = null;
+        
         // Send email notification (async in production)
-        $emailSent = sendBookingNotification($bookingData);
+        $language = $data['language'] ?? 'it';
+        $emailSent = sendBookingNotification($bookingData, $language);
         
         // Generate WhatsApp link
         $whatsappLink = generateWhatsAppLink($bookingData);
@@ -164,10 +168,9 @@ try {
 /**
  * Send booking notification email using SMTP
  */
-function sendBookingNotification($booking) {
+function sendBookingNotification($booking, $language = 'it') {
     try {
         $mailer = new SMTPMailer();
-        $language = $booking['language'] ?? 'it';
         
         // Prepare admin email content
         $adminSubject = "Nuova Richiesta Prenotazione - " . $booking['id'];
@@ -244,6 +247,9 @@ function sendBookingNotification($booking) {
                 
                 <h3>Informazioni Cliente</h3>
                 <div class='detail-row'>
+                    <span class='label'>Nome Cliente:</span> {$booking['customer_name']}
+                </div>
+                <div class='detail-row'>
                     <span class='label'>Email Cliente:</span> <a href='mailto:{$booking['customer_email']}'>{$booking['customer_email']}</a>
                 </div>
             </div>
@@ -290,7 +296,7 @@ function sendBookingNotification($booking) {
             <body>
                 <h2>Thank you for your booking request!</h2>
                 
-                <p>Hello,</p>
+                <p>Hello " . (!empty($booking['customer_name']) ? $booking['customer_name'] : '') . ",</p>
                 <p>We have received your booking request and will contact you as soon as possible to confirm availability and payment details.</p>
                 
                 <div class='booking-box'>
@@ -345,7 +351,7 @@ function sendBookingNotification($booking) {
             <body>
                 <h2>Grazie per la tua richiesta di prenotazione!</h2>
                 
-                <p>Ciao,</p>
+                <p>Ciao " . (!empty($booking['customer_name']) ? $booking['customer_name'] : '') . ",</p>
                 <p>Abbiamo ricevuto la tua richiesta di prenotazione e ti contatteremo al più presto per confermare la disponibilità e i dettagli del pagamento.</p>
                 
                 <div class='booking-box'>

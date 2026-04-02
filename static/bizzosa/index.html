@@ -129,19 +129,25 @@
                     </button>
                 </div>
 
-                <!-- Guests Dropdown -->
-                <div class="form-group">
-                    <label for="guestsCount" data-i18n-key="plan.guests">Numero di ospiti</label>
-                    <select id="guestsCount" class="guests-select">
-                        <option value="1">1</option>
-                        <option value="2" selected>2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                    </select>
+                <!-- Guests and Customer Name -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="guestsCount" data-i18n-key="plan.guests">Numero di ospiti</label>
+                        <select id="guestsCount" class="guests-select">
+                            <option value="1">1</option>
+                            <option value="2" selected>2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="customerName" data-i18n-key="plan.customer_name">Nome e Cognome</label>
+                        <input type="text" id="customerName" data-i18n-placeholder="plan.customer_name_placeholder" placeholder="Inserisci nome e cognome">
+                    </div>
                 </div>
 
                 <!-- Date Picker -->
@@ -470,6 +476,7 @@
     <footer class="footer">
         <div class="container">
             <p>&copy; 2026 Sailing Bizzosa. <span data-i18n-key="footer.rights">Tutti i diritti riservati.</span></p>
+            <p><span data-i18n-key="footer.company_name">Mastersail Srl</span> - P.IVA 01427830474</p>
         </div>
     </footer>
 

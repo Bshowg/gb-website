@@ -36,7 +36,7 @@ class BookingConfigurator {
             },
             WEEKLY_CHARTER: {
                 name: 'Weekly Charter',
-                duration: { min: 3, max: 30 }, // Minimum 3 nights
+                duration: { min: 4, max: 30 }, // Minimum 3 nights (4 days total)
                 maxGuests: 8,
                 destinations: 'by_duration', // Filtered by duration like DAILY_CHARTER
                 boarding: '11:00',
@@ -1152,6 +1152,7 @@ class BookingConfigurator {
         const closeModal = modal?.querySelector('.close');
         const submitEmail = document.getElementById('submitEmail');
         const customerEmailInput = document.getElementById('customerEmail');
+        const customerNameInput = document.getElementById('customerName');
 
         emailBtn?.addEventListener('click', () => {
             if (!this.validateBooking()) return;
@@ -1170,12 +1171,19 @@ class BookingConfigurator {
 
         submitEmail?.addEventListener('click', async () => {
             const email = customerEmailInput?.value;
+            const name = customerNameInput?.value?.trim();
+            
             if (!email || !this.validateEmail(email)) {
                 showMessage(i18n?.formatMessage('messages.email_required') || 'Email richiesta', 'error');
                 return;
             }
+            
+            if (!name) {
+                showMessage(this.currentLang === 'it' ? 'Nome richiesto' : 'Name required', 'error');
+                return;
+            }
 
-            await this.submitBookingRequest(email);
+            await this.submitBookingRequest(email, name);
             modal?.classList.remove('show');
         });
 
@@ -1232,7 +1240,7 @@ class BookingConfigurator {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     }
 
-    async submitBookingRequest(email) {
+    async submitBookingRequest(email, name = '') {
         const submitButton = document.getElementById('submitEmail');
         const originalText = submitButton?.textContent;
         
@@ -1244,8 +1252,8 @@ class BookingConfigurator {
                 submitButton.classList.add('loading');
             }
             
-            // Save booking with email
-            const data = await this.saveBookingToDatabase('email', email);
+            // Save booking with email and name
+            const data = await this.saveBookingToDatabase('email', email, name);
 
             if (data.success) {
                 showMessage(i18n?.formatMessage('messages.booking_sent') || 'Richiesta inviata con successo!', 'success');
@@ -1260,6 +1268,7 @@ class BookingConfigurator {
                 setTimeout(() => {
                     this.resetForm();
                     document.getElementById('customerEmail').value = '';
+                    document.getElementById('customerName').value = '';
                     // Hide booking details section
                     const detailsSection = document.getElementById('booking-details');
                     if (detailsSection) detailsSection.style.display = 'none';
@@ -1361,7 +1370,7 @@ class BookingConfigurator {
         }
     }
 
-    async saveBookingToDatabase(source = 'web', customerEmail = '') {
+    async saveBookingToDatabase(source = 'web', customerEmail = '', customerName = '') {
         // Build extras data with names and special request text
         const extrasData = this.state.extras.map(e => {
             if (e.pricing_type === 'CUSTOM' && e.specialRequestText) {
@@ -1388,7 +1397,7 @@ class BookingConfigurator {
             destination: this.state.destination,
             extras: extrasData,
             customer_email: customerEmail,
-            customer_name: '',
+            customer_name: customerName,
             customer_phone: source === 'whatsapp' ? '+393934830048' : '',
             source: source,
             total_price: this.state.totalPrice,

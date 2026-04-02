@@ -66,6 +66,8 @@
     "end_date": "Data Ritorno",
     "destinations": "Destinazioni",
     "guests": "Numero Ospiti",
+    "customer_name": "Nome e Cognome",
+    "customer_name_placeholder": "Inserisci nome e cognome",
     "extras": "Servizi Extra",
     "summary": "Riepilogo Preventivo",
     "base_price": "Prezzo Base",
@@ -107,7 +109,8 @@
     "crew_included": "Equipaggio di bordo incluso"
   },
   "footer": {
-    "rights": "Tutti i diritti riservati."
+    "rights": "Tutti i diritti riservati.",
+    "company_name": "Mastersail Srl"
   },
   "messages": {
     "loading": "Caricamento...",

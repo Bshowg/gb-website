@@ -721,18 +721,20 @@ section h2 {
     background: #fafafa;
 }
 
-/* Date Inputs */
-.date-input {
+/* Date Inputs and Text Inputs */
+.date-input,
+#customerName {
     width: 100%;
     padding: 0.75rem;
     border: 1px solid #ddd;
     border-radius: 8px;
     font-size: 0.95rem;
-    font-family: var(--font-body);
+    font-family: Calibri, 'Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif;
     transition: border-color 0.3s ease;
 }
 
-.date-input:focus {
+.date-input:focus,
+#customerName:focus {
     outline: none;
     border-color: var(--secondary-color);
     box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.1);

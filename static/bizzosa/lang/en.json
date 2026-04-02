@@ -66,6 +66,8 @@
     "end_date": "Return Date",
     "destinations": "Destinations",
     "guests": "Number of Guests",
+    "customer_name": "Full Name",
+    "customer_name_placeholder": "Enter your full name",
     "extras": "Extra Services",
     "summary": "Quote Summary",
     "base_price": "Base Price",
@@ -107,7 +109,8 @@
     "crew_included": "Onboard crew included"
   },
   "footer": {
-    "rights": "All rights reserved."
+    "rights": "All rights reserved.",
+    "company_name": "Mastersail Srl"
   },
   "messages": {
     "loading": "Loading...",
