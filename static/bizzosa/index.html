@@ -125,12 +125,19 @@
                     </button>
                     <button type="button" class="package-tab" data-package="WEEKLY_CHARTER">
                         <strong data-i18n-key="plan.weekly_charter.title">Weekly Charter</strong>
-                        <span data-i18n-key="plan.weekly_charter.desc">minimo 3 notti in criciera</span>
+                        <span>
+                            <span data-i18n-key="plan.weekly_charter.desc">minimo 3 notti in crociera</span>
+                            - <em data-i18n-key="plan.weekly_charter.discount">10% di sconto giornaliero</em>
+                        </span>
                     </button>
                 </div>
 
                 <!-- Guests and Customer Name -->
                 <div class="form-row">
+                    <div class="form-group">
+                        <label for="customerName" data-i18n-key="plan.customer_name">Nome e Cognome</label>
+                        <input type="text" id="customerName" data-i18n-placeholder="plan.customer_name_placeholder" placeholder="Inserisci nome e cognome">
+                    </div>
                     <div class="form-group">
                         <label for="guestsCount" data-i18n-key="plan.guests">Numero di ospiti</label>
                         <select id="guestsCount" class="guests-select">
@@ -144,10 +151,7 @@
                             <option value="8">8</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label for="customerName" data-i18n-key="plan.customer_name">Nome e Cognome</label>
-                        <input type="text" id="customerName" data-i18n-placeholder="plan.customer_name_placeholder" placeholder="Inserisci nome e cognome">
-                    </div>
+                    
                 </div>
 
                 <!-- Date Picker -->
@@ -457,11 +461,11 @@
                     </div>
                     <div class="personal-account">
                         <p data-i18n-key="about.description3">
-                            La prima volta che sono salito sulla Bizzosa avevo 6 anni, non capivo niente di vela, ma amavo tanto respirarla.
+                            "La prima volta che sono salito sulla Bizzosa avevo 6 anni, non capivo niente di vela, ma amavo tanto respirarla.
                             Oggi gran parte di quello che ho capito lo rifletto nel rispetto che sento nelle mani quando la barca va di bolina stretta con 20 nodi di Libeccio e va chiamata una virata.
                         </p>
                         <p data-i18n-key="about.description4">
-                            Ho capito che in mare la vita è lenta ma veloce, che si impara ogni giorno, se accetti il cambiamento, che il vento parla chiaro se lo sai ascoltare e che puoi asciugarla quanto vuoi, ma un po' d'acqua in sentina ci sarà sempre, ma soprattutto ho capito che se non ci sono dei problemi da risolvere probabilmente sei fermo.
+                            Ho capito che in mare la vita è lenta ma veloce, che si impara ogni giorno, se accetti il cambiamento, che il vento parla chiaro se lo sai ascoltare e che puoi asciugarla quanto vuoi, ma un po' d'acqua in sentina ci sarà sempre, ma soprattutto ho capito che se non ci sono dei problemi da risolvere probabilmente sei fermo."
                         </p>
                         <p class="about-signature" data-i18n-key="about.signature">
                             Filippo - Sailing Bizzosa
@@ -476,7 +480,7 @@
     <footer class="footer">
         <div class="container">
             <p>&copy; 2026 Sailing Bizzosa. <span data-i18n-key="footer.rights">Tutti i diritti riservati.</span></p>
-            <p><span data-i18n-key="footer.company_name">Mastersail Srl</span> - P.IVA 01427830474</p>
+            <p style="font-size:smaller"><span data-i18n-key="footer.company_name">Mastersail Srl</span> - P.IVA 01427830474</p>
         </div>
     </footer>
 

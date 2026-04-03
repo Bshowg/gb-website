@@ -847,7 +847,12 @@ class BookingConfigurator {
                 const isBlocked = this.blockedDatesSet && this.blockedDatesSet.has(dateStr);
                 const isPast = dateObj < new Date(today.toISOString().split('T')[0]);
                 
-                let isSelectable = !isBlocked && !isPast;
+                // Check if price exists for this date
+                const hasPrice = this.dailyPricesMap && this.dailyPricesMap[dateStr];
+                const dayPrice = hasPrice ? parseFloat(this.dailyPricesMap[dateStr]) : null;
+                
+                // Days without prices are not selectable
+                let isSelectable = !isBlocked && !isPast && hasPrice;
                 let isOutOfRange = false;
                 
                 // For end date, check if it's within the valid range based on package
@@ -878,9 +883,16 @@ class BookingConfigurator {
                 if (isBlocked) className += ' blocked';
                 if (isPast) className += ' past';
                 if (isOutOfRange) className += ' out-of-range';
+                if (!hasPrice && !isPast && !isBlocked) className += ' no-price';
                 if (dateStr === this.state.startDate || dateStr === this.state.endDate) className += ' selected';
                 
-                calendarHTML += `<div class="${className}" data-date="${dateStr}" data-selectable="${isSelectable}">${day}</div>`;
+                // Show day with price if available
+                let dayContent = `<span class="day-number">${day}</span>`;
+                if (dayPrice && !isBlocked && !isPast) {
+                    dayContent += `<span class="day-price">€${dayPrice}</span>`;
+                }
+                
+                calendarHTML += `<div class="${className}" data-date="${dateStr}" data-selectable="${isSelectable}">${dayContent}</div>`;
             }
             
             calendarHTML += `</div></div>`;
@@ -1189,7 +1201,15 @@ class BookingConfigurator {
 
         whatsappBtn?.addEventListener('click', () => {
             if (!this.validateBooking()) return;
-            this.sendWhatsAppMessage();
+            
+            // Get customer name for WhatsApp
+            const name = document.getElementById('customerName')?.value?.trim();
+            if (!name) {
+                showMessage(this.currentLang === 'it' ? 'Inserisci il nome per continuare' : 'Enter your name to continue', 'error');
+                return;
+            }
+            
+            this.sendWhatsAppMessage(name);
         });
     }
 
@@ -1294,7 +1314,7 @@ class BookingConfigurator {
         }
     }
 
-    async sendWhatsAppMessage() {
+    async sendWhatsAppMessage(customerName = '') {
         const whatsappBtn = document.getElementById('requestWhatsApp');
         const originalText = whatsappBtn?.textContent;
         
@@ -1306,8 +1326,8 @@ class BookingConfigurator {
                 whatsappBtn.classList.add('loading');
             }
             
-            // First save to database
-            const data = await this.saveBookingToDatabase('whatsapp');
+            // First save to database with customer name
+            const data = await this.saveBookingToDatabase('whatsapp', '', customerName);
             let details =""
             // Show booking confirmation details
             if (data.success && data.data.id) {
@@ -1321,6 +1341,7 @@ class BookingConfigurator {
             
             let message = `Richiesta Preventivo Sailing Bizzosa\n\n`;
             message += details ? `${details}\n\n` : '';
+            message += `Nome: ${customerName}\n`;
             message += `Pacchetto: ${pkg.name}\n`;
             message += `Date: ${this.state.startDate} - ${this.state.endDate} (${duration} giorni)\n`;
             message += `Ospiti: ${this.state.guests}\n`;
