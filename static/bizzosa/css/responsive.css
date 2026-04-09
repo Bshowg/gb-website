@@ -65,6 +65,23 @@
         border-color: var(--secondary-color) !important;
     }
     
+    /* Package description wrapper - row on mobile */
+    .package-desc-wrapper {
+        flex-direction: row !important;
+        align-items: center;
+        gap: 0.5rem !important;
+    }
+    
+    .package-desc-wrapper em {
+        white-space: nowrap;
+    }
+    
+    /* Calendar adjustments for mobile */
+    .calendar-day {
+        padding: 0.5rem !important;
+        min-height: 45px !important;
+    }
+    
     /* Navigation */
     .navbar .container {
         padding: 0.75rem 1rem;

@@ -518,7 +518,7 @@ section h2 {
     border: 1px solid #ddd;
     border-radius: 8px;
     font-size: 0.95rem;
-    font-family: var(--font-body);
+    font-family: Calibri, 'Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif;
     background: white;
     cursor: pointer;
     appearance: auto;
@@ -528,6 +528,7 @@ section h2 {
 .guests-select:focus {
     outline: none;
     border-color: var(--secondary-color);
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.1);
 }
 
 /* Calculate Button */
@@ -554,7 +555,7 @@ section h2 {
 /* Info Banner Section */
 .info-banner-section {
     padding: 2rem 0;
-    background: transparent;
+    background: var(--bg-light);
 }
 
 .info-banner-grid {
@@ -685,6 +686,19 @@ section h2 {
     font-size: 0.8rem;
     color: var(--text-light);
     margin-top: 0.15rem;
+    margin-right: auto;
+}
+
+.package-desc-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.package-desc-wrapper em {
+    color: var(--secondary-color);
+    margin-right: auto;
+    margin-top: 0.15rem;
 }
 
 .package-tab.selected {
@@ -779,15 +793,6 @@ section h2 {
     color: white;
 }
 
-#guestsCount {
-    width: 45px;
-    text-align: center;
-    padding: 0.35rem;
-    border: 2px solid #e0e0e0;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    background: white;
-}
 
 /* Extras List */
 .extras-list {
@@ -1480,7 +1485,6 @@ section h2 {
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     padding: 1rem;
-    max-width: 600px;
     font-size: 0.9rem;
     font-family: 'Calibri', Arial, sans-serif;
 }
@@ -1681,7 +1685,7 @@ section h2 {
 }
 
 .calendar-day .day-price {
-    font-size: 0.7rem;
+    font-size: 0.6rem;
     color: var(--primary-color);
     font-weight: 500;
     margin-top: 2px;

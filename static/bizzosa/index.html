@@ -3,13 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Sailing Bizzosa - Noleggio barche a vela e charter nel Mar Tirreno">
-    <title>Sailing Bizzosa - Charter & Sailing Experience</title>
+    <title>Sailing Bizzosa - Noleggio Barca a Vela Isola d'Elba | Charter con Skipper</title>
+    <meta name="description" content="Noleggio barca a vela all'Isola d'Elba con skipper esperto. Esperienze di navigazione nel Mar Tirreno. Crociere giornaliere e settimanali Elba, Capraia, Giglio, Corsica. Grand Soleil 46.3. Vivi il mare in autenticità.">
+    <meta name="keywords" content="noleggio barca vela Elba, charter yacht Toscana, barca vela skipper, Grand Soleil 46, crociera Elba, sailing Elba, vacanze barca vela, Portoferraio, Mar Tirreno, Capraia, Giglio, Corsica">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.sailingbizzosa.it/">
+    <meta property="og:title" content="Sailing Bizzosa - Charter Barca a Vela Isola d'Elba">
+    <meta property="og:description" content="Noleggio barca a vela con skipper all'Isola d'Elba. Esperienze autentiche di navigazione nel Mar Tirreno. Crociere personalizzate per tutti.">
+    <meta property="og:image" content="https://www.sailingbizzosa.it/images/hero/hero-poster.jpg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://www.sailingbizzosa.it/">
+    <meta property="twitter:title" content="Sailing Bizzosa - Charter Barca a Vela Isola d'Elba">
+    <meta property="twitter:description" content="Noleggio barca a vela con skipper all'Isola d'Elba. Esperienze autentiche di navigazione nel Mar Tirreno.">
+    <meta property="twitter:image" content="https://www.sailingbizzosa.it/images/hero/hero-poster.jpg">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://www.sailingbizzosa.it/">
+    
+    <!-- Robots -->
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Mastersail Srl">
+    
+    <!-- Geo Tags -->
+    <meta name="geo.region" content="IT-LI">
+    <meta name="geo.placename" content="Portoferraio">
+    <meta name="geo.position" content="42.8122;10.3194">
+    <meta name="ICBM" content="42.8122, 10.3194">
     
         <!--Fonts-->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Monsieur+La+Doulaise&family=Pinyon+Script&family=Poiret+One&family=Roboto:ital,wght@0,100..900;1,100..900&family=Sacramento&family=Spectral:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=Monsieur+La+Doulaise&family=Pinyon+Script&family=Poiret+One&family=Roboto:ital,wght@0,100..900;1,100..900&family=Sacramento&family=Spectral:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
 
     <!-- CSS Files -->
@@ -21,6 +48,35 @@
 
     
     
+    <!-- Structured Data Schema.org -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "TouristAttraction",
+        "name": "Sailing Bizzosa",
+        "description": "Esperienze autentiche in barca a vela nel Mar Tirreno. Noleggio Grand Soleil 46.3 con skipper esperto per vivere il mare con passione.",
+        "url": "https://www.sailingbizzosa.it",
+        "image": "https://www.sailingbizzosa.it/images/hero/hero-poster.jpg",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Porto ESAOM CESA",
+            "addressLocality": "Portoferraio",
+            "addressRegion": "LI",
+            "postalCode": "57037",
+            "addressCountry": "IT"
+        },
+        "telephone": "+393934830048",
+        "email": "info@sailingbizzosa.it",
+        "priceRange": "€€€",
+        "openingHoursSpecification": {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+            "opens": "09:00",
+            "closes": "19:00"
+        }
+    }
+    </script>
+
     <!-- Prevent scroll restoration on reload -->
     <script>
         if ('scrollRestoration' in history) {
@@ -125,9 +181,9 @@
                     </button>
                     <button type="button" class="package-tab" data-package="WEEKLY_CHARTER">
                         <strong data-i18n-key="plan.weekly_charter.title">Weekly Charter</strong>
-                        <span>
+                        <span class="package-desc-wrapper">
                             <span data-i18n-key="plan.weekly_charter.desc">minimo 3 notti in crociera</span>
-                            - <em data-i18n-key="plan.weekly_charter.discount">10% di sconto giornaliero</em>
+                            <em data-i18n-key="plan.weekly_charter.discount">10% sconto giornaliero</em>
                         </span>
                     </button>
                 </div>

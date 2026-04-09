@@ -851,8 +851,13 @@ class BookingConfigurator {
                 const hasPrice = this.dailyPricesMap && this.dailyPricesMap[dateStr];
                 const dayPrice = hasPrice ? parseFloat(this.dailyPricesMap[dateStr]) : null;
                 
-                // Days without prices are not selectable
-                let isSelectable = !isBlocked && !isPast && hasPrice;
+                // Default: days are selectable if not blocked and not past
+                // Only make them unselectable if we have price data AND this day has no price
+                let isSelectable = !isBlocked && !isPast;
+                if (this.dailyPricesMap && Object.keys(this.dailyPricesMap).length > 0 && !hasPrice) {
+                    // Only block days without prices if we actually have price data
+                    isSelectable = false;
+                }
                 let isOutOfRange = false;
                 
                 // For end date, check if it's within the valid range based on package
@@ -931,6 +936,8 @@ class BookingConfigurator {
             calendar.style.position = 'absolute';
             calendar.style.top = (rect.bottom + window.scrollY + 5) + 'px';
             calendar.style.left = rect.left + 'px';
+            // Let calendar width adjust to content naturally
+            calendar.style.width = 'auto';
         }
         calendar.style.zIndex = '1000';
         
