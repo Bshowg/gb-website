@@ -311,7 +311,7 @@ function sendBookingNotification($booking, $language = 'it') {
                 
                 <p>If you have questions or need to modify your request, don't hesitate to contact us:</p>
                 <ul>
-                    <li>Email: <a href='mailto:info@sailingbizzosa.it'>info@sailingbizzosa.it</a></li>
+                    <li>Email: <a href='mailto:sailingbizzosa@gmail.com'>sailingbizzosa@gmail.com</a></li>
                     <li>Phone: +39 393 4830048</li>
                     <li>WhatsApp: <a href='https://wa.me/393934830048'>+39 393 4830048</a></li>
                 </ul>

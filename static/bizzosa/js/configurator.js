@@ -849,7 +849,13 @@ class BookingConfigurator {
                 
                 // Check if price exists for this date
                 const hasPrice = this.dailyPricesMap && this.dailyPricesMap[dateStr];
-                const dayPrice = hasPrice ? parseFloat(this.dailyPricesMap[dateStr]) : null;
+                let dayPrice = hasPrice ? parseFloat(this.dailyPricesMap[dateStr]) : null;
+                
+                // Apply weekly charter discount to displayed price if applicable
+                if (dayPrice && this.state.packageType === 'WEEKLY_CHARTER') {
+                    const discount = window.CONFIG?.WEEKLY_DISCOUNT || 0.10;
+                    dayPrice = dayPrice * (1 - discount);
+                }
                 
                 // Default: days are selectable if not blocked and not past
                 // Only make them unselectable if we have price data AND this day has no price
@@ -1054,8 +1060,8 @@ class BookingConfigurator {
 
         const days = this.calculateDuration();
         
-        // Calculate base price using actual daily prices from API
-        let basePrice = 0;
+        // Calculate boat rental price using actual daily prices from API
+        let boatPrice = 0;
         
         if (this.dailyPricesMap && Object.keys(this.dailyPricesMap).length > 0) {
             // Use actual daily prices from database
@@ -1067,17 +1073,18 @@ class BookingConfigurator {
                 const dateStr = current.toISOString().split('T')[0];
                 if (this.dailyPricesMap[dateStr]) {
                     // Use specific price for this date
-                    basePrice += parseFloat(this.dailyPricesMap[dateStr]);
+                    boatPrice += parseFloat(this.dailyPricesMap[dateStr]);
                 } else {
                     // Fall back to seasonal default if no specific price
-                    basePrice += this.getSeasonalPrice(current);
+                    boatPrice += this.getSeasonalPrice(current);
                 }
                 current.setDate(current.getDate() + 1);
             }
             
             // Apply weekly charter discount if applicable (for API prices)
             if (this.state.packageType === 'WEEKLY_CHARTER') {
-                basePrice = basePrice * 0.9; // 10% discount
+                const discount = window.CONFIG?.WEEKLY_DISCOUNT || 0.10;
+                boatPrice = boatPrice * (1 - discount); // Apply discount from config
             }
         } else {
             // Fallback to default pricing if no API data
@@ -1086,31 +1093,37 @@ class BookingConfigurator {
                 WEEKLY_CHARTER: 600
             };
             
-            basePrice = (defaultPrices[this.state.packageType] || 700) * days;
+            boatPrice = (defaultPrices[this.state.packageType] || 700) * days;
             
             // Apply weekly charter discount if applicable
             if (this.state.packageType === 'WEEKLY_CHARTER') {
-                basePrice = basePrice * 0.9; // 10% discount
+                const discount = window.CONFIG?.WEEKLY_DISCOUNT || 0.10;
+                boatPrice = boatPrice * (1 - discount); // Apply discount from config
             }
         }
 
-        // Extras are only for information, not added to price
-        // Store extras for invoice purposes but don't calculate their cost
+        // Calculate crew fee (never discounted)
+        const crewFeePerDay = window.CONFIG?.CREW_FEE_PER_DAY || 150;
+        const crewFee = days * crewFeePerDay;
         
-        const totalPrice = basePrice; // Total is just the base price
+        // Total price is boat + crew
+        const totalPrice = boatPrice + crewFee;
         
-        this.state.basePrice = basePrice;
-        this.state.extrasTotal = 0; // Extras don't have a price impact
+        this.state.boatPrice = boatPrice;
+        this.state.crewFee = crewFee;
         this.state.totalPrice = totalPrice;
         
-        this.updatePriceDisplay(basePrice, 0, totalPrice);
+        this.updatePriceDisplay(boatPrice, crewFee, totalPrice);
     }
 
-    updatePriceDisplay(base, extras, total) {
-        const baseEl = document.getElementById('basePrice');
+    updatePriceDisplay(boatPrice, crewFee, total) {
+        const boatEl = document.getElementById('boatPrice');
+        const crewEl = document.getElementById('crewPrice');
+        const totalEl = document.getElementById('totalPrice');
         
-        if (baseEl) baseEl.textContent = `€ ${base.toFixed(2)}`;
-        // No longer showing extras or separate total
+        if (boatEl) boatEl.textContent = `€ ${boatPrice.toFixed(2)}`;
+        if (crewEl) crewEl.textContent = `€ ${crewFee.toFixed(2)}`;
+        if (totalEl) totalEl.textContent = `€ ${total.toFixed(2)}`;
     }
 
     // Calculate Button

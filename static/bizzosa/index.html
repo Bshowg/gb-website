@@ -52,7 +52,7 @@
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
-        "@type": "TouristAttraction",
+        "@type": "LocalBusiness",
         "name": "Sailing Bizzosa",
         "description": "Esperienze autentiche in barca a vela nel Mar Tirreno. Noleggio Grand Soleil 46.3 con skipper esperto per vivere il mare con passione.",
         "url": "https://www.sailingbizzosa.it",
@@ -66,8 +66,8 @@
             "addressCountry": "IT"
         },
         "telephone": "+393934830048",
-        "email": "info@sailingbizzosa.it",
-        "priceRange": "€€€",
+        "email": "sailingbizzosa@gmail.com",
+        "priceRange": "€600-€1200",
         "openingHoursSpecification": {
             "@type": "OpeningHoursSpecification",
             "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
@@ -135,7 +135,7 @@
         <div class="container">
             <h2 data-i18n-key="about.title">Chi Siamo</h2>
             <p class="about-text" data-i18n-key="about.description1">
-                Bizzosa è una storia d'amore.<br>
+                <strong>Bizzosa</strong> è una storia d'amore.<br>
                 Per il vento e per il mare.<br>
                 Un' amore iniziato negli anni '70 da un gruppo di amici con il sogno della barca a vela.
             </p>
@@ -254,6 +254,7 @@
                 <div class="info-banner-item">
                     <p>
                         <strong data-i18n-key="info_banner.crew_included">Equipaggio di bordo incluso</strong>
+                        <span data-i18n-key="info_banner.crew_details">Skipper + Marinaio/Hostess</span>
                     </p>
                 </div>
             </div>
@@ -268,9 +269,17 @@
             <div class="price-summary">
                 <h3 data-i18n-key="plan.summary">Riepilogo Preventivo</h3>
                 <div class="price-details">
+                    <div class="price-line">
+                        <span data-i18n-key="plan.boat_rental">Noleggio Barca</span>
+                        <span id="boatPrice">€ 0</span>
+                    </div>
+                    <div class="price-line">
+                        <span data-i18n-key="plan.crew_fee">Equipaggio di Bordo</span>
+                        <span id="crewPrice">€ 0</span>
+                    </div>
                     <div class="price-line total">
-                        <span data-i18n-key="plan.base_price">Prezzo Charter</span>
-                        <span id="basePrice">€ 0</span>
+                        <span data-i18n-key="plan.total">Totale</span>
+                        <span id="totalPrice">€ 0</span>
                     </div>
                 </div>
             </div>
@@ -540,6 +549,15 @@
         </div>
     </footer>
 
+    <!-- Configuration from PHP -->
+    <script>
+        // Configuration values from backend
+        window.CONFIG = {
+            WEEKLY_DISCOUNT: 0.10, // This should match the value in config.php
+            CREW_FEE_PER_DAY: 150
+        };
+    </script>
+    
     <!-- JavaScript Files -->
     <script src="js/i18n.js"></script>
     <script src="js/main.js"></script>

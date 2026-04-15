@@ -177,6 +177,7 @@ function showMessage(message, type = 'info') {
         border-radius: 5px;
         z-index: 9999;
         animation: slideIn 0.3s ease;
+        font-family: Calibri, 'Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif;
     `;
     
     // Remove after 3 seconds

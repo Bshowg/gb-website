@@ -41,7 +41,7 @@ define('SMTP_FROM_NAME', 'Sailing Bizzosa');
 define('SMTP_SECURE', 'ssl'); // Use 'tls' for port 587 or 'ssl' for port 465
 
 // Admin notification email (your Gmail account)
-define('ADMIN_EMAIL', 'flpp.bettarini@gmail.com'); // IMPORTANT: Update with your Gmail address
+define('ADMIN_EMAIL', 'sailingbizzosa@gmail.com'); // IMPORTANT: Update with your Gmail address
 
 // WhatsApp configuration
 define('WHATSAPP_PHONE', '393331234567'); // Without + sign
@@ -50,7 +50,8 @@ define('WHATSAPP_PHONE', '393331234567'); // Without + sign
 define('PRICE_DAY_SAIL', 200);
 define('PRICE_DAILY_CHARTER_PER_DAY', 200);
 define('PRICE_WEEKLY_CHARTER_PER_DAY', 150);
-define('WEEKLY_DISCOUNT', 0.10); // 20% discount for weekly
+define('WEEKLY_DISCOUNT', 0.10); // 10% discount for weekly
+define('CREW_FEE_PER_DAY', 150); // Crew fee per day (never discounted)
 
 // Business rules - Updated for 2 packages
 define('MAX_GUESTS_DAILY_CHARTER', 8);
