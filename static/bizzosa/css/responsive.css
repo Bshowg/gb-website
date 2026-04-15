@@ -176,9 +176,6 @@
         font-size: 1.75rem;
     }
 
-    .about-text {
-        font-size: 1rem;
-    }
     
     .about-features {
         grid-template-columns: 1fr;

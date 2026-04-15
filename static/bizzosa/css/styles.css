@@ -343,8 +343,6 @@ section h2 {
 .about-text {
     max-width: 800px;
     margin: 0 auto 1.5rem;
-    font-size: 1.1rem;
-    line-height: 1.8;
     color: var(--text-light);
 }
 
@@ -425,8 +423,9 @@ section h2 {
     margin-bottom: 0.75rem;
 }
 
-.booking-header-section .boat-description p {
+.booking-header-section .container p {
     color: var(--text-light);
+    
     font-size: 0.95rem;
     line-height: 1.7;
     margin: 0;
