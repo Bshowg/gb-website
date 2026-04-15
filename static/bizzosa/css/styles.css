@@ -426,9 +426,6 @@ section h2 {
 .booking-header-section .container p {
     color: var(--text-light);
     
-    font-size: 0.95rem;
-    line-height: 1.7;
-    margin: 0;
 }
 
 .booking-section-hero {
