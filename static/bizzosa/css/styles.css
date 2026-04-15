@@ -2,10 +2,18 @@
    Sailing Bizzosa - Main Styles
    ======================================== */
 
-/* Local Font Face */
+/* Local Font Faces */
 @font-face {
     font-family: 'Elegante';
     src: url('../fonts/elegante/Elegante.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Futura';
+    src: url('../fonts/futura/Futura.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -30,7 +38,7 @@
     
     /* Font families */
     --font-heading: 'Elegante', 'Pinyon Script', cursive;
-    --font-body: 'Libre Caslon Display', serif;
+    --font-body: 'Futura', 'Helvetica Neue', Arial, sans-serif;
 }
 
 /* Reset & Base */

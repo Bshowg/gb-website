@@ -366,7 +366,7 @@ function sendBookingNotification($booking, $language = 'it') {
                 
                 <p>Se hai domande o necessiti di modificare la tua richiesta, non esitare a contattarci:</p>
                 <ul>
-                    <li>Email: <a href='mailto:info@sailingbizzosa.it'>info@sailingbizzosa.it</a></li>
+                    <li>Email: <a href='mailto:sailingbizzosa@gmail.com'>sailingbizzosa@gmail.com</a></li>
                     <li>Telefono: +39 393 4830048</li>
                     <li>WhatsApp: <a href='https://wa.me/393934830048'>+39 393 4830048</a></li>
                 </ul>
@@ -390,7 +390,7 @@ function sendBookingNotification($booking, $language = 'it') {
                 $booking['customer_email'], 
                 $customerSubject, 
                 $customerMessage,
-                SMTP_FROM_EMAIL  // Reply-to info@sailingbizzosa.it
+                ADMIN_EMAIL  // Reply-to sailingbizzosa@gmail.com
             );
             
             if (!$customerSent) {

@@ -39,7 +39,8 @@ class I18n {
             if (translation) {
                 if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
                     element.placeholder = translation;
-                } else if (translation.includes('<br>')) {
+                } else if (translation.includes('<') && translation.includes('>')) {
+                    // If translation contains any HTML tags, use innerHTML
                     element.innerHTML = translation;
                 } else {
                     element.textContent = translation;
