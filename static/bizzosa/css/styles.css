@@ -13,7 +13,7 @@
 
 @font-face {
     font-family: 'Futura';
-    src: url('../fonts/futura/Futura.ttf') format('truetype');
+    src: url('../fonts/futura_light/futuralight.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -352,7 +352,7 @@ section h2 {
 }
 
 .personal-account p {
-    font-family: 'Libre Caslon Display', serif;
+    font-family: var(--font-body);
     font-style: italic;
     line-height: 1.8;
     margin-bottom: 1.5rem;
