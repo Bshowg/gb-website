@@ -18,7 +18,13 @@
     font-style: normal;
     font-display: swap;
 }
-
+@font-face {
+    font-family: 'Jost';
+    src: url('../fonts/jost/jost.ttf') format('truetype');
+    font-weight: 200;
+    font-style: normal;
+    font-display: swap;
+}
 /* CSS Variables */
 :root {
     --primary-color: #1e3a5f;
@@ -38,7 +44,7 @@
     
     /* Font families */
     --font-heading: 'Elegante', 'Pinyon Script', cursive;
-    --font-body: 'Futura', 'Helvetica Neue', Arial, sans-serif;
+    --font-body: 'Jost', 'Helvetica Neue', Arial, sans-serif;
 }
 
 /* Reset & Base */
