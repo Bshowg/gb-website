@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Luna & Nascite — Italia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..900,0..100;1,9..144,300..900,0..100&family=Manrope:wght@300..700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --night: #0b1020;
+    --night-deep: #060915;
+    --night-soft: #141a2e;
+    --ink: #ede5d0;
+    --ink-muted: #8a8370;
+    --ink-faint: #4a4638;
+    --gold: #d4b368;
+    --gold-dim: #8a7544;
+    --copper: #c9764a;
+    --moon: #f2ebd6;
+    --moon-soft: #d9d2bc;
+    --shadow: #1a1f30;
+    --rule: rgba(237, 229, 208, 0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--night-deep);
+    color: var(--ink);
+    font-family: "Manrope", system-ui, sans-serif;
+    font-weight: 400;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    min-height: 100vh;
+    background:
+      radial-gradient(ellipse at 20% 0%, rgba(212, 179, 104, 0.08), transparent 50%),
+      radial-gradient(ellipse at 90% 100%, rgba(201, 118, 74, 0.06), transparent 45%),
+      var(--night-deep);
+    background-attachment: fixed;
+    position: relative;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.93 0 0 0 0 0.9 0 0 0 0 0.82 0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: screen;
+    opacity: 0.5;
+    z-index: 1;
+  }
+
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 72px 40px 120px;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* HEADER */
+  header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 40px;
+    align-items: end;
+    padding-bottom: 48px;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 56px;
+  }
+
+  .eyebrow {
+    font-family: "Manrope";
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 32px; height: 1px;
+    background: var(--gold);
+  }
+
+  h1 {
+    font-family: "Fraunces";
+    font-weight: 400;
+    font-variation-settings: "opsz" 144, "SOFT" 50;
+    font-size: clamp(56px, 9vw, 120px);
+    line-height: 0.92;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    max-width: 680px;
+  }
+  h1 em {
+    font-style: italic;
+    font-variation-settings: "opsz" 144, "SOFT" 80;
+    color: var(--gold);
+  }
+
+  .subtitle {
+    margin-top: 24px;
+    font-size: 16px;
+    color: var(--ink-muted);
+    max-width: 500px;
+    line-height: 1.6;
+  }
+
+  .header-aside {
+    text-align: right;
+    font-family: "Fraunces";
+    font-variation-settings: "opsz" 14;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--ink-muted);
+    line-height: 1.6;
+  }
+  .header-aside .big-date {
+    display: block;
+    font-size: 20px;
+    font-style: normal;
+    color: var(--ink);
+    font-variation-settings: "opsz" 48;
+    margin-top: 4px;
+    letter-spacing: 0.02em;
+  }
+
+  /* FINDING BLOCK */
+  .finding {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 48px;
+    align-items: center;
+    padding: 48px 52px;
+    background: linear-gradient(135deg, var(--night-soft) 0%, rgba(20, 26, 46, 0.5) 100%);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    margin-bottom: 72px;
+    position: relative;
+  }
+  .finding::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 48px; height: 1px;
+    background: var(--gold);
+  }
+
+  #finding-moon-wrap {
+    width: 120px; height: 120px;
+    filter: drop-shadow(0 0 40px rgba(242, 235, 214, 0.15));
+    flex-shrink: 0;
+  }
+  #finding-moon-wrap svg { width: 100%; height: 100%; display: block; }
+  .bar-moon svg { width: 100%; height: 100%; display: block; }
+
+  .finding-text .label {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 12px;
+  }
+  .finding-text h2 {
+    font-family: "Fraunces";
+    font-variation-settings: "opsz" 72, "SOFT" 30;
+    font-weight: 400;
+    font-size: 44px;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+  .finding-text h2 em {
+    font-style: italic;
+    color: var(--gold);
+    font-variation-settings: "opsz" 72, "SOFT" 80;
+  }
+  .finding-text p {
+    font-size: 14px;
+    color: var(--ink-muted);
+    max-width: 440px;
+  }
+
+  .finding-stat {
+    text-align: right;
+    border-left: 1px solid var(--rule);
+    padding-left: 48px;
+  }
+  .finding-stat .num {
+    font-family: "Fraunces";
+    font-variation-settings: "opsz" 144;
+    font-style: italic;
+    font-size: 72px;
+    line-height: 1;
+    color: var(--copper);
+    letter-spacing: -0.02em;
+  }
+  .finding-stat .caption {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-top: 8px;
+  }
+
+  /* CHART */
+  .chart-section {
+    margin-bottom: 80px;
+  }
+
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 40px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .section-head h3 {
+    font-family: "Fraunces";
+    font-variation-settings: "opsz" 48, "SOFT" 30;
+    font-weight: 400;
+    font-size: 28px;
+    letter-spacing: -0.01em;
+  }
+  .section-head h3 em {
+    font-style: italic;
+    color: var(--gold);
+    font-variation-settings: "opsz" 48, "SOFT" 60;
+  }
+
+  .regen-btn {
+    background: transparent;
+    border: 1px solid var(--ink-faint);
+    color: var(--ink);
+    font-family: "Manrope";
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    padding: 12px 22px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .regen-btn:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+    letter-spacing: 0.26em;
+  }
+  .regen-btn svg { width: 13px; height: 13px; stroke: currentColor; }
+
+  .bars {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .bar-row {
+    display: grid;
+    grid-template-columns: 56px 180px 1fr 100px;
+    align-items: center;
+    gap: 24px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(237, 229, 208, 0.05);
+    animation: barIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+  }
+  @keyframes barIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .bar-moon {
+    width: 48px; height: 48px;
+    filter: drop-shadow(0 0 12px rgba(242, 235, 214, 0.08));
+  }
+
+  .bar-label {
+    font-family: "Fraunces";
+    font-variation-settings: "opsz" 24;
+    font-size: 17px;
+    color: var(--ink);
+  }
+  .bar-label .sub {
+    display: block;
+    font-family: "Manrope";
+    font-size: 11px;
+    color: var(--ink-muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
+
+  .bar-track {
+    position: relative;
+    height: 36px;
+    background: rgba(237, 229, 208, 0.04);
+    border-left: 1px solid var(--ink-faint);
+  }
+  .bar-track::before {
+    content: "";
+    position: absolute;
+    top: -4px; bottom: -4px;
+    left: 50%;
+    width: 1px;
+    background: var(--gold-dim);
+    opacity: 0.5;
+  }
+  .bar-track::after {
+    content: "media";
+    position: absolute;
+    left: 50%;
+    top: -16px;
+    transform: translateX(-50%);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+  }
+  .bar-row:not(:first-child) .bar-track::after { content: ""; }
+
+  .bar-fill {
+    position: absolute;
+    top: 0; bottom: 0;
+    background: linear-gradient(90deg, var(--gold-dim), var(--gold));
+    transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .bar-fill.positive {
+    left: 50%;
+    background: linear-gradient(90deg, var(--gold-dim), var(--gold));
+  }
+  .bar-fill.negative {
+    right: 50%;
+    background: linear-gradient(270deg, rgba(201, 118, 74, 0.5), rgba(201, 118, 74, 0.9));
+  }
+  .bar-fill.winner {
+    background: linear-gradient(90deg, var(--copper), #e89968);
+    box-shadow: 0 0 24px rgba(201, 118, 74, 0.3);
+  }
+
+  .bar-value {
+    text-align: right;
+    font-family: "Fraunces";
+    font-variation-settings: "opsz" 24;
+    font-size: 18px;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  .bar-value .delta {
+    display: block;
+    font-family: "Manrope";
+    font-size: 11px;
+    color: var(--ink-muted);
+    letter-spacing: 0.05em;
+    margin-top: 2px;
+    font-variant-numeric: tabular-nums;
+  }
+  .bar-value .delta.up { color: var(--copper); }
+  .bar-value .delta.down { color: var(--gold-dim); }
+
+  /* METHOD */
+  .method {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 72px;
+    padding-top: 48px;
+    border-top: 1px solid var(--rule);
+  }
+  .method h4 {
+    font-family: "Fraunces";
+    font-variation-settings: "opsz" 24, "SOFT" 30;
+    font-weight: 400;
+    font-size: 20px;
+    margin-bottom: 18px;
+    color: var(--ink);
+  }
+  .method h4 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+  .method p {
+    font-size: 14px;
+    color: var(--ink-muted);
+    line-height: 1.7;
+    margin-bottom: 14px;
+  }
+  .method p strong {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 24px;
+  }
+  .stat {
+    padding: 18px 20px;
+    background: rgba(237, 229, 208, 0.02);
+    border: 1px solid var(--rule);
+  }
+  .stat .k {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 8px;
+  }
+  .stat .v {
+    font-family: "Fraunces";
+    font-variation-settings: "opsz" 36;
+    font-size: 24px;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+
+  footer {
+    margin-top: 80px;
+    padding-top: 32px;
+    border-top: 1px solid var(--rule);
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  @media (max-width: 820px) {
+    .wrap { padding: 48px 22px 80px; }
+    header { grid-template-columns: 1fr; gap: 24px; }
+    .header-aside { text-align: left; }
+    .finding { grid-template-columns: 1fr; gap: 24px; padding: 32px; }
+    .finding-stat { border-left: none; border-top: 1px solid var(--rule); padding-left: 0; padding-top: 24px; text-align: left; }
+    .section-head { flex-direction: column; align-items: flex-start; gap: 16px; }
+    .bar-row { grid-template-columns: 40px 1fr; grid-template-rows: auto auto; gap: 12px 16px; }
+    .bar-moon { grid-row: span 2; width: 40px; height: 40px; }
+    .bar-track { grid-column: 2; }
+    .bar-value { grid-column: 2; text-align: left; }
+    .method { grid-template-columns: 1fr; gap: 40px; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+
+    <header>
+      <div>
+        <div class="eyebrow">Almanacco statistico — Italia</div>
+        <h1>Luna &amp; <em>Nascite</em></h1>
+        <p class="subtitle">
+          Sei anni di dati ISTAT mensili sulle nascite in Italia, distribuiti giornalmente con rumore Poisson e incrociati con le fasi lunari. Un esperimento visivo per capire se la luna piena fa davvero nascere più bambini.
+        </p>
+      </div>
+      <div class="header-aside">
+        periodo osservato
+        <span class="big-date" id="period">—</span>
+        giorni analizzati · <span id="daycount">—</span><br/>
+        nascite totali · <span id="totalbirths">—</span>
+      </div>
+    </header>
+
+    <section class="finding" id="finding">
+      <div id="finding-moon-wrap"></div>
+      <div class="finding-text">
+        <div class="label">Fase vincitrice</div>
+        <h2 id="finding-name">—</h2>
+        <p id="finding-desc">Calcolando…</p>
+      </div>
+      <div class="finding-stat">
+        <div class="num" id="finding-delta">—</div>
+        <div class="caption">vs. media generale</div>
+      </div>
+    </section>
+
+    <section class="chart-section">
+      <div class="section-head">
+        <h3>Nascite medie per <em>fase lunare</em></h3>
+        <button class="regen-btn" id="regen">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/></svg>
+          rigenera dati
+        </button>
+      </div>
+      <div class="bars" id="bars"></div>
+    </section>
+
+    <section class="method">
+      <div>
+        <h4>Nota <em>metodologica</em></h4>
+        <p>
+          I <strong>totali mensili</strong> sono dati <strong>ISTAT reali</strong> (2013–2018, 72 mesi, 2.874.020 nascite totali). Ogni mese viene distribuito sui suoi giorni con campionamento Poisson attorno alla media mensile — così ogni giorno riceve un numero plausibile, con la varianza fisiologica attesa.
+        </p>
+        <p>
+          Le <strong>fasi lunari</strong> sono calcolate astronomicamente partendo dalla luna nuova del 6 gennaio 2000 (18:14 UTC) con ciclo sinodico di 29,53 giorni, suddiviso in otto fasi standard.
+        </p>
+      </div>
+      <div>
+        <h4>Cosa dicono i <em>numeri</em></h4>
+        <p>
+          La differenza tra la fase "vincitrice" e quella "perdente" è tipicamente sotto l'1%. Premi <em>rigenera</em> più volte: il vincitore cambia praticamente ogni volta. È <strong>rumore statistico</strong>, non un effetto lunare.
+        </p>
+        <div class="stats-grid">
+          <div class="stat"><div class="k">Media giornaliera</div><div class="v" id="overall-mean">—</div></div>
+          <div class="stat"><div class="k">Dev. std.</div><div class="v" id="overall-std">—</div></div>
+          <div class="stat"><div class="k">Range fasi</div><div class="v" id="phase-range">—</div></div>
+          <div class="stat"><div class="k">Errore std. per fase</div><div class="v" id="phase-se">—</div></div>
+        </div>
+      </div>
+    </section>
+
+    <footer>dati ISTAT · fasi lunari calcolate · made with ♁</footer>
+  </div>
+
+<script>
+  // ---------- LUNAR PHASE ----------
+  const SYNODIC = 29.530588853;
+  const REF_NEW_MOON = Date.UTC(2000, 0, 6, 18, 14) / 86400000; // in days
+
+  function phaseFraction(date) {
+    const days = date.getTime() / 86400000;
+    const frac = ((days - REF_NEW_MOON) % SYNODIC + SYNODIC) % SYNODIC;
+    return frac / SYNODIC; // 0..1
+  }
+
+  const PHASE_NAMES = [
+    { key: "new",      name: "Luna nuova",       sub: "novilunio",       center: 0/8 },
+    { key: "wax-cres", name: "Crescente",        sub: "falce crescente", center: 1/8 },
+    { key: "first-q",  name: "Primo quarto",     sub: "quarto crescente",center: 2/8 },
+    { key: "wax-gib",  name: "Gibbosa crescente",sub: "gibbosa",         center: 3/8 },
+    { key: "full",     name: "Luna piena",       sub: "plenilunio",      center: 4/8 },
+    { key: "wan-gib",  name: "Gibbosa calante",  sub: "gibbosa",         center: 5/8 },
+    { key: "last-q",   name: "Ultimo quarto",    sub: "quarto calante",  center: 6/8 },
+    { key: "wan-cres", name: "Calante",          sub: "falce calante",   center: 7/8 },
+  ];
+
+  function phaseIndex(frac) {
+    // Each of 8 phases covers 1/8 of cycle, centered on center.
+    const idx = Math.floor(((frac + 1/16) % 1) * 8);
+    return idx;
+  }
+
+  // ---------- MOON SVG ----------
+  function moonSVG(phase, size = 48) {
+    const r = size/2 - 1.5;
+    const cx = size/2, cy = size/2;
+
+    // Edge cases
+    if (phase < 0.008 || phase > 0.992) {
+      return `<svg class="moon-svg" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="${cx}" cy="${cy}" r="${r}" fill="var(--shadow)" stroke="var(--moon-soft)" stroke-width="1" stroke-opacity="0.4"/>
+      </svg>`;
+    }
+    if (Math.abs(phase - 0.5) < 0.008) {
+      return `<svg class="moon-svg" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="${cx}" cy="${cy}" r="${r}" fill="var(--moon)"/>
+      </svg>`;
+    }
+
+    const waxing = phase < 0.5;
+    const crescent = phase < 0.25 || phase > 0.75;
+    const rx = Math.max(0.01, r * Math.abs(Math.cos(2 * Math.PI * phase)));
+
+    // Moon outline sweep: 1 = right side, 0 = left side
+    const moonSweep = waxing ? 1 : 0;
+    // Terminator sweep:
+    const termSweep = (waxing === crescent) ? 1 : 0;
+
+    const path = `M ${cx},${cy - r}
+                  A ${r},${r} 0 0,${moonSweep} ${cx},${cy + r}
+                  A ${rx},${r} 0 0,${termSweep} ${cx},${cy - r} Z`;
+
+    return `<svg class="moon-svg" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="${cx}" cy="${cy}" r="${r}" fill="var(--shadow)"/>
+      <path d="${path}" fill="var(--moon)"/>
+    </svg>`;
+  }
+
+  // ---------- POISSON SAMPLER ----------
+  // For large lambda, use normal approximation N(lambda, sqrt(lambda))
+  function boxMuller() {
+    let u = 0, v = 0;
+    while (u === 0) u = Math.random();
+    while (v === 0) v = Math.random();
+    return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+  }
+  function poissonLarge(lambda) {
+    const val = lambda + Math.sqrt(lambda) * boxMuller();
+    return Math.max(0, Math.round(val));
+  }
+
+  // ---------- REAL ISTAT MONTHLY DATA (2013-2018) ----------
+  const MONTHLY_BIRTHS = {
+    "2013-01": 47436, "2013-02": 39078, "2013-03": 39243, "2013-04": 37254,
+    "2013-05": 43336, "2013-06": 38343, "2013-07": 46978, "2013-08": 44243,
+    "2013-09": 46299, "2013-10": 48683, "2013-11": 41594, "2013-12": 41821,
+    "2014-01": 44969, "2014-02": 37808, "2014-03": 40289, "2014-04": 38480,
+    "2014-05": 40026, "2014-06": 39490, "2014-07": 45584, "2014-08": 40521,
+    "2014-09": 47745, "2014-10": 46859, "2014-11": 39271, "2014-12": 41554,
+    "2015-01": 41861, "2015-02": 36853, "2015-03": 39727, "2015-04": 38238,
+    "2015-05": 39339, "2015-06": 40084, "2015-07": 42178, "2015-08": 40299,
+    "2015-09": 43550, "2015-10": 43295, "2015-11": 39869, "2015-12": 40487,
+    "2016-01": 38641, "2016-02": 37828, "2016-03": 38346, "2016-04": 32823,
+    "2016-05": 36553, "2016-06": 37330, "2016-07": 39443, "2016-08": 45472,
+    "2016-09": 44638, "2016-10": 42361, "2016-11": 41600, "2016-12": 38403,
+    "2017-01": 39265, "2017-02": 34690, "2017-03": 37914, "2017-04": 31228,
+    "2017-05": 39834, "2017-06": 37055, "2017-07": 39201, "2017-08": 41074,
+    "2017-09": 39538, "2017-10": 42927, "2017-11": 39313, "2017-12": 36112,
+    "2018-01": 40539, "2018-02": 33377, "2018-03": 34777, "2018-04": 31370,
+    "2018-05": 36906, "2018-06": 34253, "2018-07": 38554, "2018-08": 39917,
+    "2018-09": 37084, "2018-10": 41314, "2018-11": 37420, "2018-12": 34236
+  };
+
+  function daysInMonth(year, month) {
+    // month: 1-12
+    return new Date(Date.UTC(year, month, 0)).getUTCDate();
+  }
+
+  // ---------- BUILD DAILY DATA FROM MONTHLY TOTALS + POISSON NOISE ----------
+  function simulate() {
+    const msPerDay = 86400000;
+    const phaseBuckets = Array.from({length: 8}, () => ({ sum: 0, n: 0 }));
+    const daily = [];
+    let totalBirths = 0;
+    let totalDays = 0;
+
+    const keys = Object.keys(MONTHLY_BIRTHS).sort();
+    const firstKey = keys[0], lastKey = keys[keys.length - 1];
+    const [y0, m0] = firstKey.split("-").map(Number);
+    const [y1, m1] = lastKey.split("-").map(Number);
+    const start = new Date(Date.UTC(y0, m0 - 1, 1));
+    const end = new Date(Date.UTC(y1, m1 - 1, daysInMonth(y1, m1)));
+
+    for (const key of keys) {
+      const [y, m] = key.split("-").map(Number);
+      const nDays = daysInMonth(y, m);
+      const monthTotal = MONTHLY_BIRTHS[key];
+      const dailyMean = monthTotal / nDays;
+
+      for (let d = 1; d <= nDays; d++) {
+        // Poisson noise around daily mean
+        const births = poissonLarge(dailyMean);
+        totalBirths += births;
+        totalDays++;
+        daily.push(births);
+
+        const date = new Date(Date.UTC(y, m - 1, d));
+        const frac = phaseFraction(date);
+        const pIdx = phaseIndex(frac);
+        phaseBuckets[pIdx].sum += births;
+        phaseBuckets[pIdx].n += 1;
+      }
+    }
+
+    const phaseMeans = phaseBuckets.map(b => b.sum / b.n);
+    const overallMean = totalBirths / totalDays;
+
+    let sse = 0;
+    for (const v of daily) sse += (v - overallMean) ** 2;
+    const std = Math.sqrt(sse / (totalDays - 1));
+
+    return { days: totalDays, totalBirths, phaseMeans, phaseBuckets, overallMean, std, start, end };
+  }
+
+  // ---------- RENDER ----------
+  const fmt = new Intl.NumberFormat("it-IT");
+  const fmt1 = new Intl.NumberFormat("it-IT", { maximumFractionDigits: 1 });
+  const fmt2 = new Intl.NumberFormat("it-IT", { maximumFractionDigits: 2 });
+
+  function render() {
+    const res = simulate();
+
+    // Header aside
+    const dateFmt = new Intl.DateTimeFormat("it-IT", { month: "short", year: "numeric", timeZone: "UTC" });
+    document.getElementById("period").textContent =
+      dateFmt.format(res.start) + " — " + dateFmt.format(res.end);
+    document.getElementById("daycount").textContent = fmt.format(res.days);
+    document.getElementById("totalbirths").textContent = fmt.format(res.totalBirths);
+
+    // Find winner
+    let maxIdx = 0, minIdx = 0;
+    for (let i = 1; i < 8; i++) {
+      if (res.phaseMeans[i] > res.phaseMeans[maxIdx]) maxIdx = i;
+      if (res.phaseMeans[i] < res.phaseMeans[minIdx]) minIdx = i;
+    }
+    const winnerDelta = res.phaseMeans[maxIdx] - res.overallMean;
+    const winnerPct = (winnerDelta / res.overallMean) * 100;
+
+    // Finding card
+    document.getElementById("finding-moon-wrap").innerHTML = moonSVG(PHASE_NAMES[maxIdx].center, 120);
+    document.getElementById("finding-name").innerHTML =
+      '<em>' + PHASE_NAMES[maxIdx].name + '</em>';
+    document.getElementById("finding-desc").textContent =
+      "In questa simulazione, la " + PHASE_NAMES[maxIdx].name.toLowerCase()
+      + " ha registrato la media giornaliera più alta — ma la differenza è statisticamente trascurabile.";
+    document.getElementById("finding-delta").textContent =
+      (winnerPct >= 0 ? "+" : "") + fmt2.format(winnerPct) + "%";
+
+    // Stats
+    document.getElementById("overall-mean").textContent = fmt1.format(res.overallMean);
+    document.getElementById("overall-std").textContent = fmt1.format(res.std);
+    const range = res.phaseMeans[maxIdx] - res.phaseMeans[minIdx];
+    document.getElementById("phase-range").textContent = fmt1.format(range);
+    // Standard error per phase: std / sqrt(n_days_per_phase)
+    const nPerPhase = res.days / 8;
+    const se = res.std / Math.sqrt(nPerPhase);
+    document.getElementById("phase-se").textContent = "±" + fmt2.format(se);
+
+    // Bars
+    const bars = document.getElementById("bars");
+    bars.innerHTML = "";
+    // Max absolute deviation from mean, for scaling
+    let maxAbs = 0;
+    for (let i = 0; i < 8; i++) {
+      maxAbs = Math.max(maxAbs, Math.abs(res.phaseMeans[i] - res.overallMean));
+    }
+    maxAbs = Math.max(maxAbs, 1); // avoid div by 0
+
+    for (let i = 0; i < 8; i++) {
+      const p = PHASE_NAMES[i];
+      const mean = res.phaseMeans[i];
+      const delta = mean - res.overallMean;
+      const pct = (delta / res.overallMean) * 100;
+      const width = (Math.abs(delta) / maxAbs) * 50; // % of half-track
+
+      const isWinner = i === maxIdx;
+      const fillCls = "bar-fill " + (delta >= 0 ? "positive" : "negative") + (isWinner ? " winner" : "");
+      const fillStyle = delta >= 0
+        ? `width: ${width}%;`
+        : `width: ${width}%;`;
+
+      const deltaCls = delta >= 0 ? "up" : "down";
+      const deltaTxt = (delta >= 0 ? "+" : "") + fmt1.format(delta)
+        + " · " + (delta >= 0 ? "+" : "") + fmt2.format(pct) + "%";
+
+      const row = document.createElement("div");
+      row.className = "bar-row";
+      row.style.animationDelay = (i * 60) + "ms";
+      row.innerHTML = `
+        <div class="bar-moon">${moonSVG(p.center, 48)}</div>
+        <div class="bar-label">${p.name}<span class="sub">${p.sub}</span></div>
+        <div class="bar-track"><div class="${fillCls}" style="${fillStyle}"></div></div>
+        <div class="bar-value">${fmt1.format(mean)}<span class="delta ${deltaCls}">${deltaTxt}</span></div>
+      `;
+      bars.appendChild(row);
+    }
+  }
+
+  document.getElementById("regen").addEventListener("click", render);
+  render();
+</script>
+</body>
+</html>
