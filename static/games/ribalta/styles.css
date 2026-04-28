@@ -56,6 +56,14 @@ button {
 .list button:hover { background: #374151; }
 .list button.subtle { background: transparent; border-style: dashed; color: #d1d5db; }
 
+.script-title { font-size: 1.1rem; font-weight: 600; }
+.script-meta {
+  margin-top: 0.25rem;
+  font-size: 0.8rem;
+  color: #9ca3af;
+  letter-spacing: 0.02em;
+}
+
 .top-bar {
   display: flex;
   justify-content: space-between;

@@ -48,7 +48,19 @@ async function loadManifest() {
   state.manifest.forEach(entry => {
     const li = document.createElement('li');
     const btn = document.createElement('button');
-    btn.textContent = entry.title;
+    const title = document.createElement('div');
+    title.className = 'script-title';
+    title.textContent = entry.title;
+    btn.appendChild(title);
+    const metaParts = [];
+    if (entry.actors != null) metaParts.push(`${entry.actors} personaggi`);
+    if (entry.scenes != null) metaParts.push(`${entry.scenes} scene`);
+    if (metaParts.length) {
+      const meta = document.createElement('div');
+      meta.className = 'script-meta';
+      meta.textContent = metaParts.join(' · ');
+      btn.appendChild(meta);
+    }
     btn.addEventListener('click', () => loadScript(entry));
     li.appendChild(btn);
     list.appendChild(li);
