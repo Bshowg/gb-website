@@ -1,0 +1,281 @@
+{
+  "title": "Saresti troppo impegnato a vendere tutto per sopravvivere.",
+  "language": "it",
+  "characters": ["Clark", "Pedro"],
+  "description": "Clark torna a casa dopo la morte del padre e si scontra con il fratello Pedro, che ha ereditato tutto. La tensione esplode quando Clark urina sulla tomba del padre, rivelando rancori profondi e questioni irrisolte sull’eredità e il passato familiare.",
+  "scenes": [
+    {
+      "id": "scene_1",
+      "setting": "Due sedie davanti al giardino. Una lapide è visibile. Bevono birra.",
+      "beats": [
+        {
+          "type": "line",
+          "speaker": "Clark",
+          "to": "Pedro",
+          "line": "Non riesco proprio a farmene una ragione.",
+          "context": "Clark è confuso e disturbato, cerca una reazione da Pedro."
+        },
+        {
+          "type": "line",
+          "speaker": "Pedro",
+          "to": "Clark",
+          "line": "Di cosa?",
+          "context": "Pedro è calmo, ma sulla difensiva."
+        },
+        {
+          "type": "line",
+          "speaker": "Clark",
+          "to": "Pedro",
+          "line": "Non ti sembra strano, per usare un eufemismo, che Roger abbia voluto essere sepolto nel suo giardino?",
+          "context": "Clark mette in discussione le scelte del padre."
+        },
+        {
+          "type": "line",
+          "speaker": "Pedro",
+          "to": "Clark",
+          "line": "Qui era felice.",
+          "context": "Pedro difende il padre."
+        },
+        {
+          "type": "line",
+          "speaker": "Clark",
+          "to": "Pedro",
+          "line": "Non riesco a immaginarmelo felice.",
+          "context": "Clark esprime cinismo e distanza emotiva."
+        },
+        {
+          "type": "line",
+          "speaker": "Pedro",
+          "to": "Clark",
+          "line": "Aveva i suoi momenti.",
+          "context": "Pedro prova a mantenere equilibrio."
+        },
+        {
+          "type": "line",
+          "speaker": "Clark",
+          "to": "Pedro",
+          "line": "Tutti abbiamo i nostri momenti, ma felice… quella è una cosa rara. Soprattutto per “Lo Scansafatiche”.",
+          "context": "Clark provoca usando un soprannome."
+        },
+        {
+          "type": "line",
+          "speaker": "Pedro",
+          "to": "Clark",
+          "line": "Perché lo chiamavi sempre così?",
+          "context": "Pedro vuole capire ma è infastidito."
+        },
+        {
+          "type": "line",
+          "speaker": "Clark",
+          "to": "Pedro",
+          "line": "Perché nostro padre ha evitato la vita. Ecco perché.",
+          "context": "Clark accusa direttamente il padre."
+        },
+
+        {
+          "type": "stage_direction",
+          "action": "Clark si alza e si avvicina alla lapide.",
+          "context": "Cambio fisico: si confronta direttamente con il padre."
+        },
+
+        {
+          "type": "line",
+          "speaker": "Clark",
+          "to": "Lapide",
+          "line": "Roger L. Dudson… cosa sta per la L?",
+          "context": "Clark legge e scopre qualcosa di nuovo."
+        },
+        {
+          "type": "line",
+          "speaker": "Pedro",
+          "to": "Clark",
+          "line": "Lemuel.",
+          "context": "Pedro sa più cose sul padre."
+        },
+        {
+          "type": "line",
+          "speaker": "Clark",
+          "to": "Pedro",
+          "line": "Stai scherzando? Il suo secondo nome era Lemuel?",
+          "context": "Clark è sorpreso e derisorio."
+        },
+        {
+          "type": "line",
+          "speaker": "Pedro",
+          "to": "Clark",
+          "line": "Come il nostro bisnonno.",
+          "context": "Pedro collega la storia familiare."
+        },
+        {
+          "type": "line",
+          "speaker": "Clark",
+          "to": "Pedro",
+          "line": "Non lo sapevo.",
+          "context": "Clark mostra ignoranza e distanza."
+        },
+        {
+          "type": "line",
+          "speaker": "Pedro",
+          "to": "Clark",
+          "line": "Ci sono tante cose che non sai.",
+          "context": "Pedro attacca indirettamente."
+        },
+
+        {
+          "type": "stage_direction",
+          "action": "Clark urina sulla lapide.",
+          "context": "Atto provocatorio e irrispettoso."
+        },
+
+        {
+          "type": "line",
+          "speaker": "Clark",
+          "to": "Pedro",
+          "line": "Gli avevo detto che quando sarebbe morto gli avrei pisciato sulla tomba. Eccoci qua.",
+          "context": "Clark rivendica il gesto con rabbia."
+        },
+
+        {
+          "type": "stage_direction",
+          "action": "Clark si sistema.",
+          "context": "Chiude il gesto."
+        },
+
+        {
+          "type": "line",
+          "speaker": "Pedro",
+          "to": "Clark",
+          "line": "L’unico motivo per cui non ti spacco la faccia è perché so che sei mentalmente instabile.",
+          "context": "Pedro trattiene la rabbia ma attacca duramente."
+        },
+        {
+          "type": "line",
+          "speaker": "Clark",
+          "to": "Pedro",
+          "line": "E tu perché sei così arrabbiato?",
+          "context": "Clark provoca ancora."
+        },
+        {
+          "type": "line",
+          "speaker": "Pedro",
+          "to": "Clark",
+          "line": "Devi andartene.",
+          "context": "Pedro impone un limite."
+        },
+        {
+          "type": "line",
+          "speaker": "Clark",
+          "to": "Pedro",
+          "line": "Andarmene?",
+          "context": "Clark finge sorpresa."
+        },
+        {
+          "type": "line",
+          "speaker": "Pedro",
+          "to": "Clark",
+          "line": "Sì. Devi andartene.",
+          "context": "Pedro è deciso."
+        },
+        {
+          "type": "line",
+          "speaker": "Clark",
+          "to": "Pedro",
+          "line": "Per una pisciata?",
+          "context": "Clark minimizza."
+        },
+        {
+          "type": "line",
+          "speaker": "Pedro",
+          "to": "Clark",
+          "line": "Per essere venuto qui, per averci invaso la vita, per pensare di avere voce in capitolo!",
+          "context": "Pedro esplode: il vero problema emerge."
+        },
+        {
+          "type": "line",
+          "speaker": "Clark",
+          "to": "Pedro",
+          "line": "Ah sì?",
+          "context": "Clark sfida apertamente."
+        },
+        {
+          "type": "line",
+          "speaker": "Pedro",
+          "to": "Clark",
+          "line": "Vattene!",
+          "context": "Ordine finale."
+        },
+
+        {
+          "type": "line",
+          "speaker": "Clark",
+          "to": "Pedro",
+          "line": "Ti sei preso la casa, il terreno, il camion… cos’altro vuoi togliermi?",
+          "context": "Clark introduce il tema dell’eredità."
+        },
+        {
+          "type": "line",
+          "speaker": "Pedro",
+          "to": "Clark",
+          "line": "Clark, devi—",
+          "context": "Pedro prova a fermarlo."
+        },
+        {
+          "type": "line",
+          "speaker": "Clark",
+          "to": "Pedro",
+          "line": "Dov’è la mia eredità? METÀ È MIA!",
+          "context": "Clark esplode, rivendica diritti."
+        },
+        {
+          "type": "line",
+          "speaker": "Pedro",
+          "to": "Clark",
+          "line": "Papà ha fatto testamento. Ha affidato tutto a me.",
+          "context": "Pedro si appella ai fatti legali."
+        },
+        {
+          "type": "line",
+          "speaker": "Clark",
+          "to": "Pedro",
+          "line": "Stronzate.",
+          "context": "Negazione totale."
+        },
+        {
+          "type": "line",
+          "speaker": "Pedro",
+          "to": "Clark",
+          "line": "Ti ho già mostrato i documenti.",
+          "context": "Pedro resta razionale."
+        },
+        {
+          "type": "line",
+          "speaker": "Clark",
+          "to": "Pedro",
+          "line": "Stronzate.",
+          "context": "Clark rifiuta la realtà."
+        },
+        {
+          "type": "line",
+          "speaker": "Pedro",
+          "to": "Clark",
+          "line": "Eri presente quando l’avvocato ha spiegato tutto.",
+          "context": "Pedro richiama la memoria condivisa."
+        },
+        {
+          "type": "line",
+          "speaker": "Clark",
+          "to": "Pedro",
+          "line": "Una farsa!",
+          "context": "Clark continua ad attaccare."
+        },
+        {
+          "type": "line",
+          "speaker": "Pedro",
+          "to": "Clark",
+          "line": "Questi sono i fatti.",
+          "context": "Pedro resta fermo."
+        }
+      ]
+    }
+  ]
+}

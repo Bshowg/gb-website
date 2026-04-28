@@ -1,3 +1,4 @@
 [
-  { "file": "zuppadisasso.json", "title": "La zuppa di sasso","actors":9,"scenes":7, "language": "it" }
+  { "file": "zuppadisasso.json", "title": "La zuppa di sasso","actors":9,"scenes":7, "language": "it" },
+  { "file": "eredità.json", "title": "Saresti troppo impegnato a vendere tutto per sopravvivere.","actors":2,"scenes":1, "language": "it" }
 ]

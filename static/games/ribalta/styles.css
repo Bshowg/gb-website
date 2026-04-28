@@ -64,6 +64,17 @@ button {
   letter-spacing: 0.02em;
 }
 
+.script-description {
+  margin: 0 0 1rem;
+  padding: 0.75rem 1rem;
+  background: #1f2937;
+  border-left: 3px solid #facc15;
+  border-radius: 0.375rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #d1d5db;
+}
+
 .top-bar {
   display: flex;
   justify-content: space-between;

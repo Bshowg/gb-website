@@ -71,6 +71,13 @@ async function loadScript(entry) {
   const res = await fetch(`./scripts/${entry.file}`);
   state.script = await res.json();
   document.getElementById('char-script-title').textContent = state.script.title;
+  const descEl = document.getElementById('char-script-description');
+  if (state.script.description) {
+    descEl.textContent = state.script.description;
+    descEl.classList.remove('hidden');
+  } else {
+    descEl.classList.add('hidden');
+  }
 
   const list = document.getElementById('character-list');
   list.innerHTML = '';
