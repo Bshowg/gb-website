@@ -1,0 +1,369 @@
+{
+  "title": "La zuppa di sasso",
+  "language": "it",
+  "characters": [
+    "Narratrice",
+    "Lupo",
+    "Gallina",
+    "Porcello",
+    "Cavallo",
+    "Oca",
+    "Pecora",
+    "Capra",
+    "Cane"
+  ],
+  "scenes": [
+    {
+      "id": "scene_1",
+      "title": "Scena 1",
+      "setting": "Notte d’inverno, villaggio degli animali",
+      "music": "sottofondo musicale",
+      "beats": [
+        {
+          "type": "line",
+          "speaker": "Narratrice",
+          "to": "Pubblico",
+          "line": "È notte, è inverno, un vecchio lupo si avvicina ad un villaggio dove vivono gli animali e bussa alla porta della casa della gallina.",
+          "context": "Introduce la situazione: il lupo arriva al villaggio e crea attesa."
+        }
+      ]
+    },
+    {
+      "id": "scene_2",
+      "title": "Scena 2",
+      "setting": "Casa della gallina",
+      "beats": [
+        {
+          "type": "line",
+          "speaker": "Gallina",
+          "to": "Lupo",
+          "line": "Chi è?",
+          "context": "La gallina sente bussare ed è prudente."
+        },
+        {
+          "type": "line",
+          "speaker": "Lupo",
+          "to": "Gallina",
+          "line": "Sono il lupo!",
+          "context": "Il lupo si presenta senza nascondersi."
+        },
+        {
+          "type": "line",
+          "speaker": "Gallina",
+          "to": "Lupo",
+          "line": "IL LUPOOO!",
+          "context": "La gallina è spaventata."
+        },
+        {
+          "type": "line",
+          "speaker": "Lupo",
+          "to": "Gallina",
+          "line": "Non aver paura gallina, sono vecchio e non ho più neanche un dente, lasciami scaldare e preparare la mia zuppa di sasso.",
+          "context": "Il lupo cerca di rassicurare la gallina e chiede ospitalità."
+        },
+        {
+          "type": "line",
+          "speaker": "Narratrice",
+          "to": "Pubblico",
+          "line": "La gallina non sa cosa fare, non è tranquilla ma è curiosa e decide di aprire la porta.",
+          "context": "Spiega il conflitto interno della gallina: paura e curiosità."
+        },
+        {
+          "type": "line",
+          "speaker": "Lupo",
+          "to": "Gallina",
+          "line": "Gallina per favore portami una pentola.",
+          "context": "Il lupo inizia la preparazione della zuppa."
+        },
+        {
+          "type": "line",
+          "speaker": "Gallina",
+          "to": "Lupo",
+          "line": "Una pentola?",
+          "context": "La gallina è sorpresa e non capisce bene la ricetta."
+        },
+        {
+          "type": "line",
+          "speaker": "Lupo",
+          "to": "Gallina",
+          "line": "Senti Gallina c’è pur bisogno di una pentola per preparare la zuppa di sasso.",
+          "context": "Il lupo risponde con naturalezza, come se fosse ovvio."
+        },
+        {
+          "type": "line",
+          "speaker": "Gallina",
+          "to": "Lupo",
+          "line": "AH! Non lo sapevo, ti serve altro?!",
+          "context": "La gallina si lascia coinvolgere."
+        },
+        {
+          "type": "line",
+          "speaker": "Lupo",
+          "to": "Gallina",
+          "line": "No, basta un sasso, dell’acqua e aspettare che bolla.",
+          "context": "Il lupo descrive una ricetta poverissima, lasciando spazio agli altri ingredienti."
+        },
+        {
+          "type": "line",
+          "speaker": "Gallina",
+          "to": "Lupo",
+          "line": "Tutto qui?! Perché nelle mie zuppe metto sempre un po’ di sedano.",
+          "context": "La gallina propone il primo ingrediente aggiuntivo."
+        },
+        {
+          "type": "line",
+          "speaker": "Lupo",
+          "to": "Gallina",
+          "line": "Sì, si può!",
+          "context": "Il lupo accetta e incoraggia la collaborazione."
+        }
+      ]
+    },
+    {
+      "id": "scene_3",
+      "title": "Scena 3",
+      "setting": "Vicino alla casa della gallina",
+      "beats": [
+        {
+          "type": "line",
+          "speaker": "Narratrice",
+          "to": "Pubblico",
+          "line": "Ma il porcello ha visto il lupo entrare nella casa della gallina ed è preoccupato.",
+          "context": "Introduce il porcello, che teme per la gallina."
+        },
+        {
+          "type": "line",
+          "speaker": "Porcello",
+          "to": "Gallina",
+          "line": "Tutto bene?",
+          "context": "Il porcello controlla che la gallina non sia in pericolo."
+        },
+        {
+          "type": "line",
+          "speaker": "Gallina",
+          "to": "Porcello",
+          "line": "Con il lupo stiamo preparando la zuppa di sasso.",
+          "context": "La gallina rassicura il porcello e spiega cosa sta succedendo."
+        },
+        {
+          "type": "line",
+          "speaker": "Porcello",
+          "to": "Lupo",
+          "line": "Solo con un sasso? Si possono aggiungere anche delle zucchine?",
+          "context": "Il porcello passa dalla paura alla curiosità e propone un ingrediente."
+        },
+        {
+          "type": "line",
+          "speaker": "Lupo",
+          "to": "Porcello",
+          "line": "Sì, si può!",
+          "context": "Il lupo accetta anche il contributo del porcello."
+        }
+      ]
+    },
+    {
+      "id": "scene_4",
+      "title": "Scena 4",
+      "setting": "Casa della gallina",
+      "beats": [
+        {
+          "type": "line",
+          "speaker": "Narratrice",
+          "to": "Pubblico",
+          "line": "Anche l’oca ed il cavallo hanno visto il lupo che entrava nella casa della gallina e si sono preoccupati.",
+          "context": "Arrivano altri animali, mossi dalla preoccupazione."
+        },
+        {
+          "type": "line",
+          "speaker": ["Cavallo", "Oca"],
+          "to": "Gruppo",
+          "line": "Tutto bene?",
+          "context": "Cavallo e oca chiedono se la situazione è sotto controllo."
+        },
+        {
+          "type": "line",
+          "speaker": "Porcello",
+          "to": ["Cavallo", "Oca"],
+          "line": "Con il lupo e la gallina stiamo preparando la zuppa di sasso con sedano e zucchine.",
+          "context": "Il porcello aggiorna i nuovi arrivati sugli ingredienti già aggiunti."
+        },
+        {
+          "type": "line",
+          "speaker": "Oca",
+          "to": "Lupo",
+          "line": "Io che ho viaggiato molto mi ricordo di aver assaggiato una zuppa con il porro. È possibile?",
+          "context": "L’oca propone il porro, facendo riferimento alla propria esperienza."
+        },
+        {
+          "type": "line",
+          "speaker": "Lupo",
+          "to": "Oca",
+          "line": "Sì, si può!",
+          "context": "Il lupo accetta un altro ingrediente."
+        }
+      ]
+    },
+    {
+      "id": "scene_5",
+      "title": "Scena 5",
+      "setting": "Casa della gallina, porta spalancata",
+      "beats": [
+        {
+          "type": "line",
+          "speaker": "Narratrice",
+          "to": "Pubblico",
+          "line": "Anche la pecora, la capra ed il cane hanno visto il lupo che entrava nella casa della gallina e si sono preoccupati. Trovano la porta spalancata ed entrano.",
+          "context": "Il gruppo si allarga: altri animali entrano nella casa."
+        },
+        {
+          "type": "line",
+          "speaker": ["Pecora", "Capra", "Cane"],
+          "to": "Gruppo",
+          "line": "Cosa state facendo?",
+          "context": "I nuovi arrivati chiedono spiegazioni."
+        },
+        {
+          "type": "line",
+          "speaker": "Cavallo",
+          "to": ["Pecora", "Capra", "Cane"],
+          "line": "Con il lupo, la gallina, il porcello e l’oca stiamo preparando la zuppa di sasso con sedano, zucchine e porri.",
+          "context": "Il cavallo riassume la situazione e gli ingredienti."
+        },
+        {
+          "type": "line",
+          "speaker": "Pecora",
+          "to": "Gruppo",
+          "line": "Io prendo la rapa.",
+          "context": "La pecora contribuisce alla zuppa."
+        },
+        {
+          "type": "line",
+          "speaker": "Capra",
+          "to": "Gruppo",
+          "line": "Io prendo il cavolo.",
+          "context": "La capra contribuisce alla zuppa."
+        },
+        {
+          "type": "line",
+          "speaker": "Cane",
+          "to": "Gruppo",
+          "line": "Io prendo le patate.",
+          "context": "Il cane contribuisce alla zuppa."
+        }
+      ]
+    },
+    {
+      "id": "scene_6",
+      "title": "Scena 6",
+      "setting": "Tutti intorno al camino",
+      "beats": [
+        {
+          "type": "line",
+          "speaker": "Narratrice",
+          "to": "Pubblico",
+          "line": "Tutti sono intorno al camino in circolo aspettando che sia pronta la zuppa.",
+          "context": "La tensione iniziale è diventata convivialità."
+        },
+        {
+          "type": "line",
+          "speaker": "Capra",
+          "to": "Gruppo",
+          "line": "Com’è bello essere tutti insieme!!",
+          "context": "La capra esprime la gioia del gruppo."
+        },
+        {
+          "type": "line",
+          "speaker": "Cane",
+          "to": "Gruppo",
+          "line": "Dovremo organizzare cene più spesso!",
+          "context": "Il cane propone di ripetere l’esperienza."
+        },
+        {
+          "type": "line",
+          "speaker": "Porcello",
+          "to": "Gruppo",
+          "line": "Pensavo che avremmo mangiato un brodo di carne.",
+          "context": "Il porcello fa una battuta sul lupo e sulla paura iniziale."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Gli animali ridacchiano, il lupo si porta la mano alla fronte.",
+          "context": "Reazione comica alla battuta del porcello."
+        },
+        {
+          "type": "line",
+          "speaker": "Lupo",
+          "to": "Gruppo",
+          "line": "Credo che la zuppa sia pronta!",
+          "context": "Il lupo chiude l’attesa e serve la zuppa."
+        },
+        {
+          "type": "line",
+          "speaker": "Narratrice",
+          "to": "Pubblico",
+          "line": "Il lupo serve tutti gli animali e ognuno si serve per ben tre volte.",
+          "context": "La zuppa è un successo e tutti mangiano insieme."
+        }
+      ]
+    },
+    {
+      "id": "scene_7",
+      "title": "Scena 7",
+      "setting": "Dopo cena",
+      "beats": [
+        {
+          "type": "line",
+          "speaker": "Narratrice",
+          "to": "Pubblico",
+          "line": "Il lupo tira fuori dal sacco un coltello e… infilza il sasso.",
+          "context": "Momento di suspense comica: sembra pericoloso, ma il lupo prende il sasso."
+        },
+        {
+          "type": "line",
+          "speaker": "Lupo",
+          "to": "Gruppo",
+          "line": "Non è ancora cotto!, se permettete me lo riprendo per la cena di domani.",
+          "context": "Il lupo rivela il trucco della zuppa e si prepara ad andare via."
+        },
+        {
+          "type": "line",
+          "speaker": "Capra",
+          "to": "Lupo",
+          "line": "Già te ne vai?",
+          "context": "La capra è dispiaciuta che il lupo parta."
+        },
+        {
+          "type": "line",
+          "speaker": "Lupo",
+          "to": "Gruppo",
+          "line": "Vi ringrazio per questa bella serata!",
+          "context": "Il lupo saluta con gratitudine."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Il lupo esce dalla porta, gli animali stanno affacciati.",
+          "context": "Gli animali lo guardano andare via."
+        },
+        {
+          "type": "line",
+          "speaker": "Narratrice",
+          "to": "Pubblico",
+          "line": "Chissà da chi andrà a cena domani…",
+          "context": "La narratrice prepara la battuta finale."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Il lupo si gira verso i bambini.",
+          "context": "Il lupo rompe la quarta parete."
+        },
+        {
+          "type": "line",
+          "speaker": "Lupo",
+          "to": "Bambini",
+          "line": "Chi mi invita di voi a cena?",
+          "context": "Battuta finale rivolta direttamente al pubblico."
+        }
+      ]
+    }
+  ]
+}

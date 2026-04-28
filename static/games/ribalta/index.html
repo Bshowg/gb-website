@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ribalta</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="container">
+
+    <section id="view-scripts">
+      <h1>Ribalta</h1>
+      <h2>Scegli un copione</h2>
+      <ul class="list" id="script-list"></ul>
+    </section>
+
+    <section id="view-characters" class="hidden">
+      <div class="top-bar">
+        <button class="back-btn" id="back-to-scripts">← Cambia copione</button>
+      </div>
+      <h1 id="char-script-title"></h1>
+      <h2>Scegli un personaggio</h2>
+      <ul class="list" id="character-list"></ul>
+    </section>
+
+    <section id="view-playback" class="hidden">
+      <div class="top-bar">
+        <button class="back-btn" id="back-to-characters">← Cambia personaggio</button>
+        <div class="mode-toggle" id="mode-toggle">
+          <button data-mode="read" class="active">Lettura</button>
+          <button data-mode="improv">Improvvisa</button>
+        </div>
+      </div>
+
+      <div class="scene-banner hidden" id="scene-banner">
+        <div class="title" id="scene-title"></div>
+        <div class="row"><span class="label">Ambientazione:</span> <span id="scene-setting"></span></div>
+        <div class="row hidden" id="scene-music-row"><span class="label">Musica:</span> <span id="scene-music"></span></div>
+      </div>
+
+      <div class="beat-card" id="beat-card">
+        <div class="beat-header" id="beat-header"></div>
+        <div class="beat-line" id="beat-line"></div>
+        <button class="peek-btn hidden" id="peek-btn">Sbircia la battuta</button>
+        <div class="beat-context" id="beat-context"></div>
+      </div>
+
+      <div class="up-next hidden" id="up-next">Tocca a te alla prossima!</div>
+
+      <button class="advance-btn" id="advance-btn">Avanti</button>
+    </section>
+
+    <section id="view-end" class="hidden">
+      <div class="end-card">
+        <h2>Fine. Bravissim*!</h2>
+        <button id="restart-btn">Ricomincia</button>
+      </div>
+    </section>
+
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
