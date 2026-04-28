@@ -1,0 +1,329 @@
+{
+  "title": "15 minuti di fama su YouTube",
+  "language": "it",
+  "description": "Dillon Spree, un ragazzo di scuola superiore, viene convocato d’urgenza nell’ufficio del preside a causa di un video virale leggermente inappropriato e imbarazzante. Il preside, invece di punirlo, cerca di sfruttare la sua improvvisa fama per promuovere la scuola. Dillon si trova così a dover navigare tra l’imbarazzo della sua notorietà e le aspettative della comunità scolastica.",
+  "characters": ["Dillon", "Pembelton", "Preside Smock"],
+  "scenes": [
+    {
+      "id": "scene_1",
+      "setting": "Corridoio della scuola. Dillon viene convocato d’urgenza nell’ufficio del preside.",
+      "beats": [
+        {
+          "type": "line",
+          "speaker": "Pembelton",
+          "to": "Dillon",
+          "line": "Dillon Spree, per favore recati nell’ufficio del Preside. Immediatamente. Signor Dillon Spree.",
+          "context": "Pembelton è formale e urgente. Sta chiamando Dillon come se fosse nei guai seri."
+        },
+        {
+          "type": "line",
+          "speaker": "Dillon",
+          "to": "Pembelton",
+          "line": "Io non sono mai stato nell’ufficio del preside. Sono un secchione da tutti dieci. Faccio parte del club di scacchi. Io— io—",
+          "context": "Dillon è nel panico. Non capisce cosa possa aver fatto di sbagliato."
+        },
+        {
+          "type": "line",
+          "speaker": "Pembelton",
+          "to": "Dillon",
+          "line": "Signor Spree, abbiamo davvero bisogno di lei nell’ufficio del Preside! Ora!",
+          "context": "Pembelton interrompe Dillon e aumenta la pressione."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Il Preside Smock aspetta Dillon. Dillon entra. Pembelton esce.",
+          "context": "Cambio di spazio: dall’esterno dell’ufficio al confronto diretto con il preside."
+        }
+      ]
+    },
+    {
+      "id": "scene_2",
+      "setting": "Ufficio del Preside Smock.",
+      "beats": [
+        {
+          "type": "line",
+          "speaker": "Dillon",
+          "to": "Preside Smock",
+          "line": "Ehm, voleva vedermi, Preside—",
+          "context": "Dillon è intimidito e cerca di essere educato."
+        },
+        {
+          "type": "line",
+          "speaker": "Preside Smock",
+          "to": "Dillon",
+          "line": "Sì, sì, sì. Siediti, Dillon.",
+          "context": "Il preside taglia corto. Vuole passare subito al punto."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Dillon si siede.",
+          "context": "Dillon obbedisce, ancora nervoso."
+        },
+        {
+          "type": "line",
+          "speaker": "Preside Smock",
+          "to": "Dillon",
+          "line": "Dillon, un paio di cose. A me piacciono i video stupidi quanto a chiunque altro, ma questa è pur sempre una scuola pubblica. E non puoi usare quel linguaggio. Non puoi proprio.",
+          "context": "Il preside finge autorità morale, ma il problema è assurdo."
+        },
+        {
+          "type": "line",
+          "speaker": "Dillon",
+          "to": "Preside Smock",
+          "line": "Preside Smock, io non c’entro niente con… aspetti, quale linguaggio?",
+          "context": "Dillon prova a difendersi, poi si confonde."
+        },
+        {
+          "type": "line",
+          "speaker": "Preside Smock",
+          "to": "Dillon",
+          "line": "Sedere.",
+          "context": "Il preside pronuncia la parola come se fosse grave."
+        },
+        {
+          "type": "line",
+          "speaker": "Dillon",
+          "to": "Preside Smock",
+          "line": "Sedere è una brutta parola?",
+          "context": "Dillon è incredulo."
+        },
+        {
+          "type": "line",
+          "speaker": "Preside Smock",
+          "to": "Dillon",
+          "line": "Sedere è una brutta parola.",
+          "context": "Il preside conferma con serietà sproporzionata."
+        },
+        {
+          "type": "line",
+          "speaker": "Preside Smock",
+          "to": "Dillon",
+          "line": "Ora, se stessimo parlando di “sedere” nel senso di stare seduti, come in: “Mi devo sedere perché sono stanco”, allora va bene. Quello puoi dirlo.",
+          "context": "Il preside tenta una spiegazione grammaticale ridicola."
+        },
+        {
+          "type": "line",
+          "speaker": "Dillon",
+          "to": "Preside Smock",
+          "line": "È sicuro che sia una brutta parola? Sedere nel senso di… sedere?",
+          "context": "Dillon cerca di capire se il preside sta parlando seriamente."
+        },
+        {
+          "type": "line",
+          "speaker": "Preside Smock",
+          "to": "Dillon",
+          "line": "Guarda, nemmeno io lo pensavo. Ma sono stato sommerso da email di genitori sconvolti perché i loro figli stanno guardando un video con la parola “sedere”. Quindi non dirla più. E cambia il titolo del video.",
+          "context": "Il preside non crede davvero al problema, ma vuole evitare lamentele."
+        },
+        {
+          "type": "line",
+          "speaker": "Dillon",
+          "to": "Preside Smock",
+          "line": "Ma io non ho pubblicato il video!",
+          "context": "Dillon cerca di chiarire il malinteso principale."
+        },
+        {
+          "type": "line",
+          "speaker": "Preside Smock",
+          "to": "Dillon",
+          "line": "No? Strano. Allora dì a chiunque l’abbia pubblicato di non usare la parola sedere. Usate, ehm… accidenti, qual era la parola… Pembelton!",
+          "context": "Il preside non si concentra sulla responsabilità, ma solo sulla censura della parola."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Pembelton rientra.",
+          "context": "Pembelton viene chiamato come assistente tecnico del linguaggio accettabile."
+        },
+        {
+          "type": "line",
+          "speaker": "Pembelton",
+          "to": "Preside Smock",
+          "line": "Sì, signore?",
+          "context": "Pembelton è pronto a eseguire."
+        },
+        {
+          "type": "line",
+          "speaker": "Preside Smock",
+          "to": "Pembelton",
+          "line": "Come dobbiamo dire adesso al posto di sedere? Deretano?",
+          "context": "Il preside chiede la formula approvata."
+        },
+        {
+          "type": "line",
+          "speaker": "Pembelton",
+          "to": "Preside Smock",
+          "line": "No, è troppo anatomico.",
+          "context": "Pembelton tratta la questione con assurda serietà burocratica."
+        },
+        {
+          "type": "line",
+          "speaker": "Preside Smock",
+          "to": "Pembelton",
+          "line": "Fondo schiena?",
+          "context": "Il preside propone un’alternativa."
+        },
+        {
+          "type": "line",
+          "speaker": "Pembelton",
+          "to": "Preside Smock",
+          "line": "Troppo allusivo.",
+          "context": "Pembelton boccia anche questa."
+        },
+        {
+          "type": "line",
+          "speaker": "Preside Smock",
+          "to": "Pembelton",
+          "line": "A cosa?",
+          "context": "Il preside non capisce l’obiezione."
+        },
+        {
+          "type": "line",
+          "speaker": "Pembelton",
+          "to": "Preside Smock",
+          "line": "Alle sedie.",
+          "context": "Risposta assurda, detta con convinzione."
+        },
+        {
+          "type": "line",
+          "speaker": "Preside Smock",
+          "to": "Pembelton",
+          "line": "Giusto. Allora qual è? Cosa vogliono che diciamo?",
+          "context": "Il preside si arrende alla burocrazia."
+        },
+        {
+          "type": "line",
+          "speaker": "Pembelton",
+          "to": "Preside Smock",
+          "line": "La terminologia accettabile decisa dal comitato genitori è… “mucchio carnoso”.",
+          "context": "Pembelton annuncia una soluzione molto peggiore del problema."
+        },
+        {
+          "type": "line",
+          "speaker": "Preside Smock",
+          "to": "Pembelton",
+          "line": "Davvero? Suona molto più inappropriato.",
+          "context": "Il preside riconosce l’assurdità."
+        },
+        {
+          "type": "line",
+          "speaker": "Pembelton",
+          "to": "Preside Smock",
+          "line": "Concordo, signore.",
+          "context": "Pembelton approva, ma non mette in discussione la regola."
+        },
+        {
+          "type": "line",
+          "speaker": "Preside Smock",
+          "to": "Dillon",
+          "line": "Cioè, so che non è una parolaccia, però è… disgustosa da sentire. “Mucchio carnoso”. Bleah.",
+          "context": "Il preside prova repulsione per la nuova formula."
+        },
+        {
+          "type": "line",
+          "speaker": "Pembelton",
+          "to": "Preside Smock",
+          "line": "È quello che vogliono che gli studenti usino d’ora in poi.",
+          "context": "Pembelton ribadisce l’ordine istituzionale."
+        },
+        {
+          "type": "line",
+          "speaker": "Preside Smock",
+          "to": "Dillon",
+          "line": "Va bene. Come vogliono. Mucchio carnoso. D’ora in poi riferisciti alla tua parte posteriore come a un mucchio carnoso.",
+          "context": "Il preside applica la regola, pur trovandola assurda."
+        },
+        {
+          "type": "line",
+          "speaker": "Dillon",
+          "to": "Preside Smock",
+          "line": "Ok. Va bene, ma io—",
+          "context": "Dillon prova ancora a spiegare che non è responsabile."
+        },
+        {
+          "type": "line",
+          "speaker": "Preside Smock",
+          "to": "Dillon",
+          "line": "Ma non è nemmeno per questo che ti ho chiamato. Sai perché ti ho chiamato?",
+          "context": "Il preside rivela che il vero motivo è un altro."
+        },
+        {
+          "type": "line",
+          "speaker": "Dillon",
+          "to": "Preside Smock",
+          "line": "Non perché ho detto “sedere”?",
+          "context": "Dillon testa il limite appena imposto."
+        },
+        {
+          "type": "line",
+          "speaker": "Preside Smock",
+          "to": "Dillon",
+          "line": "Dillon.",
+          "context": "Il preside lo ammonisce severamente."
+        },
+        {
+          "type": "line",
+          "speaker": "Dillon",
+          "to": "Preside Smock",
+          "line": "Voglio dire, mucchio carnoso.",
+          "context": "Dillon corregge la parola per evitare problemi."
+        },
+        {
+          "type": "line",
+          "speaker": "Preside Smock",
+          "to": "Dillon",
+          "line": "No. Senti, nonostante l’obiezione della scuola alla parola sedere, ci piacerebbe che tu partecipassi ad alcuni eventi per noi. Qualche raccolta fondi, cose così.",
+          "context": "Il preside passa dalla reprimenda allo sfruttamento della fama di Dillon."
+        },
+        {
+          "type": "line",
+          "speaker": "Dillon",
+          "to": "Preside Smock",
+          "line": "Mi scusi, vuole che io—",
+          "context": "Dillon è spiazzato dal cambio di tono."
+        },
+        {
+          "type": "line",
+          "speaker": "Preside Smock",
+          "to": "Dillon",
+          "line": "Non ho mai avuto uno studente famoso in questa scuola, Dillon. Nel 2005 c’era una possibilità che Zac Efron si iscrivesse da noi. Sarebbe stato magnifico. Mio Dio, la quantità di stampa e fondi spontanei che una scuola può ricevere se una celebrità la frequenta… fa venire l’acquolina in bocca.",
+          "context": "Il preside fantastica sui vantaggi economici e mediatici della fama."
+        },
+        {
+          "type": "line",
+          "speaker": "Preside Smock",
+          "to": "Dillon",
+          "line": "Poi però ha deciso di fare un film. Inoltre era analfabeta, quindi avremmo dovuto ritoccargli parecchio i voti. Io ero disposto a farlo. Eccome se ero disposto… ma, ehm…",
+          "context": "Il preside rivela senza vergogna la sua opportunismo."
+        },
+        {
+          "type": "line",
+          "speaker": "Dillon",
+          "to": "Preside Smock",
+          "line": "Signore.",
+          "context": "Dillon prova a riportarlo alla realtà."
+        },
+        {
+          "type": "line",
+          "speaker": "Preside Smock",
+          "to": "Dillon",
+          "line": "Il punto è che adesso ce l’ho. Tu! Il ragazzo di “Ahia, mi sono fatto male al mucchio carnoso”. Il tuo video ha già superato mezzo milione di visualizzazioni.",
+          "context": "Il preside vede Dillon come una risorsa pubblicitaria."
+        },
+        {
+          "type": "line",
+          "speaker": "Dillon",
+          "to": "Preside Smock",
+          "line": "Davvero?!",
+          "context": "Dillon è scioccato dalla portata della sua fama involontaria."
+        },
+        {
+          "type": "line",
+          "speaker": "Preside Smock",
+          "to": "Dillon",
+          "line": "Allora, che ne dici? Saresti disposto a fare qualche evento per noi? Raduni scolastici, interviste, magari una raccolta fondi… tutto per il bene della tua scuola?",
+          "context": "Il preside cerca di convincerlo usando il senso di appartenenza alla scuola."
+        }
+      ]
+    }
+  ]
+}

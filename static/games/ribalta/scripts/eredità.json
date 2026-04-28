@@ -27,14 +27,14 @@
           "speaker": "Clark",
           "to": "Pedro",
           "line": "Non ti sembra strano, per usare un eufemismo, che Roger abbia voluto essere sepolto nel suo giardino?",
-          "context": "Clark mette in discussione le scelte del padre."
+          "context": "Clark mette in discussione le scelte del padre Roger."
         },
         {
           "type": "line",
           "speaker": "Pedro",
           "to": "Clark",
           "line": "Qui era felice.",
-          "context": "Pedro difende il padre."
+          "context": "Pedro difende il padre Roger."
         },
         {
           "type": "line",
@@ -124,7 +124,7 @@
         {
           "type": "stage_direction",
           "action": "Clark urina sulla lapide.",
-          "context": "Atto provocatorio e irrispettoso."
+          "context": "Atto provocatorio e irrispettoso di Clark verso il padre Roger."
         },
 
         {
