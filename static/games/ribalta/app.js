@@ -7,6 +7,7 @@ const state = {
   sceneIdx: 0,
   beatIdx: 0,
   mode: 'read',
+  previewMode: false,
 };
 
 const views = {
@@ -54,6 +55,7 @@ function renderManifestList() {
   const inFolder = state.folderStack.length > 0;
   document.querySelector('#view-scripts .hero').classList.toggle('hidden', inFolder);
   document.getElementById('scripts-top-bar').classList.toggle('hidden', !inFolder);
+  document.getElementById('editor-link').classList.toggle('hidden', inFolder);
 
   const list = document.getElementById('script-list');
   list.innerHTML = '';
@@ -101,10 +103,14 @@ function exitFolder() {
 async function loadScript(entry) {
   const res = await fetch(`./scripts/${state.currentPath}${entry.file}`);
   state.script = await res.json();
-  document.getElementById('char-script-title').textContent = state.script.title;
+  showCharacterPicker(state.script);
+}
+
+function showCharacterPicker(script) {
+  document.getElementById('char-script-title').textContent = script.title;
   const descEl = document.getElementById('char-script-description');
-  if (state.script.description) {
-    descEl.textContent = state.script.description;
+  if (script.description) {
+    descEl.textContent = script.description;
     descEl.classList.remove('hidden');
   } else {
     descEl.classList.add('hidden');
@@ -112,7 +118,7 @@ async function loadScript(entry) {
 
   const list = document.getElementById('character-list');
   list.innerHTML = '';
-  state.script.characters.forEach(char => {
+  script.characters.forEach(char => {
     const li = document.createElement('li');
     const btn = document.createElement('button');
     const name = document.createElement('div');
@@ -331,7 +337,10 @@ function hasNextUserBeat() {
   return false;
 }
 
-document.getElementById('back-to-scripts').addEventListener('click', () => showView('scripts'));
+document.getElementById('back-to-scripts').addEventListener('click', () => {
+  if (state.previewMode) { window.location.href = './editor.html'; return; }
+  showView('scripts');
+});
 document.getElementById('folder-back-btn').addEventListener('click', exitFolder);
 document.getElementById('back-to-characters').addEventListener('click', () => showView('characters'));
 document.getElementById('back-from-readall').addEventListener('click', () => showView('characters'));
@@ -356,4 +365,20 @@ document.getElementById('restart-btn').addEventListener('click', () => {
   startPlayback(state.character);
 });
 
-loadManifest();
+(function bootstrap() {
+  const params = new URLSearchParams(location.search);
+  if (params.get('preview') === '1') {
+    const raw = localStorage.getItem('ribalta:preview');
+    if (!raw) {
+      alert('Nessuna anteprima trovata. Torna all’editor.');
+      window.location.href = './editor.html';
+      return;
+    }
+    state.previewMode = true;
+    state.script = JSON.parse(raw);
+    document.getElementById('back-to-scripts').textContent = '← Torna all’editor';
+    showCharacterPicker(state.script);
+  } else {
+    loadManifest();
+  }
+})();

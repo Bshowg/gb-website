@@ -1,0 +1,289 @@
+{
+  "title": "Il Pranzo dell'Ispettore Candela",
+  "language": "it",
+  "description": "Elena Vargas è stata avvelenata durante un pranzo al suo ristorante. L’ispettore Rómulo Candela interroga i due sospetti principali, la collega Lidia Giostra e il critico gastronomico Tommaso Grieco, in un confronto teso e ironico che si svolge tutto a tavola.",
+  
+  "characters": [
+    {
+      "name": "Rómulo Candela",
+      "description": "Detective privato di origini spagnole, teatrale, colorato, ironico e manipolatore."
+    },
+    {
+      "name": "Lidia Giostra",
+      "description": "Ristoratrice elegante e nervosa. Vuole sembrare collaborativa, ma controlla ogni parola. Ha paura che il passato torni a galla."
+    },
+    {
+      "name": "Tommaso Grieco",
+      "description": "Critico gastronomico brillante e sarcastico. Usa l’ironia per difendersi. Finge superiorità, ma è più fragile di quanto sembri."
+    }
+  ],
+  "scenes": [
+    {
+      "id": "scene_1",
+      "title": "Antipasto",
+      "setting": "Un piccolo ristorante mediterraneo. Tavolo apparecchiato per tre. Pomodori, olive, pane, birra leggera. Candela indossa una giacca colorata e occhiali da sole.",
+      "beats": [
+        {
+          "type": "line",
+          "speaker": "Rómulo Candela",
+          "to": ["Lidia Giostra", "Tommaso Grieco"],
+          "line": "Benvenuti. Mangiate, per favore. Nessuno confessa bene a stomaco vuoto.",
+          "context": "Candela apre il pranzo come se fosse una normale conversazione, ma vuole subito mettere i due sotto pressione."
+        },
+        {
+          "type": "line",
+          "speaker": "Lidia Giostra",
+          "to": "Rómulo Candela",
+          "line": "Ispettore, lei ha detto che sarebbe stato un pranzo informale.",
+          "context": "Lidia cerca di riportare controllo e normalità."
+        },
+        {
+          "type": "line",
+          "speaker": "Rómulo Candela",
+          "to": "Lidia Giostra",
+          "line": "Informale, sì. Ho ordinato senza avogados...",
+          "context": "Candela risponde con leggerezza, ma le ricorda che è sospettata."
+        },
+        {
+          "type": "line",
+          "speaker": "Tommaso Grieco",
+          "to": "Rómulo Candela",
+          "line": "Se questa è una trappola, almeno ha scelto un buon olio.",
+          "context": "Tommaso usa sarcasmo per mostrarsi superiore."
+        },
+        {
+          "type": "line",
+          "speaker": "Rómulo Candela",
+          "to": "Tommaso Grieco",
+          "line": "Gracias. L’olio dice molto di una persona. Anche il modo in cui mente.",
+          "context": "Candela accetta il gioco e lo trasforma in minaccia."
+        },
+        {
+          "type": "line",
+          "speaker": "Lidia Giostra",
+          "to": "Tommaso Grieco",
+          "line": "Tu trovi sempre il modo di sembrare divertente nel momento sbagliato.",
+          "context": "Lidia è irritata da Tommaso e teme che peggiori la situazione."
+        },
+        {
+          "type": "line",
+          "speaker": "Tommaso Grieco",
+          "to": "Lidia Giostra",
+          "line": "E tu trovi sempre il modo di sembrare innocente nel momento giusto.",
+          "context": "Tommaso contrattacca, insinuando che Lidia stia recitando."
+        },
+        {
+          "type": "line",
+          "speaker": "Rómulo Candela",
+          "to": ["Lidia Giostra", "Tommaso Grieco"],
+          "line": "Ay Dios, che bello. Due persone educate che si pugnalano con le posate ancora pulite.",
+          "context": "Candela gode della tensione e li incoraggia a esporsi."
+        },
+        {
+          "type": "line",
+          "speaker": "Lidia Giostra",
+          "to": "Rómulo Candela",
+          "line": "Lei sa già qualcosa. Si vede.",
+          "context": "Lidia prova a capire quanto Candela abbia scoperto."
+        },
+        {
+          "type": "line",
+          "speaker": "Rómulo Candela",
+          "to": "Lidia Giostra",
+          "line": "Io so sempre qualcosa. Il problema è capire chi ha paura della cosa sbagliata.",
+          "context": "Candela resta ambiguo per aumentare l’ansia."
+        },
+        {
+          "type": "line",
+          "speaker": "Tommaso Grieco",
+          "to": "Rómulo Candela",
+          "line": "Allora ci dica perché siamo qui.",
+          "context": "Tommaso vuole forzare Candela a scoprire le carte."
+        },
+        {
+          "type": "line",
+          "speaker": "Rómulo Candela",
+          "to": ["Lidia Giostra", "Tommaso Grieco"],
+          "line": "Perché uno di voi matò a Elena Vargas.",
+          "context": "Candela introduce l’oggetto chiave del caso."
+        },
+        {
+          "type": "line",
+          "speaker": "Lidia Giostra",
+          "to": "Rómulo Candela",
+          "line": "Elena era mia amica!",
+          "context": "Lidia risponde subito sul piano emotivo, forse troppo in fretta."
+        },
+        {
+          "type": "line",
+          "speaker": "Tommaso Grieco",
+          "to": "Lidia Giostra",
+          "line": "Era amica di tutti quando serviva.",
+          "context": "Tommaso insinua che Elena avesse relazioni opportunistiche."
+        },
+        {
+          "type": "line",
+          "speaker": "Rómulo Candela",
+          "to": "Tommaso Grieco",
+          "line": "E nemica di chi, señor Greco?",
+          "context": "Candela coglie l’apertura e spinge Tommaso a sbilanciarsi."
+        },
+        {
+          "type": "line",
+          "speaker": "Tommaso Grieco",
+          "to": "Rómulo Candela",
+          "line": "Di chiunque avesse qualcosa da nascondere.",
+          "context": "Tommaso parla in modo generale, ma sta anche accusando Lidia."
+        },
+        {
+          "type": "line",
+          "speaker": "Rómulo Candela",
+          "to": "Tommaso Grieco",
+          "line": "Allora era nemica del mondo intero...",
+          "context": "Candela sdrammatizza, ma tiene il ritmo sotto controllo."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Candela versa altra birra nel proprio bicchiere. Non si toglie gli occhiali.",
+          "context": "Il gesto crea pausa e aumenta il disagio degli altri."
+        },
+        {
+          "type": "line",
+          "speaker": "Rómulo Candela",
+          "to": ["Lidia Giostra", "Tommaso Grieco"],
+          "line": "Prima regola del pranzo: chi interrompe paga il conto. Seconda regola: chi mente prende il dolce.",
+          "context": "Candela stabilisce un gioco, trasformando l’interrogatorio in performance."
+        },
+        {
+          "type": "line",
+          "speaker": "Lidia Giostra",
+          "to": "Rómulo Candela",
+          "line": "E chi dice la verità?",
+          "context": "Lidia cerca una via d’uscita morale."
+        },
+        {
+          "type": "line",
+          "speaker": "Rómulo Candela",
+          "to": "Lidia Giostra",
+          "line": "Chi dice la verita, señora Giostra, non è nella lista degli invitati...",
+          "context": "Candela chiude la scena con una minaccia elegante."
+        }
+      ]
+    },
+    {
+      "id": "scene_2",
+      "title": "Il primo",
+      "setting": "Lo stesso tavolo, più tardi. Arrivano i piatti principali. Candela è più rilassato, ma gli altri sono più tesi.",
+      "beats": [
+        {
+          "type": "line",
+          "speaker": "Rómulo Candela",
+          "to": "Lidia Giostra",
+          "line": "Lidia, lei ha detto che Elena era soprattutto sua amica. Però il giorno prima della morte ha cancellato dodici messaggi con lei.",
+          "context": "Candela attacca Lidia con un dettaglio preciso."
+        },
+        {
+          "type": "line",
+          "speaker": "Lidia Giostra",
+          "to": "Rómulo Candela",
+          "line": "Erano personali.",
+          "context": "Lidia si chiude, cercando di difendere la propria privacy."
+        },
+        {
+          "type": "line",
+          "speaker": "Rómulo Candela",
+          "to": "Lidia Giostra",
+          "line": "Muy bien, andiamo avanti. Cosa c'era nel taccuino di Elena? Quello che la polizia non riesce a trovare?"
+        },
+        {
+          "type": "line",
+          "speaker": "Tommaso Grieco",
+          "to": "Rómulo Candela",
+          "line": "Inspettore, è morta una persona e noi siamo qua a pranzare come fossimo vecchi amici, non crede che sia un po’ irrispettoso?",
+          "context": "Tommaso provoca Candela cercando di spostare l’attenzione sulla situazione emotiva."
+        },
+        {
+          "type": "line",
+          "speaker": "Rómulo Candela",
+          "to": "Tommaso Grieco",
+          "line": "Non sia geloso, señor Greco. Arrivo anche da lei.",
+          "context": "Candela sposta la pressione su Tommaso."
+        },
+        {
+          "type": "line",
+          "speaker": "Rómulo Candela",
+          "to": "Tommaso Grieco",
+          "line": "Lei ha pubblicato una recensione feroce del ristorante di Elena e Lidia. Poi, il giorno prima del delitto, quest'ultima è sparita dal suo sito. Che coincidenza, no?",
+          "context": "Candela mostra una contraddizione nel comportamento di Tommaso."
+        },
+        {
+          "type": "line",
+          "speaker": "Tommaso Grieco",
+          "to": "Rómulo Candela",
+          "line": "Ho cambiato idea.",
+          "context": "Tommaso tenta una spiegazione semplice."
+        },
+        {
+          "type": "line",
+          "speaker": "Rómulo Candela",
+          "to": "Tommaso Grieco",
+          "line": "Parece mentira, ma non importa. Cambiare idea succede.",
+          "context": "Candela smonta la difesa con ironia."
+        },
+        {
+          "type": "line",
+          "speaker": "Lidia Giostra",
+          "to": "Tommaso Grieco",
+          "line": "Che cosa c’era nel taccuino, Tommaso?",
+          "context": "Lidia sospetta Tommaso e prova a farlo crollare."
+        },
+        {
+          "type": "line",
+          "speaker": "Tommaso Grieco",
+          "to": "Lidia Giostra",
+          "line": "Ma che ne so! Chiedilo a lui. È lui che sta recitando da mezzogiorno.",
+          "context": "Tommaso devia la domanda su Candela."
+        },
+        {
+          "type": "line",
+          "speaker": "Rómulo Candela",
+          "to": "Tommaso Grieco",
+          "line": "Secondo me, nel taccuino c'erano i piani di una persona ambiziosa. Troppo ambiziosa per la sua socia in affari, ma non abbastanza per cedere ai ricatti.",
+          "context": "Candela lascia intendere di aver risolto il caso."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Candela prende una sigaretta sul tavolo e inizia a girarsela tra le dita.",
+          "context": "Segnale rituale: Candela è vicino alla soluzione."
+        },
+        {
+          "type": "line",
+          "speaker": "Tommaso Grieco",
+          "to": "Rómulo Candela",
+          "line": "Che cosa sta insinuando, ispettore?"
+        },
+        {
+          "type": "line",
+          "speaker": "Rómulo Candela",
+          "to": "Lidia Giostra",
+          "line": "A ver! Lidia, se non mangia il piatto si freddarà."
+        },
+        {
+          "type": "line",
+          "speaker": "Lidia Giostra",
+          "to": "Rómulo Candela",
+          "line": "Non ho appetito, voglio sapere cosa sta insinuando.",
+          "context": "Lidia è stanca dei giochi di Candela e vuole chiarezza."
+        },
+        {
+          "type": "line",
+          "speaker": "Rómulo Candela",
+          "to": ["Lidia Giostra", "Tommaso Grieco"],
+          "line": "Non sto insinuando niente. Sto solo dicendo che il taccuino è scomparso, e che chiunque lo abbia preso aveva un motivo per farlo.",
+          "context": "Candela resta vago, ma la sua insistenza fa capire che sa chi è il colpevole."
+        }
+
+      ]
+    }
+  ]
+}
