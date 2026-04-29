@@ -56,21 +56,21 @@
           "type": "line",
           "speaker": "Rómulo Candela",
           "to": "Tommaso Grieco",
-          "line": "Gracias. L’olio dice molto di una persona. Anche il modo in cui mente.",
+          "line": "Gracias. Ma l’olio buono non vale nulla senza un buon pane. E in questo pane manca il sale.",
           "context": "Candela accetta il gioco e lo trasforma in minaccia."
         },
         {
           "type": "line",
           "speaker": "Lidia Giostra",
           "to": "Tommaso Grieco",
-          "line": "Tu trovi sempre il modo di sembrare divertente nel momento sbagliato.",
+          "line": "Tu trovi sempre il modo di sembrare divertente nel momento più inopportuno.",
           "context": "Lidia è irritata da Tommaso e teme che peggiori la situazione."
         },
         {
           "type": "line",
           "speaker": "Tommaso Grieco",
           "to": "Lidia Giostra",
-          "line": "E tu trovi sempre il modo di sembrare innocente nel momento giusto.",
+          "line": "E tu trovi sempre il modo di sembrare innocente nel momento più opportuno.",
           "context": "Tommaso contrattacca, insinuando che Lidia stia recitando."
         },
         {
@@ -87,14 +87,14 @@
           "type": "line",
           "speaker": "Lidia Giostra",
           "to": "Rómulo Candela",
-          "line": "Lei sa già qualcosa. Si vede.",
+          "line": "Cos'è questa cena? Non siamo ancora andati al funerale della povera Elena e siamo a festeggiare?",
           "context": "Lidia prova a capire quanto Candela abbia scoperto."
         },
         {
           "type": "line",
           "speaker": "Rómulo Candela",
           "to": "Lidia Giostra",
-          "line": "Io so sempre qualcosa. Il problema è capire chi ha paura della cosa sbagliata.",
+          "line": "Non siamo certo a festeggiare, señora Giostra, ma ho come l'idea che non siamo qui nemmeno per piangere.",
           "context": "Candela resta ambiguo per aumentare l’ansia."
         },
         {
@@ -111,7 +111,7 @@
             "Lidia Giostra",
             "Tommaso Grieco"
           ],
-          "line": "Perché uno di voi matò a Elena Vargas.",
+          "line": "Porque uno di voi matò a Elena Vargas.",
           "context": "Candela introduce l’oggetto chiave del caso."
         },
         {
@@ -161,7 +161,7 @@
             "Lidia Giostra",
             "Tommaso Grieco"
           ],
-          "line": "Prima regola del pranzo: chi sbaglia paga la cuenta. Seconda regola: chi mente prende il dolce.",
+          "line": "Vale, prima regola del pranzo: chi sbaglia paga la cuenta. Seconda regola: chi mente prende il dolce.",
           "context": "Candela stabilisce un gioco, trasformando l’interrogatorio in performance."
         },
         {
