@@ -465,3 +465,54 @@ button {
 .hint { font-size: 0.85rem; color: var(--muted-cool); margin: 0.25rem 0 1rem; }
 
 #editor-list .editor-actions button { flex: 1 1 auto; }
+
+.tag-input {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 0.375rem;
+  padding: 0.35rem 0.4rem;
+  cursor: text;
+  min-height: 2.4rem;
+  align-items: center;
+}
+.tag-input:focus-within { outline: 2px solid var(--gold); outline-offset: 1px; }
+.tag-input .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: var(--gold);
+  color: var(--on-gold);
+  border-radius: 0.25rem;
+  padding: 0.15rem 0.4rem 0.15rem 0.55rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+.tag-input .chip-x {
+  background: transparent;
+  color: var(--on-gold);
+  border: none;
+  padding: 0 0.1rem;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  line-height: 1;
+  border-radius: 0;
+}
+.tag-input .chip-x:hover { color: #b91c1c; background: transparent; }
+.tag-input .tag-typer {
+  flex: 1;
+  min-width: 7rem;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  padding: 0.15rem 0.25rem;
+  width: auto;
+}
+.tag-input .tag-typer:focus { outline: none; }

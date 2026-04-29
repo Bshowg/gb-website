@@ -127,16 +127,98 @@ function renderListView() {
 
 // ---------- Multi-speaker helpers ----------
 
-function joinNames(v) {
-  if (v == null) return '';
-  return Array.isArray(v) ? v.join(', ') : String(v);
+function asNamesArray(v) {
+  if (v == null) return [];
+  return Array.isArray(v) ? [...v] : [String(v)];
 }
 
-function serializeNames(s) {
-  const parts = (s || '').split(',').map(x => x.trim()).filter(Boolean);
-  if (parts.length === 0) return undefined;
-  if (parts.length === 1) return parts[0];
-  return parts;
+function packNames(arr) {
+  if (!arr || arr.length === 0) return undefined;
+  if (arr.length === 1) return arr[0];
+  return [...arr];
+}
+
+function refreshCharacterDatalist() {
+  const dl = document.getElementById('characters-suggest');
+  if (!dl) return;
+  const names = [...document.querySelectorAll('#characters-list .c-name')]
+    .map(i => i.value.trim()).filter(Boolean);
+  const unique = [...new Set(names)];
+  dl.innerHTML = '';
+  unique.forEach(n => {
+    const opt = document.createElement('option');
+    opt.value = n;
+    dl.appendChild(opt);
+  });
+}
+
+function makeTagInput(extraClass, initialValues = []) {
+  const root = document.createElement('div');
+  root.className = `tag-input ${extraClass}`;
+
+  const typer = document.createElement('input');
+  typer.type = 'text';
+  typer.className = 'tag-typer';
+  typer.setAttribute('list', 'characters-suggest');
+  typer.placeholder = 'Aggiungi…';
+
+  let values = [...initialValues];
+
+  function rerender() {
+    [...root.querySelectorAll('.chip')].forEach(c => c.remove());
+    values.forEach((v, i) => {
+      const chip = document.createElement('span');
+      chip.className = 'chip';
+      chip.textContent = v;
+      const x = document.createElement('button');
+      x.type = 'button';
+      x.className = 'chip-x';
+      x.textContent = '×';
+      x.addEventListener('click', e => {
+        e.stopPropagation();
+        values.splice(i, 1);
+        rerender();
+      });
+      chip.appendChild(x);
+      root.insertBefore(chip, typer);
+    });
+  }
+
+  function commit() {
+    const v = typer.value.replace(/,$/, '').trim();
+    if (v && !values.includes(v)) {
+      values.push(v);
+      rerender();
+    }
+    typer.value = '';
+  }
+
+  typer.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ',') {
+      e.preventDefault();
+      commit();
+    } else if (e.key === 'Backspace' && !typer.value && values.length > 0) {
+      values.pop();
+      rerender();
+    }
+  });
+  typer.addEventListener('blur', commit);
+  typer.addEventListener('input', () => {
+    if (typer.value.endsWith(',')) commit();
+  });
+
+  root.addEventListener('click', e => {
+    if (e.target === root) typer.focus();
+  });
+
+  root.appendChild(typer);
+  rerender();
+
+  root._tagInput = {
+    getValues: () => [...values],
+    setValues: arr => { values = [...arr]; rerender(); },
+  };
+  return root;
 }
 
 // ---------- Blank / open / fork ----------
@@ -226,8 +308,8 @@ function formToScript() {
         return { type, action: row.querySelector('.b-action').value.trim(), context };
       }
       const beat = { type: 'line' };
-      const speaker = serializeNames(row.querySelector('.b-speaker').value);
-      const to = serializeNames(row.querySelector('.b-to').value);
+      const speaker = packNames(row.querySelector('.b-speaker')._tagInput.getValues());
+      const to = packNames(row.querySelector('.b-to')._tagInput.getValues());
       if (speaker !== undefined) beat.speaker = speaker;
       if (to !== undefined) beat.to = to;
       beat.line = row.querySelector('.b-line').value.trim();
@@ -262,8 +344,13 @@ function appendCharacterRow(name = '', description = '') {
   `;
   row.querySelector('.c-name').value = name;
   row.querySelector('.c-desc').value = description;
-  row.querySelector('.row-delete').addEventListener('click', () => row.remove());
+  row.querySelector('.c-name').addEventListener('input', refreshCharacterDatalist);
+  row.querySelector('.row-delete').addEventListener('click', () => {
+    row.remove();
+    refreshCharacterDatalist();
+  });
   document.getElementById('characters-list').appendChild(row);
+  refreshCharacterDatalist();
 }
 
 function appendSceneCard(scene) {
@@ -341,13 +428,11 @@ function appendBeatRow(beatsEl, beat) {
       </div>
     </div>
     <div class="beat-fields-line">
-      <div class="form-row">
-        <label>Chi parla <span class="hint">Più nomi separati da virgola</span></label>
-        <input class="b-speaker" type="text">
+      <div class="form-row" data-slot="speaker">
+        <label>Chi parla <span class="hint">scegli un personaggio o scrivi qualsiasi nome (Pubblico, Gruppo…)</span></label>
       </div>
-      <div class="form-row">
-        <label>A chi <span class="hint">Più nomi separati da virgola</span></label>
-        <input class="b-to" type="text">
+      <div class="form-row" data-slot="to">
+        <label>A chi <span class="hint">scegli un personaggio o scrivi qualsiasi nome</span></label>
       </div>
       <div class="form-row">
         <label>Battuta</label>
@@ -375,13 +460,16 @@ function appendBeatRow(beatsEl, beat) {
   }
   typeEl.addEventListener('change', syncTypeUI);
 
+  const speakerTI = makeTagInput('b-speaker', asNamesArray(beat && beat.speaker));
+  const toTI = makeTagInput('b-to', asNamesArray(beat && beat.to));
+  row.querySelector('[data-slot="speaker"]').appendChild(speakerTI);
+  row.querySelector('[data-slot="to"]').appendChild(toTI);
+
   if (beat) {
     typeEl.value = beat.type || 'line';
     if (beat.type === 'stage_direction') {
       row.querySelector('.b-action').value = beat.action || '';
     } else {
-      row.querySelector('.b-speaker').value = joinNames(beat.speaker);
-      row.querySelector('.b-to').value = joinNames(beat.to);
       row.querySelector('.b-line').value = beat.line || '';
     }
     row.querySelector('.b-context').value = beat.context || '';
