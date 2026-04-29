@@ -2,7 +2,11 @@
   "title": "15 minuti di fama su YouTube",
   "language": "it",
   "description": "Dillon Spree, un ragazzo di scuola superiore, viene convocato d’urgenza nell’ufficio del preside a causa di un video virale leggermente inappropriato e imbarazzante. Il preside, invece di punirlo, cerca di sfruttare la sua improvvisa fama per promuovere la scuola. Dillon si trova così a dover navigare tra l’imbarazzo della sua notorietà e le aspettative della comunità scolastica.",
-  "characters": ["Dillon", "Pembelton", "Preside Smock"],
+  "characters": [
+    { "name": "Dillon", "description": "Studente modello impaurito, vittima involontaria di un video virale che lo mette al centro dell'attenzione." },
+    { "name": "Pembelton", "description": "Assistente burocratico del preside, applica le direttive del comitato genitori con assurda serietà." },
+    { "name": "Preside Smock", "description": "Opportunista pronto a sfruttare la fama di Dillon per il prestigio e i fondi della scuola." }
+  ],
   "scenes": [
     {
       "id": "scene_1",

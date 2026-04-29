@@ -1,7 +1,10 @@
 {
   "title": "Saresti troppo impegnato a vendere tutto per sopravvivere.",
   "language": "it",
-  "characters": ["Clark", "Pedro"],
+  "characters": [
+    { "name": "Clark", "description": "Cinico e provocatore, torna a casa dopo la morte del padre per rivendicare la sua parte di eredità." },
+    { "name": "Pedro", "description": "Erede unico, calmo ma trattenuto: difende la memoria del padre e impone limiti al fratello." }
+  ],
   "description": "Clark torna a casa dopo la morte del padre e si scontra con il fratello Pedro, che ha ereditato tutto. La tensione esplode quando Clark urina sulla tomba del padre, rivelando rancori profondi e questioni irrisolte sull’eredità e il passato familiare.",
   "scenes": [
     {

@@ -1,5 +1,7 @@
 const state = {
   manifest: [],
+  currentPath: '',
+  folderStack: [],
   script: null,
   character: null,
   sceneIdx: 0,
@@ -11,6 +13,7 @@ const views = {
   scripts: document.getElementById('view-scripts'),
   characters: document.getElementById('view-characters'),
   playback: document.getElementById('view-playback'),
+  readall: document.getElementById('view-readall'),
   end: document.getElementById('view-end'),
 };
 
@@ -40,9 +43,18 @@ function isUserSpeaker(beat) {
   return asArray(beat.speaker).includes(state.character);
 }
 
-async function loadManifest() {
-  const res = await fetch('./scripts/index.json');
+async function loadManifest(path = '') {
+  const res = await fetch(`./scripts/${path}index.json`);
   state.manifest = await res.json();
+  state.currentPath = path;
+  renderManifestList();
+}
+
+function renderManifestList() {
+  const inFolder = state.folderStack.length > 0;
+  document.querySelector('#view-scripts .hero').classList.toggle('hidden', inFolder);
+  document.getElementById('scripts-top-bar').classList.toggle('hidden', !inFolder);
+
   const list = document.getElementById('script-list');
   list.innerHTML = '';
   state.manifest.forEach(entry => {
@@ -52,23 +64,42 @@ async function loadManifest() {
     title.className = 'script-title';
     title.textContent = entry.title;
     btn.appendChild(title);
-    const metaParts = [];
-    if (entry.actors != null) metaParts.push(`${entry.actors} personaggi`);
-    if (entry.scenes != null) metaParts.push(`${entry.scenes} scene`);
-    if (metaParts.length) {
+    if (entry.folder) {
+      btn.classList.add('folder-entry');
       const meta = document.createElement('div');
       meta.className = 'script-meta';
-      meta.textContent = metaParts.join(' · ');
+      meta.textContent = 'Cartella';
       btn.appendChild(meta);
+      btn.addEventListener('click', () => enterFolder(entry));
+    } else {
+      const metaParts = [];
+      if (entry.actors != null) metaParts.push(`${entry.actors} personaggi`);
+      if (entry.scenes != null) metaParts.push(`${entry.scenes} scene`);
+      if (metaParts.length) {
+        const meta = document.createElement('div');
+        meta.className = 'script-meta';
+        meta.textContent = metaParts.join(' · ');
+        btn.appendChild(meta);
+      }
+      btn.addEventListener('click', () => loadScript(entry));
     }
-    btn.addEventListener('click', () => loadScript(entry));
     li.appendChild(btn);
     list.appendChild(li);
   });
 }
 
+function enterFolder(entry) {
+  state.folderStack.push(state.currentPath);
+  loadManifest(state.currentPath + entry.folder + '/');
+}
+
+function exitFolder() {
+  const prev = state.folderStack.pop();
+  loadManifest(prev || '');
+}
+
 async function loadScript(entry) {
-  const res = await fetch(`./scripts/${entry.file}`);
+  const res = await fetch(`./scripts/${state.currentPath}${entry.file}`);
   state.script = await res.json();
   document.getElementById('char-script-title').textContent = state.script.title;
   const descEl = document.getElementById('char-script-description');
@@ -81,11 +112,20 @@ async function loadScript(entry) {
 
   const list = document.getElementById('character-list');
   list.innerHTML = '';
-  state.script.characters.forEach(name => {
+  state.script.characters.forEach(char => {
     const li = document.createElement('li');
     const btn = document.createElement('button');
-    btn.textContent = name;
-    btn.addEventListener('click', () => startPlayback(name));
+    const name = document.createElement('div');
+    name.className = 'script-title';
+    name.textContent = char.name;
+    btn.appendChild(name);
+    if (char.description) {
+      const desc = document.createElement('div');
+      desc.className = 'char-description';
+      desc.textContent = char.description;
+      btn.appendChild(desc);
+    }
+    btn.addEventListener('click', () => startPlayback(char.name));
     li.appendChild(btn);
     list.appendChild(li);
   });
@@ -105,9 +145,62 @@ function startPlayback(character) {
   state.sceneIdx = 0;
   state.beatIdx = 0;
   state.mode = 'read';
-  syncModeToggle();
-  showView('playback');
-  render();
+  if (character === null) {
+    renderReadAll();
+    showView('readall');
+  } else {
+    syncModeToggle();
+    showView('playback');
+    render();
+  }
+}
+
+function renderReadAll() {
+  document.getElementById('readall-title').textContent = state.script.title;
+  const container = document.getElementById('readall-content');
+  container.innerHTML = '';
+  state.script.scenes.forEach(scene => {
+    const banner = document.createElement('div');
+    banner.className = 'scene-banner';
+    const t = document.createElement('div'); t.className = 'title'; t.textContent = scene.title;
+    banner.appendChild(t);
+    if (scene.setting) {
+      const r = document.createElement('div'); r.className = 'row';
+      const lab = document.createElement('span'); lab.className = 'label'; lab.textContent = 'Ambientazione: ';
+      r.appendChild(lab); r.appendChild(document.createTextNode(scene.setting));
+      banner.appendChild(r);
+    }
+    if (scene.music) {
+      const r = document.createElement('div'); r.className = 'row';
+      const lab = document.createElement('span'); lab.className = 'label'; lab.textContent = 'Musica: ';
+      r.appendChild(lab); r.appendChild(document.createTextNode(scene.music));
+      banner.appendChild(r);
+    }
+    container.appendChild(banner);
+
+    scene.beats.forEach(beat => {
+      const row = document.createElement('div');
+      row.className = 'readall-beat';
+      if (beat.type === 'stage_direction') {
+        row.classList.add('stage-direction');
+        const action = document.createElement('div');
+        action.className = 'action';
+        action.textContent = beat.action || '';
+        row.appendChild(action);
+      } else {
+        const head = document.createElement('div');
+        head.className = 'speaker';
+        head.textContent = `${asArray(beat.speaker).join(' & ')} → ${asArray(beat.to).join(' & ')}`;
+        const line = document.createElement('div');
+        line.className = 'line';
+        line.textContent = beat.line || '';
+        row.appendChild(head);
+        row.appendChild(line);
+      }
+      container.appendChild(row);
+    });
+  });
+  window.scrollTo(0, 0);
 }
 
 function syncModeToggle() {
@@ -177,6 +270,10 @@ function render() {
 
   const nb = nextBeat();
   upNext.classList.toggle('hidden', !(nb && isUserSpeaker(nb.beat)));
+
+  const atStart = state.sceneIdx === 0 && state.beatIdx === 0;
+  document.getElementById('back-btn-beat').disabled = atStart;
+  document.getElementById('skip-btn-user').disabled = !hasNextUserBeat();
 }
 
 function advance() {
@@ -193,9 +290,54 @@ function advance() {
   render();
 }
 
+function goBack() {
+  if (state.beatIdx > 0) {
+    state.beatIdx--;
+  } else if (state.sceneIdx > 0) {
+    state.sceneIdx--;
+    state.beatIdx = state.script.scenes[state.sceneIdx].beats.length - 1;
+  } else {
+    return;
+  }
+  render();
+}
+
+function skipToNextUserBeat() {
+  let s = state.sceneIdx, b = state.beatIdx + 1;
+  while (s < state.script.scenes.length) {
+    const scene = state.script.scenes[s];
+    while (b < scene.beats.length) {
+      if (isUserSpeaker(scene.beats[b])) {
+        state.sceneIdx = s; state.beatIdx = b;
+        render();
+        return;
+      }
+      b++;
+    }
+    s++; b = 0;
+  }
+}
+
+function hasNextUserBeat() {
+  let s = state.sceneIdx, b = state.beatIdx + 1;
+  while (s < state.script.scenes.length) {
+    const scene = state.script.scenes[s];
+    while (b < scene.beats.length) {
+      if (isUserSpeaker(scene.beats[b])) return true;
+      b++;
+    }
+    s++; b = 0;
+  }
+  return false;
+}
+
 document.getElementById('back-to-scripts').addEventListener('click', () => showView('scripts'));
+document.getElementById('folder-back-btn').addEventListener('click', exitFolder);
 document.getElementById('back-to-characters').addEventListener('click', () => showView('characters'));
+document.getElementById('back-from-readall').addEventListener('click', () => showView('characters'));
 document.getElementById('advance-btn').addEventListener('click', advance);
+document.getElementById('back-btn-beat').addEventListener('click', goBack);
+document.getElementById('skip-btn-user').addEventListener('click', skipToNextUserBeat);
 document.getElementById('peek-btn').addEventListener('click', () => {
   const beat = currentBeat();
   const lineEl = document.getElementById('beat-line');

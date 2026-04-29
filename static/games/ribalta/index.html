@@ -11,6 +11,9 @@
 
     <section id="view-scripts">
       <img class="hero" src="./images/hero.png" alt="Ribalta">
+      <div class="top-bar hidden" id="scripts-top-bar">
+        <button class="back-btn" id="folder-back-btn">← Cartella superiore</button>
+      </div>
       <h1>Ribalta</h1>
       <h2>Scegli un copione</h2>
       <ul class="list" id="script-list"></ul>
@@ -22,7 +25,7 @@
       </div>
       <h1 id="char-script-title"></h1>
       <p class="script-description hidden" id="char-script-description"></p>
-      <h2>Scegli un personaggio</h2>
+      <h2>Scegli un ribaltato</h2>
       <ul class="list" id="character-list"></ul>
     </section>
 
@@ -51,6 +54,18 @@
       <div class="up-next hidden" id="up-next">Tocca a te alla prossima!</div>
 
       <button class="advance-btn" id="advance-btn">Avanti</button>
+      <div class="nav-row">
+        <button class="nav-btn" id="back-btn-beat">← Indietro</button>
+        <button class="nav-btn" id="skip-btn-user">Prossima battuta →</button>
+      </div>
+    </section>
+
+    <section id="view-readall" class="hidden">
+      <div class="top-bar">
+        <button class="back-btn" id="back-from-readall">← Cambia personaggio</button>
+      </div>
+      <h1 id="readall-title"></h1>
+      <div id="readall-content"></div>
     </section>
 
     <section id="view-end" class="hidden">
