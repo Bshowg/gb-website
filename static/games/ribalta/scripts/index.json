@@ -3,6 +3,6 @@
   { "file": "eredità.json", "title": "Saresti troppo impegnato a vendere tutto per sopravvivere.","actors":2,"scenes":1, "language": "it" },
   { "file": "youtubefame.json", "title": "15 minuti di fama su YouTube","actors":3,"scenes":2,"language":"it" },
   { "folder": "inspettore-candela", "title": "Inspettore Candela" },
-  {"file":"il-tutore.json","title":"Il tutore","actors":3,"scenes":2,"language":"it"},
+  {"file":"il-tutore.json","title":"Il Tutore","actors":3,"scenes":2,"language":"it"},
   { "file": "i-fraticelli.json", "title": "I Fraticelli","actors":4,"scenes":1,"language":"it" }
 ]
