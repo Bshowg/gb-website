@@ -66,14 +66,14 @@
           "type": "line",
           "speaker": "Guadalberto",
           "to": "Adalberto",
-          "line": "Ovvero babbo caro? Mi mandere forse all'Università di Bologna dove potrò far brillare il nome dei nostri tra quelli dei più grandi eruditi d'Europa?",
+          "line": "Ovvero babbo caro? Mi manderete forse all'Università di Bologna dove potrò far brillare il nome dei nostri tra quelli dei più grandi eruditi d'Europa?",
           "context": ""
         },
         {
           "type": "line",
           "speaker": "Adalberto",
           "to": "Guadalberto",
-          "line": "Assolutamente no. Ho deciso che invece di studiare questa tua scienza senza futuro ti prodigherai in qualcosa di più concreto come l'Alchimia.\n[Batte le mani]",
+          "line": "Assolutamente no. Ho deciso che invece di studiare questa tua scienza senza futuro ti prodigherai in qualcosa di più concreto. Come l'Alchimia.\n[Batte le mani]",
           "context": ""
         },
         {
@@ -86,11 +86,6 @@
           "speaker": "Adalberto",
           "to": "Guadalberto",
           "line": "Ti presento il Magister Johannes Foscafides l'Alchimista, l'ho fatto arrivare direttamente dalle Fiandre per formarti come Alchimista, così da ottimizzare al meglio la tua dannazione eterna.",
-          "context": ""
-        },
-        {
-          "type": "stage_direction",
-          "action": "Il Magister e Guadalberto si stringono la mano.",
           "context": ""
         },
         {
@@ -111,21 +106,28 @@
           "type": "line",
           "speaker": "Guadalberto",
           "to": "Adalberto",
-          "line": "Parlo con licenza padre e mi mena dire che, con tutto il rispetto, l'Alchimia è un esercizio che ha poco a che spartire con la mia ricerca del vero. Anzi da ciò che so pare spesso è adoprata da ciarlatano per spillare danari agli ingenui.",
+          "line": "Parlo con licenza padre e mi mena dire che, con tutto il rispetto, l'Alchimia è un esercizio che ha poco a che spartire con la mia ricerca del vero. Anzi da ciò che so pare spesso è adoperata dai ciarlatani per spillare danari agli ingenui.",
           "context": ""
         },
         {
           "type": "line",
           "speaker": "Adalberto",
           "to": "Guadalberto",
-          "line": "Le parole che usi per offendere Nostro Signore sono solo un minimo dettaglio del peccato! Però se nel mentre riesci a trasformare il piombo in oro non è certo una perdità di tempo...",
+          "line": "Le parole che usi per offendere Nostro Signore sono solo un minimo dettaglio del peccato! Però se nel mentre riesci a trasformare il piombo in oro almeno ci guadagno...",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Magister Foscafides",
+          "to": "Adalberto",
+          "line": "Il giovane ha ragione, Ser Adalberto, ci sono molti ciarlatani che si fingono dottori...",
           "context": ""
         },
         {
           "type": "line",
           "speaker": "Guadalberto",
           "to": "Magister Foscafides",
-          "line": "[Scrutando la collana del Magister] Ma... Magister Johannes, con devozione... voi portate al collo un crocifisso rovesciato!? Che Dio ci potregga questo è un demonio.",
+          "line": "[Scrutando la collana del Magister] Ma... Magister Johannes, con devozione... voi portate al collo un crocifisso rovesciato!? Che Dio ci protegga!",
           "context": ""
         },
         {
@@ -146,7 +148,7 @@
           "type": "line",
           "speaker": "Magister Foscafides",
           "to": "Guadalberto",
-          "line": "[Scrutando i fogli sulla scrivania] Molto bene, mein kind, vedo che ti sei prodigato molto nello studio della natura e degli astri. Ma ti serviranno a poco perchè da oggi imparerai un arte che va OLTRE la natura.",
+          "line": "[Scrutando i fogli sulla scrivania] Molto bene, figliuolo, vedo che ti sei prodigato molto nello studio della natura e degli astri. Ma ti serviranno a poco perché da oggi imparerai un arte che va OLTRE la natura.",
           "context": ""
         },
         {
@@ -181,7 +183,7 @@
           "type": "line",
           "speaker": "Guadalberto",
           "to": "Adalberto",
-          "line": "No Messer Padre, al contrario, il vostro magister qui porta pesanti ceppi di ghisa ai polsi e li muove come fossero di seta! Ora che li veggo meglio sono anche marchiati col simbolo del Santo Uffizio.  Quest'uomo è chiaramente un eretico, se non proprio un demonio!",
+          "line": "Ma Messer Padre, al contrario, il vostro magister qui porta pesanti ceppi di ghisa ai polsi e li muove come fossero seta! Ora che li veggo meglio sono anche marchiati col simbolo del Sant'Uffizio.  Quest'uomo è chiaramente un eretico, se non proprio un demonio!",
           "context": ""
         },
         {
@@ -198,7 +200,7 @@
           "type": "line",
           "speaker": "Adalberto",
           "to": "Magister Foscafides",
-          "line": "Ah ma ovvio. Non sapevo che voi foste un tale uomo di fede Magister! Sarà per questo che Nostro Signore ha donato solo a voi la capacità di transformare le cose in oro!",
+          "line": "Ah ma ovvio. Non sapevo che voi foste un tale uomo di fede Magister! Sarà per questo che Nostro Signore ha donato solo a voi la capacità di trasformare le cose in oro!",
           "context": ""
         },
         {
@@ -257,8 +259,8 @@
           "type": "line",
           "speaker": "Magister Foscafides",
           "to": "Guadalberto",
-          "line": "",
-          "context": "Prima dobbiamo trovare un caprone dalle corna nere, un coltello arrugginito, due galloni di sangue di vergine ..."
+          "line": "Prima dobbiamo trovare un caprone dalle corna nere, un coltello arrugginito, due galloni di sangue di vergine ...",
+          "context": ""
         },
         {
           "type": "line",
@@ -278,14 +280,14 @@
           "type": "line",
           "speaker": "Guadalberto",
           "to": "Adalberto",
-          "line": "Niente di tutto ciò, oh Padre Mio. Il Magister richiede caproni, coltelli e sangue di vergine. Vuole richiamare il Satanasso! Qui nel mio studio!",
+          "line": "Niente di tutto ciò, oh Padre Mio. Il Magister richiede caproni, coltelli e sangue di vergine. Vuole richiamare il Satanasso! Che dio ci protegga!",
           "context": ""
         },
         {
           "type": "line",
           "speaker": "Magister Foscafides",
           "to": "Adalberto",
-          "line": "Noo... il sangue... no... Se mi fate finire, il sangue di vergine bovina... per una pozione che trasforma tutto.... in oro... tutto tutto. Serve anche ruggine e delle belle... belle corna di capra. Molto belle.",
+          "line": "Noo... il sangue... no... Se mi fate finire, il sangue di vergine bovina... per una pozione che trasforma tutto.... in oro... tutto tutto. Serve anche carbone di quercia e delle belle... belle corna di capra. Molto belle.",
           "context": ""
         },
         {
@@ -324,13 +326,13 @@
     {
       "id": "scene_2",
       "title": "Scena 2",
-      "setting": "Studio di Gaudalberto, le carte sulla sua scrivania hanno preso fuoco.  Guadalberto,visibilmente scioccato, richiama il padre per l'ennessima volta, che rientra nello studio ormai fuori di se.",
+      "setting": "Studio di Gaudalberto, le carte sulla sua scrivania sono carbonizzate.  Guadalberto,visibilmente scioccato, richiama il padre per l'ennesima volta, che rientra nello studio ormai fuori di se.",
       "beats": [
         {
           "type": "line",
           "speaker": "Adalberto",
           "to": "Guadalberto",
-          "line": "Per il beato nome della Vergine Maria santissima madre di Gesù Cristo, Adalberto! Hai rotto il cazzo! Cosa c'è?",
+          "line": "Per il beato nome della Vergine Maria santissima madre di Gesù Cristo, Adalberto! Hai rotto il cazzo! Cosa vuoi ora?",
           "context": ""
         },
         {
@@ -379,7 +381,7 @@
           "type": "line",
           "speaker": "Adalberto",
           "to": "Guadalberto",
-          "line": "Che vi paia o no, così sarà. Prego Magitester procedete, che il sole già ci lascia.",
+          "line": "Che vi paia o no, così sarà. Prego Magister procedete, che il sole già ci lascia.",
           "context": ""
         },
         {
@@ -428,14 +430,14 @@
           "type": "line",
           "speaker": "Magister Foscafides",
           "to": "Adalberto",
-          "line": "NO! noooo, no.... la prudenza mia mi dice di congedarmi, e io l'ascolto perchè non vi fu mai virtù più rara.",
+          "line": "NO! noooo, no.... la prudenza mia mi dice di congedarmi, e io l'ascolto perché non vi fu mai virtù più rara.",
           "context": ""
         },
         {
           "type": "line",
           "speaker": "Adalberto",
           "to": "Magister Foscafides",
-          "line": "Così sia allora, mi rimetto al vostro giudizio, l'oro allora sarà domani?",
+          "line": "Così sia, mi rimetto al vostro giudizio, l'oro allora sarà domani?",
           "context": ""
         },
         {
@@ -456,7 +458,7 @@
           "type": "line",
           "speaker": "Adalberto",
           "to": "Guadalberto",
-          "line": "Ancora vi ricadi? Parli con poca riverenza e minor sapere. Ciò che serve serve e il Magister lo avrà. Manderò subito i miei servi ad operarsi, perchè domani farai l'oro, giusto?",
+          "line": "Ancora vi ricadi? Parli con poca riverenza e minor sapere. Ciò che serve serve e il Magister lo avrà. Manderò subito i miei servi ad operarsi, perché domani farai l'oro, giusto?",
           "context": ""
         },
         {
