@@ -4,4 +4,5 @@
   { "file": "youtubefame.json", "title": "15 minuti di fama su YouTube","actors":3,"scenes":2,"language":"it" },
   { "folder": "inspettore-candela", "title": "Inspettore Candela" },
   {"file":"il-tutore.json","title":"Il tutore","actors":3,"scenes":2,"language":"it"}
+  { "file": "i-fraticelli.json", "title": "I Fraticelli","actors":4,"scenes":1,"language":"it" }
 ]
