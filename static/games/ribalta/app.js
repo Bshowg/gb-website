@@ -39,6 +39,30 @@ function nextBeat() {
   return null;
 }
 
+function prevBeat() {
+  if (state.beatIdx > 0) return state.script.scenes[state.sceneIdx].beats[state.beatIdx - 1];
+  let s = state.sceneIdx - 1;
+  while (s >= 0) {
+    const scene = state.script.scenes[s];
+    if (scene.beats.length > 0) return scene.beats[scene.beats.length - 1];
+    s--;
+  }
+  return null;
+}
+
+function beatText(beat) {
+  if (!beat) return '';
+  return beat.type === 'stage_direction' ? (beat.action || '') : (beat.line || '');
+}
+
+function lastWordsNoPunctuation(text, n) {
+  if (!text) return '';
+  const cleaned = text.replace(/[^\p{L}\p{N}\s]/gu, ' ').replace(/\s+/g, ' ').trim();
+  if (!cleaned) return '';
+  const words = cleaned.split(' ');
+  return words.slice(-n).join(' ');
+}
+
 function isUserSpeaker(beat) {
   if (!state.character || !beat || beat.type !== 'line') return false;
   return asArray(beat.speaker).includes(state.character);
@@ -262,7 +286,12 @@ function render() {
       headerEl.appendChild(tag);
       card.classList.add('mine');
     }
-    contextEl.textContent = beat.context || '';
+    if (state.mode === 'read') {
+      const cue = lastWordsNoPunctuation(beatText(prevBeat()), 4);
+      contextEl.textContent = cue ? `… ${cue}` : '';
+    } else {
+      contextEl.textContent = beat.context || '';
+    }
 
     if (mine && state.mode === 'improv') {
       lineEl.textContent = '';

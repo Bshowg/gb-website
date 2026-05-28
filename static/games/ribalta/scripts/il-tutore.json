@@ -1,0 +1,480 @@
+{
+  "title": "Il Tutore",
+  "language": "it",
+  "characters": [
+    {
+      "name": "Guadalberto",
+      "description": "Il figlio. Un giovane sveglio e razionale che studia per diventare dotto."
+    },
+    {
+      "name": "Adalberto",
+      "description": "Il padre. Un ricco mercante sempre intento a fare affari e al guadagno"
+    },
+    {
+      "name": "Magister Foscafides",
+      "description": "Un losco alchimista fiammingo, forse un ciarlatano, forse un demonio."
+    }
+  ],
+  "scenes": [
+    {
+      "id": "scene_1",
+      "title": "Scena 1",
+      "setting": "Guadalberto è immerso nello studio alla sua scrivania, sommerso da fogli e manoscritti, quando entra senza bussare o annunciarsi il padre, Adalberto.",
+      "beats": [
+        {
+          "type": "line",
+          "speaker": [
+            "",
+            "Adalberto"
+          ],
+          "to": [
+            "",
+            "Guadalberto"
+          ],
+          "line": "Buongiorno, filius meus, vedo che siete molto indaffarato.",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Guadalberto",
+          "to": "Adalberto",
+          "line": "Buongiorno padre! Qual buon vento vi porta nelle mie stanze?",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Adalberto",
+          "to": "Guadalberto",
+          "line": "Mi è giunta voce che ormai da tempo vi state trastullando su fanfole e diavolerie non consone ad un buon Cristiano. Negate?",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Guadalberto",
+          "to": "Adalberto",
+          "line": "Messer padre! La filosofia di Natura e lo studio dell'operato del nostro Creatore non sono certo opera del diavolo!",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Adalberto",
+          "to": "Guadalberto",
+          "line": "Ebbene! Se vuoi perdere la tua anima non mi interessa, ma già che ne va anche del mio buon nome ho deciso che almeno il tuo operato porti guadagno alla nostra famiglia.",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Guadalberto",
+          "to": "Adalberto",
+          "line": "Ovvero babbo caro? Mi mandere forse all'Università di Bologna dove potrò far brillare il nome dei nostri tra quelli dei più grandi eruditi d'Europa?",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Adalberto",
+          "to": "Guadalberto",
+          "line": "Assolutamente no. Ho deciso che invece di studiare questa tua scienza senza futuro ti prodigherai in qualcosa di più concreto come l'Alchimia.\n[Batte le mani]",
+          "context": ""
+        },
+        {
+          "type": "stage_direction",
+          "action": "Entra nella stanza il Magister, Guadalberto si alza in piedi.",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Adalberto",
+          "to": "Guadalberto",
+          "line": "Ti presento il Magister Johannes Foscafides l'Alchimista, l'ho fatto arrivare direttamente dalle Fiandre per formarti come Alchimista, così da ottimizzare al meglio la tua dannazione eterna.",
+          "context": ""
+        },
+        {
+          "type": "stage_direction",
+          "action": "Il Magister e Guadalberto si stringono la mano.",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Guadalberto",
+          "to": "Magister Foscafides",
+          "line": "Magister, vi porgo il mio saluto e mi presento: Gaudalberto, di Adalberto, di un altro Guardalberto, di Bentivoglio, di Giovanni, di Alberto.",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Magister Foscafides",
+          "to": "Guadalberto",
+          "line": "Io v'odo, figliuolo, e vostro padre Ser Adalberto, di Guadalberto, di Bentivoglio, di Giovanni, di Alberto, già mi introdusse e mi parlò di voi e delle vostre contorsioni intellettuali...",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Guadalberto",
+          "to": "Adalberto",
+          "line": "Parlo con licenza padre e mi mena dire che, con tutto il rispetto, l'Alchimia è un esercizio che ha poco a che spartire con la mia ricerca del vero. Anzi da ciò che so pare spesso è adoprata da ciarlatano per spillare danari agli ingenui.",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Adalberto",
+          "to": "Guadalberto",
+          "line": "Le parole che usi per offendere Nostro Signore sono solo un minimo dettaglio del peccato! Però se nel mentre riesci a trasformare il piombo in oro non è certo una perdità di tempo...",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Guadalberto",
+          "to": "Magister Foscafides",
+          "line": "[Scrutando la collana del Magister] Ma... Magister Johannes, con devozione... voi portate al collo un crocifisso rovesciato!? Che Dio ci potregga questo è un demonio.",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Magister Foscafides",
+          "to": "Guadalberto",
+          "line": "Aaah questo... nooo, no... questo fu... fatto... un'opera di carità... me lo feci fare da un fabbro... cieco, per dargli opera e sfamar la sua famiglia..",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Adalberto",
+          "to": "Magister Foscafides",
+          "line": "Ah ma che brava persona che è lei Magister Foscafides! Bene adesso mi licenzio e vi lascio alla vostra prima lezione e mi aspetto, come da sua promessa, di veder dell'oro in questa stanza entro la fine della giornata. [Esce]",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Magister Foscafides",
+          "to": "Guadalberto",
+          "line": "[Scrutando i fogli sulla scrivania] Molto bene, mein kind, vedo che ti sei prodigato molto nello studio della natura e degli astri. Ma ti serviranno a poco perchè da oggi imparerai un arte che va OLTRE la natura.",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Guadalberto",
+          "to": "Magister Foscafides",
+          "line": "Oltre la natura? Impossibile!",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Magister Foscafides",
+          "to": "Guadalberto",
+          "line": "[Alzando le braccia al cielo] OLTRE LA NATURA E OLTRE LA RAGIONEEE...",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Guadalberto",
+          "to": "Magister Foscafides",
+          "line": "La ragio.... Ma le vostre mani, portate ai polsi... Padreeeeeee! Padreeeee! Accorrete!",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Adalberto",
+          "to": "Guadalberto",
+          "line": "[Entrando correndo] Accorro! Accorro! Eccomi, è già l'oro!? E le gemme preziose?",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Guadalberto",
+          "to": "Adalberto",
+          "line": "No Messer Padre, al contrario, il vostro magister qui porta pesanti ceppi di ghisa ai polsi e li muove come fossero di seta! Ora che li veggo meglio sono anche marchiati col simbolo del Santo Uffizio.  Quest'uomo è chiaramente un eretico, se non proprio un demonio!",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Magister Foscafides",
+          "to": [
+            "Guadalberto",
+            "Adalberto"
+          ],
+          "line": "Aaah queste, nooo, no. Sono... per penitenza... contro il peccato... originale. Me le ha fatte fare il Papa in persona dopo che riconobbe la mia estrema... devozione. [Risata molto malefica]",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Adalberto",
+          "to": "Magister Foscafides",
+          "line": "Ah ma ovvio. Non sapevo che voi foste un tale uomo di fede Magister! Sarà per questo che Nostro Signore ha donato solo a voi la capacità di transformare le cose in oro!",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Magister Foscafides",
+          "to": "Adalberto",
+          "line": "[Leccandosi le labbra] Mmmh... si infatti. Sono estremamente devoto al mio Signore, ed Egli mi ricompesa abbondantemente. Sì, sì, abbondantemente.",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Adalberto",
+          "to": [
+            "Magister Foscafides",
+            "Guadalberto"
+          ],
+          "line": "Siete veramente un brav'uomo Magister Foscafides. E tu Guadalberto vedi di non far più perdete tempo nè a me nè all'eminentissimo Magister. [Esce]",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Guadalberto",
+          "to": "Magister Foscafides",
+          "line": "Come desideri padre... Magister, chieggo vostra perdonanza. Non fu mia intenzione offendervi. Se mi perdonate, chiedo di veder questi ceppi in luce buona.",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Magister Foscafides",
+          "to": "Guadalberto",
+          "line": "No! No i ceppi sono miei e miei soltanto. Ma non v’affliggete. Ogni uomo... falla.",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Guadalberto",
+          "to": "Magister Foscafides",
+          "line": "Vi sia reso grazie, Maestro... non vi darò cagione di nuovo fallo, però vorrei davvero vedere codesti ceppi...",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Magister Foscafides",
+          "to": "Guadalberto",
+          "line": "",
+          "context": "Ti farò vedere ben di meglio, Messer Guadalberto. E ti imparerò che le cose importanti non le si guardano con gli occhi..."
+        },
+        {
+          "type": "line",
+          "speaker": "Guadalberto",
+          "to": "Magister Foscafides",
+          "line": "E con cosa, oh immenso Magister?",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Magister Foscafides",
+          "to": "Guadalberto",
+          "line": "",
+          "context": "Prima dobbiamo trovare un caprone dalle corna nere, un coltello arrugginito, due galloni di sangue di vergine ..."
+        },
+        {
+          "type": "line",
+          "speaker": "Guadalberto",
+          "to": "Adalberto",
+          "line": "Padreeee! Padre presto, accorete!.",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Adalberto",
+          "to": "Guadalberto",
+          "line": "[Entra] Eccomi, eccomi, accorro! Dove sono i preziosi e le pietre? Avete trasformato i chiodi in oro? O i candelabri?",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Guadalberto",
+          "to": "Adalberto",
+          "line": "Niente di tutto ciò, oh Padre Mio. Il Magister richiede caproni, coltelli e sangue di vergine. Vuole richiamare il Satanasso! Qui nel mio studio!",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Magister Foscafides",
+          "to": "Adalberto",
+          "line": "Noo... il sangue... no... Se mi fate finire, il sangue di vergine bovina... per una pozione che trasforma tutto.... in oro... tutto tutto. Serve anche ruggine e delle belle... belle corna di capra. Molto belle.",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Adalberto",
+          "to": [
+            "Magister Foscafides",
+            "Guadalberto"
+          ],
+          "line": "Magister Foscafides, mi rallegro di sapere che ci avviciniamo. Molto bene, lei è un vero uomo di parola. E tu Guadalberto smettila di interrompere il Magister e mettiti a lavoro. [Esce]",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Guadalberto",
+          "to": "Adalberto",
+          "line": "Chieggo vostra licenza e misericordia, Magister. Mea culpa ancora.",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Magister Foscafides",
+          "to": "Guadalberto",
+          "line": "Non vi affliggete Messere, non è cosa. Ma piuttosto ditemi, siete voi per caso vergine?",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Guadalberto",
+          "to": "Adalberto",
+          "line": "Padreeeeeeee! Padreeeeeeeeeeee!",
+          "context": ""
+        }
+      ]
+    },
+    {
+      "id": "scene_2",
+      "title": "Scena 2",
+      "setting": "Studio di Gaudalberto, le carte sulla sua scrivania hanno preso fuoco.  Guadalberto,visibilmente scioccato, richiama il padre per l'ennessima volta, che rientra nello studio ormai fuori di se.",
+      "beats": [
+        {
+          "type": "line",
+          "speaker": "Adalberto",
+          "to": "Guadalberto",
+          "line": "Per il beato nome della Vergine Maria santissima madre di Gesù Cristo, Adalberto! Hai rotto il cazzo! Cosa c'è?",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Adalberto",
+          "to": "Guadalberto",
+          "line": "Il Magister ha elencato parole proibite in Alamanno e in Goto, masticando la testa di un serpente velenoso e la mia scrivania ha preso fuoco! Ora mi credete che è il demonio?!?",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Adalberto",
+          "to": "Guadalberto",
+          "line": "Guadalberto, ora basta! Smettetela di accusare questo sant'uomo di eresia, gli avete già trovato mille colpe e lui vi ha risposto con mille virtù. Adesso presenzierò anche io allo studio in modo da tenervi in buona disciplina, per Dio!",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Magister Foscafides",
+          "to": "Adalberto",
+          "line": "[Sputa resti di serpente] In ciò operate con prudenza, Ser Adalberto. [Sputa] Al giovane non gli manca il senno, ma l’applicazione! Potrebbe molto... se volesse...",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Guadalberto",
+          "to": "Guadalberto",
+          "line": "Oh le mie pergamene! Il mio studio! L'opera mia! Tutto perduto nelle fiamme infernali di codesto lestofante!",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Adalberto",
+          "to": "Guadalberto",
+          "line": "Cheta, figliuolo e non t'accendere. Hai fatto fallo l'ultima volta. Adesso taci e ascolta il Magister tuo.",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Guadalberto",
+          "to": "Adalberto",
+          "line": "Vi ubbidirò, padre, ma il cuore non se ne persuade e porto dubbio.",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Adalberto",
+          "to": "Guadalberto",
+          "line": "Che vi paia o no, così sarà. Prego Magitester procedete, che il sole già ci lascia.",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Magister Foscafides",
+          "to": "Adalberto",
+          "line": "Aaaaaah... già... il sole si ritira... La luce fugge e lascia il mondo a pensieri meno pii... il giorno ci nega la sua compagnia e io con lui... debbo andare...",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Adalberto",
+          "to": "Magister Foscafides",
+          "line": "Già ve ne andate? Ah! Le operazioni alchemiche richiedono il vespro?",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Guadalberto",
+          "to": "Adalberto",
+          "line": "Oppure a buio fatto gli spuntan artigli di belva e fauci da fiera!",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Adalberto",
+          "to": "Guadalberto",
+          "line": "Chetati Adalberto! E fa parlare il Magister.",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Magister Foscafides",
+          "to": "Adalberto",
+          "line": "Molte cose... mutano... nelle grinfie della notte... E i miei saperi e le mie arti è meglio farli quando brilla... per sicurezza...",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Adalberto",
+          "to": "Magister Foscafides",
+          "line": "Ma non vorrete lasciarci proprio ora, Magister? Se v'è prudenza nei vostri saperi, allora restate ancora un poco... finché il sole concede il suo favore.",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Magister Foscafides",
+          "to": "Adalberto",
+          "line": "NO! noooo, no.... la prudenza mia mi dice di congedarmi, e io l'ascolto perchè non vi fu mai virtù più rara.",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Adalberto",
+          "to": "Magister Foscafides",
+          "line": "Così sia allora, mi rimetto al vostro giudizio, l'oro allora sarà domani?",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Magister Foscafides",
+          "to": "Adalberto",
+          "line": "Si e a proposito... fatemi trovare alcune cose domani... se la signoria vostra lo permette. Limatura di ferro raccolta da lama usata in guerra, sette spine prese da sette rose nere, la terra presa da un incrocio di 3 strade e molto zolfo... molto molto zolfo... 666 libbre....",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Guadalberto",
+          "to": "Adalberto",
+          "line": "Padre, vi imploro! E' ridicolo questi oggetti sono chiaramente per una maledizione. Quest'uomo è un mago o uno stregone mandato dal demonio per ingannarci!",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Adalberto",
+          "to": "Guadalberto",
+          "line": "Ancora vi ricadi? Parli con poca riverenza e minor sapere. Ciò che serve serve e il Magister lo avrà. Manderò subito i miei servi ad operarsi, perchè domani farai l'oro, giusto?",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Magister Foscafides",
+          "to": "Adalberto",
+          "line": "Si.... si... Si può trasformare il piombo in oro…",
+          "context": ""
+        },
+        {
+          "type": "line",
+          "speaker": "Magister Foscafides",
+          "to": "Pubblico",
+          "line": "[Avvicinandosi al pubblico] ma gli uomini…\ngli uomini no.",
+          "context": ""
+        }
+      ]
+    }
+  ],
+  "description": "Siamo alle porte del Rinascimento ed il ricco mercante Adalberto si preoccupare degli interessi del figlio minore Gaudalberto. Decide quindi di affidarlo ad un tutore perchè possa formarlo adeguatamente in qualcosa di utile per la famiglia."
+}
