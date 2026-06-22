@@ -1,3 +1,4 @@
 [
     { "file": "episodio1.json", "title": "EP 1: La Rinascita", "actors": 3, "scenes": 3, "language": "it" }
+    { "file": "episodio2.json", "title": "EP 2: Il Demonietto di Brindisi", "actors": 3, "scenes": 3, "language": "it" }
 ]

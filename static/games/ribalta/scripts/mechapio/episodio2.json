@@ -1,0 +1,435 @@
+{
+"title": "Il Demonietto di Brindisi",
+"language": "it",
+"description": "Il Cardinale Porpora assegna a Mecha Padre Pio la sua prima missione come Santo Protettore. Un piccolo demonio chiamato Mestollero si è impossessato di un fedele a Brindisi. Convinto di dover affrontare le forze dell'Apocalisse, Mecha Padre Pio scoprirà che la sua prima vittoria dipenderà più dalla comprensione che dalla forza.",
+"characters": [
+{
+"name": "Mecha Padre Pio",
+"description": "Il nuovo Santo Protettore. Ancora inesperto delle sue capacità e alla ricerca del proprio ruolo."
+},
+{
+"name": "Cardinale Porpora",
+"description": "Coordinatore delle missioni di Mecha Padre Pio. Pragmatico e spesso costretto a gestire l'entusiasmo del suo campione."
+},
+{
+"name": "Giuliano Anvizzotti",
+"description": "Un tranquillo pensionato brindisino posseduto dal demonietto Mestollero."
+}
+],
+"scenes": [
+{
+"id": "scene_1",
+"title": "Prima missione",
+"setting": "Quartier generale del Cardinale Porpora. Mecha Padre Pio osserva una grande mappa del mondo.",
+"beats": [
+{
+"type": "line",
+"speaker": "Mecha Padre Pio",
+"to": "Cardinale Porpora",
+"line": "Dove colpiremo per primi? Una setta infernale? Un drago dell'Apocalisse? Un portale per l'Abisso?",
+"context": "Mecha Padre Pio è impaziente di iniziare."
+},
+{
+"type": "line",
+"speaker": "Cardinale Porpora",
+"to": "Mecha Padre Pio",
+"line": "Brindisi.",
+"context": "Risposta secca."
+},
+{
+"type": "line",
+"speaker": "Mecha Padre Pio",
+"to": "Cardinale Porpora",
+"line": "Brindisi?",
+"context": "Deluso."
+},
+{
+"type": "line",
+"speaker": "Cardinale Porpora",
+"to": "Mecha Padre Pio",
+"line": "Brindisi.",
+"context": "Conferma."
+},
+{
+"type": "line",
+"speaker": "Mecha Padre Pio",
+"to": "Cardinale Porpora",
+"line": "L'Abisso si è aperto a Brindisi?",
+"context": "Cerca di capire."
+},
+{
+"type": "line",
+"speaker": "Cardinale Porpora",
+"to": "Mecha Padre Pio",
+"line": "No. Un demonietto ha posseduto un pensionato.",
+"context": "Missione reale."
+},
+{
+"type": "line",
+"speaker": "Mecha Padre Pio",
+"to": "Cardinale Porpora",
+"line": "Un demonietto?",
+"context": "Sempre più deluso."
+},
+{
+"type": "line",
+"speaker": "Cardinale Porpora",
+"to": "Mecha Padre Pio",
+"line": "Si chiama Mestollero. È classificato come Disturbo Infernale di Terza Categoria.",
+"context": "Tono burocratico."
+},
+{
+"type": "line",
+"speaker": "Mecha Padre Pio",
+"to": "Cardinale Porpora",
+"line": "Esistono categorie?",
+"context": "Sorprendentemente."
+},
+{
+"type": "line",
+"speaker": "Cardinale Porpora",
+"to": "Mecha Padre Pio",
+"line": "Per tempo ti spiegherò tutto. Per ora concentrati sulla missione.",
+"context": "Serissimo."
+},
+{
+"type": "stage_direction",
+"action": "Porpora inserisce un auricolare nell'orecchio metallico di Mecha Padre Pio.",
+"context": "Nuova tecnologia."
+},
+{
+"type": "line",
+"speaker": "Cardinale Porpora",
+"to": "Mecha Padre Pio",
+"line": "Questo è un auricolare benedetto. Vi guiderò durante la missione.",
+"context": "Supporto remoto."
+},
+{
+"type": "line",
+"speaker": "Mecha Padre Pio",
+"to": "Cardinale Porpora",
+"line": "Un'altra voce nella mia testa. Non so se ci sarà spazio per me.",
+"context": "Non sembra convinto."
+},
+{
+"type": "line",
+"speaker": "Cardinale Porpora",
+"to": "Mecha Padre Pio",
+"line": "Non preoccuparti. Non interferirò con i tuoi pensieri. Sarò solo una guida...",
+"context": "Supporto remoto."
+}
+]
+},
+{
+"id": "scene_2",
+"title": "Il demonietto di Brindisi",
+"setting": "Piazza principale di Brindisi. Giuliano Anvizzotti corre in cerchio urlando mentre i cittadini si nascondono.",
+"beats": [
+{
+"type": "line",
+"speaker": "Giuliano Anvizzotti",
+"to": "Pubblico",
+"line": "Io sono Mestollero! Terrore degli inferi! Flagello dei mortali! Mi sono impossessato del Signor Anvizzotti! E adesso dichiaro illegali i panzerotti!",
+"context": "La voce è quella di Giuliano ma l'espressione e i modi sono completamente diversi."
+},
+{
+"type": "stage_direction",
+"action": "Mecha Padre Pio atterra nella piazza con un tonfo metallico.",
+"context": "Ingresso eroico."
+},
+{
+"type": "line",
+"speaker": "Giuliano Anvizzotti",
+"to": "Mecha Padre Pio",
+"line": "E adesso chi è questo robot? Irradia un luce fastidiosa",
+"context": "Mestollero riconosce subito il suo avversario."
+},
+{
+"type": "line",
+"speaker": "Cardinale Porpora",
+"to": "Mecha Padre Pio",
+"line": "[Auricolare] Mantenete la calma. È un demonio minore.",
+"context": "Consigli tattici."
+},
+{
+"type": "line",
+"speaker": "Mecha Padre Pio",
+"to": "Giuliano Anvizzotti",
+"line": "E' arrivato Mecha Padre Pio! Lascia quest'uomo e torna da dove sei venuto.",
+"context": "Approccio diretto."
+},
+{
+"type": "line",
+"speaker": "Giuliano Anvizzotti",
+"to": "Mecha Padre Pio",
+"line": "No.",
+"context": "Risposta immediata."
+},
+{
+"type": "line",
+"speaker": "Mecha Padre Pio",
+"to": "Cardinale Porpora",
+"line": "[Auricolare] Cardinale e adesso cosa faccio?",
+"context": "Porpora aspetta una strategia."
+},
+{
+"type": "line",
+"speaker": "Cardinale Porpora",
+"to": "Mecha Padre Pio",
+"line": "[Auricolare] Rischiaritelo con la vostra empatia e con le vostre savie parole.",
+"context": "Consigli tattici."
+},
+{
+"type": "line",
+"speaker": "Mecha Padre Pio",
+"to": "Giuliano Anvizzotti",
+"line": "Perché fai tutto questo?",
+"context": "Cambia approccio."
+},
+{
+"type": "line",
+"speaker": "Giuliano Anvizzotti",
+"to": "Mecha Padre Pio",
+"line": "Perché nessuno si accorge mai di noi demonietti. Sempre Lucifero, sempre Belzebù... mai Mestollero. Una volta ho infestato una casa per 2 anni e nessuno se ne è accorto.",
+"context": "Sfogo sincero."
+},
+{
+"type": "line",
+"speaker": "Mecha Padre Pio",
+"to": "Giuliano Anvizzotti",
+"line": "Quindi non vuoi distruggere l'umanità.",
+"context": "Comprende il problema."
+},
+{
+"type": "line",
+"speaker": "Giuliano Anvizzotti",
+"to": "Mecha Padre Pio",
+"line": "No. Vorrei solo un po' di rispetto professionale.",
+"context": "Ammissione sincera."
+},
+{
+"type": "stage_direction",
+"action": "Le stimmate luminose di Mecha Padre Pio brillano leggermente.",
+"context": "La sua presenza diventa più rassicurante che minacciosa."
+},
+{
+"type": "line",
+"speaker": "Mecha Padre Pio",
+"to": "Giuliano Anvizzotti",
+"line": "Ti vedo, Mestollero. Sei un bravo ingranaggio della grande macchina del Signore!",
+"context": "Primo atto di compassione."
+},
+
+{
+"type": "line",
+"speaker": "Cardinale Porpora",
+"to": "Mecha Padre Pio",
+"line": "[Auricolare] Bravo santo padre! ",
+"context": "Consigli tattici."
+},
+{
+"type": "line",
+"speaker": "Mecha Padre Pio",
+"to": "Giuliano Anvizzotti",
+"line": "Quindi state dicendo che faccio parte di un piano divino e sto recitando la parte che mi è stata assegnata?",
+"context": "Lezione morale."
+},
+
+{
+"type": "line",
+"speaker": "Mecha Padre Pio",
+"to": "Giuliano Anvizzotti",
+"line": "Esattamente! Sei importante e amato!",
+"context": "Primo atto di compassione."
+},
+{
+"type": "line",
+"speaker": "Giuliano Anvizzotti",
+"to": "Mecha Padre Pio",
+"line": "Allora smetto, non sto al gioco di nessuno. Inizierò a diffondere odio online e a fare commenti razzisti sui social!",
+"context": "Mestollero sta cedendo."
+},
+{
+"type": "line",
+"speaker": "Mecha Padre Pio",
+"to": "Giuliano Anvizzotti",
+"line": "Fa quello che il tuo cuore si sente. Ma sappi che sei amato e che la tua esistenza ha un senso.",
+"context": "Mecha Padre Pio riconosce il demonietto come creatura e non solo come minaccia."
+},
+
+{
+"type": "line",
+"speaker": "Cardinale Porpora",
+"to": "Mecha Padre Pio",
+"line": "[Auricolare] No santo padre aspetta un momento...",
+"context": "Consigli tattici."
+},
+{
+"type": "line",
+"speaker": "Giuliano Anvizzotti",
+"to": "Mecha Padre Pio",
+"line": "Beh... è stato bello essere ascoltato almeno una volta.",
+"context": "Le ultime parole di Mestollero."
+},
+
+{
+"type": "line",
+"speaker": "Cardinale Porpora",
+"to": "Mecha Padre Pio",
+"line": "[Auricolare] No santo padre, ferma subito quel demonio!",
+"context": "Consigli tattici."
+},
+{
+"type": "line",
+"speaker": "Mecha Padre Pio",
+"to": "Giuliano Anvizzotti",
+"line": "Va! E sii felice! Sii te stesso!",
+"context": "Mecha Padre Pio riconosce il demonietto come creatura e non solo come minaccia."
+},
+{
+"type": "stage_direction",
+"action": "Giuliano vacilla e quasi cade. Quando rialza la testa il suo sguardo è cambiato. Mestollero non c'è più.",
+"context": "La possessione è terminata."
+}
+]
+},
+{
+"id": "scene_3",
+"title": "Il miracolo",
+"setting": "Piazza di Brindisi ormai tranquilla.",
+"beats": [
+{
+"type": "line",
+"speaker": "Giuliano Anvizzotti",
+"to": "Mecha Padre Pio",
+"line": "Dove sono?",
+"context": "Giuliano si guarda attorno confuso."
+},
+{
+"type": "line",
+"speaker": "Mecha Padre Pio",
+"to": "Giuliano Anvizzotti",
+"line": "A Brindisi.",
+"context": "Risposta semplice."
+},
+{
+"type": "line",
+"speaker": "Giuliano Anvizzotti",
+"to": "Mecha Padre Pio",
+"line": "Si fin qui c'ero arrivato. Ma cosa mi è successo?",
+"context": "Prima battuta dopo la liberazione."
+},
+
+{
+"type": "line",
+"speaker": "Mecha Padre Pio",
+"to": "Giuliano Anvizzotti",
+"line": "Eravate imposseduto da un demonietto. Ora siete libero e il mondo è salvo.",
+"context": "Risposta semplice."
+},
+{
+"type": "line",
+"speaker": "Cardinale Porpora",
+"to": "Mecha Padre Pio",
+"line": "[Auricolare] Si padre... poi dovremmo risolvere la situazione che avete creato. Il problema non è risolto.",
+"context": "Consigli tattici."
+},
+{
+"type": "line",
+"speaker": "Mecha Padre Pio",
+"to": "Giuliano Anvizzotti",
+"line": "Tutto è bene quel che finisce bene.",
+"context": "Risposta semplice."
+},
+{
+"type": "line",
+"speaker": "Giuliano Anvizzotti",
+"to": "Mecha Padre Pio",
+"line": "Mi avete salvato. Grazie.",
+"context": "Gratitudine sincera."
+},
+{
+"type": "line",
+"speaker": "Mecha Padre Pio",
+"to": "Giuliano Anvizzotti",
+"line": "Sono lieto che stiate bene.",
+"context": "Risposta umile."
+},
+{
+"type": "line",
+"speaker": "Giuliano Anvizzotti",
+"to": "Mecha Padre Pio",
+"line": "Posso chiedervi una cosa?",
+"context": "Esitante."
+},
+{
+"type": "line",
+"speaker": "Mecha Padre Pio",
+"to": "Giuliano Anvizzotti",
+"line": "Certamente."
+},
+{
+"type": "line",
+"speaker": "Giuliano Anvizzotti",
+"to": "Mecha Padre Pio",
+"line": "Secondo voi... il vostro ritorno è un miracolo?",
+"context": "Domanda centrale dell'episodio."
+},
+{
+"type": "line",
+"speaker": "Mecha Padre Pio",
+"to": "Giuliano Anvizzotti",
+"line": "Non lo so.",
+"context": "Risposta onesta."
+},
+{
+"type": "line",
+"speaker": "Cardinale Porpora",
+"to": "Mecha Padre Pio",
+"line": "[Auricolare] Santo Padre! E' stato trovato un hacker razzista e misogino che sta attaccando i server del Vaticano! Dobbiamo fermarlo!",
+"context": "Consigli tattici."
+},
+{
+"type": "line",
+"speaker": "Giuliano Anvizzotti",
+"to": "Mecha Padre Pio",
+"line": "Pensavo che i santi sapessero tutto.",
+"context": "Sorride."
+},
+{
+"type": "line",
+"speaker": "Mecha Padre Pio",
+"to": "Giuliano Anvizzotti",
+"line": "I santi fanno domande come tutti gli altri. Solo che continuano a cercare la risposta.",
+"context": "Tema della serie."
+},
+{
+"type": "line",
+"speaker": "Giuliano Anvizzotti",
+"to": "Mecha Padre Pio",
+"line": "Allora continuerò a cercarla anch'io.",
+"context": "Ispirato."
+},
+{
+"type": "stage_direction",
+"action": "Mecha Padre Pio osserva il cielo. Nell'auricolare si sentono le urla del Cardinale Porpora.",
+"context": "Epilogo."
+},
+{
+"type": "line",
+"speaker": "Cardinale Porpora",
+"to": "Mecha Padre Pio",
+"line": "[Auricolare] Mecha Padre Pio! L'hacker ha appena dichiarato guerra alla Norvegia utilizzando il nostro Twitter ufficiale! Dobbiamo fermarlo ORA!",
+"context": "Chiusura ufficiale."
+},
+{
+"type": "line",
+"speaker": "Mecha Padre Pio",
+"to": "Pubblico",
+"line": "Un'anima è stata salvata. Per oggi può bastare.",
+"context": "Chiusura dell'episodio."
+}
+]
+}
+]
+}
