@@ -245,8 +245,8 @@
           "type": "line",
           "speaker": "Magister Foscafides",
           "to": "Guadalberto",
-          "line": "",
-          "context": "Ti farò vedere ben di meglio, Messer Guadalberto. E ti imparerò che le cose importanti non le si guardano con gli occhi..."
+          "line": "Ti farò vedere ben di meglio, Messer Guadalberto. E ti imparerò che le cose importanti non le si guardano con gli occhi...",
+          "context": ""
         },
         {
           "type": "line",
@@ -326,7 +326,7 @@
     {
       "id": "scene_2",
       "title": "Scena 2",
-      "setting": "Studio di Gaudalberto, le carte sulla sua scrivania sono carbonizzate.  Guadalberto,visibilmente scioccato, richiama il padre per l'ennesima volta, che rientra nello studio ormai fuori di se.",
+      "setting": "Studio di Gaudalberto, le carte sulla sua scrivania sono carbonizzate.  Guadalberto,visibilmente scioccato, richiama il padre per l'ennesima volta, che rientra nello studio ormai fuori di se. Il Magister sta visibilmente masticando una testa di serpente.",
       "beats": [
         {
           "type": "line",
@@ -337,8 +337,8 @@
         },
         {
           "type": "line",
-          "speaker": "Adalberto",
-          "to": "Guadalberto",
+          "speaker": "Guadalberto",
+          "to": "Adalberto",
           "line": "Il Magister ha elencato parole proibite in Alamanno e in Goto, masticando la testa di un serpente velenoso e la mia scrivania ha preso fuoco! Ora mi credete che è il demonio?!?",
           "context": ""
         },
@@ -465,14 +465,14 @@
           "type": "line",
           "speaker": "Magister Foscafides",
           "to": "Adalberto",
-          "line": "Si.... si... Si può trasformare il piombo in oro…",
+          "line": "Si.... si... Si può cambiare il piombo in oro…",
           "context": ""
         },
         {
           "type": "line",
           "speaker": "Magister Foscafides",
           "to": "Pubblico",
-          "line": "[Avvicinandosi al pubblico] ma gli uomini…\ngli uomini no.",
+          "line": "[Avvicinandosi al pubblico] ma gli uomini…gli uomini non cambiano mai.",
           "context": ""
         }
       ]
