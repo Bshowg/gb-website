@@ -3,12 +3,30 @@ const state = {
   currentPath: '',
   folderStack: [],
   script: null,
-  character: null,
+  characters: [],
   sceneIdx: 0,
   beatIdx: 0,
   mode: 'read',
   previewMode: false,
 };
+
+const CHARACTER_PALETTE = [
+  '#e0bd72',
+  '#7bb4e8',
+  '#e89b7b',
+  '#9bd17a',
+  '#d896d8',
+  '#7be0c4',
+  '#e87b9b',
+  '#c4a8e8',
+];
+
+function characterColor(name) {
+  if (!state.script || !name) return CHARACTER_PALETTE[0];
+  const idx = state.script.characters.findIndex(c => c.name === name);
+  if (idx < 0) return CHARACTER_PALETTE[0];
+  return CHARACTER_PALETTE[idx % CHARACTER_PALETTE.length];
+}
 
 const views = {
   scripts: document.getElementById('view-scripts'),
@@ -64,8 +82,13 @@ function lastWordsNoPunctuation(text, n) {
 }
 
 function isUserSpeaker(beat) {
-  if (!state.character || !beat || beat.type !== 'line') return false;
-  return asArray(beat.speaker).includes(state.character);
+  if (!state.characters.length || !beat || beat.type !== 'line') return false;
+  return asArray(beat.speaker).some(s => state.characters.includes(s));
+}
+
+function userSpeakersIn(beat) {
+  if (!beat || beat.type !== 'line') return [];
+  return asArray(beat.speaker).filter(s => state.characters.includes(s));
 }
 
 async function loadManifest(path = '') {
@@ -140,22 +163,52 @@ function showCharacterPicker(script) {
     descEl.classList.add('hidden');
   }
 
+  const selected = new Set();
+  const startBtn = document.getElementById('start-playback-btn');
+  function refreshStart() {
+    startBtn.disabled = selected.size === 0;
+    startBtn.textContent = selected.size === 0
+      ? 'Inizia'
+      : `Inizia (${selected.size})`;
+  }
+
   const list = document.getElementById('character-list');
   list.innerHTML = '';
   script.characters.forEach(char => {
+    const color = characterColor(char.name);
     const li = document.createElement('li');
     const btn = document.createElement('button');
+    btn.className = 'character-pick';
+    btn.style.setProperty('--char-color', color);
+
+    const swatch = document.createElement('span');
+    swatch.className = 'char-swatch';
+    btn.appendChild(swatch);
+
+    const body = document.createElement('div');
+    body.className = 'char-body';
     const name = document.createElement('div');
     name.className = 'script-title';
     name.textContent = char.name;
-    btn.appendChild(name);
+    body.appendChild(name);
     if (char.description) {
       const desc = document.createElement('div');
       desc.className = 'char-description';
       desc.textContent = char.description;
-      btn.appendChild(desc);
+      body.appendChild(desc);
     }
-    btn.addEventListener('click', () => startPlayback(char.name));
+    btn.appendChild(body);
+
+    btn.addEventListener('click', () => {
+      if (selected.has(char.name)) {
+        selected.delete(char.name);
+        btn.classList.remove('selected');
+      } else {
+        selected.add(char.name);
+        btn.classList.add('selected');
+      }
+      refreshStart();
+    });
     li.appendChild(btn);
     list.appendChild(li);
   });
@@ -163,19 +216,28 @@ function showCharacterPicker(script) {
   const btnRead = document.createElement('button');
   btnRead.className = 'subtle';
   btnRead.textContent = 'Solo lettura (nessun personaggio)';
-  btnRead.addEventListener('click', () => startPlayback(null));
+  btnRead.addEventListener('click', () => startPlayback([]));
   liRead.appendChild(btnRead);
   list.appendChild(liRead);
+
+  startBtn.onclick = () => {
+    if (!selected.size) return;
+    const ordered = script.characters
+      .map(c => c.name)
+      .filter(n => selected.has(n));
+    startPlayback(ordered);
+  };
+  refreshStart();
 
   showView('characters');
 }
 
-function startPlayback(character) {
-  state.character = character;
+function startPlayback(characters) {
+  state.characters = Array.isArray(characters) ? characters : [];
   state.sceneIdx = 0;
   state.beatIdx = 0;
   state.mode = 'read';
-  if (character === null) {
+  if (state.characters.length === 0) {
     renderReadAll();
     showView('readall');
   } else {
@@ -280,10 +342,13 @@ function render() {
     headerEl.innerHTML = '';
     headerEl.appendChild(document.createTextNode(`${speakers} → ${tos}`));
     if (mine) {
-      const tag = document.createElement('span');
-      tag.className = 'mine-tag';
-      tag.textContent = 'La tua battuta';
-      headerEl.appendChild(tag);
+      userSpeakersIn(beat).forEach(name => {
+        const tag = document.createElement('span');
+        tag.className = 'mine-tag';
+        tag.style.background = characterColor(name);
+        tag.textContent = name;
+        headerEl.appendChild(tag);
+      });
       card.classList.add('mine');
     }
     if (state.mode === 'read') {
@@ -391,7 +456,7 @@ document.getElementById('mode-toggle').addEventListener('click', e => {
   render();
 });
 document.getElementById('restart-btn').addEventListener('click', () => {
-  startPlayback(state.character);
+  startPlayback(state.characters);
 });
 
 (function bootstrap() {

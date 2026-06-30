@@ -201,6 +201,47 @@ button {
   font-size: 0.7rem;
   margin-left: 0.5rem;
   letter-spacing: 0.05em;
+  text-transform: none;
+  font-weight: 700;
+}
+
+.character-pick {
+  display: flex !important;
+  align-items: flex-start;
+  gap: 0.75rem;
+  --char-color: var(--gold);
+}
+.character-pick .char-swatch {
+  flex: 0 0 auto;
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 50%;
+  border: 2px solid var(--char-color);
+  background: transparent;
+  margin-top: 0.15rem;
+  position: relative;
+}
+.character-pick.selected {
+  border-color: var(--char-color);
+  background: color-mix(in srgb, var(--char-color) 12%, var(--panel));
+}
+.character-pick.selected .char-swatch {
+  background: var(--char-color);
+}
+.character-pick.selected .char-swatch::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  display: block;
+  background: var(--on-gold);
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M3.5 8.5l3 3 6-6' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/></svg>") center/70% no-repeat;
+          mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M3.5 8.5l3 3 6-6' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/></svg>") center/70% no-repeat;
+}
+.character-pick .char-body { flex: 1; min-width: 0; }
+
+#start-playback-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .beat-line { font-size: inherit; }
@@ -244,7 +285,7 @@ button {
   font-size: 1.25rem;
   margin-top: 1rem;
 }
-.advance-btn:hover { background: var(--gold-bright); }
+.advance-btn:hover:not(:disabled) { background: var(--gold-bright); }
 
 .nav-row {
   display: flex;
