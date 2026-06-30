@@ -137,19 +137,60 @@ function renderManifestList() {
   });
 }
 
-function enterFolder(entry) {
-  state.folderStack.push(state.currentPath);
-  loadManifest(state.currentPath + entry.folder + '/');
+function folderStackFor(path) {
+  if (!path) return [];
+  const segs = path.split('/').filter(Boolean);
+  const stack = [];
+  for (let i = 0; i < segs.length; i++) {
+    stack.push(i === 0 ? '' : segs.slice(0, i).join('/') + '/');
+  }
+  return stack;
 }
 
-function exitFolder() {
-  const prev = state.folderStack.pop();
-  loadManifest(prev || '');
+function pushNav(s) {
+  if (state.suppressNav) return;
+  history.pushState(s, '');
+}
+
+function replaceNav(s) {
+  if (state.suppressNav) return;
+  history.replaceState(s, '');
+}
+
+async function restoreView(s) {
+  if (!s) s = { view: 'scripts', path: '' };
+  state.suppressNav = true;
+  try {
+    if (s.view === 'scripts') {
+      const target = s.path || '';
+      if (state.currentPath !== target || !state.manifest.length) {
+        state.folderStack = folderStackFor(target);
+        await loadManifest(target);
+      }
+      showView('scripts');
+    } else if (s.view === 'characters') {
+      showView('characters');
+    } else if (s.view === 'playback') {
+      showView('playback');
+    } else if (s.view === 'readall') {
+      showView('readall');
+    }
+  } finally {
+    state.suppressNav = false;
+  }
+}
+
+function enterFolder(entry) {
+  state.folderStack.push(state.currentPath);
+  const newPath = state.currentPath + entry.folder + '/';
+  pushNav({ view: 'scripts', path: newPath });
+  loadManifest(newPath);
 }
 
 async function loadScript(entry) {
   const res = await fetch(`./scripts/${state.currentPath}${entry.file}`);
   state.script = await res.json();
+  pushNav({ view: 'characters' });
   showCharacterPicker(state.script);
 }
 
@@ -237,6 +278,8 @@ function startPlayback(characters) {
   state.sceneIdx = 0;
   state.beatIdx = 0;
   state.mode = 'read';
+  const view = state.characters.length ? 'playback' : 'readall';
+  if (history.state && history.state.view !== view) pushNav({ view });
   if (state.characters.length === 0) {
     renderReadAll();
     showView('readall');
@@ -433,11 +476,11 @@ function hasNextUserBeat() {
 
 document.getElementById('back-to-scripts').addEventListener('click', () => {
   if (state.previewMode) { window.location.href = './editor.html'; return; }
-  showView('scripts');
+  history.back();
 });
-document.getElementById('folder-back-btn').addEventListener('click', exitFolder);
-document.getElementById('back-to-characters').addEventListener('click', () => showView('characters'));
-document.getElementById('back-from-readall').addEventListener('click', () => showView('characters'));
+document.getElementById('folder-back-btn').addEventListener('click', () => history.back());
+document.getElementById('back-to-characters').addEventListener('click', () => history.back());
+document.getElementById('back-from-readall').addEventListener('click', () => history.back());
 document.getElementById('advance-btn').addEventListener('click', advance);
 document.getElementById('back-btn-beat').addEventListener('click', goBack);
 document.getElementById('skip-btn-user').addEventListener('click', skipToNextUserBeat);
@@ -459,6 +502,8 @@ document.getElementById('restart-btn').addEventListener('click', () => {
   startPlayback(state.characters);
 });
 
+window.addEventListener('popstate', e => restoreView(e.state));
+
 (function bootstrap() {
   const params = new URLSearchParams(location.search);
   if (params.get('preview') === '1') {
@@ -471,8 +516,10 @@ document.getElementById('restart-btn').addEventListener('click', () => {
     state.previewMode = true;
     state.script = JSON.parse(raw);
     document.getElementById('back-to-scripts').textContent = '← Torna all’editor';
+    replaceNav({ view: 'characters' });
     showCharacterPicker(state.script);
   } else {
+    replaceNav({ view: 'scripts', path: '' });
     loadManifest();
   }
 })();
