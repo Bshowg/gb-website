@@ -86,11 +86,6 @@ function isUserSpeaker(beat) {
   return asArray(beat.speaker).some(s => state.characters.includes(s));
 }
 
-function userSpeakersIn(beat) {
-  if (!beat || beat.type !== 'line') return [];
-  return asArray(beat.speaker).filter(s => state.characters.includes(s));
-}
-
 async function loadManifest(path = '') {
   const res = await fetch(`./scripts/${path}index.json`);
   state.manifest = await res.json();
@@ -380,20 +375,20 @@ function render() {
     contextEl.textContent = beat.context || '';
   } else {
     const mine = isUserSpeaker(beat);
-    const speakers = asArray(beat.speaker).join(' & ');
     const tos = asArray(beat.to).join(' & ');
     headerEl.innerHTML = '';
-    headerEl.appendChild(document.createTextNode(`${speakers} → ${tos}`));
-    if (mine) {
-      userSpeakersIn(beat).forEach(name => {
-        const tag = document.createElement('span');
-        tag.className = 'mine-tag';
-        tag.style.background = characterColor(name);
-        tag.textContent = name;
-        headerEl.appendChild(tag);
-      });
-      card.classList.add('mine');
-    }
+    asArray(beat.speaker).forEach((name, i) => {
+      if (i > 0) headerEl.appendChild(document.createTextNode(' & '));
+      const span = document.createElement('span');
+      span.textContent = name;
+      if (state.characters.includes(name)) {
+        span.className = 'speaker-name';
+        span.style.color = characterColor(name);
+      }
+      headerEl.appendChild(span);
+    });
+    headerEl.appendChild(document.createTextNode(` → ${tos}`));
+    if (mine) card.classList.add('mine');
     if (state.mode === 'read') {
       const cue = lastWordsNoPunctuation(beatText(prevBeat()), 4);
       contextEl.textContent = cue ? `… ${cue}` : '';

@@ -412,7 +412,7 @@ function appendSceneCard(scene) {
   }
 }
 
-function appendBeatRow(beatsEl, beat) {
+function appendBeatRow(beatsEl, beat, insertAfter) {
   const row = document.createElement('div');
   row.className = 'beat-edit-row';
   row.innerHTML = `
@@ -449,6 +449,7 @@ function appendBeatRow(beatsEl, beat) {
       <label>Contesto</label>
       <textarea class="b-context" rows="2"></textarea>
     </div>
+    <button type="button" class="add-below-btn" title="Aggiungi battuta sotto" aria-label="Aggiungi battuta sotto">+</button>
   `;
   const typeEl = row.querySelector('.b-type');
   const lineFields = row.querySelector('.beat-fields-line');
@@ -485,8 +486,13 @@ function appendBeatRow(beatsEl, beat) {
     if (next) row.parentNode.insertBefore(next, row);
   });
   row.querySelector('.row-delete').addEventListener('click', () => row.remove());
+  row.querySelector('.add-below-btn').addEventListener('click', () => {
+    appendBeatRow(beatsEl, undefined, row);
+    row.nextElementSibling?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  });
 
-  beatsEl.appendChild(row);
+  if (insertAfter) insertAfter.after(row);
+  else beatsEl.appendChild(row);
 }
 
 function renumberScenes() {
