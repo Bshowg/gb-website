@@ -277,8 +277,587 @@
           "to": "Clark",
           "line": "Questi sono i fatti.",
           "context": "Pedro resta fermo."
-        }
-      ]
-    }
-  ]
+        },
+{
+"type": "line",
+"speaker": "Clark",
+"to": "Pedro",
+"line": "I fatti sono cose che stanno su un foglio finché qualcuno non ha abbastanza soldi per stamparli.",
+"context": "Clark non accetta la legalità del testamento e trasforma tutto in sospetto."
+},
+{
+"type": "line",
+"speaker": "Pedro",
+"to": "Clark",
+"line": "Non è una cospirazione, Clark. È un testamento.",
+"context": "Pedro prova a restare freddo, ma è stanco."
+},
+{
+"type": "line",
+"speaker": "Clark",
+"to": "Pedro",
+"line": "È una cospirazione con il notaio.",
+"context": "Clark rilancia con sarcasmo amaro."
+},
+{
+"type": "line",
+"speaker": "Pedro",
+"to": "Clark",
+"line": "Tu non vuoi giustizia. Vuoi contanti.",
+"context": "Pedro individua il vero bisogno di Clark."
+},
+{
+"type": "line",
+"speaker": "Clark",
+"to": "Pedro",
+"line": "Mi pare che i contanti siano una forma molto rispettata di giustizia.",
+"context": "Clark non nega davvero."
+},
+{
+"type": "line",
+"speaker": "Pedro",
+"to": "Clark",
+"line": "Ecco perché papà non ti ha lasciato niente.",
+"context": "Pedro colpisce Clark nel punto più doloroso."
+},
+{
+"type": "line",
+"speaker": "Clark",
+"to": "Pedro",
+"line": "Perché era un bastardo.",
+"context": "Clark risponde subito, ma è ferito."
+},
+{
+"type": "line",
+"speaker": "Pedro",
+"to": "Clark",
+"line": "No. Perché ti conosceva.",
+"context": "Pedro dice una verità che ha trattenuto troppo a lungo."
+},
+{
+"type": "line",
+"speaker": "Clark",
+"to": "Pedro",
+"line": "Lui non mi conosceva. Lui mi giudicava. È diverso.",
+"context": "Clark distingue tra essere visto e essere condannato."
+},
+{
+"type": "line",
+"speaker": "Pedro",
+"to": "Clark",
+"line": "Ti giudicava perché ogni volta che entravi da quella porta spariva qualcosa.",
+"context": "Pedro apre il dossier dei rancori concreti."
+},
+{
+"type": "line",
+"speaker": "Clark",
+"to": "Pedro",
+"line": "Ah, eccolo. Il martirio della famiglia Dudson.",
+"context": "Clark prova a sminuire prima che Pedro sia più preciso."
+},
+{
+"type": "line",
+"speaker": "Pedro",
+"to": "Clark",
+"line": "La motosega. Il televisore piccolo. Il fucile da pesca. La fede di mamma.",
+"context": "Pedro elenca senza enfasi, aumentando il peso della scena."
+},
+{
+"type": "line",
+"speaker": "Clark",
+"to": "Pedro",
+"line": "La fede di mamma l’ho impegnata.",
+"context": "Clark si difende su un dettaglio, rivelando colpa."
+},
+{
+"type": "line",
+"speaker": "Pedro",
+"to": "Clark",
+"line": "È un modo elegante per dire venduta.",
+"context": "Pedro non gli lascia via di fuga."
+},
+{
+"type": "line",
+"speaker": "Clark",
+"to": "Pedro",
+"line": "Avevo bisogno di soldi.",
+"context": "Clark lascia cadere la maschera per un istante."
+},
+{
+"type": "line",
+"speaker": "Pedro",
+"to": "Clark",
+"line": "Hai sempre bisogno di soldi.",
+"context": "Pedro non è crudele, ma esausto."
+},
+{
+"type": "line",
+"speaker": "Clark",
+"to": "Pedro",
+"line": "Beato te che hai sempre avuto bisogno solo di sentirti migliore.",
+"context": "Clark contrattacca sul piano morale."
+},
+{
+"type": "line",
+"speaker": "Pedro",
+"to": "Clark",
+"line": "Io ho avuto bisogno di restare. Di pagare le bollette. Di portarlo alle visite. Di lavarlo quando non riusciva più ad alzarsi.",
+"context": "Pedro rivela cosa significava davvero ereditare."
+},
+{
+"type": "line",
+"speaker": "Clark",
+"to": "Pedro",
+"line": "E quindi ti sei guadagnato il premio.",
+"context": "Clark non riesce ad accogliere la sofferenza di Pedro."
+},
+{
+"type": "line",
+"speaker": "Pedro",
+"to": "Clark",
+"line": "Premio? Questa casa ha il tetto marcio, il camion non passa la revisione e il terreno è pieno di debiti arretrati.",
+"context": "Pedro smonta l’idea dell’eredità come ricchezza."
+},
+{
+"type": "line",
+"speaker": "Clark",
+"to": "Pedro",
+"line": "Allora vendi tutto.",
+"context": "Clark propone la soluzione che Pedro temeva."
+},
+{
+"type": "line",
+"speaker": "Pedro",
+"to": "Clark",
+"line": "Tu venderesti tutto.",
+"context": "Pedro capisce che il problema è proprio questo."
+},
+{
+"type": "line",
+"speaker": "Clark",
+"to": "Pedro",
+"line": "Sì. Perché io non sono innamorato della muffa.",
+"context": "Clark resta pratico e sprezzante."
+},
+{
+"type": "line",
+"speaker": "Pedro",
+"to": "Clark",
+"line": "Non saresti nemmeno abbastanza libero da piangere papà. Saresti troppo impegnato a vendere tutto per sopravvivere.",
+"context": "Pedro pronuncia il cuore della scena: Clark è prigioniero del bisogno."
+},
+{
+"type": "stage_direction",
+"action": "Clark resta fermo. Per la prima volta non risponde subito.",
+"context": "La frase ha colpito davvero."
+},
+{
+"type": "line",
+"speaker": "Clark",
+"to": "Pedro",
+"line": "Bella frase. Te l’ha lasciata lui o l’hai inventata mentre lucidavi la sua bara?",
+"context": "Clark prova a recuperare controllo con crudeltà."
+},
+{
+"type": "line",
+"speaker": "Pedro",
+"to": "Clark",
+"line": "Mi ha lasciato una busta per te.",
+"context": "Pedro cambia direzione e introduce un nuovo elemento."
+},
+{
+"type": "line",
+"speaker": "Clark",
+"to": "Pedro",
+"line": "Una busta?",
+"context": "Clark è sorpreso e sospettoso."
+},
+{
+"type": "line",
+"speaker": "Pedro",
+"to": "Clark",
+"line": "È in cucina. Nel cassetto dove teneva le cose che non voleva buttare e non sapeva come guardare.",
+"context": "Pedro parla del padre con una tenerezza trattenuta."
+},
+{
+"type": "line",
+"speaker": "Clark",
+"to": "Pedro",
+"line": "E non me l’hai data prima?",
+"context": "Clark trasforma subito la notizia in accusa."
+},
+{
+"type": "line",
+"speaker": "Pedro",
+"to": "Clark",
+"line": "Aspettavo che tu finissi di pisciargli addosso.",
+"context": "Pedro chiude con durezza secca."
+},
+{
+"type": "stage_direction",
+"action": "Pedro prende le bottiglie vuote e rientra in casa. Clark resta solo davanti alla lapide.",
+"context": "Pedro abbandona il campo, Clark resta con il padre morto."
+},
+{
+"type": "line",
+"speaker": "Clark",
+"to": "Lapide",
+"line": "Lemuel. Che razza di nome di merda.",
+"context": "Clark parla alla lapide, ma il tono è meno aggressivo di prima."
+},
+{
+"type": "stage_direction",
+"action": "Clark guarda verso la casa. Dopo un momento, lo segue.",
+"context": "Fine scena: Clark sceglie di entrare, non di andarsene."
+}]
+}
+,
+{
+"id": "scene_2",
+"setting": "Cucina della casa. Notte. Sul tavolo ci sono documenti, una lampada accesa, due birre chiuse e una busta ingiallita.",
+"beats": [
+{
+"type": "stage_direction",
+"action": "Clark entra piano. Pedro è già seduto al tavolo, ma non guarda il fratello.",
+"context": "La tensione si sposta dal giardino alla casa, in uno spazio più intimo."
+},
+{
+"type": "line",
+"speaker": "Clark",
+"to": "Pedro",
+"line": "Quindi adesso c’è anche la busta melodrammatica.",
+"context": "Clark prova a ridicolizzare il momento."
+},
+{
+"type": "line",
+"speaker": "Pedro",
+"to": "Clark",
+"line": "C’è una busta.",
+"context": "Pedro non accetta il tono teatrale di Clark."
+},
+{
+"type": "line",
+"speaker": "Clark",
+"to": "Pedro",
+"line": "Dentro cosa c’è? Un’altra copia del testamento? Una foto di te con un’aureola?",
+"context": "Clark continua a difendersi con sarcasmo."
+},
+{
+"type": "line",
+"speaker": "Pedro",
+"to": "Clark",
+"line": "Non l’ho aperta.",
+"context": "Pedro stabilisce un confine morale."
+},
+{
+"type": "line",
+"speaker": "Clark",
+"to": "Pedro",
+"line": "Certo.",
+"context": "Clark non gli crede."
+},
+{
+"type": "line",
+"speaker": "Pedro",
+"to": "Clark",
+"line": "Clark.",
+"context": "Pedro lo richiama alla serietà."
+},
+{
+"type": "line",
+"speaker": "Clark",
+"to": "Pedro",
+"line": "Che c’è? Vuoi che mi commuova perché per una volta non hai controllato qualcosa?",
+"context": "Clark attacca Pedro come uomo del controllo."
+},
+{
+"type": "line",
+"speaker": "Pedro",
+"to": "Clark",
+"line": "Voglio che tu la apra o che te ne vada. Una delle due.",
+"context": "Pedro mette Clark davanti a una scelta concreta."
+},
+{
+"type": "stage_direction",
+"action": "Clark prende la busta. La gira tra le mani senza aprirla.",
+"context": "Clark ha paura del contenuto più di quanto voglia mostrare."
+},
+{
+"type": "line",
+"speaker": "Clark",
+"to": "Pedro",
+"line": "Ha scritto il mio nome male.",
+"context": "Clark nota un dettaglio per evitare il contenuto emotivo."
+},
+{
+"type": "line",
+"speaker": "Pedro",
+"to": "Clark",
+"line": "Ha sempre scritto male.",
+"context": "Pedro attenua il colpo con normalità."
+},
+{
+"type": "line",
+"speaker": "Clark",
+"to": "Pedro",
+"line": "No. Il tuo lo scriveva bene.",
+"context": "Clark trasforma anche l’ortografia in prova di esclusione."
+},
+{
+"type": "line",
+"speaker": "Pedro",
+"to": "Clark",
+"line": "Il mio lo vedeva sulle bollette.",
+"context": "Pedro risponde secco, senza compiacimento."
+},
+{
+"type": "stage_direction",
+"action": "Clark apre la busta. Dentro ci sono una lettera breve, una vecchia fotografia e una chiave arrugginita.",
+"context": "La busta contiene memoria, non denaro."
+},
+{
+"type": "line",
+"speaker": "Clark",
+"to": "Pedro",
+"line": "Una chiave. Fantastico. Sono ricco.",
+"context": "Clark reagisce male alla mancanza di valore economico."
+},
+{
+"type": "line",
+"speaker": "Pedro",
+"to": "Clark",
+"line": "È del capanno dietro al pozzo.",
+"context": "Pedro riconosce l’oggetto."
+},
+{
+"type": "line",
+"speaker": "Clark",
+"to": "Pedro",
+"line": "Il capanno con le lamiere e i topi?",
+"context": "Clark ricorda il luogo con disprezzo."
+},
+{
+"type": "line",
+"speaker": "Pedro",
+"to": "Clark",
+"line": "Sì.",
+"context": "Pedro non spiega ancora."
+},
+{
+"type": "line",
+"speaker": "Clark",
+"to": "Pedro",
+"line": "Mi ha lasciato i topi.",
+"context": "Clark cerca la battuta per non aprire la lettera."
+},
+{
+"type": "line",
+"speaker": "Pedro",
+"to": "Clark",
+"line": "Leggi.",
+"context": "Pedro lo costringe gentilmente ad affrontare il padre."
+},
+{
+"type": "stage_direction",
+"action": "Clark apre la lettera. La legge in silenzio. Il suo viso cambia appena.",
+"context": "Non serve sentire subito il testo: conta la reazione."
+},
+{
+"type": "line",
+"speaker": "Pedro",
+"to": "Clark",
+"line": "Che dice?",
+"context": "Pedro, pur avendo rispettato la busta, vuole sapere."
+},
+{
+"type": "line",
+"speaker": "Clark",
+"to": "Pedro",
+"line": "Niente.",
+"context": "Clark mente istintivamente."
+},
+{
+"type": "line",
+"speaker": "Pedro",
+"to": "Clark",
+"line": "Clark.",
+"context": "Pedro riconosce la bugia."
+},
+{
+"type": "line",
+"speaker": "Clark",
+"to": "Pedro",
+"line": "Dice che nel capanno ci sono le mie cose.",
+"context": "Clark concede solo il minimo."
+},
+{
+"type": "line",
+"speaker": "Pedro",
+"to": "Clark",
+"line": "Che cose?",
+"context": "Pedro è incuriosito."
+},
+{
+"type": "line",
+"speaker": "Clark",
+"to": "Pedro",
+"line": "Non lo so. Roba vecchia. Spazzatura.",
+"context": "Clark svaluta prima di scoprire."
+},
+{
+"type": "line",
+"speaker": "Pedro",
+"to": "Clark",
+"line": "Allora buttala.",
+"context": "Pedro lo provoca senza alzare la voce."
+},
+{
+"type": "line",
+"speaker": "Clark",
+"to": "Pedro",
+"line": "Non ho detto che la butto.",
+"context": "Clark rivela che gli importa."
+},
+{
+"type": "stage_direction",
+"action": "Pedro apre una birra e la mette davanti a Clark, poi ne apre una per sé.",
+"context": "Primo gesto di tregua."
+},
+{
+"type": "line",
+"speaker": "Pedro",
+"to": "Clark",
+"line": "Hai urinato sulla tomba di nostro padre e io ti sto offrendo una birra. Direi che la famiglia ha fatto passi avanti.",
+"context": "Pedro usa ironia asciutta per allentare la tensione."
+},
+{
+"type": "line",
+"speaker": "Clark",
+"to": "Pedro",
+"line": "Non montarti la testa. È birra scadente.",
+"context": "Clark accetta la tregua senza ammetterlo."
+},
+{
+"type": "line",
+"speaker": "Pedro",
+"to": "Clark",
+"line": "È quella che beveva lui.",
+"context": "Pedro collega il gesto al padre."
+},
+{
+"type": "line",
+"speaker": "Clark",
+"to": "Pedro",
+"line": "Allora era scadente anche lui.",
+"context": "Clark torna subito all’attacco."
+},
+{
+"type": "line",
+"speaker": "Pedro",
+"to": "Clark",
+"line": "Sì.",
+"context": "Pedro sorprende Clark concedendo qualcosa."
+},
+{
+"type": "line",
+"speaker": "Clark",
+"to": "Pedro",
+"line": "Sì?",
+"context": "Clark non si aspettava accordo."
+},
+{
+"type": "line",
+"speaker": "Pedro",
+"to": "Clark",
+"line": "Sì. Era scadente. Era duro, testardo, vigliacco con le parole. Faceva prima a morire che a chiedere scusa.",
+"context": "Pedro ammette i limiti del padre."
+},
+{
+"type": "line",
+"speaker": "Clark",
+"to": "Pedro",
+"line": "Finalmente.",
+"context": "Clark sente di aver ottenuto una crepa nella difesa di Pedro."
+},
+{
+"type": "line",
+"speaker": "Pedro",
+"to": "Clark",
+"line": "Ma è rimasto.",
+"context": "Pedro salva comunque il padre su ciò che per lui conta."
+},
+{
+"type": "line",
+"speaker": "Clark",
+"to": "Pedro",
+"line": "Non tutti restano perché amano. Alcuni restano perché non sanno dove andare.",
+"context": "Clark vede nel padre una forma di immobilità, non devozione."
+},
+{
+"type": "line",
+"speaker": "Pedro",
+"to": "Clark",
+"line": "E alcuni se ne vanno chiamandola libertà, ma è solo fuga con una giacca migliore.",
+"context": "Pedro risponde specularmente."
+},
+{
+"type": "stage_direction",
+"action": "I due bevono in silenzio.",
+"context": "Nessuno vince. La scena respira."
+},
+{
+"type": "line",
+"speaker": "Clark",
+"to": "Pedro",
+"line": "Posso dormire qui stanotte?",
+"context": "Clark chiede qualcosa senza travestirlo da provocazione."
+},
+{
+"type": "line",
+"speaker": "Pedro",
+"to": "Clark",
+"line": "Sul divano.",
+"context": "Pedro concede, ma con un limite."
+},
+{
+"type": "line",
+"speaker": "Clark",
+"to": "Pedro",
+"line": "Il divano è mio per metà?",
+"context": "Clark torna al tema dell’eredità, ma ora è quasi un gioco."
+},
+{
+"type": "line",
+"speaker": "Pedro",
+"to": "Clark",
+"line": "Solo la parte sfondata.",
+"context": "Pedro risponde con la stessa lingua di Clark."
+},
+{
+"type": "stage_direction",
+"action": "Clark sorride appena, poi guarda la chiave sul tavolo.",
+"context": "Il conflitto non è risolto, ma una porta si è aperta."
+},
+{
+"type": "line",
+"speaker": "Clark",
+"to": "Pedro",
+"line": "Domani vado a vedere cosa c’è nel capanno.",
+"context": "Clark decide di affrontare il lascito non economico del padre."
+},
+{
+"type": "line",
+"speaker": "Pedro",
+"to": "Clark",
+"line": "Domani.",
+"context": "Pedro accetta il rinvio come una piccola promessa."
+},
+{
+"type": "stage_direction",
+"action": "La luce della cucina resta accesa. Fuori, nel buio, la lapide è appena visibile.",
+"context": "Finale sospeso: la casa non è pace, ma per ora non è più solo guerra."
+}
+]
+}
+]
 }

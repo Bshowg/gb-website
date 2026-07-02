@@ -1,6 +1,7 @@
 {
   "title": "TG Ribalta",
   "language": "it",
+  "description": "Una nuova puntata di TG Ribalta, il TG più amato della TV!",
   "characters": [
     {
       "name": "Gianni Meraviglia",
@@ -28,13 +29,13 @@
     },
     {
       "name": "Kamalel l'Eradicatore",
-      "description": "Un demone antico come la disperazione. Si occupa di intrattenimento e cronaca rosa."
+      "description": "Un demone antico come la disperazione. Si occupa di intrattenimento e cultura."
     }
   ],
   "scenes": [
     {
       "id": "scene_1",
-      "title": "Apertura e politica",
+      "title": "TG Ribalta",
       "setting": "Studio del TG. Gianni Meraviglia sorride alla telecamera come se avesse appena ricevuto la migliora notizia della sua vita.",
       "beats": [
         {
@@ -146,14 +147,7 @@
           "to": "Telecamera",
           "line": "Lo Sponsor, sempre puntuale e sempre dritto al punto, ahahahah.",
           "context": "Gianni cerca di salvare la faccia del TG."
-        }
-      ]
-    },
-    {
-      "id": "scene_2",
-      "title": "Collegamento estero",
-      "setting": "Studio del TG. Sul maxischermo compare Vince Toombound.",
-      "beats": [
+        },
         {
           "type": "line",
           "speaker": "Gianni Meraviglia",
@@ -251,14 +245,7 @@
           "to": "Gianni Meraviglia",
           "line": "Always, Gianni. Domani ho fissato con il mio amico delle calamite per andare a pescare! A voi la linea!",
           "context": "Vince resta sereno."
-        }
-      ]
-    },
-    {
-      "id": "scene_3",
-      "title": "Cronaca nera e sport",
-      "setting": "Studio del TG. Sulla telecamera appare Tina Mastrotta",
-      "beats": [
+        },
         {
           "type": "line",
           "speaker": "Gianni Meraviglia",
@@ -445,14 +432,7 @@
           "to": "Telecamera",
           "line": "Tutti i tuoi amici sono migliori di te. Tua madre non ti ama.",
           "context": ""
-        }
-      ]
-    },
-    {
-      "id": "scene_4",
-      "title": "Intrattenimento, cronaca rosa e chiusura",
-      "setting": "Studio del TG.",
-      "beats": [
+        },
         {
           "type": "line",
           "speaker": "Gianni Meraviglia",
@@ -563,6 +543,5 @@
         }
       ]
     }
-  ],
-  "description": "Una nuova puntata di TG Ribalta, il TG più amato della TV!"
+  ]
 }
