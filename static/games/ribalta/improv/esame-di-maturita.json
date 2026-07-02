@@ -118,7 +118,7 @@
       "speaker": "Filippo Spicchi",
       "to": "Antonio Cantante",
       "context": "Rispondi su Pirandello. Usa parole come identità, maschera, società, frammentazione.",
-      "constraint": "Devi sembrare incerto ma recuperabile."
+      "constraint": "Devi stare vago ma con tono epico per sembrare che ne sai."
     },
     {
       "speaker": "Antonio Cantante",
@@ -270,8 +270,8 @@
     {
       "speaker": "Antonio La Penna",
       "to": "Antonio Cantante",
-      "context": "Scontrati sui criteri. Contesta la valutazione poetica: serve una griglia, non una redenzione.",
-      "constraint": "Litigio leggero, non personale."
+      "context": "Stai pensando di bocciarlo. Non è stata disastroso come orale ma nemmeno sufficiente",
+      "constraint": "Litigio ma non lo devi bocciare."
     },
     {
       "speaker": "Annachiara Lo Capo",
@@ -316,19 +316,19 @@
       "speaker": "Antonio Cantante",
       "to": "Filippo Spicchi",
       "context": "Chiudi solennemente. Fai una riflessione pomposa sulle maschere della vita.",
-      "constraint": "Breve, altrimenti ti tagliano."
+      "constraint": "Sarai interrotto nella tua riflessione poetica da Antonio La Penna."
     },
     {
       "speaker": "Antonio La Penna",
       "to": "Antonio Cantante",
       "context": "Taglia la poesia. Ricorda che bisogna chiamare il candidato successivo.",
-      "constraint": "La scuola continua."
+      "constraint": "Devi far uscire Spicchi dall'aula."
     },
     {
       "speaker": "Filippo Spicchi",
       "to": "Pubblico",
-      "context": "Esci sopravvissuto. Chiudi sul contrasto tra maturità legale e immaturità reale.",
-      "constraint": "Nessun nuovo colpo di scena."
+      "context": "Esci sopravvissuto. Fai una confidenza intima al Pubblico.",
+      "constraint": "Nessun limite."
     }
   ]
 }
