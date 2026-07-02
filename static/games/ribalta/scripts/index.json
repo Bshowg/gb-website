@@ -5,5 +5,6 @@
   { "folder": "inspettore-candela", "title": "Inspettore Candela" },
   {"file":"il-tutore.json","title":"Il Tutore","actors":3,"scenes":2,"language":"it"},
   { "file": "i-fraticelli.json", "title": "I Fraticelli","actors":4,"scenes":1,"language":"it" },
-  {"folder": "mechapio", "title": "Mecha Padre Pio" }
+  {"folder": "mechapio", "title": "Mecha Padre Pio" },
+  {"file":"tg-ribalta.json","title":"TG Ribalta","actors":7,"scenes":1,"language":"it"}
 ]

@@ -156,6 +156,17 @@ button {
   font-weight: 700;
 }
 
+.scripts-mode-toggle {
+  display: flex;
+  width: 100%;
+  margin: 0.75rem 0 1rem;
+}
+.scripts-mode-toggle button {
+  flex: 1;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.95rem;
+}
+
 .scene-banner {
   background: var(--panel);
   border-left: 4px solid var(--gold);
@@ -571,3 +582,94 @@ button {
   width: auto;
 }
 .tag-input .tag-typer:focus { outline: none; }
+
+/* ---------- Prep view (improv) ---------- */
+
+#prep-content { padding-bottom: 1rem; }
+
+.prep-description {
+  margin: 0 0 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--panel);
+  border-left: 3px solid var(--gold);
+  border-radius: 0.375rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.prep-box {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 0.85rem 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.prep-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.4rem;
+}
+
+.prep-body {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--text);
+}
+
+.prep-list {
+  margin: 0.25rem 0 0;
+  padding-left: 1.25rem;
+  color: var(--text);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+.prep-list li { margin-bottom: 0.3rem; }
+.prep-list li:last-child { margin-bottom: 0; }
+.prep-list strong { color: var(--gold-bright); font-weight: 700; }
+
+.prep-character {
+  --char-color: var(--gold);
+  border-left: 3px solid var(--char-color);
+  padding: 0.6rem 0.75rem;
+  margin: 0.5rem 0;
+  background: var(--bg);
+  border-radius: 0 0.375rem 0.375rem 0;
+}
+.prep-character.mine {
+  background: color-mix(in srgb, var(--char-color) 12%, var(--bg));
+}
+.prep-char-name {
+  color: var(--char-color);
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 0.2rem;
+}
+.prep-char-desc {
+  font-size: 0.9rem;
+  color: var(--text);
+  line-height: 1.45;
+}
+.prep-char-never {
+  margin-top: 0.35rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+.prep-char-never strong { color: var(--muted-cool); }
+
+#start-improv-btn { margin-top: 0.5rem; }
+
+/* Improv beat card: constraint styled as a warning-like footer */
+.beat-card.improv .beat-line {
+  font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+  line-height: 1.45;
+}
+.beat-card.improv .beat-context {
+  font-style: normal;
+  color: var(--muted);
+}

@@ -1,3 +1,6 @@
+const MODE_BASE = { lettura: 'scripts', improv: 'improv' };
+const MODE_KEY = 'ribalta:mode';
+
 const state = {
   manifest: [],
   currentPath: '',
@@ -6,9 +9,13 @@ const state = {
   characters: [],
   sceneIdx: 0,
   beatIdx: 0,
-  mode: 'read',
+  mode: 'lettura',
   previewMode: false,
 };
+
+function isImprovScript() {
+  return state.script && state.script.mode === 'improv';
+}
 
 const CHARACTER_PALETTE = [
   '#e0bd72',
@@ -31,6 +38,7 @@ function characterColor(name) {
 const views = {
   scripts: document.getElementById('view-scripts'),
   characters: document.getElementById('view-characters'),
+  prep: document.getElementById('view-prep'),
   playback: document.getElementById('view-playback'),
   readall: document.getElementById('view-readall'),
   end: document.getElementById('view-end'),
@@ -82,15 +90,23 @@ function lastWordsNoPunctuation(text, n) {
 }
 
 function isUserSpeaker(beat) {
-  if (!state.characters.length || !beat || beat.type !== 'line') return false;
+  if (!state.characters.length || !beat) return false;
+  if (beat.type === 'stage_direction') return false;
   return asArray(beat.speaker).some(s => state.characters.includes(s));
 }
 
 async function loadManifest(path = '') {
-  const res = await fetch(`./scripts/${path}index.json`);
+  const base = MODE_BASE[state.mode] || 'scripts';
+  const res = await fetch(`./${base}/${path}index.json`);
   state.manifest = await res.json();
   state.currentPath = path;
   renderManifestList();
+}
+
+function syncScriptsModeToggle() {
+  document.querySelectorAll('#scripts-mode-toggle button').forEach(b => {
+    b.classList.toggle('active', b.dataset.mode === state.mode);
+  });
 }
 
 function renderManifestList() {
@@ -165,6 +181,8 @@ async function restoreView(s) {
       showView('scripts');
     } else if (s.view === 'characters') {
       showView('characters');
+    } else if (s.view === 'prep') {
+      showView('prep');
     } else if (s.view === 'playback') {
       showView('playback');
     } else if (s.view === 'readall') {
@@ -183,7 +201,8 @@ function enterFolder(entry) {
 }
 
 async function loadScript(entry) {
-  const res = await fetch(`./scripts/${state.currentPath}${entry.file}`);
+  const base = MODE_BASE[state.mode] || 'scripts';
+  const res = await fetch(`./${base}/${state.currentPath}${entry.file}`);
   state.script = await res.json();
   pushNav({ view: 'characters' });
   showCharacterPicker(state.script);
@@ -248,13 +267,15 @@ function showCharacterPicker(script) {
     li.appendChild(btn);
     list.appendChild(li);
   });
-  const liRead = document.createElement('li');
-  const btnRead = document.createElement('button');
-  btnRead.className = 'subtle';
-  btnRead.textContent = 'Solo lettura (nessun personaggio)';
-  btnRead.addEventListener('click', () => startPlayback([]));
-  liRead.appendChild(btnRead);
-  list.appendChild(liRead);
+  if (!isImprovScript()) {
+    const liRead = document.createElement('li');
+    const btnRead = document.createElement('button');
+    btnRead.className = 'subtle';
+    btnRead.textContent = 'Solo lettura (nessun personaggio)';
+    btnRead.addEventListener('click', () => startPlayback([]));
+    liRead.appendChild(btnRead);
+    list.appendChild(liRead);
+  }
 
   startBtn.onclick = () => {
     if (!selected.size) return;
@@ -272,17 +293,27 @@ function startPlayback(characters) {
   state.characters = Array.isArray(characters) ? characters : [];
   state.sceneIdx = 0;
   state.beatIdx = 0;
-  state.mode = 'read';
-  const view = state.characters.length ? 'playback' : 'readall';
+  let view;
+  if (state.characters.length === 0) view = 'readall';
+  else if (isImprovScript()) view = 'prep';
+  else view = 'playback';
   if (history.state && history.state.view !== view) pushNav({ view });
-  if (state.characters.length === 0) {
+  if (view === 'readall') {
     renderReadAll();
     showView('readall');
+  } else if (view === 'prep') {
+    renderPrep();
+    showView('prep');
   } else {
-    syncModeToggle();
     showView('playback');
     render();
   }
+}
+
+function beginImprovPlayback() {
+  if (history.state && history.state.view !== 'playback') pushNav({ view: 'playback' });
+  showView('playback');
+  render();
 }
 
 function renderReadAll() {
@@ -333,21 +364,151 @@ function renderReadAll() {
   window.scrollTo(0, 0);
 }
 
-function syncModeToggle() {
-  document.querySelectorAll('#mode-toggle button').forEach(b => {
-    b.classList.toggle('active', b.dataset.mode === state.mode);
+function renderSpeakerHeader(beat, headerEl) {
+  const tos = asArray(beat.to).join(' & ');
+  headerEl.innerHTML = '';
+  asArray(beat.speaker).forEach((name, i) => {
+    if (i > 0) headerEl.appendChild(document.createTextNode(' & '));
+    const span = document.createElement('span');
+    span.textContent = name;
+    if (state.characters.includes(name)) {
+      span.className = 'speaker-name';
+      span.style.color = characterColor(name);
+    }
+    headerEl.appendChild(span);
   });
+  headerEl.appendChild(document.createTextNode(` → ${tos}`));
+}
+
+function renderPrep() {
+  const p = state.script.preparation || {};
+  document.getElementById('prep-title').textContent = state.script.title;
+  const container = document.getElementById('prep-content');
+  container.innerHTML = '';
+
+  if (state.script.description) {
+    const d = document.createElement('p');
+    d.className = 'prep-description';
+    d.textContent = state.script.description;
+    container.appendChild(d);
+  }
+
+  const meta = [
+    ['Premessa', p.premise],
+    ['Tono', p.tone],
+    ['Titolo tesina', p.tesina_title],
+    ['Finale da preservare', p.ending_to_preserve],
+  ];
+  meta.forEach(([label, val]) => {
+    if (!val) return;
+    container.appendChild(prepBox(label, val));
+  });
+
+  if (Array.isArray(p.continuity_rules) && p.continuity_rules.length) {
+    container.appendChild(prepListBox('Regole di continuità', p.continuity_rules));
+  }
+
+  if (Array.isArray(p.scene_flow) && p.scene_flow.length) {
+    const box = document.createElement('div');
+    box.className = 'prep-box';
+    const lab = document.createElement('div');
+    lab.className = 'prep-label';
+    lab.textContent = 'Struttura delle scene';
+    box.appendChild(lab);
+    const ol = document.createElement('ol');
+    ol.className = 'prep-list';
+    p.scene_flow.forEach(sf => {
+      const li = document.createElement('li');
+      const scene = state.script.scenes.find(s => s.id === sf.scene);
+      const title = scene ? scene.title : sf.scene;
+      const strong = document.createElement('strong');
+      strong.textContent = title;
+      li.appendChild(strong);
+      li.appendChild(document.createTextNode(` — ${sf.summary}`));
+      ol.appendChild(li);
+    });
+    box.appendChild(ol);
+    container.appendChild(box);
+  }
+
+  const chBox = document.createElement('div');
+  chBox.className = 'prep-box';
+  const chLab = document.createElement('div');
+  chLab.className = 'prep-label';
+  chLab.textContent = 'Personaggi';
+  chBox.appendChild(chLab);
+  state.script.characters.forEach(c => {
+    const row = document.createElement('div');
+    row.className = 'prep-character';
+    row.style.setProperty('--char-color', characterColor(c.name));
+    if (state.characters.includes(c.name)) row.classList.add('mine');
+    const nm = document.createElement('div');
+    nm.className = 'prep-char-name';
+    nm.textContent = c.name;
+    row.appendChild(nm);
+    if (c.description) {
+      const d = document.createElement('div');
+      d.className = 'prep-char-desc';
+      d.textContent = c.description;
+      row.appendChild(d);
+    }
+    if (c.never_do) {
+      const nd = document.createElement('div');
+      nd.className = 'prep-char-never';
+      const strong = document.createElement('strong');
+      strong.textContent = 'Da non fare: ';
+      nd.appendChild(strong);
+      nd.appendChild(document.createTextNode(c.never_do));
+      row.appendChild(nd);
+    }
+    chBox.appendChild(row);
+  });
+  container.appendChild(chBox);
+
+  window.scrollTo(0, 0);
+}
+
+function prepBox(label, val) {
+  const box = document.createElement('div');
+  box.className = 'prep-box';
+  const lab = document.createElement('div');
+  lab.className = 'prep-label';
+  lab.textContent = label;
+  const body = document.createElement('div');
+  body.className = 'prep-body';
+  body.textContent = val;
+  box.appendChild(lab);
+  box.appendChild(body);
+  return box;
+}
+
+function prepListBox(label, items) {
+  const box = document.createElement('div');
+  box.className = 'prep-box';
+  const lab = document.createElement('div');
+  lab.className = 'prep-label';
+  lab.textContent = label;
+  box.appendChild(lab);
+  const ul = document.createElement('ul');
+  ul.className = 'prep-list';
+  items.forEach(it => {
+    const li = document.createElement('li');
+    li.textContent = it;
+    ul.appendChild(li);
+  });
+  box.appendChild(ul);
+  return box;
 }
 
 function render() {
   const scene = currentScene();
   const beat = currentBeat();
+  const improv = isImprovScript();
   const card = document.getElementById('beat-card');
   const banner = document.getElementById('scene-banner');
   const headerEl = document.getElementById('beat-header');
   const lineEl = document.getElementById('beat-line');
   const contextEl = document.getElementById('beat-context');
-  const peekBtn = document.getElementById('peek-btn');
   const upNext = document.getElementById('up-next');
 
   if (state.beatIdx === 0) {
@@ -360,49 +521,40 @@ function render() {
     } else {
       musicRow.classList.add('hidden');
     }
+    const prepRow = document.getElementById('scene-prep-row');
+    if (scene.scene_prep) {
+      document.getElementById('scene-prep').textContent = scene.scene_prep;
+      prepRow.classList.remove('hidden');
+    } else {
+      prepRow.classList.add('hidden');
+    }
     banner.classList.remove('hidden');
   } else {
     banner.classList.add('hidden');
   }
 
-  card.classList.remove('mine', 'stage-direction');
-  peekBtn.classList.add('hidden');
+  card.classList.remove('mine', 'stage-direction', 'improv');
+  if (improv) card.classList.add('improv');
 
   if (beat.type === 'stage_direction') {
     card.classList.add('stage-direction');
     headerEl.textContent = 'Indicazione scenica';
     lineEl.textContent = beat.action || '';
+    lineEl.classList.remove('hidden');
     contextEl.textContent = beat.context || '';
   } else {
     const mine = isUserSpeaker(beat);
-    const tos = asArray(beat.to).join(' & ');
-    headerEl.innerHTML = '';
-    asArray(beat.speaker).forEach((name, i) => {
-      if (i > 0) headerEl.appendChild(document.createTextNode(' & '));
-      const span = document.createElement('span');
-      span.textContent = name;
-      if (state.characters.includes(name)) {
-        span.className = 'speaker-name';
-        span.style.color = characterColor(name);
-      }
-      headerEl.appendChild(span);
-    });
-    headerEl.appendChild(document.createTextNode(` → ${tos}`));
+    renderSpeakerHeader(beat, headerEl);
     if (mine) card.classList.add('mine');
-    if (state.mode === 'read') {
-      const cue = lastWordsNoPunctuation(beatText(prevBeat()), 4);
-      contextEl.textContent = cue ? `… ${cue}` : '';
-    } else {
-      contextEl.textContent = beat.context || '';
-    }
-
-    if (mine && state.mode === 'improv') {
-      lineEl.textContent = '';
-      lineEl.classList.add('hidden');
-      peekBtn.classList.remove('hidden');
+    if (improv) {
+      lineEl.textContent = beat.context || '';
+      lineEl.classList.remove('hidden');
+      contextEl.textContent = beat.constraint ? `Vincolo: ${beat.constraint}` : '';
     } else {
       lineEl.textContent = beat.line || '';
       lineEl.classList.remove('hidden');
+      const cue = lastWordsNoPunctuation(beatText(prevBeat()), 4);
+      contextEl.textContent = cue ? `… ${cue}` : '';
     }
   }
 
@@ -479,19 +631,21 @@ document.getElementById('back-from-readall').addEventListener('click', () => his
 document.getElementById('advance-btn').addEventListener('click', advance);
 document.getElementById('back-btn-beat').addEventListener('click', goBack);
 document.getElementById('skip-btn-user').addEventListener('click', skipToNextUserBeat);
-document.getElementById('peek-btn').addEventListener('click', () => {
-  const beat = currentBeat();
-  const lineEl = document.getElementById('beat-line');
-  lineEl.textContent = beat.line || '';
-  lineEl.classList.remove('hidden');
-  document.getElementById('peek-btn').classList.add('hidden');
-});
-document.getElementById('mode-toggle').addEventListener('click', e => {
+document.getElementById('back-from-prep').addEventListener('click', () => history.back());
+document.getElementById('start-improv-btn').addEventListener('click', beginImprovPlayback);
+document.getElementById('scripts-mode-toggle').addEventListener('click', e => {
   const btn = e.target.closest('button[data-mode]');
   if (!btn) return;
-  state.mode = btn.dataset.mode;
-  syncModeToggle();
-  render();
+  const newMode = btn.dataset.mode;
+  if (newMode === state.mode) return;
+  state.mode = newMode;
+  localStorage.setItem(MODE_KEY, newMode);
+  state.currentPath = '';
+  state.folderStack = [];
+  syncScriptsModeToggle();
+  loadManifest('').then(() => {
+    replaceNav({ view: 'scripts', path: '' });
+  });
 });
 document.getElementById('restart-btn').addEventListener('click', () => {
   startPlayback(state.characters);
@@ -500,6 +654,10 @@ document.getElementById('restart-btn').addEventListener('click', () => {
 window.addEventListener('popstate', e => restoreView(e.state));
 
 (function bootstrap() {
+  const savedMode = localStorage.getItem(MODE_KEY);
+  if (savedMode && MODE_BASE[savedMode]) state.mode = savedMode;
+  syncScriptsModeToggle();
+
   const params = new URLSearchParams(location.search);
   if (params.get('preview') === '1') {
     const raw = localStorage.getItem('ribalta:preview');

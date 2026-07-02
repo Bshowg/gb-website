@@ -11,6 +11,10 @@
 
     <section id="view-scripts">
       <img class="hero" src="./images/hero.png" alt="Ribalta">
+      <div class="mode-toggle scripts-mode-toggle" id="scripts-mode-toggle">
+        <button data-mode="lettura" class="active">Lettura</button>
+        <button data-mode="improv">Improvvisa</button>
+      </div>
       <div class="top-bar hidden" id="scripts-top-bar">
         <button class="back-btn" id="folder-back-btn">← Cartella superiore</button>
       </div>
@@ -33,22 +37,18 @@
     <section id="view-playback" class="hidden">
       <div class="top-bar">
         <button class="back-btn" id="back-to-characters">← Cambia personaggio</button>
-        <div class="mode-toggle" id="mode-toggle">
-          <button data-mode="read" class="active">Lettura</button>
-          <button data-mode="improv">Improvvisa</button>
-        </div>
       </div>
 
       <div class="scene-banner hidden" id="scene-banner">
         <div class="title" id="scene-title"></div>
         <div class="row"><span class="label">Ambientazione:</span> <span id="scene-setting"></span></div>
         <div class="row hidden" id="scene-music-row"><span class="label">Musica:</span> <span id="scene-music"></span></div>
+        <div class="row hidden" id="scene-prep-row"><span class="label">Preparazione:</span> <span id="scene-prep"></span></div>
       </div>
 
       <div class="beat-card" id="beat-card">
         <div class="beat-header" id="beat-header"></div>
         <div class="beat-line" id="beat-line"></div>
-        <button class="peek-btn hidden" id="peek-btn">Sbircia la battuta</button>
         <div class="beat-context" id="beat-context"></div>
       </div>
 
@@ -59,6 +59,15 @@
         <button class="nav-btn" id="back-btn-beat">← Indietro</button>
         <button class="nav-btn" id="skip-btn-user">Prossima battuta →</button>
       </div>
+    </section>
+
+    <section id="view-prep" class="hidden">
+      <div class="top-bar">
+        <button class="back-btn" id="back-from-prep">← Cambia personaggio</button>
+      </div>
+      <h1 id="prep-title"></h1>
+      <div id="prep-content"></div>
+      <button class="advance-btn" id="start-improv-btn">Comincia la scena</button>
     </section>
 
     <section id="view-readall" class="hidden">
