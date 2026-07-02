@@ -396,7 +396,6 @@ function renderPrep() {
   const meta = [
     ['Premessa', p.premise],
     ['Tono', p.tone],
-    ['Titolo tesina', p.tesina_title],
     ['Finale da preservare', p.ending_to_preserve],
   ];
   meta.forEach(([label, val]) => {
