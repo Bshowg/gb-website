@@ -698,7 +698,7 @@ button {
 .improv-fabs {
   position: fixed;
   right: 0.75rem;
-  bottom: 7rem;
+  bottom: 1rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
