@@ -1,0 +1,245 @@
+{
+"title": "Una coppa di vino",
+"language": "it",
+"description": "Nei primi anni della dinastia Song (circa anno 1000 DC), l’imperatore Taizu invita due vecchi compagni d’armi, i generali Shi Shouxin e Wang Shenqi, a un banchetto privato nel palazzo di Kaifeng. Tra vino, memoria militare e parole misurate, Taizu li conduce a comprendere che il nuovo impero non potrà sopravvivere se il potere dell’esercito resterà nelle mani degli stessi uomini che lo hanno fondato.",
+"characters": [
+{
+"name": "Imperatore Taizu",
+"description": "Zhao Kuangyin, fondatore della dinastia Song. Ex comandante militare, ora imperatore. Parla con calma, ma ogni frase è una mossa politica."
+},
+{
+"name": "Shi Shouxin",
+"description": "Generale veterano della Guardia imperiale. Fedele a Taizu, ma consapevole che il proprio potere militare lo rende pericoloso agli occhi della corte."
+},
+{
+"name": "Wang Shenqi",
+"description": "Generale esperto, compagno d’armi di Taizu. Più prudente di Shi, comprende prima degli altri dove l’imperatore vuole arrivare."
+}
+],
+"scenes": [
+{
+"id": "scene_1",
+"title": "Il banchetto dopo l’udienza",
+"setting": "Palazzo imperiale di Kaifeng, sala interna. È sera. Non è una grande udienza pubblica, ma un banchetto privato dopo gli affari di corte. Una tavola bassa, vino caldo, lampade a olio. Alcuni servitori restano lontani. Taizu siede senza armatura; i due generali portano abiti formali da ufficiali, non tenuta da battaglia.",
+"beats": [
+{
+"type": "stage_direction",
+"action": "Shi Shouxin e Wang Shenqi entrano, si inchinano con rispetto ma non si gettano a terra. Taizu li invita a sedere.",
+"context": "La scena deve evitare gesti troppo tardi-imperiali: non è una corte Qing, ma un incontro Song sobrio e controllato."
+},
+{
+"type": "line",
+"speaker": "Imperatore Taizu",
+"to": ["Shi Shouxin", "Wang Shenqi"],
+"line": "Sedete. Questa sera non voglio parlare con titoli, sigilli e memoriali. Voglio bere con uomini che hanno marciato con me quando il destino non portava ancora il nome di Song.",
+"context": "Taizu apre con familiarità calcolata: ricorda il passato militare comune per abbassare le difese dei generali."
+},
+{
+"type": "line",
+"speaker": "Shi Shouxin",
+"to": "Imperatore Taizu",
+"line": "Vostra Maestà ci onora oltre misura. Noi siamo vostri servitori: prima sotto le insegne, ora sotto il Cielo che vi ha scelto.",
+"context": "Shi risponde con lealtà formale, usando il linguaggio politico del mandato celeste."
+},
+{
+"type": "line",
+"speaker": "Wang Shenqi",
+"to": "Imperatore Taizu",
+"line": "La pace della capitale dipende dalla vostra virtù. Se il vino è offerto da Vostra Maestà, anche il silenzio diventa un ordine lieto.",
+"context": "Wang è più cauto: elogia l’imperatore ma segnala che capisce la natura politica dell’invito."
+},
+{
+"type": "line",
+"speaker": "Imperatore Taizu",
+"to": ["Shi Shouxin", "Wang Shenqi"],
+"line": "Il silenzio non mi serve. Ne ho già troppo durante le udienze. Tutti mi chiamano Figlio del Cielo, ma nessuno mi dice quanto pesa il Cielo quando cala sulle spalle.",
+"context": "Taizu introduce il proprio disagio: è una confessione apparente, ma prepara il tema della minaccia interna."
+},
+{
+"type": "line",
+"speaker": "Shi Shouxin",
+"to": "Imperatore Taizu",
+"line": "Chi oserebbe turbare il vostro riposo? Le armate della Guardia sono salde. I passi nelle vie di Kaifeng obbediscono al tamburo imperiale.",
+"context": "Shi interpreta il timore come minaccia esterna o disordine cittadino."
+},
+{
+"type": "line",
+"speaker": "Imperatore Taizu",
+"to": "Shi Shouxin",
+"line": "È proprio questo che mi toglie il sonno: le armate sono salde. Gli uomini sono fedeli. I tamburi rispondono. Così era anche prima che io salissi al trono.",
+"context": "Taizu allude alla propria ascesa militare senza nominarla apertamente."
+},
+{
+"type": "line",
+"speaker": "Wang Shenqi",
+"to": "Imperatore Taizu",
+"line": "Vostra Maestà parla del tempo in cui il comando di un esercito poteva mutare il destino di una dinastia.",
+"context": "Wang capisce il riferimento alla transizione dai Cinque Regni e alla presa del potere da parte di Taizu."
+},
+{
+"type": "line",
+"speaker": "Imperatore Taizu",
+"to": "Wang Shenqi",
+"line": "Io parlo del fatto che gli uomini dormono, ma le insegne no. Una veste gialla può essere gettata sulle spalle di un uomo anche quando quell’uomo dice di non volerla.",
+"context": "Riferimento velato alla propria proclamazione imperiale, presentata come qualcosa che può accadere anche contro la volontà personale."
+},
+{
+"type": "line",
+"speaker": "Shi Shouxin",
+"to": "Imperatore Taizu",
+"line": "Noi non siamo uomini da tradimento. I nostri figli mangiano grazie alla vostra grazia, i nostri nomi vivono grazie alla vostra fiducia.",
+"context": "Shi si difende direttamente: prende la frase di Taizu come un sospetto personale."
+},
+{
+"type": "line",
+"speaker": "Imperatore Taizu",
+"to": "Shi Shouxin",
+"line": "Lo so. Se temessi il vostro cuore, non vi avrei chiamati al vino. Temo il cuore degli altri: soldati, attendenti, parenti, uomini che sussurrano quando un generale vittorioso passa davanti a loro.",
+"context": "Taizu distingue tra lealtà personale e pericolo strutturale: anche un generale fedele può diventare centro di ambizioni altrui."
+},
+{
+"type": "line",
+"speaker": "Wang Shenqi",
+"to": "Imperatore Taizu",
+"line": "Un comandante può tenere ferma la propria mano, ma non sempre può tenere ferme le mani di chi gli sta dietro.",
+"context": "Wang riconosce il punto dell’imperatore senza ancora cedere esplicitamente."
+},
+{
+"type": "line",
+"speaker": "Imperatore Taizu",
+"to": ["Shi Shouxin", "Wang Shenqi"],
+"line": "Avete combattuto abbastanza da sapere che una freccia non chiede consiglio all’arciere dopo essere partita. Così è il potere militare: una volta teso l’arco, non sempre torna nella faretra.",
+"context": "Taizu usa una metafora militare comprensibile ai generali."
+},
+{
+"type": "stage_direction",
+"action": "Taizu versa personalmente il vino nelle coppe dei due generali. Il gesto è cortese, ma mette i generali in una posizione impossibile: rifiutare sarebbe scortesia, accettare significa entrare nel suo gioco.",
+"context": "Il vino diventa strumento politico, non semplice convivialità."
+},
+{
+"type": "line",
+"speaker": "Shi Shouxin",
+"to": "Imperatore Taizu",
+"line": "Vostra Maestà ci offre vino, ma le vostre parole pesano come ferro. Diteci allora quale colpa dobbiamo lavar via.",
+"context": "Shi è diretto, quasi ferito. Vuole trasformare il sospetto in accusa chiara."
+},
+{
+"type": "line",
+"speaker": "Imperatore Taizu",
+"to": "Shi Shouxin",
+"line": "Nessuna colpa. È questo il punto. Se foste colpevoli, basterebbe una sentenza. Ma voi siete meritevoli, e i meriti sono più difficili da governare delle colpe.",
+"context": "Taizu spiega la logica politica: il problema non è punire, ma prevenire."
+},
+{
+"type": "line",
+"speaker": "Wang Shenqi",
+"to": "Imperatore Taizu",
+"line": "I meriti radunano uomini. Gli uomini radunano aspettative. Le aspettative radunano pericoli.",
+"context": "Wang completa il ragionamento, ormai vicino alla decisione."
+},
+{
+"type": "line",
+"speaker": "Imperatore Taizu",
+"to": "Wang Shenqi",
+"line": "E i pericoli costringono un sovrano a scegliere tra gratitudine e sospetto. Io non voglio diventare un imperatore che uccide i propri fratelli d’armi per poter dormire.",
+"context": "Taizu si presenta come benevolo, ma fa capire che l’alternativa alla rinuncia potrebbe essere violenta."
+},
+{
+"type": "line",
+"speaker": "Shi Shouxin",
+"to": "Wang Shenqi",
+"line": "Fratello Wang, senti anche tu il passo della tigre dietro la porta?",
+"context": "Shi capisce finalmente che non è un invito, ma un passaggio obbligato."
+},
+{
+"type": "line",
+"speaker": "Wang Shenqi",
+"to": "Shi Shouxin",
+"line": "Lo sento. Ma la tigre non è dietro la porta. È nella natura stessa del comando.",
+"context": "Wang mantiene dignità e lucidità: non accusa Taizu, accetta la logica del potere."
+},
+{
+"type": "line",
+"speaker": "Imperatore Taizu",
+"to": ["Shi Shouxin", "Wang Shenqi"],
+"line": "Avete terre? Avrete terre più quiete. Avete figli? Li legheremo alla casa imperiale con matrimoni onorevoli. Avete desiderio di ricchezza? La ricchezza non mancherà. Ma lasciate che le armi appartengano al trono, non agli uomini.",
+"context": "Taizu offre la soluzione storicamente coerente: ricchezza, onori, sicurezza familiare in cambio del ritiro dal comando effettivo."
+},
+{
+"type": "line",
+"speaker": "Shi Shouxin",
+"to": "Imperatore Taizu",
+"line": "Vostra Maestà ci chiede di deporre il comando prima che il comando deponga noi.",
+"context": "Shi formula la verità della scena."
+},
+{
+"type": "line",
+"speaker": "Imperatore Taizu",
+"to": "Shi Shouxin",
+"line": "Vi chiedo di invecchiare ricchi, vivi e onorati. È più di quanto gli ultimi decenni abbiano concesso a molti generali.",
+"context": "Taizu richiama implicitamente l’instabilità del periodo precedente alla Song."
+},
+{
+"type": "line",
+"speaker": "Wang Shenqi",
+"to": "Imperatore Taizu",
+"line": "Se domani presentassimo memoriale chiedendo il congedo dai comandi, Vostra Maestà lo giudicherebbe atto di prudenza o di paura?",
+"context": "Wang negozia il modo in cui la rinuncia sarà registrata: vuole preservare l’onore."
+},
+{
+"type": "line",
+"speaker": "Imperatore Taizu",
+"to": "Wang Shenqi",
+"line": "Lo giudicherei atto di saggezza. E la corte saprebbe che chi serve la dinastia non serve solo con la spada, ma anche sapendo quando riporla.",
+"context": "Taizu garantisce una narrazione onorevole."
+},
+{
+"type": "line",
+"speaker": "Shi Shouxin",
+"to": "Imperatore Taizu",
+"line": "Allora domani il vostro servo chiederà di lasciare il comando della Guardia. Non perché il cuore vacilli, ma perché non vacilli l’impero.",
+"context": "Shi accetta, salvando la propria lealtà."
+},
+{
+"type": "line",
+"speaker": "Wang Shenqi",
+"to": "Imperatore Taizu",
+"line": "Anch’io presenterò memoriale. Se le nostre insegne devono scendere perché la dinastia Song resti alta, che scendano senza rumore.",
+"context": "Wang accetta con tono più politico e rassegnato."
+},
+{
+"stage_direction": "Taizu solleva la coppa. I generali lo imitano.",
+"type": "stage_direction",
+"action": "Taizu solleva la coppa. I generali lo imitano.",
+"context": "Il gesto conclude l’accordo: non serve un decreto pronunciato in scena."
+},
+{
+"type": "line",
+"speaker": "Imperatore Taizu",
+"to": ["Shi Shouxin", "Wang Shenqi"],
+"line": "Alla pace nelle case, alla quiete nei campi, alla lunga vita dei vecchi compagni.",
+"context": "Brindisi volutamente domestico: Taizu sposta i generali dal mondo della guerra a quello della famiglia e della ricchezza privata."
+},
+{
+"type": "line",
+"speaker": "Shi Shouxin",
+"to": "Imperatore Taizu",
+"line": "Alla lunga vita di Vostra Maestà.",
+"context": "Formula leale, semplice."
+},
+{
+"type": "line",
+"speaker": "Wang Shenqi",
+"to": "Imperatore Taizu",
+"line": "E alla dinastia che oggi impara a sopravvivere ai propri vincitori.",
+"context": "Chiusura più amara e storicamente consapevole."
+},
+{
+"type": "stage_direction",
+"action": "Bevono. Fuori dalla sala, lontanissimi, si sente il cambio della guardia. Taizu resta immobile con la coppa vuota in mano.",
+"context": "Finale sospeso: la pace interna è stata comprata, ma anche il rapporto tra trono ed esercito è cambiato per sempre."
+}
+]
+}
+]
+}

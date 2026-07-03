@@ -1,0 +1,351 @@
+{
+"title": "Nella Sala della Preservazione dell’Armonia",
+"language": "it",
+"description": "Pechino, Città Proibita, ultimi anni del regno di Qianlong (fine XVIII secolo). Durante l’esame di palazzo, l’imperatore interroga un candidato jinshi sul governo dell’impero. Accanto a lui siedono un gran segretario mancese e un accademico Hanlin. Le parole sembrano un esercizio letterario, ma ogni citazione dai Classici diventa una prova politica.",
+"characters": [
+{
+"name": "Imperatore Qianlong",
+"description": "Sovrano della dinastia Qing. Colto, teatrale, consapevole del proprio ruolo di imperatore universale e custode dei Classici. Non ama essere contraddetto, ma apprezza l’eleganza della contraddizione ben mascherata."
+},
+{
+"name": "Fuca Mingliang",
+"description": "Gran segretario mancese. Fedele alla casa imperiale, attento alla forma rituale e ai segnali di pericolo politico. Interviene poco, ma ogni intervento pesa."
+},
+{
+"name": "Liu Wenheng",
+"description": "Accademico Hanlin cinese. Letterato raffinato, incaricato di leggere e commentare gli elaborati dei candidati. Conosce il potere delle parole e il rischio delle parole."
+},
+{
+"name": "Zhang Shiyu",
+"description": "Candidato all’esame di palazzo. Giovane, brillante, teso. Sa che deve citare i Classici, ma sa anche che alcune citazioni possono sembrare rimproveri all’imperatore."
+}
+],
+"scenes": [
+{
+"id": "scene_1",
+"title": "Il tema dell’impero",
+"setting": "Baohe Dian, Sala della Preservazione dell’Armonia, Città Proibita. È mattina. I candidati sono allineati in silenzio. Sulla grande sala pendono drappi imperiali. Al centro, l’imperatore Qianlong siede sopraelevato. Davanti a lui: tavole con elaborati, pennelli, sigilli. Fuca Mingliang e Liu Wenheng stanno poco più in basso. Zhang Shiyu viene chiamato avanti.",
+"beats": [
+{
+"type": "stage_direction",
+"action": "Zhang Shiyu avanza, si inginocchia e compie il saluto rituale. Non guarda direttamente l’imperatore.",
+"context": "Nella corte Qing la postura del corpo è parte del linguaggio politico. Zhang è sotto esame ancora prima di parlare."
+},
+{
+"type": "line",
+"speaker": "Fuca Mingliang",
+"to": "Zhang Shiyu",
+"line": "Il candidato Zhang Shiyu, della provincia del Jiangnan, si presenta davanti al Figlio del Cielo.",
+"context": "Annuncio formale. Il nome e la provincia ricordano che il candidato viene da un’area colta ma politicamente sensibile."
+},
+{
+"type": "line",
+"speaker": "Imperatore Qianlong",
+"to": "Zhang Shiyu",
+"line": "Alzate il capo quanto basta per ascoltare, non tanto da dimenticare dove siete.",
+"context": "Qianlong stabilisce subito il rapporto: benevolenza controllata, autorità assoluta."
+},
+{
+"type": "line",
+"speaker": "Zhang Shiyu",
+"to": "Imperatore Qianlong",
+"line": "Il vostro servo ascolta tremando.",
+"context": "Formula umile, adatta al contesto."
+},
+{
+"type": "line",
+"speaker": "Imperatore Qianlong",
+"to": "Zhang Shiyu",
+"line": "Nel vostro elaborato scrivete: “Governare con la virtù è come la Stella Polare”. Dunque ditemi: se la Stella Polare resta ferma, perché l’impero richiede tanti editti?",
+"context": "Qianlong cita Confucio e trasforma la citazione in una trappola: vuole vedere se il candidato sa distinguere virtù morale e amministrazione concreta."
+},
+{
+"type": "line",
+"speaker": "Zhang Shiyu",
+"to": "Imperatore Qianlong",
+"line": "Maestà, la Stella Polare resta ferma, ma gli uomini sotto il Cielo non sono stelle. Confucio dice anche: “Guidarli con la virtù, ordinarli con il rito”. L’editto è il pennello; la virtù è l’inchiostro. Senza inchiostro, il tratto resta secco.",
+"context": "Risposta elegante: non oppone legge e virtù, ma subordina il comando morale all’ordine rituale."
+},
+{
+"type": "line",
+"speaker": "Liu Wenheng",
+"to": "Imperatore Qianlong",
+"line": "Il candidato non separa il governo dalla coltivazione morale. È una lettura ortodossa.",
+"context": "Liu lo difende, ma con prudenza: dice che è ortodosso, non che è audace."
+},
+{
+"type": "line",
+"speaker": "Fuca Mingliang",
+"to": "Zhang Shiyu",
+"line": "Molti candidati sanno citare. Pochi sanno fermarsi prima che la citazione diventi superbia.",
+"context": "Mingliang avverte Zhang: l’erudizione può sembrare arroganza davanti al sovrano."
+},
+{
+"type": "line",
+"speaker": "Imperatore Qianlong",
+"to": "Zhang Shiyu",
+"line": "Allora continuate. Nel tema parlate di tasse, carestie e magazzini pubblici. Perché portare il grano del popolo davanti al trono?",
+"context": "Qianlong sposta il discorso su amministrazione e responsabilità imperiale."
+},
+{
+"type": "line",
+"speaker": "Zhang Shiyu",
+"to": "Imperatore Qianlong",
+"line": "Perché Mencio insegna: “Chi ha mezzi stabili ha cuore stabile; chi non li ha, non ha cuore stabile”. Dove il popolo digiuna, la legge arriva tardi e la colpa arriva presto.",
+"context": "Zhang cita Mencio per sostenere che la moralità dipende anche da condizioni materiali."
+},
+{
+"type": "line",
+"speaker": "Fuca Mingliang",
+"to": "Zhang Shiyu",
+"line": "State dicendo che il crimine del suddito nasce dal difetto del governo?",
+"context": "Mingliang individua il rischio politico della frase."
+},
+{
+"type": "line",
+"speaker": "Zhang Shiyu",
+"to": "Fuca Mingliang",
+"line": "Dico solo che il contadino affamato non legge il Codice prima di rubare una ciotola di riso.",
+"context": "Zhang risponde in modo concreto, rischiando ma senza accusare direttamente il trono."
+},
+{
+"type": "stage_direction",
+"action": "Nella sala cala un silenzio breve. Liu Wenheng abbassa gli occhi. Qianlong osserva Zhang con interesse.",
+"context": "La risposta è vera, ma pericolosa."
+},
+{
+"type": "line",
+"speaker": "Imperatore Qianlong",
+"to": "Zhang Shiyu",
+"line": "Avete lingua sottile. Sottile come carta di riso: ci si può scrivere un classico o un’accusa.",
+"context": "Qianlong riconosce la qualità letteraria e il pericolo politico."
+},
+{
+"type": "line",
+"speaker": "Zhang Shiyu",
+"to": "Imperatore Qianlong",
+"line": "Il vostro servo non osa accusare. Il Libro dei Documenti dice: “Il Cielo vede come vede il popolo, il Cielo ascolta come ascolta il popolo”. Io non porto accuse: porto orecchie.",
+"context": "Zhang usa una citazione forte: il popolo come tramite del Cielo. È legittima, ma molto audace davanti all’imperatore."
+},
+{
+"type": "line",
+"speaker": "Fuca Mingliang",
+"to": "Liu Wenheng",
+"line": "Accademico Liu, questa frase è nel canone o nella gola del candidato?",
+"context": "Mingliang vuole capire se può accusare Zhang di usare i Classici come critica politica."
+},
+{
+"type": "line",
+"speaker": "Liu Wenheng",
+"to": "Fuca Mingliang",
+"line": "È nel canone, Eccellenza. Ma anche il canone, quando viene letto ad alta voce, cambia temperatura.",
+"context": "Liu riconosce che una citazione ortodossa può diventare politicamente scomoda."
+},
+{
+"type": "line",
+"speaker": "Imperatore Qianlong",
+"to": "Liu Wenheng",
+"line": "E voi, Hanlin, quale temperatura sentite?",
+"context": "Qianlong testa anche Liu: nessuno è semplice spettatore."
+},
+{
+"type": "line",
+"speaker": "Liu Wenheng",
+"to": "Imperatore Qianlong",
+"line": "Quella del Grande Studio, Maestà: “Il percorso del Grande Studio consiste nel rendere chiara la virtù, rinnovare il popolo, fermarsi al sommo bene” — rendere chiara la virtù, rinnovare il popolo, fermarsi al sommo bene. Il candidato ha ricordato la seconda parte. Vostra Maestà incarna la prima.",
+"context": "Liu salva la situazione con una citazione che lusinga Qianlong e rimette il sovrano al centro."
+},
+{
+"type": "line",
+"speaker": "Imperatore Qianlong",
+"to": "Liu Wenheng",
+"line": "Sapete lucidare una lama senza tagliarvi.",
+"context": "Qianlong apprezza l’abilità retorica di Liu."
+},
+{
+"type": "line",
+"speaker": "Imperatore Qianlong",
+"to": "Zhang Shiyu",
+"line": "Candidato Zhang, conoscete il Libro delle Odi?",
+"context": "Cambio apparente di tema, ma sempre dentro la prova letteraria."
+},
+{
+"type": "line",
+"speaker": "Zhang Shiyu",
+"to": "Imperatore Qianlong",
+"line": "Lo studio da quando ero bambino. Confucio disse: “Trecento poesie, una sola frase le contiene: pensiero senza stortura”.",
+"context": "Zhang cita i Dialoghi su come leggere il Libro delle Odi."
+},
+{
+"type": "line",
+"speaker": "Imperatore Qianlong",
+"to": "Zhang Shiyu",
+"line": "Allora recitate l’inizio.",
+"context": "Qianlong chiede un classico elementare: è una prova di controllo, non di memoria."
+},
+{
+"type": "line",
+"speaker": "Zhang Shiyu",
+"to": "Imperatore Qianlong",
+"line": "“Gli uccelli gridano sull’isola del fiume; la giovane virtuosa è degna compagna del principe.”",
+"context": "Citazione dal primo poema del Libro delle Odi. In un esame di corte, anche una poesia d’amore diventa discorso sull’ordine morale."
+},
+{
+"type": "line",
+"speaker": "Imperatore Qianlong",
+"to": "Zhang Shiyu",
+"line": "E che c’entra una fanciulla con i magazzini del grano?",
+"context": "Qianlong vuole vedere se Zhang sa interpretare, non solo recitare."
+},
+{
+"type": "line",
+"speaker": "Zhang Shiyu",
+"to": "Imperatore Qianlong",
+"line": "C’entra l’armonia, Maestà. Nel poema il desiderio non diventa disordine perché è trattenuto dal rito. Così nel governo: fame, ambizione e paura esistono; il compito del sovrano non è fingere che non esistano, ma accordarle come qin e se.",
+"context": "Zhang interpreta la poesia in chiave politica, come avrebbe fatto un letterato confuciano."
+},
+{
+"type": "line",
+"speaker": "Fuca Mingliang",
+"to": "Zhang Shiyu",
+"line": "Parlate come se il popolo fosse uno strumento e il sovrano dovesse temere di spezzarne le corde.",
+"context": "Mingliang formula il sospetto in termini conservatori."
+},
+{
+"type": "line",
+"speaker": "Zhang Shiyu",
+"to": "Fuca Mingliang",
+"line": "Non temere, Eccellenza. Accordare.",
+"context": "Risposta breve, controllata."
+},
+{
+"type": "line",
+"speaker": "Imperatore Qianlong",
+"to": "Zhang Shiyu",
+"line": "E se uno strumento suona contro il palazzo?",
+"context": "Qianlong porta la metafora al punto politico: ribellione e dissenso."
+},
+{
+"type": "line",
+"speaker": "Zhang Shiyu",
+"to": "Imperatore Qianlong",
+"line": "Allora bisogna chiedersi se la corda è ribelle o se il legno si è deformato nell’umidità.",
+"context": "Zhang rischia moltissimo: suggerisce che il disordine può venire dal governo, non solo dal popolo."
+},
+{
+"type": "stage_direction",
+"action": "Fuca Mingliang irrigidisce le spalle. Liu Wenheng chiude lentamente il ventaglio.",
+"context": "Entrambi capiscono che la frase può essere interpretata come critica."
+},
+{
+"type": "line",
+"speaker": "Fuca Mingliang",
+"to": "Imperatore Qianlong",
+"line": "Maestà, il candidato ha ingegno. Forse troppo ingegno per un primo incarico.",
+"context": "Mingliang consiglia cautela: un uomo così brillante può essere utile o pericoloso."
+},
+{
+"type": "line",
+"speaker": "Liu Wenheng",
+"to": "Imperatore Qianlong",
+"line": "Oppure abbastanza ingegno da sapere che i Classici non furono scritti per decorare le mensole.",
+"context": "Liu difende l’idea che i Classici debbano guidare il governo, non essere solo ornamentali."
+},
+{
+"type": "line",
+"speaker": "Imperatore Qianlong",
+"to": "Liu Wenheng",
+"line": "State difendendo lui o voi stesso?",
+"context": "Qianlong sente l’ambiguità politica di Liu."
+},
+{
+"type": "line",
+"speaker": "Liu Wenheng",
+"to": "Imperatore Qianlong",
+"line": "Difendo il pennello, Maestà. Senza pennello, anche l’editto resta muto.",
+"context": "Liu si rifugia nella funzione letteraria dell’amministrazione."
+},
+{
+"type": "line",
+"speaker": "Imperatore Qianlong",
+"to": "Zhang Shiyu",
+"line": "Mencio disse: “Il popolo è il più prezioso, poi vengono gli altari dello Stato, e il sovrano è il più leggero.” È una frase che molti ripetono con bocca virtuosa e cuore disordinato. Voi come la leggete?",
+"context": "Qianlong pone la domanda più pericolosa: il primato del popolo può sembrare limite all’autorità imperiale."
+},
+{
+"type": "line",
+"speaker": "Zhang Shiyu",
+"to": "Imperatore Qianlong",
+"line": "La leggo inginocchiato.",
+"context": "Zhang risponde prima con il corpo: riconosce la gerarchia."
+},
+{
+"type": "line",
+"speaker": "Imperatore Qianlong",
+"to": "Zhang Shiyu",
+"line": "Non basta.",
+"context": "Qianlong pretende interpretazione, non solo sottomissione."
+},
+{
+"type": "line",
+"speaker": "Zhang Shiyu",
+"to": "Imperatore Qianlong",
+"line": "Allora la leggo così: il sovrano è leggero non perché vale poco, ma perché deve stare in alto. Se diventa pesante, schiaccia ciò che dovrebbe reggere.",
+"context": "Zhang salva la citazione: trasforma una frase potenzialmente anti-assolutista in immagine di responsabilità imperiale."
+},
+{
+"type": "stage_direction",
+"action": "Qianlong resta immobile. Poi sorride appena.",
+"context": "Il candidato ha trovato una via elegante: non nega Mencio e non offende il trono."
+},
+{
+"type": "line",
+"speaker": "Imperatore Qianlong",
+"to": "Fuca Mingliang",
+"line": "Scrivete: Zhang Shiyu possiede lingua acuta, memoria salda e istinto di sopravvivenza.",
+"context": "Qianlong concede approvazione, ma mantiene un’ombra ironica."
+},
+{
+"type": "line",
+"speaker": "Fuca Mingliang",
+"to": "Imperatore Qianlong",
+"line": "Sarà scritto, Maestà.",
+"context": "Mingliang obbedisce."
+},
+{
+"type": "line",
+"speaker": "Imperatore Qianlong",
+"to": "Zhang Shiyu",
+"line": "Vi darò un posto dove le parole servano l’impero prima di pretendere di correggerlo.",
+"context": "Qianlong non lo punisce: lo incanala nella burocrazia letteraria."
+},
+{
+"type": "line",
+"speaker": "Zhang Shiyu",
+"to": "Imperatore Qianlong",
+"line": "Il vostro servo riceve la grazia come riceverebbe una lama: con entrambe le mani.",
+"context": "Zhang sa che l’onore è anche controllo."
+},
+{
+"type": "line",
+"speaker": "Imperatore Qianlong",
+"to": "Zhang Shiyu",
+"line": "Ricordate un’ultima frase dei Dialoghi: “Trasmettere, non inventare; credere negli antichi e amarli.” Ma ricordate anche questo: chi trasmette sceglie sempre cosa far passare.",
+"context": "Qianlong chiude con un monito sulla responsabilità politica dell’erudizione."
+},
+{
+"type": "line",
+"speaker": "Liu Wenheng",
+"to": "Zhang Shiyu",
+"line": "Inchinatevi. Avete superato la domanda. Ora vi resta l’impero.",
+"context": "Liu parla piano, quasi come un avvertimento privato."
+},
+{
+"type": "stage_direction",
+"action": "Zhang si inchina profondamente. Dietro di lui, gli altri candidati attendono immobili. Fuori dalla sala, il vento muove appena gli stendardi imperiali.",
+"context": "Finale sospeso: la letteratura ha aperto una porta, ma la corte decide quanto quella porta può restare aperta."
+}
+]
+}
+]
+}
