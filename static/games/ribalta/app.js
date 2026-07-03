@@ -46,6 +46,10 @@ const views = {
 
 function showView(name) {
   Object.entries(views).forEach(([k, el]) => el.classList.toggle('hidden', k !== name));
+  if (name !== 'playback') {
+    const sheet = document.getElementById('info-sheet');
+    if (sheet && !sheet.classList.contains('hidden')) closeInfoSheet();
+  }
 }
 
 function asArray(v) {
@@ -407,6 +411,29 @@ function renderPrep() {
     container.appendChild(prepListBox('Regole di continuità', p.continuity_rules));
   }
 
+  if (Array.isArray(p.background) && p.background.length) {
+    const box = document.createElement('div');
+    box.className = 'prep-box';
+    const lab = document.createElement('div');
+    lab.className = 'prep-label';
+    lab.textContent = 'Ripasso';
+    box.appendChild(lab);
+    p.background.forEach(item => {
+      const entry = document.createElement('div');
+      entry.className = 'prep-bg-entry';
+      const t = document.createElement('div');
+      t.className = 'prep-bg-title';
+      t.textContent = item.title || '';
+      const d = document.createElement('div');
+      d.className = 'prep-bg-desc';
+      d.textContent = item.description || '';
+      entry.appendChild(t);
+      entry.appendChild(d);
+      box.appendChild(entry);
+    });
+    container.appendChild(box);
+  }
+
   if (Array.isArray(p.scene_flow) && p.scene_flow.length) {
     const box = document.createElement('div');
     box.className = 'prep-box';
@@ -499,6 +526,59 @@ function prepListBox(label, items) {
   return box;
 }
 
+function openInfoSheet(kind) {
+  const p = (state.script && state.script.preparation) || {};
+  const sheet = document.getElementById('info-sheet');
+  const title = document.getElementById('info-sheet-title');
+  const body = document.getElementById('info-sheet-body');
+  body.innerHTML = '';
+  if (kind === 'continuity') {
+    title.textContent = 'Regole di continuità';
+    const ul = document.createElement('ul');
+    ul.className = 'prep-list';
+    (p.continuity_rules || []).forEach(r => {
+      const li = document.createElement('li');
+      li.textContent = r;
+      ul.appendChild(li);
+    });
+    body.appendChild(ul);
+  } else {
+    title.textContent = 'Ripasso';
+    (p.background || []).forEach(item => {
+      const entry = document.createElement('div');
+      entry.className = 'prep-bg-entry';
+      const t = document.createElement('div');
+      t.className = 'prep-bg-title';
+      t.textContent = item.title || '';
+      const d = document.createElement('div');
+      d.className = 'prep-bg-desc';
+      d.textContent = item.description || '';
+      entry.appendChild(t);
+      entry.appendChild(d);
+      body.appendChild(entry);
+    });
+  }
+  sheet.dataset.kind = kind;
+  sheet.classList.remove('hidden');
+  document.querySelectorAll('#improv-fabs .fab-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.panel === kind);
+  });
+}
+
+function closeInfoSheet() {
+  document.getElementById('info-sheet').classList.add('hidden');
+  document.querySelectorAll('#improv-fabs .fab-btn').forEach(b => b.classList.remove('active'));
+}
+
+function toggleInfoSheet(kind) {
+  const sheet = document.getElementById('info-sheet');
+  if (!sheet.classList.contains('hidden') && sheet.dataset.kind === kind) {
+    closeInfoSheet();
+  } else {
+    openInfoSheet(kind);
+  }
+}
+
 function render() {
   const scene = currentScene();
   const beat = currentBeat();
@@ -534,6 +614,14 @@ function render() {
 
   card.classList.remove('mine', 'stage-direction', 'improv');
   if (improv) card.classList.add('improv');
+
+  const fabs = document.getElementById('improv-fabs');
+  const p = (state.script && state.script.preparation) || {};
+  const hasContinuity = Array.isArray(p.continuity_rules) && p.continuity_rules.length > 0;
+  const hasBackground = Array.isArray(p.background) && p.background.length > 0;
+  fabs.classList.toggle('hidden', !improv || (!hasContinuity && !hasBackground));
+  fabs.querySelector('[data-panel="continuity"]').classList.toggle('hidden', !hasContinuity);
+  fabs.querySelector('[data-panel="background"]').classList.toggle('hidden', !hasBackground);
 
   if (beat.type === 'stage_direction') {
     card.classList.add('stage-direction');
@@ -632,6 +720,12 @@ document.getElementById('back-btn-beat').addEventListener('click', goBack);
 document.getElementById('skip-btn-user').addEventListener('click', skipToNextUserBeat);
 document.getElementById('back-from-prep').addEventListener('click', () => history.back());
 document.getElementById('start-improv-btn').addEventListener('click', beginImprovPlayback);
+document.getElementById('improv-fabs').addEventListener('click', e => {
+  const btn = e.target.closest('button[data-panel]');
+  if (!btn) return;
+  toggleInfoSheet(btn.dataset.panel);
+});
+document.getElementById('info-sheet-close').addEventListener('click', closeInfoSheet);
 document.getElementById('scripts-mode-toggle').addEventListener('click', e => {
   const btn = e.target.closest('button[data-mode]');
   if (!btn) return;

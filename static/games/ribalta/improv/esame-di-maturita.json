@@ -41,6 +41,20 @@
 "Nessuno deve introdurre scandali, genitori in aula, prove annullate o confessioni di copiatura.",
 "Il doppio nome Antonio può creare confusione comica, ma non deve bloccare la scena."
 ],
+"background": [
+{
+"title": "Pirandello e la maschera",
+"description": "Luigi Pirandello (1867-1936), scrittore siciliano. Idea centrale: l'identità è multipla e instabile. Ognuno indossa maschere diverse a seconda di chi lo guarda; la 'persona' che gli altri vedono non coincide con nessun 'io' vero. Opere chiave: 'Il fu Mattia Pascal' (un uomo si crede libero cambiando identità e scopre che nessuna maschera regge), 'Uno, nessuno e centomila' (chi si accorge di essere visto in cento modi diversi entra in crisi), 'Sei personaggi in cerca d'autore' (i personaggi rifiutano l'autore che li ha creati). Parole utili in scena: identità, maschera, persona vs personaggio, frammentazione, forma vs vita."
+},
+{
+"title": "Seneca e il tempo",
+"description": "Lucio Anneo Seneca (4 a.C. - 65 d.C.), filosofo stoico romano, precettore di Nerone, costretto al suicidio. Idea centrale: il vero problema non è la brevità della vita ma il modo in cui la sprechiamo. Testo chiave: 'De brevitate vitae' — 'non abbiamo poco tempo, ma molto ne perdiamo'. Concetti: tempo come unico bene davvero nostro, otium (tempo dedicato allo studio interiore, non ozio) contro negotium (l'affannarsi degli occupati), controllo di sé, morte come misura della vita, interiorità. Parole utili in scena: brevitas, tempus fugit, occupati, sapiens, ratio."
+},
+{
+"title": "Il Novecento e la crisi dell'individuo",
+"description": "Il XX secolo europeo, dalle due guerre mondiali (1914-18 e 1939-45) al dopoguerra. Fenomeni chiave: società di massa (folle urbane, produzione industriale, consumo di massa), regimi totalitari (fascismo, nazismo, stalinismo), propaganda e uso dei nuovi media (radio, cinema, poi TV), Shoah, guerra fredda. L'individuo si sente schiacciato tra masse anonime, ideologie totalizzanti e catastrofi collettive: da qui la 'crisi dell'uomo moderno' che attraversa filosofia (esistenzialismo), letteratura e arte. Ordine minimo da rispettare: prima guerra mondiale, poi fascismo e nazismo, poi seconda guerra mondiale, poi dopoguerra."
+}
+],
 "scene_flow": [
 {
 "scene": "scene_1",
