@@ -1,3 +1,4 @@
 [
-  { "title": "L'Esame di Maturità di Filippo Spicchi", "file": "esame-di-maturita.json", "actors": 4, "scenes": 6 }
+  { "title": "L'Esame di Maturità di Filippo Spicchi", "file": "esame-di-maturita.json", "actors": 4, "scenes": 6 },
+  {"title":"Il colloquio di Disruptic","file":"citofonoai.json","actors":4,"scenes":6}
 ]

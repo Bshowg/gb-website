@@ -1,0 +1,369 @@
+{
+"title": "Il Colloquio in Disruptic",
+"language": "it",
+"mode": "improv",
+"description": "Luca Bonetti, sviluppatore disoccupato e disperato, affronta un colloquio di lavoro in Disruptic, una startup tech che vuole rivoluzionare i citofoni con intelligenza artificiale e blockchain. Davanti a lui un CEO visionario che parla solo per slogan, una Chief Happiness Officer ossessionata dal 'culture fit' e un CTO esausto che è l'unico a sapere che il prodotto non funziona.",
+
+"characters": [
+{
+"name": "Luca Bonetti",
+"description": "Sviluppatore trentenne, competente ma disoccupato da otto mesi. Ha bisogno di questo lavoro e cerca di assecondare qualsiasi assurdità pur di essere assunto, ma la sua razionalità ogni tanto scappa fuori. Passa dall'entusiasmo finto allo sconcerto genuino.",
+"never_do": "Non andartene dal colloquio. Non insultare apertamente l'azienda. Non fingere di essere incompetente: sei l'unico normale nella stanza."
+},
+{
+"name": "Ascanio Ferri",
+"description": "CEO e fondatore di Disruptic. Visionario autoproclamato, parla per slogan e metafore motivazionali, cita Steve Jobs a sproposito e chiama i problemi 'opportunità di crescita esponenziale'. È convinto che Disruptic cambierà il mondo partendo dai citofoni. Non ascolta mai davvero le risposte.",
+"never_do": "Non ammettere che l'azienda ha problemi. Non fare domande tecniche vere: non le capiresti. Non licenziare nessuno in scena."
+},
+{
+"name": "Gioia Brambilla",
+"description": "Chief Happiness Officer. Ossessionata dal 'culture fit', dalle energie del team e dai rituali aziendali: il cerchio della gratitudine, il saluto al monolite, il venerdì senza vocali. Sorride sempre, anche quando minaccia. Valuta il candidato su criteri completamente irrilevanti.",
+"never_do": "Non smettere mai di sorridere. Non fare domande sul lavoro vero e proprio. Non ammettere che i rituali sono assurdi: per te sono scienza."
+},
+{
+"name": "Damiano Croce",
+"description": "CTO e unico sviluppatore rimasto. Esausto, occhiaie, tazza di caffè sempre in mano. È l'unico che sa che il prodotto non funziona e che il server è un portatile nel ripostiglio. Vede in Luca una possibile salvezza e cerca disperatamente di farlo assumere, avvertendolo però a mezza voce di quello che lo aspetta.",
+"never_do": "Non sabotare l'assunzione: hai bisogno di Luca. Non dire apertamente davanti ad Ascanio che il prodotto non esiste. Non dimetterti in scena."
+}
+],
+
+"preparation": {
+"premise": "Siamo nell'open space di Disruptic, startup che sviluppa 'CitofonAI', un citofono intelligente basato su intelligenza artificiale e blockchain. Luca Bonetti è stato convocato per un colloquio come sviluppatore. La scena deve restare un colloquio di lavoro: assurdo, ma con una struttura riconoscibile di domande, prove e decisione finale.",
+"tone": "Commedia satirica sul mondo delle startup: buzzword, entusiasmo tossico e rituali aziendali contro il buon senso di un candidato disperato. L'assurdo cresce gradualmente, ma i personaggi ci credono sempre sul serio.",
+"ending_to_preserve": "Luca viene assunto sul posto con il titolo di 'Full-Stack Ninja Evangelist' e uno stipendio composto quasi solo da equity e buoni pasto. Accetta per disperazione, tra l'entusiasmo del CEO e lo sguardo di scuse di Damiano.",
+"continuity_rules": [
+"Il prodotto è 'CitofonAI': un citofono con intelligenza artificiale e blockchain che non funziona.",
+"Il server di produzione è un portatile nascosto nel ripostiglio delle scope.",
+"Ascanio non deve mai capire né ammettere che il prodotto non funziona.",
+"Damiano vuole che Luca sia assunto: è l'unico che potrebbe aiutarlo.",
+"Gioia valuta Luca solo su criteri di 'culture fit', mai su competenze tecniche.",
+"Luca ha bisogno del lavoro: può dubitare, ma non rifiutare l'offerta finale.",
+"Lo stipendio non va mai detto in cifre chiare: solo equity, 'pacchetti di crescita' e benefit assurdi.",
+"Nessuno deve introdurre investitori in scena, fallimenti annunciati o arresti: il crollo resta solo minacciato, mai avvenuto."
+],
+"background": [
+{
+"title": "CitofonAI, il prodotto",
+"description": "CitofonAI è un citofono 'intelligente' che dovrebbe riconoscere il visitatore con l'intelligenza artificiale, registrare ogni citofonata sulla blockchain e suggerire se aprire o meno in base al 'trust score' del visitatore. Nella realtà: riconosce solo il postino (e lo scambia per un intruso), la blockchain è un file Excel condiviso, e l'app mobile si apre una volta su tre. Slogan ufficiale: 'Non apriamo porte. Apriamo paradigmi.' Parole utili in scena: trust score, machine learning, decentralizzato, MVP, pivot, scalabilità."
+},
+{
+"title": "Il gergo startup",
+"description": "Vocabolario di sopravvivenza: 'disruption' (rivoluzionare un settore, di solito peggiorandolo), 'pivot' (cambiare completamente idea fingendo che fosse previsto), 'MVP' (Minimum Viable Product, versione che a malapena si accende), 'unicorno' (startup da un miliardo, il sogno di Ascanio), 'burn rate' (velocità con cui finiscono i soldi, argomento tabù), 'growth hacking' (marketing senza budget), 'equity' (pezzi di carta al posto dello stipendio), 'culture fit' (quanto sei disposto a partecipare ai rituali di Gioia). Ascanio usa questi termini a raffica, spesso a sproposito."
+},
+{
+"title": "I rituali di Disruptic",
+"description": "La cultura aziendale inventata da Gioia: il 'cerchio della gratitudine' del lunedì (ognuno ringrazia un collega e un elettrodomestico), il 'saluto al monolite' (inchino alla stampante 3D all'ingresso, che non ha mai stampato nulla), il 'venerdì senza vocali' (si comunica solo per consonanti, per stimolare la creatività), e lo 'scream break' delle 15 (urlo liberatorio collettivo di dieci secondi). La partecipazione è 'assolutamente volontaria e attentamente monitorata'."
+}
+],
+"scene_flow": [
+{
+"scene": "scene_1",
+"summary": "Accoglienza. Luca arriva e viene travolto dai rituali di benvenuto e dalla visione di Ascanio."
+},
+{
+"scene": "scene_2",
+"summary": "Il pitch. Ascanio presenta CitofonAI come rivoluzione mondiale; Luca fa domande fin troppo sensate."
+},
+{
+"scene": "scene_3",
+"summary": "Il test di culture fit. Gioia sottopone Luca a prove assurde sulle sue energie e i suoi valori."
+},
+{
+"scene": "scene_4",
+"summary": "La parte tecnica. Damiano interroga Luca e, a mezza voce, gli rivela la verità sul prodotto."
+},
+{
+"scene": "scene_5",
+"summary": "La deliberazione. Luca viene mandato all'angolo energetico; i tre discutono se assumerlo."
+},
+{
+"scene": "scene_6",
+"summary": "L'offerta. Luca viene assunto come Full-Stack Ninja Evangelist e accetta per disperazione."
+}
+]
+},
+
+"scenes": [
+{
+"id": "scene_1",
+"title": "Benvenuto nella famiglia",
+"setting": "Open space di Disruptic: pouf colorati, una stampante 3D su un piedistallo, una lavagna piena di frecce. Luca entra in giacca e cravatta, unico vestito formale della stanza.",
+"scene_prep": "Luca deve sembrare preparato per un colloquio normale e scoprire subito che normale non sarà. I tre di Disruptic sono entusiasti e inquietanti, mai ostili.",
+"beats": [
+{
+"speaker": "Gioia Brambilla",
+"to": "Luca Bonetti",
+"context": "Accogli Luca con entusiasmo eccessivo. Prima di farlo sedere, invitalo a fare il saluto al monolite: un piccolo inchino alla stampante 3D.",
+"constraint": "Non spiegare perché: per te è ovvio."
+},
+{
+"speaker": "Luca Bonetti",
+"to": "Gioia Brambilla",
+"context": "Esegui l'inchino cercando di non sembrare a disagio. Prova a riportare la conversazione sul colloquio.",
+"constraint": "Devi assecondare: hai bisogno del lavoro."
+},
+{
+"speaker": "Ascanio Ferri",
+"to": "Luca Bonetti",
+"context": "Entra in scena come una rockstar. Presentati come fondatore e visionario, e dì a Luca che questo non è un colloquio ma 'un incontro tra destini'.",
+"constraint": "Non fargli ancora nessuna domanda."
+},
+{
+"speaker": "Damiano Croce",
+"to": "Luca Bonetti",
+"context": "Presentati stancamente come CTO. Stringi la mano a Luca e trattienila un secondo di troppo, come chi si aggrappa a un salvagente.",
+"constraint": "Non dire ancora nulla di esplicito sui problemi."
+},
+{
+"speaker": "Luca Bonetti",
+"to": "Gruppo",
+"context": "Presentati in modo professionale: esperienza, competenze, motivazione. Sei l'unico che si comporta come in un colloquio vero.",
+"constraint": "Resta educato e concreto, verrai interrotto da Ascanio."
+},
+{
+"speaker": "Ascanio Ferri",
+"to": "Luca Bonetti",
+"context": "Interrompi il curriculum. Dì che i curriculum sono 'il passato' e che a te interessa solo una cosa: se Luca è pronto a 'disruptare'.",
+"constraint": "Non specificare mai cosa significhi."
+}
+]
+},
+
+{
+"id": "scene_2",
+"title": "Non apriamo porte, apriamo paradigmi",
+"setting": "Ascanio trascina tutti davanti alla lavagna, dove campeggia un disegno di un citofono con raggi luminosi e la scritta 'CitofonAI'.",
+"scene_prep": "Ascanio deve vendere CitofonAI come una rivoluzione epocale. Le domande sensate di Luca devono rimbalzare contro il muro di slogan. Damiano soffre in silenzio a ogni esagerazione.",
+"beats": [
+{
+"speaker": "Ascanio Ferri",
+"to": "Luca Bonetti",
+"context": "Presenta CitofonAI con un pitch grandioso: intelligenza artificiale, blockchain, trust score dei visitatori. Chiudi con lo slogan aziendale.",
+"constraint": "Non scendere mai nei dettagli tecnici: non li conosci."
+},
+{
+"speaker": "Luca Bonetti",
+"to": "Ascanio Ferri",
+"context": "Fai una domanda sensata e concreta, per esempio a cosa serva la blockchain in un citofono.",
+"constraint": "Ponila con rispetto, da candidato, non da critico."
+},
+{
+"speaker": "Ascanio Ferri",
+"to": "Luca Bonetti",
+"context": "Rispondi senza rispondere. Trasforma la domanda in una metafora sul futuro e loda Luca per il suo 'mindset da first principles'.",
+"constraint": "Non ammettere di non sapere la risposta."
+},
+{
+"speaker": "Damiano Croce",
+"to": "Luca Bonetti",
+"context": "Intervieni con una risposta tecnica onesta ma addolcita: la blockchain 'è in una fase molto embrionale'. Cerca gli occhi di Luca per fargli capire che lui capirebbe.",
+"constraint": "Non contraddire apertamente Ascanio."
+},
+{
+"speaker": "Gioia Brambilla",
+"to": "Gruppo",
+"context": "Interrompi la parte tecnica: percepisci che 'le energie si stanno abbassando'. Proponi tre respiri sincronizzati tutti insieme prima di continuare.",
+"constraint": "Devi ottenere che li facciano davvero."
+},
+{
+"speaker": "Luca Bonetti",
+"to": "Pubblico",
+"context": "Mentre respiri in sincrono con gli altri, fai un a parte al pubblico su quello che sta succedendo e sul fatto che il mutuo non si paga da solo.",
+"constraint": "Gli altri non ti sentono."
+}
+]
+},
+
+{
+"id": "scene_3",
+"title": "Il test delle energie",
+"setting": "Angolo relax con tappeto, campana tibetana e un cartello 'Judgment Free Zone'. Gioia ha una cartellina con la scritta 'Culture Fit Assessment'.",
+"scene_prep": "Le prove di Gioia devono essere assurde ma somministrate con serietà assoluta. Luca oscilla tra l'assecondare e lo sconcerto. Ascanio prende appunti come davanti a un genio.",
+"beats": [
+{
+"speaker": "Gioia Brambilla",
+"to": "Luca Bonetti",
+"context": "Avvia il test di culture fit. Prima domanda: chiedigli che animale sarebbe il suo codice, e osserva attentamente la risposta.",
+"constraint": "Tratta la domanda come scientificamente fondata."
+},
+{
+"speaker": "Luca Bonetti",
+"to": "Gioia Brambilla",
+"context": "Prova a rispondere seriamente a una domanda che non ha senso. Scegli un animale e giustificalo come puoi.",
+"constraint": "Non ridere e non rifiutarti."
+},
+{
+"speaker": "Gioia Brambilla",
+"to": "Luca Bonetti",
+"context": "Seconda prova: chiedigli di come si ordina un caffè in modo smart e sostenibile.",
+"constraint": "Correggilo se per sbaglio usa una vocale."
+},
+{
+"speaker": "Luca Bonetti",
+"to": "Gioia Brambilla",
+"context": "Esegui la prova impegnandoti al massimo, con la dignità di chi sta morendo dentro.",
+"constraint": "Devi provarci davvero."
+},
+{
+"speaker": "Ascanio Ferri",
+"to": "Gruppo",
+"context": "Commuoviti per la performance. Dichiara che in Luca vedi 'la fame' e racconta un aneddoto inventato su Steve Jobs che c'entra pochissimo.",
+"constraint": "L'aneddoto deve essere palesemente falso."
+},
+{
+"speaker": "Damiano Croce",
+"to": "Gioia Brambilla",
+"context": "Chiedi con tono stanco di poter fare anche tu qualche domanda, di quelle 'noiose, tipo se sa programmare'.",
+"constraint": "Ironia sottile, non conflitto aperto."
+},
+{
+"speaker": "Gioia Brambilla",
+"to": "Damiano Croce",
+"context": "Concedi la parte tecnica, ma solo dopo aver annotato che l'aura di Luca è 'compatibile ma da monitorare'.",
+"constraint": "Sorridi mentre lo dici, come una minaccia."
+}
+]
+},
+
+{
+"id": "scene_4",
+"title": "La domanda tecnica",
+"setting": "Scrivania di Damiano, sommersa di tazze e post-it. Sullo schermo, un grafico che scende. Damiano lo gira in fretta prima che Luca lo veda bene.",
+"scene_prep": "Questa scena rivela la verità: il prodotto non funziona e Damiano è solo. La complicità tra Damiano e Luca deve crescere, mentre Ascanio non capisce nulla di ciò che sente.",
+"beats": [
+{
+"speaker": "Damiano Croce",
+"to": "Luca Bonetti",
+"context": "Fai una domanda tecnica vera e ragionevole, la prima dell'intera giornata. Illuminati appena Luca inizia a rispondere sensatamente.",
+"constraint": "Resta professionale: sei affamato di competenza."
+},
+{
+"speaker": "Luca Bonetti",
+"to": "Damiano Croce",
+"context": "Rispondi bene, da persona competente. Rilassati: finalmente una cosa che sai fare.",
+"constraint": "Questa risposta deve essere solida, senza gag."
+},
+{
+"speaker": "Ascanio Ferri",
+"to": "Gruppo",
+"context": "Non hai capito niente della risposta, ma commentala come se fosse una visione strategica. Usa almeno tre buzzword a caso.",
+"constraint": "Non fare domande di chiarimento: fingeresti di aver capito."
+},
+{
+"speaker": "Damiano Croce",
+"to": "Luca Bonetti",
+"context": "Abbassa la voce e digli la verità a mezze frasi: il server è un portatile nel ripostiglio, la demo funziona solo se non la tocca nessuno, e tu non dormi da mesi.",
+"constraint": "Ascanio non deve sentire o capire."
+},
+{
+"speaker": "Luca Bonetti",
+"to": "Damiano Croce",
+"context": "Reagisci alla rivelazione: sei diviso tra la fuga e il mutuo da pagare. Chiedi a mezza voce quanto è grave davvero.",
+"constraint": "Non alzare la voce: mantieni la copertura."
+},
+{
+"speaker": "Gioia Brambilla",
+"to": "Gruppo",
+"context": "Interrompi il momento di verità: annuncia che sono le 15 in punto e guida lo scream break aziendale di dieci secondi.",
+"constraint": "Tutti devono partecipare, anche Luca."
+},
+{
+"speaker": "Ascanio Ferri",
+"to": "Gruppo",
+"context": "Dopo l'urlo, dichiara di aver 'sentito qualcosa di speciale' e annuncia che è il momento della decisione.",
+"constraint": "Prepara la deliberazione, non anticipare l'esito."
+}
+]
+},
+
+{
+"id": "scene_5",
+"title": "La deliberazione all'angolo energetico",
+"setting": "Luca è stato parcheggiato nell'angolo relax con una tisana 'detox' che non ha chiesto. I tre di Disruptic confabulano a pochi metri, convinti di non essere sentiti.",
+"scene_prep": "La decisione deve andare verso l'assunzione, ognuno per i propri motivi assurdi o disperati. Luca sente quasi tutto e reagisce in silenzio dal suo angolo.",
+"beats": [
+{
+"speaker": "Ascanio Ferri",
+"to": "Gruppo",
+"context": "Apri la deliberazione in grande stile: dichiara che Luca 'ha l'occhio del disruptor' e che l'universo ve lo ha mandato.",
+"constraint": "Non citare nemmeno una competenza concreta."
+},
+{
+"speaker": "Gioia Brambilla",
+"to": "Gruppo",
+"context": "Esprimi una riserva: l'aura di Luca è compatibile, ma la cravatta ti preoccupa. Proponi di assumerlo 'in osservazione energetica'.",
+"constraint": "La tua obiezione deve riguardare solo cose irrilevanti."
+},
+{
+"speaker": "Damiano Croce",
+"to": "Gruppo",
+"context": "Difendi Luca con il fervore di un naufrago: è competente, è sano di mente, ed è l'unica cosa che si frappone tra te e il crollo totale.",
+"constraint": "Non rivelare quanto è grave la situazione tecnica."
+},
+{
+"speaker": "Luca Bonetti",
+"to": "Pubblico",
+"context": "Dal tuo angolo, commenta al pubblico quello che stai sentendo. Pesa il disastro imminente contro gli otto mesi di disoccupazione.",
+"constraint": "I tre non devono accorgersi che senti tutto."
+},
+{
+"speaker": "Ascanio Ferri",
+"to": "Gruppo",
+"context": "Chiudi la deliberazione: inventa sul momento il titolo 'Full-Stack Ninja Evangelist' e commuoviti per la tua stessa idea.",
+"constraint": "Il titolo deve nascere adesso, davanti a tutti."
+},
+{
+"speaker": "Gioia Brambilla",
+"to": "Gruppo",
+"context": "Accetta il verdetto e proponi di comunicarlo a Luca con il rituale di benvenuto: il cerchio della gratitudine in versione ridotta.",
+"constraint": "Il rituale deve avvenire nella prossima scena."
+}
+]
+},
+
+{
+"id": "scene_6",
+"title": "L'offerta che non si può rifiutare",
+"setting": "Luca viene richiamato al centro dell'open space. I tre lo attendono in semicerchio, con espressioni solenni.",
+"scene_prep": "La scena chiude il colloquio: offerta assurda, stipendio evasivo, accettazione disperata. Il finale deve essere festoso per Disruptic e agrodolce per Luca.",
+"beats": [
+{
+"speaker": "Ascanio Ferri",
+"to": "Luca Bonetti",
+"context": "Annuncia l'assunzione con enfasi da cerimonia: Luca è il nuovo Full-Stack Ninja Evangelist di Disruptic.",
+"constraint": "Non menzionare lo stipendio."
+},
+{
+"speaker": "Luca Bonetti",
+"to": "Ascanio Ferri",
+"context": "Ringrazia e fai la domanda proibita: chiedi qual è la retribuzione.",
+"constraint": "Ponila con tutta la delicatezza possibile."
+},
+{
+"speaker": "Ascanio Ferri",
+"to": "Luca Bonetti",
+"context": "Rispondi con un pacchetto assurdo: equity 'potenzialmente illimitata', buoni pasto, pouf personale e 'la possibilità di scrivere la storia'.",
+"constraint": "Nessuna cifra deve mai essere pronunciata."
+},
+{
+"speaker": "Damiano Croce",
+"to": "Luca Bonetti",
+"context": "Avvicinati per la stretta di mano e sussurragli le ultime istruzioni di sopravvivenza: non toccare mai la demo e portati un caricabatterie da casa.",
+"constraint": "Fallo sembrare un benvenuto, non un avvertimento."
+},
+{
+"speaker": "Gioia Brambilla",
+"to": "Gruppo",
+"context": "Guida il cerchio della gratitudine di benvenuto: ognuno deve ringraziare Luca e un elettrodomestico a scelta.",
+"constraint": "Devi ottenere che tutti lo facciano, anche Luca."
+},
+{
+"speaker": "Luca Bonetti",
+"to": "Pubblico",
+"context": "Mentre gli altri festeggiano, chiudi con una confidenza al pubblico: hai un lavoro, forse. Firma idealmente il contratto della tua rovina con un sorriso stanco.",
+"constraint": "Devi accettare il lavoro: il mutuo vince sempre."
+}
+]
+}
+]
+}

@@ -23,14 +23,8 @@
       "beats": [
         {
           "type": "line",
-          "speaker": [
-            "",
-            "Adalberto"
-          ],
-          "to": [
-            "",
-            "Guadalberto"
-          ],
+          "speaker": "Adalberto",
+          "to": "Guadalberto",
           "line": "Buongiorno, filius meus, vedo che siete molto indaffarato.",
           "context": ""
         },

@@ -1,0 +1,345 @@
+{
+  "title": "Il processo a Galileo",
+  "language": "it",
+  "description": "Roma, 1623-1633. Maffeo Barberini, amico e ammiratore di Galileo, diventa papa Urbano VIII: dieci anni dopo, lo stesso papa lo consegna all'Inquisizione per il 'Dialogo sopra i due massimi sistemi'. Interrogatori, la minaccia della tortura, e la più famosa abiura della storia. Adattamento dai documenti del processo (verbali degli interrogatori, sentenza e abiura del giugno 1633, editi in 'Le Opere di Galileo' a cura di A. Favaro, vol. XIX), dai dispacci dell'ambasciatore Francesco Niccolini e dalle lettere del commissario Vincenzo Maculano.",
+  "characters": [
+    {
+      "name": "Galileo Galilei",
+      "description": "Il matematico più famoso d'Europa. Quasi settant'anni al processo: geniale, vanitoso, sarcastico, convinto fino all'ultimo di potersela cavare con l'ingegno — e poi, davanti ai giudici, un vecchio solo."
+    },
+    {
+      "name": "Urbano VIII",
+      "description": "Maffeo Barberini, fiorentino, poeta, per vent'anni amico e ammiratore di Galileo. Da papa: orgoglioso, permaloso, assediato dalla politica. L'amicizia tradita lo rende più feroce di qualunque nemico."
+    },
+    {
+      "name": "Vincenzo Maculano",
+      "description": "Frate domenicano, commissario generale del Sant'Uffizio. Prima di farsi inquisitore progettava fortezze: uomo pratico, senza fanatismo, che cerca l'uscita meno rovinosa per tutti — tribunale compreso."
+    }
+  ],
+  "scenes": [
+    {
+      "id": "scene_1",
+      "title": "L'amico papa",
+      "setting": "Roma, 1623-1624. Galileo ha puntato il cannocchiale al cielo e il cielo non è più quello di prima: montagne sulla Luna, lune intorno a Giove, macchie sul Sole. Ma nel 1616 il Sant'Uffizio ha dichiarato la teoria di Copernico — il Sole fermo al centro, la Terra che gira — contraria alle Scritture, e Galileo è stato ammonito dal cardinale Bellarmino a lasciarla stare. Poi, nell'agosto del 1623, il miracolo: sul trono di Pietro sale il cardinale Maffeo Barberini, da vent'anni amico e ammiratore di Galileo. Il matematico, sessantenne e celebre in tutta Europa, viene a Roma a rendergli omaggio.",
+      "beats": [
+        {
+          "type": "line",
+          "speaker": "Galileo Galilei",
+          "to": "Pubblico",
+          "line": "Maffeo Barberini, papa! L'uomo che mi scrisse versi in latino per le mie scoperte, che a tavola mi difese contro mezzo collegio cardinalizio! Gli ho appena dedicato il mio 'Saggiatore', e dicono che se lo faccia leggere a cena, ridendo. Amici miei, si alza il vento buono: questa volta il cielo si può dire ad alta voce.",
+          "context": "Tutto documentato: nel 1620 Barberini dedicò a Galileo il poema latino 'Adulatio perniciosa'; il 'Saggiatore' (1623) fu dedicato al nuovo papa, che se lo faceva leggere a mensa."
+        },
+        {
+          "type": "line",
+          "speaker": "Urbano VIII",
+          "to": "Galileo Galilei",
+          "line": "Signor Galilei! Venite, venite: un papa può abbracciare un matematico, se il matematico è il primo del mondo. Vi ho scritto dei versi, una volta — 'serba il tuo vetro, o Galileo, le glorie degli astri' — e non ero ancora papa, dunque erano sinceri. Ditemi cosa posso fare per voi.",
+          "context": "Nella primavera del 1624 Urbano VIII ricevette Galileo in sei lunghe udienze, colmandolo di doni e di una pensione per il figlio Vincenzo."
+        },
+        {
+          "type": "line",
+          "speaker": "Galileo Galilei",
+          "to": "Urbano VIII",
+          "line": "Santità, una cosa sola: liberarmi da un silenzio. Dal sedici mi è vietato tenere l'opinione di Copernico. Ma vietarla non la confuta: i moti del cielo, le maree, le macchie del Sole — tutto grida che è la Terra a muoversi. Lasciate almeno che io metta le due opinioni a confronto, con le ragioni dell'una e dell'altra.",
+          "context": "Galileo andò a Roma nel 1624 proprio per sondare la possibilità di riaprire la questione copernicana."
+        },
+        {
+          "type": "line",
+          "speaker": "Urbano VIII",
+          "to": "Galileo Galilei",
+          "line": "Confrontatele pure, da matematico: per ipotesi, non per verità. E ricordate il mio argomento, Galileo: Dio è onnipotente. Poteva fabbricare il mondo in mille modi che la vostra mente non arriva nemmeno a sognare. Chi pretende di chiudere la Sua sapienza dentro una sola dimostrazione, la limita — e questo, amico mio, nessun cristiano lo può scrivere.",
+          "context": "L'argomento dell'onnipotenza divina è storicamente di Urbano VIII, che pretese fosse incluso nel futuro 'Dialogo'. Dove Galileo lo mise finirà per costargli caro."
+        },
+        {
+          "type": "line",
+          "speaker": "Galileo Galilei",
+          "to": "Urbano VIII",
+          "line": "Il vostro argomento avrà il posto d'onore, Santità: parola. Scriverò un dialogo tra tre gentiluomini — uno per Copernico, uno per Aristotele e Tolomeo, uno di buon senso nel mezzo — e nessuno vincerà. Sulla carta.",
+          "context": "Le ultime due parole vanno quasi mangiate: è la riserva mentale che genererà il disastro."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Urbano benedice Galileo e lo congeda con doni. Galileo torna a Firenze e per anni, tra malattie e revisioni, scrive il suo libro. Negli archivi del Sant'Uffizio, intanto, dorme una carta di cui nessuno parla: un verbale del febbraio 1616, senza firma né notaio, secondo cui a Galileo sarebbe stato intimato di non tenere, insegnare o difendere quell'opinione 'in qualsivoglia modo, in voce o in scritto'.",
+          "context": "Il 'Dialogo sopra i due massimi sistemi del mondo' fu scritto tra il 1624 e il 1630. Il precetto del 26 febbraio 1616 (attribuito al commissario Segizzi) è privo di firme e la sua regolarità è discussa dagli storici ancora oggi: sarà il perno dell'accusa nel 1633."
+        },
+        {
+          "type": "line",
+          "speaker": "Galileo Galilei",
+          "to": "Pubblico",
+          "line": "Il cardinale Bellarmino, buonanima, mi diede una dichiarazione di suo pugno: che io non ho mai abiurato né fatto penitenza, e che mi fu solo notificato che la dottrina di Copernico 'non si può difendere né tenere'. Difendere né tenere: di insegnare, di discutere, di scrivere per ipotesi — nemmeno una parola. La conservo come una reliquia. Non si sa mai.",
+          "context": "Il certificato di Bellarmino, 26 maggio 1616, è autentico: Galileo lo esibirà al processo. La frase citata viene dal documento."
+        },
+        {
+          "type": "line",
+          "speaker": "Urbano VIII",
+          "to": "Pubblico",
+          "line": "Gli voglio bene, al signor Galilei. Ma il papa non è un uomo: è una fortezza. Ho la guerra in Germania, gli spagnoli che mi accusano di tiepidezza, mezzo Sacro Collegio che aspetta un mio passo falso. L'amicizia è un lusso da cardinali. Speriamo che il matematico scriva con prudenza.",
+          "context": "Ponte inventato ma fedele al contesto: nel 1632 Urbano era politicamente assediato, e la crisi con la Spagna lo rendeva vulnerabile all'accusa di indulgenza verso gli eretici."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Febbraio 1632: il 'Dialogo sopra i due massimi sistemi del mondo' esce a Firenze, con regolare imprimatur strappato ai revisori. Tre personaggi: Salviati, copernicano, che vince ogni scontro; Sagredo, arbitro, che gli dà sempre ragione; e il difensore della vecchia scienza, quello che perde ogni disputa, che Galileo ha scelto di chiamare... Simplicio.",
+          "context": "L'imprimatur fu concesso dal padre Niccolò Riccardi dopo lunghe trattative. 'Simplicio' richiama il filosofo antico Simplicio, ma in toscano suona come 'sempliciotto'."
+        },
+        {
+          "type": "line",
+          "speaker": "Galileo Galilei",
+          "to": "Pubblico",
+          "line": "E l'argomento del papa? Mantengo la parola: posto d'onore, ultima pagina, conclusione del libro. L'ho messo in bocca a Simplicio. Chi mai potrà offendersene?",
+          "context": "Storico: l'argomento dell'onnipotenza divina caro a Urbano VIII chiude il 'Dialogo' pronunciato proprio da Simplicio, il personaggio che esce sconfitto da tutto il libro."
+        }
+      ]
+    },
+    {
+      "id": "scene_2",
+      "title": "L'ira del papa",
+      "setting": "Roma, estate-autunno 1632. Il 'Dialogo' circola da mesi e piace troppo. Qualcuno si è preso la briga di far notare a Sua Santità in bocca a chi sia finito il suo argomento: il papa ha letto il libro, e nei palazzi vaticani il vento è cambiato. L'estate del 1632 è molto calda.",
+      "beats": [
+        {
+          "type": "line",
+          "speaker": "Urbano VIII",
+          "to": "Pubblico",
+          "line": "Il mio argomento. Il MIO argomento, quello che gli affidai come un pegno, messo in bocca al personaggio che tutto il libro deride! Simplicio! E i miei nemici, nelle anticamere, già sussurrano che Simplicio sarei io. Mi ha raggirato: ha strappato l'imprimatur con l'inganno e ha stampato ciò che gli era proibito perfino di tenere nella testa.",
+          "context": "Il sospetto di Urbano che Simplicio lo caricaturasse è riferito dalle fonti; l'accusa di 'raggiro' sull'imprimatur è nei dispacci dell'ambasciatore Niccolini."
+        },
+        {
+          "type": "stage_direction",
+          "action": "La macchina si mette in moto: a luglio l'ordine di bloccare la vendita del libro, ad agosto una commissione speciale, a settembre il fascicolo passa al Sant'Uffizio. L'ambasciatore di Toscana, Francesco Niccolini, corre dal papa a difendere il matematico del Granduca. Il colloquio finisce male — e lo conosciamo parola per parola, perché Niccolini lo mise per iscritto quella sera stessa.",
+          "context": "Dispaccio di Niccolini al segretario granducale Cioli, 5 settembre 1632: una delle scene meglio documentate di tutta la vicenda."
+        },
+        {
+          "type": "line",
+          "speaker": "Urbano VIII",
+          "to": "Pubblico",
+          "line": "Il vostro Galileo ha ardito entrare dove non doveva, e in materie le più gravi e le più pericolose che a questi tempi si potessero suscitare! Lo dite al vostro Granduca: in queste cose del Sant'Uffizio non si viene a trattare, si viene a ubbidire!",
+          "context": "La prima frase è la citazione testuale riportata da Niccolini (dispaccio del 5 settembre 1632). Da urlare a un ambasciatore immaginario, davanti a sé."
+        },
+        {
+          "type": "line",
+          "speaker": "Vincenzo Maculano",
+          "to": "Pubblico",
+          "line": "Fra Vincenzo Maculano da Firenzuola, domenicano, commissario generale del Sant'Uffizio. Prima di processare uomini progettavo bastioni, e le fortezze mi hanno insegnato una cosa: ogni assedio costa a chi lo fa quanto a chi lo subisce. Ora sul mio tavolo c'è il fascicolo dell'uomo più famoso d'Europa. Che il cielo mi assista.",
+          "context": "Maculano era davvero un apprezzato ingegnere militare. Presentazione al pubblico: tono pratico, per niente da fanatico."
+        },
+        {
+          "type": "line",
+          "speaker": "Urbano VIII",
+          "to": "Vincenzo Maculano",
+          "line": "Padre commissario, il caso è vostro. Negli atti del sedici c'è un precetto: non tenere, non insegnare, non difendere in qualsivoglia modo. Il libro sta lì a dimostrare che l'ha calpestato. Lo si citi a Roma, davanti al tribunale. E non mi si parli di riguardi: qui non si tratta di matematica, si tratta di chi comanda sulle Scritture.",
+          "context": "La congregazione del 23 settembre 1632 decise formalmente la citazione di Galileo a Roma."
+        },
+        {
+          "type": "stage_direction",
+          "action": "L'ordine di comparire arriva a Firenze il primo ottobre. Galileo ha sessantotto anni, è malato, e in Toscana infuria la peste: chiede tempo, manda certificati medici con sette firme. Da Roma la risposta è di quelle che non si dimenticano: o viene, o lo si porta legato.",
+          "context": "Storico: davanti ai rinvii, nel dicembre 1632 il Sant'Uffizio minacciò di mandarlo a prendere e condurlo in catene ('vinctum')."
+        },
+        {
+          "type": "line",
+          "speaker": "Galileo Galilei",
+          "to": "Pubblico",
+          "line": "Legato. A me. Ho dedicato il libro ai revisori del papa, ho l'imprimatur stampato in prima pagina, e mi si minaccia la corda come un contrabbandiere. Vecchio, mezzo cieco, d'inverno, tre settimane di viaggio e la quarantena della peste a Ponte a Centino. Va bene. Andrò a Roma. Ho ancora la mia reliquia, e ho ancora la mia testa.",
+          "context": "Galileo partì il 20 gennaio 1633 e giunse a Roma il 13 febbraio, dopo la quarantena al confine. La 'reliquia' è il certificato di Bellarmino."
+        },
+        {
+          "type": "line",
+          "speaker": "Vincenzo Maculano",
+          "to": "Pubblico",
+          "line": "Ho studiato il fascicolo. La nostra arma è quel precetto del sedici: 'in qualsivoglia modo, in voce o in scritto'. Senza firma, senza notaio — un giurista di provincia ci ballerebbe sopra. Ma in questo tribunale il giudice e l'accusatore siedono sulla stessa sedia, e la sedia la paga il papa. Non sarà il diritto, il problema del signor Galilei.",
+          "context": "Le irregolarità del precetto del 1616 sono reali e discusse dagli storici; l'osservazione sul tribunale è il punto di vista moderno messo in bocca al più lucido dei personaggi."
+        },
+        {
+          "type": "line",
+          "speaker": "Galileo Galilei",
+          "to": "Pubblico",
+          "line": "Roma, tredici febbraio 1633. Non cella: l'ambasciata di Toscana, Villa Medici, il cuoco del Granduca. Persino quando mi trasferiscono al Sant'Uffizio mi danno le stanze del procuratore, con il mio servitore. Mai visto un imputato trattato così, dicono tutti. Forse perché mai visto un imputato così: metà prigioniero, metà monumento.",
+          "context": "Tutto documentato: l'alloggio a Villa Medici e poi, durante il processo, nell'appartamento del fiscale del Sant'Uffizio — un privilegio senza precedenti per un inquisito."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Due mesi di attesa, di istruttoria, di pareri. Poi, il dodici aprile 1633, il monumento viene condotto al palazzo del Sant'Uffizio, davanti al commissario Maculano. Da qui in avanti, quasi ogni parola sta scritta nei verbali.",
+          "context": "I verbali dei quattro costituti (12 e 30 aprile, 10 maggio, 21 giugno 1633) sono editi in Favaro, 'Opere di Galileo', vol. XIX."
+        }
+      ]
+    },
+    {
+      "id": "scene_3",
+      "title": "Gli interrogatori",
+      "setting": "Palazzo del Sant'Uffizio, Roma, aprile-giugno 1633. Una sala spoglia: un tavolo, un notaio che verbalizza, il commissario Maculano di fronte a Galileo. Primo costituto, dodici aprile: il commissario gira intorno alla preda con le buone maniere del mestiere, e arriva subito all'anno decisivo, il 1616.",
+      "beats": [
+        {
+          "type": "line",
+          "speaker": "Vincenzo Maculano",
+          "to": "Galileo Galilei",
+          "line": "Signor Galilei, nel febbraio del 1616 vi fu notificata una determinazione del Sant'Uffizio intorno all'opinione del Copernico. Diteci, in coscienza: che cosa vi fu comandato allora, e da chi?",
+          "context": "Fedele all'andamento del primo costituto (verbale: domande in latino, risposte di Galileo in italiano): tutto il processo ruota su cosa fu davvero intimato a Galileo nel 1616."
+        },
+        {
+          "type": "line",
+          "speaker": "Galileo Galilei",
+          "to": "Vincenzo Maculano",
+          "line": "Il signor cardinale Bellarmino mi disse che l'opinione del Copernico, presa assolutamente, non si poteva difendere né tenere. E poiché prevedevo che un giorno qualcuno avrebbe raccontato altro, mi feci dare da lui una fede scritta di sua mano. Eccola, padre: la porto con me da diciassette anni. Vi leggerete 'difendere né tenere' — e nient'altro.",
+          "context": "Storico: al primo costituto Galileo produsse a sorpresa il certificato originale di Bellarmino del 26 maggio 1616, spiazzando l'accusa."
+        },
+        {
+          "type": "line",
+          "speaker": "Vincenzo Maculano",
+          "to": "Galileo Galilei",
+          "line": "La fede è autentica, non si discute. Ma negli atti nostri, di quello stesso febbraio, sta scritto che vi fu fatto precetto di non tenerla, non insegnarla, non difenderla 'in qualsivoglia modo, in voce o in scritto'. Qualsivoglia modo, signor Galilei. Ve lo ricordate, questo precetto?",
+          "context": "La formula 'quovis modo... verbo aut scriptis' è quella del contestato verbale del 26 febbraio 1616."
+        },
+        {
+          "type": "line",
+          "speaker": "Galileo Galilei",
+          "to": "Vincenzo Maculano",
+          "line": "Non mi sovviene di quelle parole, 'insegnare' e 'in qualsivoglia modo': saranno passati diciassette anni, e nella fede del cardinale non ci sono. E del resto, padre, avete letto il mio Dialogo? Io in quel libro non difendo il Copernico: mostro che le sue ragioni sono deboli e non concludenti. L'ho scritto per confutarlo.",
+          "context": "Risposta storica e famosa: nel primo costituto Galileo sostenne davvero che il 'Dialogo' confutava Copernico. Nessuno che avesse letto il libro poteva crederci — e lo sapevano tutti nella stanza."
+        },
+        {
+          "type": "line",
+          "speaker": "Vincenzo Maculano",
+          "to": "Pubblico",
+          "line": "Confutarlo. Il tribunale ha fatto leggere il libro a tre consultori, e tutti e tre hanno scritto la stessa cosa: il Dialogo insegna, difende e tiene il moto della Terra. La difesa del signor Galilei non è debole: è un insulto all'intelligenza dei giudici. Così scrivo alle Eminenze: 'Ho proposto un mezzo: che il tribunale mi conceda di trattare extragiudizialmente con il Galilei, per renderlo capace del suo errore e condurlo, riconosciutolo, a confessarlo.' Fuori dal verbale, da uomo a uomo. Se confessa un errore, il tribunale salva la sua autorità, il papa la sua faccia, e il vecchio la sua vita. Le fortezze migliori sono quelle che si arrendono prima dell'assalto.",
+          "context": "I pareri dei tre consultori (tra cui Melchior Inchofer) sono agli atti. Le frasi tra virgolette parafrasano da vicino la lettera autentica di Maculano al cardinale Francesco Barberini, 28 aprile 1633, in cui propone di 'trattare seco extragiudizialmente'."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Sera del 27 aprile. Maculano entra senza notaio nelle stanze dove Galileo è custodito. Due sedie, una candela, nessun verbale.",
+          "context": "Il colloquio privato avvenne davvero: lo conosciamo solo dalla lettera di Maculano, perché — di proposito — non fu verbalizzato."
+        },
+        {
+          "type": "line",
+          "speaker": "Vincenzo Maculano",
+          "to": "Galileo Galilei",
+          "line": "Niente notaio, signor Galilei: stasera parlo da frate, non da giudice. La vostra difesa non regge e voi lo sapete: tre consultori contro, e i giudici hanno letto il libro. Se vi ostinate, il processo va alle strette, e alle strette questo tribunale ha strumenti che non augurate a nessuno. Rileggete il vostro Dialogo. Trovateci un errore. Ve lo chiedo da uomo che vorrebbe rivedervi a Firenze.",
+          "context": "Il contenuto della persuasione è ricostruito; l'esito — Galileo che accetta di confessare — è documentato nella lettera del 28 aprile."
+        },
+        {
+          "type": "line",
+          "speaker": "Galileo Galilei",
+          "to": "Vincenzo Maculano",
+          "line": "Un errore. Mi chiedete di trovare un errore nel libro più vero che io abbia scritto... Padre, ho quasi settant'anni, ho la pietra ai reni e le notti qui non finiscono mai. Datemi qualche giorno: rileggerò il mio libro come fosse d'un altro autore. Forse quell'altro autore, da qualche parte, ha esagerato.",
+          "context": "'Quasi come scrittura nuova e di altro autore' è l'immagine che Galileo stesso userà nel verbale del 30 aprile."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Trenta aprile, secondo costituto: Galileo chiede spontaneamente di essere ascoltato. Quello che detta a verbale è la resa concordata tre giorni prima — e fa male ancora oggi, a leggerla.",
+          "context": "Il secondo costituto si aprì proprio con la comparizione 'spontanea' di Galileo."
+        },
+        {
+          "type": "line",
+          "speaker": "Galileo Galilei",
+          "to": "Vincenzo Maculano",
+          "line": "Ho riletto il mio Dialogo, che da tre anni non rivedevo, e mi è parso quasi scrittura nuova e di altro autore. Confesso che in più luoghi le ragioni della parte falsa sono formulate con tale forza che paiono atte a convincere, più che facili a essere sciolte. Fu compiacenza del mostrarmi più arguto del comune degli uomini. Il mio errore dunque è stato, e lo confesso, di una vana ambizione e di una pura ignoranza e inavvertenza. E se mi si concede, sono pronto ad aggiungere al Dialogo una o due giornate per confutare quegli argomenti con la maggior efficacia che potrò.",
+          "context": "Montaggio quasi letterale del verbale del 30 aprile 1633, compresa la frase finale sulla 'vana ambizione' e l'offerta (mai accolta) di aggiungere giornate al Dialogo."
+        },
+        {
+          "type": "line",
+          "speaker": "Vincenzo Maculano",
+          "to": "Pubblico",
+          "line": "Fatta. La confessione è a verbale, il decoro del tribunale è salvo, e la causa si può chiudere con una penitenza e il libro all'Indice: il vecchio torna a Firenze per l'estate. Così scrivo alle Eminenze, e così sarebbe andata... se questo processo appartenesse al tribunale. Ma appartiene a un uomo solo, e quell'uomo si sente tradito.",
+          "context": "Nella lettera del 28 aprile Maculano prospettava davvero una rapida chiusura ('si potrà spedire speditamente la causa'). La decisione finale spettava però al papa."
+        },
+        {
+          "type": "line",
+          "speaker": "Urbano VIII",
+          "to": "Vincenzo Maculano",
+          "line": "Una penitenza e a casa? No, padre commissario. Costui ha ingannato me, i revisori e la Chiesa intera: la sua 'vana ambizione' non basta a pagare il conto. Sia interrogato sopra l'intenzione, anche con la minaccia della tortura. Poi abiuri pubblicamente, davanti alla congregazione piena. Il libro sia proibito, lui tenuto in carcere a nostro arbitrio, e la sentenza mandata a tutti i nunzi e gli inquisitori d'Italia, che la leggano ai loro matematici. Che serva da esempio.",
+          "context": "È, punto per punto, la decisione della congregazione del 16 giugno 1633 presieduta da Urbano VIII: esame sull'intenzione 'etiam comminata ei tortura', abiura de vehementi, carcere ad arbitrio, divieto del 'Dialogo', sentenza da circolare pubblicamente."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Ventuno giugno 1633, ultimo interrogatorio. La formula prevede che all'imputato si chieda la verità 'sotto minaccia di tortura'. Nessuno, con ogni probabilità, intende applicarla a un settantenne protetto dal Granduca di Toscana: ma lui, seduto su quella sedia, non può saperlo.",
+          "context": "Gli storici concordano che l'esame rigoroso fosse una minaccia formale ('territio verbalis'); i regolamenti stessi sconsigliavano la tortura dei vecchi. Galileo però non aveva modo di esserne certo."
+        },
+        {
+          "type": "line",
+          "speaker": "Vincenzo Maculano",
+          "to": "Galileo Galilei",
+          "line": "Galileo Galilei: avete voi tenuto, o tenete, che il Sole sia centro del mondo e la Terra si muova? Vi si ammonisce a dire la verità: altrimenti si verrà contro di voi alla tortura.",
+          "context": "Dal verbale del 21 giugno: la domanda sull'intenzione fu posta tre volte, e chiusa con la formula di rito 'alias devenietur ad torturam'."
+        },
+        {
+          "type": "line",
+          "speaker": "Galileo Galilei",
+          "to": "Vincenzo Maculano",
+          "line": "Io son qua per far l'obbedienza. Non tengo né ho tenuto questa opinione del Copernico, dopo che mi fu intimato con precetto che io la dovessi lasciare. Del resto, son qua nelle loro mani: faccino quello che gli piace.",
+          "context": "Citazione pressoché testuale dal verbale del 21 giugno 1633. Un uomo che ha capito che la verità non è più tra le cose in discussione."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Verbalizzato che nulla più si poteva cavare, Galileo viene rimandato al suo luogo. L'indomani mattina lo vestono con l'abito bianco dei penitenti e lo conducono al convento di Santa Maria sopra Minerva.",
+          "context": "Dal verbale: 'Et cum nihil aliud posset haberi... remissus fuit ad locum suum'."
+        }
+      ]
+    },
+    {
+      "id": "scene_4",
+      "title": "La Minerva",
+      "setting": "Roma, 22 giugno 1633. La sala capitolare del convento di Santa Maria sopra Minerva. I cardinali della congregazione seduti in fila; Galileo in ginocchio, in abito da penitente, davanti a loro. La sentenza porta dieci nomi di cardinali, ma le firme sono sette: tre — e tra loro Francesco Barberini, il nipote del papa — non firmarono. Un dettaglio che dice molto, e che non cambierà niente.",
+      "music": "Un miserere in canto piano, lontano",
+      "beats": [
+        {
+          "type": "line",
+          "speaker": "Vincenzo Maculano",
+          "to": "Galileo Galilei",
+          "line": "Diciamo, pronunciamo, sentenziamo e dichiariamo che tu, Galileo, ti sei reso a questo Santo Offizio veementemente sospetto d'eresia: cioè d'aver tenuto e creduto dottrina falsa e contraria alle Sacre e divine Scritture — che il Sole sia centro del mondo e non si muova, e che la Terra si muova e non sia centro del mondo. Si proibisce il libro dei Dialoghi. Ti condanniamo al carcere formale ad arbitrio nostro; e per penitenza, dirai per tre anni, una volta la settimana, i sette salmi penitenziali.",
+          "context": "Condensato fedele del dispositivo della sentenza del 22 giugno 1633, con le formule originali ('veementemente sospetto d'eresia', 'carcere formale ad arbitrio nostro', i salmi settimanali). La sentenza fu letta al condannato in ginocchio."
+        },
+        {
+          "type": "line",
+          "speaker": "Galileo Galilei",
+          "to": "Vincenzo Maculano",
+          "line": "Io, Galileo, figlio del fu Vincenzo Galilei di Fiorenza, dell'età mia d'anni settanta, inginocchiato avanti di voi, avendo davanti agli occhi i sacrosanti Vangeli che tocco con le proprie mani... con cuor sincero e fede non finta abiuro, maledico e detesto i suddetti errori ed eresie. E giuro che per l'avvenire non dirò mai più, né asserirò, in voce o in scritto, cose tali per le quali si possa avere di me simile sospetto.",
+          "context": "Testo autentico dell'abiura (22 giugno 1633), condensato. Da leggere lentamente, a fatica: ogni parola costa."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Galileo firma l'abiura. Silenzio lungo. I cardinali escono; lui resta in ginocchio, solo, con la penna ancora in mano.",
+          "context": "L'originale firmato ('Io Galileo Galilei ho abiurato come di sopra, di mano propria') è conservato negli archivi vaticani."
+        },
+        {
+          "type": "line",
+          "speaker": "Galileo Galilei",
+          "to": "Pubblico",
+          "line": "Dicono che mi sia rialzato mormorando: 'Eppur si muove'. Non è vero: nessun testimone la udì, e la frase comparirà in stampa solo centoventiquattro anni dopo, a Londra. Ma vi dico io che cosa ho pensato, rialzandomi: che domattina la Terra farà quello che ha sempre fatto, senza chiedere licenza a nessuno di noi due. Io ho firmato per la mia vecchiaia. Lei non firma niente.",
+          "context": "'Eppur si muove' è attestato per la prima volta in Giuseppe Baretti, 'The Italian Library', Londra 1757: apocrifo, ma indistruttibile. Il pensiero che segue è invenzione fedele — la verità che la leggenda voleva dire, senza fingere che l'abbia detta."
+        },
+        {
+          "type": "line",
+          "speaker": "Urbano VIII",
+          "to": "Pubblico",
+          "line": "Il carcere glielo commuto subito, s'intende: prima l'ambasciata, poi la custodia dell'arcivescovo Piccolomini a Siena, che lo tratterà da principe, e infine la sua villa d'Arcetri, con l'ordine di starsene lì senza chiamar gente a ragionare. Non sono un mostro: sono un papa offeso. Non l'ho più voluto vedere. Nemmeno una volta.",
+          "context": "La commutazione in confino fu immediata (Siena da luglio, Arcetri dal dicembre 1633). Urbano respinse negli anni ogni supplica di piena liberazione, e i due non si incontrarono mai più."
+        },
+        {
+          "type": "line",
+          "speaker": "Vincenzo Maculano",
+          "to": "Pubblico",
+          "line": "Io avevo promesso una via d'uscita e ho consegnato un'abiura: fate voi il conto di quel che vale la parola d'un commissario. Il tribunale mi ricompensò: pochi anni e fui cardinale. Ma vi lascio un dubbio da uomo di fortezze: quel giorno alla Minerva, chi dei due era sotto assedio — il vecchio in ginocchio, o la Chiesa che aveva bisogno di vederlo in ginocchio?",
+          "context": "Maculano fu creato cardinale nel 1641. La domanda finale è invenzione: il congedo del personaggio."
+        },
+        {
+          "type": "line",
+          "speaker": "Galileo Galilei",
+          "to": "Pubblico",
+          "line": "Ad Arcetri, nella mia casa-prigione, mi morì la figlia prediletta, suor Maria Celeste. Poi, nel trentasette, mi si spensero gli occhi che avevano visto più cielo di chiunque altro. Scrissi allora a un amico: questo universo, che io con le mie meravigliose osservazioni avevo ampliato cento e mille volte oltre il creduto dei sapienti di tutti i secoli passati, ora per me s'è sì diminuito e ristretto, che non è maggiore di quel che occupa la persona mia. Eppure in quel buio dettai l'opera mia più grande, i 'Discorsi intorno a due nuove scienze': il manoscritto uscì di nascosto dall'Italia e si stampò in Olanda, dove i papi non arrivano.",
+          "context": "La citazione centrale è quasi testuale dalla lettera a Elia Diodati del 2 gennaio 1638, sulla propria cecità. I 'Discorsi' furono pubblicati da Elzevier a Leida nel 1638: fondano la fisica moderna."
+        },
+        {
+          "type": "line",
+          "speaker": "Urbano VIII",
+          "to": "Pubblico",
+          "line": "Morì l'otto gennaio del 1642, ad Arcetri. Il Granduca voleva fargli un mausoleo in Santa Croce, di fronte a Michelangelo: feci sapere che non era buon esempio, per uno che aveva dato al mondo il maggior scandalo della cristianità. Lo seppellirono in uno stanzino, sotto il campanile. Vinsi anche quella. Credo.",
+          "context": "Storico: Urbano VIII fece bloccare il monumento funebre, e Niccolini riferì il giudizio sullo 'scandalo'. La tomba monumentale in Santa Croce arrivò solo nel 1737."
+        },
+        {
+          "type": "line",
+          "speaker": "Vincenzo Maculano",
+          "to": "Pubblico",
+          "line": "Il 'Dialogo' restò all'Indice dei libri proibiti fino al 1835. E nel 1992 — trecentocinquantanove anni dopo quella mattina alla Minerva — un altro papa, Giovanni Paolo II, riconobbe davanti al mondo gli errori dei giudici di Galileo. La Terra, per parte sua, non ha mai smesso un solo giorno di girare: ma questo, in fondo, lo sapevate già.",
+          "context": "La commissione voluta da Giovanni Paolo II concluse i lavori il 31 ottobre 1992. Chiusura al pubblico, affidata al più lucido dei tre."
+        }
+      ]
+    }
+  ]
+}

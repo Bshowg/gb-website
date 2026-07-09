@@ -1,0 +1,759 @@
+{
+  "title": "Cecè - Pirandello",
+  "language": "it",
+  "description": "Commedia in un atto di Luigi Pirandello (1913), qui divisa in tre scene. Cecè Vivoli, vitaiolo che tutta Italia chiama per nome, deve riavere tre cambiali da seimila lire finite in mano alla bella Nada. Convince l'imbarazzatissimo commendator Squatriglia a fingersi amico di famiglia e a coprirlo di insulti per farsele restituire a prezzo di saldo. Testo originale adattato dall'edizione Mondadori (Maschere nude, vol. II).",
+  "characters": [
+    {
+      "name": "Cecè",
+      "description": "Cesare Vivoli, detto Cecè: vitaiolo elegante, chiacchierone e squattrinato, conosciuto da centomila persone in tutta Italia. Improvvisa truffe con la faccia più candida del mondo e non perde mai il controllo della commedia che sta recitando."
+    },
+    {
+      "name": "Squatriglia",
+      "description": "Il commendator Carlo Squatriglia, appaltatore di lavori portuali con un occhio 'murato' da uno scoppio di mina. Goffo, sudatissimo, onesto fino al midollo: l'ultima persona al mondo adatta a recitare una parte, e proprio per questo costretto a farlo."
+    },
+    {
+      "name": "Nada",
+      "description": "Signorina del bel mondo, bella, ironica e per niente ingenua. Ha in borsetta tre cambiali firmate da Cecè e un conto della modista da farsi pagare. Si indigna, ride, e si vendica a modo suo."
+    }
+  ],
+  "scenes": [
+    {
+      "id": "scene_1",
+      "title": "Il favore",
+      "setting": "Una stanza d'albergo di prim'ordine a Roma, mobili all'ultima moda, un telefono alla parete. Al levarsi della tela la scena è vuota: il telefono squilla una, due, tre volte. Cecè accorre in pigiama, con le guance insaponate e il pennello da barba in mano.",
+      "music": "Foxtrot da caffè-concerto anni '10",
+      "beats": [
+        {
+          "type": "line",
+          "speaker": "Cecè",
+          "to": "Telefono",
+          "line": "E tre! Un momento... Cristo, sto a farmi la barba! Pronto... Chi?... Più forte, non sento... — Ah, Squatriglia? Come? No... dicevo tra me, sto a farmi la barba... Sì, fate salire.",
+          "context": "Urla nel ricevitore, metà insaponato. Attacco fulminante della commedia."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Cecè s'avvia per tornare in camera; a un certo punto si ferma, sospeso."
+        },
+        {
+          "type": "line",
+          "speaker": "Cecè",
+          "to": "Pubblico",
+          "line": "Chi ha detto? Squatriglia? Uhm! Mi pare che sia commendatore...",
+          "context": "Tra sé: non è nemmeno sicuro di chi stia per ricevere."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Cecè rientra in camera. Si picchia alla porta, due volte, prima che gridi «Avanti!». Il cameriere introduce il commendator Squatriglia e si ritira."
+        },
+        {
+          "type": "line",
+          "speaker": "Squatriglia",
+          "to": "Cecè",
+          "line": "Carissimo Cecè! Se disturbo...",
+          "context": "Espansivo, con un grosso portafogli nella giacca."
+        },
+        {
+          "type": "line",
+          "speaker": "Cecè",
+          "to": "Squatriglia",
+          "line": "Ah, ecco, tu! Abbi pazienza: accomodati, commendatore. Vedi, sto a farmi la barba. Con te non faccio cerimonie: l'uscio è aperto, puoi parlare. Cinque minuti, ho bell'e finito.",
+          "context": "Parla dalla soglia della camera da letto, continuando a radersi."
+        },
+        {
+          "type": "line",
+          "speaker": "Squatriglia",
+          "to": "Cecè",
+          "line": "Fa', fa'; sto qua a guardare un certo conto... Cecè, devo andar via subito, sai? Sono venuto per salutarti e ringraziarti. Parto alle undici.",
+          "context": "Siede, esamina una carta dal portafogli, guarda l'orologio."
+        },
+        {
+          "type": "line",
+          "speaker": "Cecè",
+          "to": "Squatriglia",
+          "line": "Così presto? Hai sbrigato tutto?",
+          "context": "Rientra finendo di vestirsi in fretta."
+        },
+        {
+          "type": "line",
+          "speaker": "Squatriglia",
+          "to": "Cecè",
+          "line": "Eh, grazie a te! Se non era per te, figurati se avrei trovato così presto la via d'entrare a parlare con Sua Eccellenza!",
+          "context": "Gratitudine sincera e un po' ingombrante."
+        },
+        {
+          "type": "line",
+          "speaker": "Cecè",
+          "to": "Squatriglia",
+          "line": "Te l'ho fatta trovare io, la via? Quale Eccellenza, scusa?",
+          "context": "Sincero: non se ne ricorda affatto."
+        },
+        {
+          "type": "line",
+          "speaker": "Squatriglia",
+          "to": "Cecè",
+          "line": "Va' là, buffone! Ti dai le arie di confonderti, perché le conosci tutte, eh? Cos'è? T'offendi?",
+          "context": "Ride, convinto che Cecè finga per modestia."
+        },
+        {
+          "type": "line",
+          "speaker": "Cecè",
+          "to": "Squatriglia",
+          "line": "Non m'offendo; mi fai rabbia! Perché ti giuro, caro, che io non conosco nessuno. Nes-su-no, capisci? Centomila mi chiamano Cecè — a Milano, a Torino, a Roma, a Palermo — e io vivo sparpagliato in centomila che mi conoscono e che io non conosco. Perché non siamo mica sempre gli stessi: allegri con uno, tristi con un altro, serii con questo, burloni con quello... E dentro ti domandi: «Chi sarà costui? Chi sarò io per costui?». Se mi ci fisso, parola d'onore, ammattisco.",
+          "context": "Il celebre tema pirandelliano dell'uomo 'uno e centomila', qui condensato. Da dire con foga crescente, quasi sul serio."
+        },
+        {
+          "type": "line",
+          "speaker": "Squatriglia",
+          "to": "Cecè",
+          "line": "Rido, perché... di' la verità... sai chi sono io?",
+          "context": "Lo mette alla prova, divertito."
+        },
+        {
+          "type": "line",
+          "speaker": "Cecè",
+          "to": "Squatriglia",
+          "line": "Ma sì che ti conosco! Tu hai un fratello, perdio! Filippo, ecco! Lui, l'occhio, e tu la... cioè, no: lui, la mano, e tu l'occhio, già! Una mina, eh? Ma te lo murarono bene, magnificamente: bello liscio, che non pare più niente. T'ho conosciuto a... aspetta! che ci avevi l'impresa d'un porto, o di qualche cosa di simile...",
+          "context": "Ricostruisce a tentoni, sbagliando pure quale dei due fratelli ha perso cosa."
+        },
+        {
+          "type": "line",
+          "speaker": "Squatriglia",
+          "to": "Cecè",
+          "line": "Ma sì! A Palermo. Per una riparazione all'antemurale del porto. Prima dal Sotto-segretario, e poi dal Ministro... Era una settimana che mi mandavano da Erode a Pilato. Non so proprio come ringraziarti...",
+          "context": "Conferma tutto, felice."
+        },
+        {
+          "type": "line",
+          "speaker": "Cecè",
+          "to": "Squatriglia",
+          "line": "Te n'affliggi? Te n'affliggi sul serio? Te ne riparti con l'afflizione di non sapere come ringraziarmi?",
+          "context": "Gli si accende un'idea negli occhi."
+        },
+        {
+          "type": "line",
+          "speaker": "Squatriglia",
+          "to": "Cecè",
+          "line": "Ma sì, davvero... e... Cecè, se posso... senza cerimonie... Siamo tanto amici... sei un discolaccio, sempre in mezzo a tanti imbarazzi...",
+          "context": "Accenna a cavare il portafogli dalla tasca in petto."
+        },
+        {
+          "type": "line",
+          "speaker": "Cecè",
+          "to": "Squatriglia",
+          "line": "Ohè! che scherziamo? Commendatore, per chi mi prendi? Il gesto che hai fatto, scusa, è proprio brutto. Ma non credere che mi sia offeso! Sto studiando il modo di levarti l'afflizione: ti vorrei dare in cambio un gran piacere che io non ho mai potuto provare. Quello di dire tutto il male possibile e immaginabile d'un amico — alle sue spalle, s'intende. Te lo vorresti prendere?",
+          "context": "Blocca il gesto con la mano, poi passa immediatamente al piano."
+        },
+        {
+          "type": "line",
+          "speaker": "Squatriglia",
+          "to": "Cecè",
+          "line": "Cecè, non ho tempo! Debbo partire alle undici, e ancora non ho pronta la valigia. Purché sia spiccio, ecco, il modo...",
+          "context": "Già in trappola senza saperlo."
+        },
+        {
+          "type": "line",
+          "speaker": "Cecè",
+          "to": "Squatriglia",
+          "line": "Spiccissimo! Invece del treno delle undici prenderai quello delle quindici. Servizio per servizio! Più ti guardo e più vedo che sei quello che ci vuole per me: età... statura... portamento... e poi tu sei l'indulgenza personificata...",
+          "context": "Lo squadra come un impresario squadra un attore."
+        },
+        {
+          "type": "line",
+          "speaker": "Squatriglia",
+          "to": "Cecè",
+          "line": "Sfido! Con un occhio sempre chiuso...",
+          "context": "Autoironia sull'occhio murato."
+        },
+        {
+          "type": "line",
+          "speaker": "Cecè",
+          "to": "Squatriglia",
+          "line": "Caro! Sei un uomo di spirito, per questo ti voglio bene! Dunque, senti: tu sei un amico di papà. Papà è in commercio, io sono in ditta con papà, e siamo rovinati, rovinatissimi — per causa mia. Perché io sono... di' un po', come ti piacerebbe meglio di dire: canaglia o farabutto?",
+          "context": "Lo bacia, poi gli detta la parte. Nota: il papà di Cecè in realtà è morto."
+        },
+        {
+          "type": "line",
+          "speaker": "Squatriglia",
+          "to": "Cecè",
+          "line": "Canaglia! ...Ma a chi? Perché? Scherzi o dici sul serio?",
+          "context": "Ci sta prendendo gusto e insieme si spaventa."
+        },
+        {
+          "type": "line",
+          "speaker": "Cecè",
+          "to": "Squatriglia",
+          "line": "Di' pure canaglia. Ma anche farabutto, sai? suona bene in bocca. E biscazziere, anche... Falsario! Ti piacerebbe falsario? Ecco, ti dico subito di che si tratta. Quindici giorni fa, alla casina del Pincio, in mezzo al solito passeraio d'amici — Cecè, Cecè, Cecè — passa in automobile un tocco d'Eva di quelli che ti fanno baciar la punta delle dita. «Eh, Cecè», mi dicono, «quella lì, caro, non è per te!» Scommettiamo! Tre giorni dopo, alla stessa ora, io passavo in automobile accanto a lei, salutando graziosamente tutti quei cari amici. Ma per uscirne ho commesso una sciocchezza da cui m'ero sempre guardato: le ho fatto accettare, facendogliele cadere bene dall'alto, tre cambialette di duemila lire l'una.",
+          "context": "'Passeraio' = stormo di passeri che cinguettano, la solita corte di amici. Il racconto della scommessa, condensato dall'originale."
+        },
+        {
+          "type": "line",
+          "speaker": "Squatriglia",
+          "to": "Cecè",
+          "line": "Ah sì?",
+          "context": "Comincia a intravedere il guaio."
+        },
+        {
+          "type": "line",
+          "speaker": "Cecè",
+          "to": "Squatriglia",
+          "line": "Ti pare niente? Di quelle bestie in giro io non ne voglio: ne ho sempre avuto un sacro terrore. Ti giuro che da quattro notti non ci dormo. Bisogna assolutamente che io riabbia oggi stesso quelle tre cambiali. Ho scritto ieri a Nada che me le riporti, e...",
+          "context": "Per la prima volta è sincero: le cambiali lo terrorizzano davvero."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Squilla il campanello del telefono. Cecè si illumina e vi si appressa.",
+          "context": "È Nada che chiama dal portiere dell'albergo."
+        },
+        {
+          "type": "line",
+          "speaker": "Cecè",
+          "to": "Squatriglia",
+          "line": "Eccola qua. Dunque, siamo intesi. Vieni qua... Rispondi!",
+          "context": "Cerca di trascinarlo all'apparecchio."
+        },
+        {
+          "type": "line",
+          "speaker": "Squatriglia",
+          "to": "Cecè",
+          "line": "Aspetta! Che intesi? Che debbo fare? Vuoi che paghi seimila lire?",
+          "context": "Nel panico totale."
+        },
+        {
+          "type": "line",
+          "speaker": "Cecè",
+          "to": "Squatriglia",
+          "line": "No! Ma che! Seimila? Neanche per ischerzo! Le rovescerai addosso tutte le ingiurie che ti verranno in bocca — canaglia, farabutto — le dirai che mio padre è all'orlo del fallimento, che quelle cambiali in mano sua non valgono nulla. Te le farai restituire, e le darai in cambio... vedi un po'... quattrocento, cinquecento lire. Non di più, sai? Non ne varrebbe la pena!",
+          "context": "Le istruzioni complete della truffa, sparate a raffica."
+        },
+        {
+          "type": "line",
+          "speaker": "Squatriglia",
+          "to": "Cecè",
+          "line": "Ma nient'affatto! Non sono parti per me... Io... con una donna...",
+          "context": "Ultimo, inutile tentativo di resistenza. Il telefono squilla di nuovo."
+        },
+        {
+          "type": "line",
+          "speaker": "Cecè",
+          "to": "Squatriglia",
+          "line": "Che donna e donna! Va' là. Di': pronto! — Addio, eh? Io scappo!",
+          "context": "Gli caccia in mano il ricevitore."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Cecè fugge di corsa per la porta del corridoio, col cappello in mano, lasciando Squatriglia solo davanti al telefono che squilla.",
+          "context": "Fine del primo movimento: la trappola è armata."
+        }
+      ]
+    },
+    {
+      "id": "scene_2",
+      "title": "L'uomo dall'occhio murato",
+      "setting": "La stessa stanza d'albergo, un istante dopo. Squatriglia, solo, col ricevitore del telefono in mano, suda freddo: tra poco dovrà recitare la parte più infame della sua vita davanti a una sconosciuta.",
+      "music": "Valzer lento, teso",
+      "beats": [
+        {
+          "type": "line",
+          "speaker": "Squatriglia",
+          "to": "Telefono",
+          "line": "Pronto... Va bene... Fate salire...",
+          "context": "Voce strozzata."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Appende il ricevitore sbuffando; leva le braccia, cava il fazzoletto, si asciuga la fronte e resta in penosissima attesa."
+        },
+        {
+          "type": "line",
+          "speaker": "Squatriglia",
+          "to": "Pubblico",
+          "line": "Perdio... perdio... Ma questo è matto!... Preso in trappola... E come faccio adesso?... Che le dico?... Oh che storia... oh che storia... — Avanti!",
+          "context": "Borbotta tra sé; l'ultimo «Avanti!» risponde ai colpi all'uscio."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Il cameriere introduce Nada, elegante, con un vistoso cappello in capo, e si ritira. Squatriglia, imbarazzatissimo, s'inchina goffamente."
+        },
+        {
+          "type": "line",
+          "speaker": "Nada",
+          "to": "Squatriglia",
+          "line": "Il signor Vivoli?",
+          "context": "Impacciata alla vista di quell'estraneo."
+        },
+        {
+          "type": "line",
+          "speaker": "Squatriglia",
+          "to": "Nada",
+          "line": "Il signor Vivoli, signorina... il signor Vivoli, non... non c'è...",
+          "context": "Partenza disastrosa."
+        },
+        {
+          "type": "line",
+          "speaker": "Nada",
+          "to": "Squatriglia",
+          "line": "Ma come? Chi ha risposto al telefono? Come si trova qua e m'invita a salire? Questa è ancora la stanza del signor Vivoli?",
+          "context": "Diffidente, pronta ad andarsene."
+        },
+        {
+          "type": "line",
+          "speaker": "Squatriglia",
+          "to": "Nada",
+          "line": "Sì, del signor Vivoli. Al telefono ho risposto io, perché... scusi, lei è la... si... signorina Nada, non è vero? Abbia pazienza, le spiego... Ho sentito una voce di donna e... ho creduto che fosse la... la mamma...",
+          "context": "Improvvisa malissimo."
+        },
+        {
+          "type": "line",
+          "speaker": "Nada",
+          "to": "Squatriglia",
+          "line": "La mamma? che mamma? La sua mamma? Eh, lo volevo dire: scambiare la mia voce con quella della sua mamma!",
+          "context": "Scoppia a ridere del suo comico imbarazzo."
+        },
+        {
+          "type": "line",
+          "speaker": "Squatriglia",
+          "to": "Nada",
+          "line": "No! Che mia! Lasci, la prego, la mia mamma: qua non c'entra, grazie a Dio! È in paradiso da un pezzo! Dicevo la mamma di lui... Io sono un amico... del padre, che è vivo... purtroppo! cioè... sì... dico purtroppo, perché è vivo per patire... Oh, creda, signorina... dolori... dolori... Ci eravamo proposti, io e la mamma, di venire da lei!",
+          "context": "Si impantana sempre di più; il «purtroppo» gli scappa e deve rattopparlo."
+        },
+        {
+          "type": "line",
+          "speaker": "Nada",
+          "to": "Squatriglia",
+          "line": "Venire da me? la mamma di Cecè? Ma che scherzo è questo? Io conosco il signor Vivoli da una ventina di giorni appena!",
+          "context": "Fra l'allarmata e la divertita."
+        },
+        {
+          "type": "line",
+          "speaker": "Squatriglia",
+          "to": "Nada",
+          "line": "Per metterci nelle sue mani, signorina! Perché sappiamo che lei è stata vil... vilmente... vorrei dire di più, m'aiuti lei... spudoratamente, ecco... ingannata da quella canaglia, da quel farabutto, da quel cagliostro — no, la prego, mi lasci dire — biscazziere, donnaiuolo, falsario, ladro, assassino...",
+          "context": "Recita la lista d'insulti concordata, prendendo velocità come un treno senza freni."
+        },
+        {
+          "type": "line",
+          "speaker": "Nada",
+          "to": "Squatriglia",
+          "line": "Ed è suo amico?",
+          "context": "Secca, con un sopracciglio alzato."
+        },
+        {
+          "type": "line",
+          "speaker": "Squatriglia",
+          "to": "Nada",
+          "line": "Sissignora. Amicissimo. Ma della sua casa: di suo papà, che è una perla d'uomo, il più gran galantuomo che Dio abbia fatto e messo in terra! E in un momento supremo come questo, in cui la più lieve spinta... che dico? un soffio, signorina, un soffio... può mandar tutto a catafascio... determinare la più spaventosa catastrofe...",
+          "context": "Si agita, gesticola, suda."
+        },
+        {
+          "type": "line",
+          "speaker": "Nada",
+          "to": "Squatriglia",
+          "line": "Oh, per carità... Lei ha un certo modo di parlare... Se si vedesse... Si agita troppo, è... Dio mio, non posso vederla così agitato... Parli più calmo!",
+          "context": "Si nasconde la faccia per non ridere."
+        },
+        {
+          "type": "line",
+          "speaker": "Squatriglia",
+          "to": "Nada",
+          "line": "Mi proverò... Lei mi perdoni... M'investo della mia parte d'amico... La catastrofe, le dicevo, non solo d'una casa, ma dell'onore d'un povero vecchio assassinato dalla condotta infame del figlio... Questo figlio si espone a firmare... a mettere in giro... sì, dico... lei lo sa... sono tre, è vero? di duemila lire ciascuna, è vero?",
+          "context": "Arriva finalmente al punto: le cambiali."
+        },
+        {
+          "type": "line",
+          "speaker": "Nada",
+          "to": "Squatriglia",
+          "line": "Ma che vergogne son queste? ...Ma basta! Sa che lei è buffo sul serio?",
+          "context": "Prima sobbalza indignata, poi lo squadra e non riesce a prenderlo sul serio."
+        },
+        {
+          "type": "line",
+          "speaker": "Squatriglia",
+          "to": "Nada",
+          "line": "Io? Ah, me l'immagino... E creda che... sono tutto... tutto sudato, signorina!",
+          "context": "Patetico e disarmante."
+        },
+        {
+          "type": "line",
+          "speaker": "Nada",
+          "to": "Squatriglia",
+          "line": "Lo credo bene! Fare una tal parte... Si rassetti, via, si asciughi, caro signore. Io me ne vado.",
+          "context": "Si avvia verso la porta."
+        },
+        {
+          "type": "line",
+          "speaker": "Squatriglia",
+          "to": "Nada",
+          "line": "No, per carità, non se ne vada! M'ascolti, la scongiuro! Lei ha lì tre pezzi di carta che non valgono nulla! Che scandalo vuol provocare, se egli è vissuto sempre in mezzo allo scandalo, se è notoriamente uno svergognato, il ludibrio di tutti? Tutto quel poco che resta alla famiglia è oberato da ipoteche scoperte. Scoperte, signorina! Basta il minimo protesto d'una nuova cambiale, e il crollo è inevitabile. Ne resta schiacciato un povero vecchio, una povera donna... Lui, no! Ah, lui, no! Che importa a lui del disonore, della morte d'un povero vecchio?",
+          "context": "La grande tirata, condensata dall'originale. Qui, paradossalmente, diventa quasi bravo."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Si porta una mano alla tasca interna della giacca, ne trae il portafogli, lo apre titubante e ne cava un mazzetto di biglietti di banca."
+        },
+        {
+          "type": "line",
+          "speaker": "Nada",
+          "to": "Squatriglia",
+          "line": "Ah, un mercato! Caro signore, lei sbaglia. Crede d'avere a buon mercato un sentimento, quale la generosità, da una donna come me? Generose, noi? Per amore, se mai! Non per uno che ci mandi una terza persona a supplicarci in nome dei parenti. Questo indigna! Io non provo in questo momento altro che schifo, e una tal rabbia che se avessi qua, invece di lei, quel mascalzone...",
+          "context": "Sdegno vero, il momento più serio della commedia."
+        },
+        {
+          "type": "line",
+          "speaker": "Squatriglia",
+          "to": "Nada",
+          "line": "Lo ucciderebbe? L'ucciderei anch'io, creda, signorina!",
+          "context": "Con sincera e comicissima espressione: per un attimo dice la pura verità."
+        },
+        {
+          "type": "line",
+          "speaker": "Nada",
+          "to": "Squatriglia",
+          "line": "Lei mi fa ridere... Ma ha avuto un bel coraggio, mi sembra! ...Va bene. Lei dice che le cambiali non valgono nulla?",
+          "context": "Scoppia a ridere; la rabbia si scioglie in decisione."
+        },
+        {
+          "type": "line",
+          "speaker": "Squatriglia",
+          "to": "Nada",
+          "line": "Nulla: questo glielo posso proprio giurare: nulla, signorina!",
+          "context": "L'unica frase che può dire a cuor leggero: è vera."
+        },
+        {
+          "type": "line",
+          "speaker": "Nada",
+          "to": "Squatriglia",
+          "line": "E allora doveva dirmi così, e nient'altro: che protestandole farei ridere le mie amiche, perché saprebbero che ho avuto la dabbenaggine d'accettarle. Non fare appello alla mia generosità! Io non posso essere generosa: io mi devo vendicare. E creda che saprò trovare il modo, e mi vendicherò ferocemente. Questo schifo che m'ha fatto provare, perdio, lo sconterà!",
+          "context": "Promessa che manterrà prima di quanto Squatriglia immagini."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Di scatto, risoluta, Nada apre la borsetta, ne trae le tre cambiali e gliele porge."
+        },
+        {
+          "type": "line",
+          "speaker": "Nada",
+          "to": "Squatriglia",
+          "line": "Ecco a lei le cambiali. Se ne vada! Se ne vada via subito! ...E non mi ringrazi!",
+          "context": "Gli tronca il «grazie» in gola."
+        },
+        {
+          "type": "line",
+          "speaker": "Squatriglia",
+          "to": "Nada",
+          "line": "No... ma... mi permetta... mi conceda... Mi lasci fare... per favore... non so se faccio bene o male...",
+          "context": "Timido, con le dita tremolanti, depone alcuni biglietti di banca sul tavolino, sotto il calamaio."
+        },
+        {
+          "type": "line",
+          "speaker": "Nada",
+          "to": "Squatriglia",
+          "line": "Non voglio, le dico! Si riprenda quel denaro! ...Quanto ha messo lì?",
+          "context": "Il «non voglio» e la curiosità sulla cifra a mezzo secondo di distanza."
+        },
+        {
+          "type": "line",
+          "speaker": "Squatriglia",
+          "to": "Nada",
+          "line": "Mille e cinque... cinquecento lire, signorina, ma... se... se è poco...",
+          "context": "Ben oltre le cinquecento massime ordinate da Cecè."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Contrariata, Nada cava dalla borsetta una busta aperta e gliela porge: è un conto della modista. Col dito gli indica il cappello che ha in capo."
+        },
+        {
+          "type": "line",
+          "speaker": "Squatriglia",
+          "to": "Nada",
+          "line": "«Cappello a cupola piana, con grande Paradis bianco naturale: lire milleseicentocinquanta.» ...Ah... sì... subito... Volentieri...",
+          "context": "Legge il conto senza capire, poi capisce: aggiunge sotto il calamaio un biglietto da cento e uno da cinquanta."
+        },
+        {
+          "type": "line",
+          "speaker": "Nada",
+          "to": "Squatriglia",
+          "line": "Basta, la prego!",
+          "context": "Gelida, mentre lui ricomincia coi ringraziamenti."
+        },
+        {
+          "type": "line",
+          "speaker": "Squatriglia",
+          "to": "Nada",
+          "line": "Ha ragione. Scappo, corro a dar l'annunzio del suo atto generoso... no, no... non aggiungo altro... Permette? La ossequio.",
+          "context": "Le porge la mano, gliela stringe, s'inchina, e via per la porta in fondo."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Nada, rimasta sola, fa atti di nausea e di rabbia; passeggia infuriata per la stanza."
+        },
+        {
+          "type": "line",
+          "speaker": "Nada",
+          "to": "Pubblico",
+          "line": "Ah, me la pagherà... me la pagherà... Vigliacco!... Vigliacco! Vigliacco!... Aspetta...",
+          "context": "Conta i biglietti con ira e sprezzo, li caccia nella borsetta; poi si morde un dito, gli occhi sfavillanti, siede al tavolino e si mette a scrivere una lettera."
+        }
+      ]
+    },
+    {
+      "id": "scene_3",
+      "title": "Il compenso",
+      "setting": "La stessa stanza. Nada, di spalle alla porta, sta scrivendo la sua lettera di vendetta. La porta si apre silenziosamente: Cecè v'entra col cappello a sghembo, in punta di piedi, e le si avvicina alle spalle.",
+      "music": "Ripresa del foxtrot, più maliziosa",
+      "beats": [
+        {
+          "type": "stage_direction",
+          "action": "Cecè richiude la porta senza far rumore, si appressa a Nada e l'abbraccia per di dietro.",
+          "context": "Non sa ancora che qui bisogna recitare il capolavoro."
+        },
+        {
+          "type": "line",
+          "speaker": "Cecè",
+          "to": "Nada",
+          "line": "Naduccia mia bella!",
+          "context": "Tutto miele."
+        },
+        {
+          "type": "line",
+          "speaker": "Nada",
+          "to": "Cecè",
+          "line": "Ah? Tu? Con che faccia osi presentarti a me?",
+          "context": "Si divincola, furibonda."
+        },
+        {
+          "type": "line",
+          "speaker": "Cecè",
+          "to": "Nada",
+          "line": "Che cos'è? Perdonami: t'ho fatto aspettar troppo? Non credevo di far così tardi. Via, eccomi qua...",
+          "context": "Le presenta la faccia sorridente — errore fatale."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Nada gli appioppa uno schiaffo sonoro."
+        },
+        {
+          "type": "line",
+          "speaker": "Cecè",
+          "to": "Nada",
+          "line": "Oh Dio... troppo forte... M'hai fatto male... perché?",
+          "context": "Genuinamente sorpreso dalla potenza dello schiaffo."
+        },
+        {
+          "type": "line",
+          "speaker": "Nada",
+          "to": "Cecè",
+          "line": "Perché? Hai il coraggio di domandarmi il perché? Sei stato con la mamma? Con la tua mamma, che doveva venire a pregarmi, a scongiurarmi d'aver pietà?",
+          "context": "Gli rovescia addosso la messinscena di Squatriglia."
+        },
+        {
+          "type": "line",
+          "speaker": "Cecè",
+          "to": "Nada",
+          "line": "La mia mamma? Che dici? Sei matta? Che mamma, scusa? dov'è la mamma? che c'entra la mia mamma?",
+          "context": "Da qui in poi recita l'innocenza con impegno totale."
+        },
+        {
+          "type": "line",
+          "speaker": "Nada",
+          "to": "Cecè",
+          "line": "Imbroglione! Il fallimento! la rovina! il disonore! tutto a catafascio per le tue nequizie! Un povero padre a cui hai inzaccherato la canizie veneranda! Una povera madre... imbroglione! gaglioffo! Come non ti vergogni?",
+          "context": "Ripete a memoria le enormità sentite un quarto d'ora prima."
+        },
+        {
+          "type": "line",
+          "speaker": "Cecè",
+          "to": "Nada",
+          "line": "Ma tu farnetichi, mia cara! Io non ho papà, io non ho mamma; che dici? Hai sognato! Ti prego di spiegarmi: io non capisco nulla. Ti vedo infuriata... credevo che fosse per il mio ritardo...",
+          "context": "Serio, con freddezza grave. Qui, tra l'altro, dice il vero."
+        },
+        {
+          "type": "line",
+          "speaker": "Nada",
+          "to": "Cecè",
+          "line": "È possibile una faccia così a prova di bomba? Ma come? quell'uomo dall'occhio murato, che ho trovato qua, al tuo posto? Amico di tuo papà!",
+          "context": "Gli va incontro con le mani tese, esasperata."
+        },
+        {
+          "type": "line",
+          "speaker": "Cecè",
+          "to": "Nada",
+          "line": "Un uomo dall'occhio murato? L'hai trovato qua? E come? E chi l'aveva fatto salire?",
+          "context": "Simula prima sgomento, poi ansia e costernazione."
+        },
+        {
+          "type": "line",
+          "speaker": "Nada",
+          "to": "Cecè",
+          "line": "Che ne so io? Ho telefonato; m'hanno invitata a salire. Credevo di trovar te; ho trovato lui. Aspettava tua madre, per venire da me a pregarmi...",
+          "context": "Comincia a vacillare: e se davvero non c'entrasse?"
+        },
+        {
+          "type": "line",
+          "speaker": "Cecè",
+          "to": "Nada",
+          "line": "Mia madre? E tu ci hai creduto? A pregarti di che?",
+          "context": "Incalza."
+        },
+        {
+          "type": "line",
+          "speaker": "Nada",
+          "to": "Cecè",
+          "line": "Ti dico di no! ...Di restituire le tre cambiali.",
+          "context": "Eccoci al punto."
+        },
+        {
+          "type": "line",
+          "speaker": "Cecè",
+          "to": "Nada",
+          "line": "E tu? Tu gliele hai date?",
+          "context": "Con ansia aggressiva: il momento della verità (della sua verità)."
+        },
+        {
+          "type": "line",
+          "speaker": "Nada",
+          "to": "Cecè",
+          "line": "S'è messo a parlarmi della rovina della tua casa... che tuo padre era all'orlo del fallimento... che bastava un soffio a mandar giù un accordo coi creditori... M'ha detto, dimostrato, che non valevano nulla, che non avrei potuto cavarne alcun vantaggio...",
+          "context": "Si giustifica, smarrita."
+        },
+        {
+          "type": "line",
+          "speaker": "Cecè",
+          "to": "Nada",
+          "line": "E gliel'hai date? Disgraziata! Mi hai rovinato, mi hai rovinato, mi hai rovinato! Sai chi è costui? Il più feroce strozzino ch'esista sulla faccia della terra! Una sanguisuga! Un vampiro!",
+          "context": "Esplode: la controtruffa comincia."
+        },
+        {
+          "type": "line",
+          "speaker": "Nada",
+          "to": "Cecè",
+          "line": "Quello lì? ...Ma io ho creduto che l'avessi mandato tu, per riavere le cambiali!",
+          "context": "Ha indovinato tutto — e sta per farsi convincere del contrario."
+        },
+        {
+          "type": "line",
+          "speaker": "Cecè",
+          "to": "Nada",
+          "line": "Io? Ma come? Se t'avevo scritto io stesso di riportarmele qua! Te le volevo cambiare... ritirarle... darti il danaro... Come ti sei arrischiata a dargliele? Ma perché sa fare lo scemo a meraviglia, sfido! Non c'è parte che non sappia fare: l'asino e il porco, la serpe e la iena, la tigre e il coniglio! Da anni mi dava la caccia, perché gli ho strappato dalle grinfie più d'una preda. E sono in bianco, capisci? senza scadenza fissa: mi terrà sotto la minaccia, m'imporrà gl'interessi a suo piacere e mi succhierà il sangue, come ha fatto a tanti altri. Il cento per cento, mi farà pagare, su quelle seimila lire! Ma dimmi: tu gliele hai date così... per niente?",
+          "context": "Il ritratto dello 'strozzino', condensato dall'originale: ogni parola è un'infamia inventata sul povero Squatriglia."
+        },
+        {
+          "type": "line",
+          "speaker": "Nada",
+          "to": "Cecè",
+          "line": "No... m'ha date alcune centinaia di lire... mille... milleseicento... seicentocinquanta.",
+          "context": "La cifra esce a rate, con crescente imbarazzo."
+        },
+        {
+          "type": "line",
+          "speaker": "Cecè",
+          "to": "Nada",
+          "line": "Strozzino! Milleseicentocinquanta per seimila, su cui mi farà il cento per cento!",
+          "context": "Fa i conti dell'usura immaginaria — intascando mentalmente la differenza."
+        },
+        {
+          "type": "line",
+          "speaker": "Nada",
+          "to": "Cecè",
+          "line": "E me ne voleva dare anche meno! Appena gli ho fatto vedere la nota del cappello...",
+          "context": "Si tradisce con candore."
+        },
+        {
+          "type": "line",
+          "speaker": "Cecè",
+          "to": "Nada",
+          "line": "Quale cappello? Codesto? Ma scusa, se codesto te l'ho pagato io? Ho capito: vuol dire che lo pagherò due volte io, codesto cappello. Le aggiungerà agli interessi.",
+          "context": "Indignazione da ragioniere."
+        },
+        {
+          "type": "line",
+          "speaker": "Nada",
+          "to": "Cecè",
+          "line": "No, no, senti, Cecè, almeno queste... Te ne prego! Fammi questo piacere...",
+          "context": "Prova a offrirgli i soldi appena incassati."
+        },
+        {
+          "type": "line",
+          "speaker": "Cecè",
+          "to": "Nada",
+          "line": "Ma va'! Che ti passa per il capo? Sta' zitta! Mi dispiace anche per te, ma ti sta bene, sai? Hai potuto credere a tutte le infamie che colui t'avrà dette di me! Che t'ha detto? Che t'ha detto?",
+          "context": "Rifiuta i soldi con sdegno: gli servono lì dove sono, in mano a lei."
+        },
+        {
+          "type": "line",
+          "speaker": "Nada",
+          "to": "Cecè",
+          "line": "Caro mio... Povero Cecè... vieni qua... Ti compenserò io, Cecè...",
+          "context": "Completamente riconquistata, tenera."
+        },
+        {
+          "type": "line",
+          "speaker": "Cecè",
+          "to": "Nada",
+          "line": "Ah, cara mia, lo credo bene! Mi compenserai alla stregua dell'usura che mi farà quello lì! Ma è pure la rabbia, capisci? la rabbia d'esser caduto in quelle mani!",
+          "context": "Accorre e l'abbraccia: la vittima che si lascia consolare."
+        },
+        {
+          "type": "line",
+          "speaker": "Nada",
+          "to": "Cecè",
+          "line": "Anche di più! E ti farò passare anche la rabbia, sta' zitto... Siedi qua.",
+          "context": "Lo fa sedere e gli si siede sulle ginocchia."
+        },
+        {
+          "type": "line",
+          "speaker": "Cecè",
+          "to": "Nada",
+          "line": "Comincia il compenso? Subito un bacio qua! ...Di' un po', me ne ha dette molte, quell'infame? Per ognuna, un bacio! E dove voglio io... Cominciamo: che t'ha detto?",
+          "context": "Indica la fronte. Trasforma gli insulti che lui stesso ha commissionato in tariffa di baci."
+        },
+        {
+          "type": "line",
+          "speaker": "Nada",
+          "to": "Cecè",
+          "line": "Tante... tante... Canaglia!",
+          "context": "Ci sta al gioco."
+        },
+        {
+          "type": "line",
+          "speaker": "Cecè",
+          "to": "Nada",
+          "line": "Subito un bacio qua! Su, avanti, che altro t'ha detto?",
+          "context": "Indica la guancia destra; Nada ride e lo bacia."
+        },
+        {
+          "type": "line",
+          "speaker": "Nada",
+          "to": "Cecè",
+          "line": "Aspetta... aborto... di natura...",
+          "context": "Se lo gusta sillaba per sillaba."
+        },
+        {
+          "type": "line",
+          "speaker": "Cecè",
+          "to": "Nada",
+          "line": "Aborto di natura?! Vieni qua... vieni qua...",
+          "context": "Balza in piedi fingendosi oltraggiato; Nada gli scappa ridendo per la stanza."
+        },
+        {
+          "type": "line",
+          "speaker": "Nada",
+          "to": "Cecè",
+          "line": "Lasciami levare il cappello... Eccomi.",
+          "context": "Il famoso cappello da milleseicentocinquanta lire."
+        },
+        {
+          "type": "line",
+          "speaker": "Cecè",
+          "to": "Nada",
+          "line": "Milleseicentocinquanta! E il resto! Dunque, aborto di natura? Eh... questa volta qua, qua, cara mia...",
+          "context": "Risiede, con Nada sulle ginocchia, e indica con un dito la bocca."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Nada si china per baciarlo in bocca — e a questo punto, come scrive Pirandello, «sarà meglio che cali la tela».",
+          "context": "Didascalia finale originale dell'autore."
+        }
+      ]
+    }
+  ]
+}
