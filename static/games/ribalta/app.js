@@ -37,6 +37,7 @@ function characterColor(name) {
 
 const views = {
   scripts: document.getElementById('view-scripts'),
+  versions: document.getElementById('view-versions'),
   characters: document.getElementById('view-characters'),
   prep: document.getElementById('view-prep'),
   playback: document.getElementById('view-playback'),
@@ -140,22 +141,26 @@ function renderCatalog() {
   const list = document.getElementById('script-list');
   list.innerHTML = '';
 
-  function appendScript({ row, depth }) {
+  function familyOf(root) {
+    return rows.filter(r => r.id === root.id || r.root_id === root.id);
+  }
+
+  function appendScript(root) {
+    const versions = familyOf(root).length;
     const li = document.createElement('li');
     const btn = document.createElement('button');
-    if (depth > 0) btn.style.marginLeft = `${Math.min(depth, 4) * 1.1}rem`;
     const title = document.createElement('div');
     title.className = 'script-title';
-    title.textContent = (depth > 0 ? '↳ ' : '') + row.title;
+    title.textContent = root.title;
     btn.appendChild(title);
-    const metaParts = [`${row.actors} personaggi`, `${row.scenes} scene`];
-    if (depth > 0) metaParts.unshift(row.fork_note ? `Fork: ${row.fork_note}` : 'Fork');
-    if (row.author) metaParts.push(`di ${row.author}`);
+    const metaParts = [`${root.actors} personaggi`, `${root.scenes} scene`];
+    if (versions > 1) metaParts.push(`${versions} versioni`);
+    if (root.author) metaParts.push(`di ${root.author}`);
     const meta = document.createElement('div');
     meta.className = 'script-meta';
     meta.textContent = metaParts.join(' · ');
     btn.appendChild(meta);
-    btn.addEventListener('click', () => loadScript(row.id));
+    btn.addEventListener('click', () => openEntry(root));
     li.appendChild(btn);
     list.appendChild(li);
   }
@@ -180,14 +185,48 @@ function renderCatalog() {
   if (!inFolder) {
     const collections = [...new Set(roots.filter(r => r.collection).map(r => r.collection))];
     collections.forEach(appendFolder);
-    roots
-      .filter(r => !r.collection)
-      .forEach(root => forkSubtree(rows, root).forEach(appendScript));
+    roots.filter(r => !r.collection).forEach(appendScript);
   } else {
-    roots
-      .filter(r => r.collection === state.collection)
-      .forEach(root => forkSubtree(rows, root).forEach(appendScript));
+    roots.filter(r => r.collection === state.collection).forEach(appendScript);
   }
+}
+
+function openEntry(root) {
+  const family = state.catalog.filter(r => r.id === root.id || r.root_id === root.id);
+  if (family.length <= 1) {
+    loadScript(root.id);
+    return;
+  }
+  pushNav({ view: 'versions', id: root.id });
+  renderVersions(root);
+  showView('versions');
+}
+
+function renderVersions(root) {
+  document.getElementById('versions-title').textContent = root.title;
+  const list = document.getElementById('version-list');
+  list.innerHTML = '';
+  const family = state.catalog.filter(r => r.id === root.id || r.root_id === root.id);
+  forkSubtree(family, root).forEach(({ row, depth }) => {
+    const li = document.createElement('li');
+    const btn = document.createElement('button');
+    if (depth > 0) btn.style.marginLeft = `${Math.min(depth, 4) * 1.1}rem`;
+    const title = document.createElement('div');
+    title.className = 'script-title';
+    title.textContent = (depth > 0 ? '↳ ' : '') + row.title;
+    btn.appendChild(title);
+    const metaParts = [];
+    metaParts.push(depth === 0 ? 'Originale' : (row.fork_note || 'Variante'));
+    metaParts.push(`${row.actors} personaggi · ${row.scenes} scene`);
+    if (row.author) metaParts.push(`di ${row.author}`);
+    const meta = document.createElement('div');
+    meta.className = 'script-meta';
+    meta.textContent = metaParts.join(' · ');
+    btn.appendChild(meta);
+    btn.addEventListener('click', () => loadScript(row.id));
+    li.appendChild(btn);
+    list.appendChild(li);
+  });
 }
 
 function pushNav(s) {
@@ -210,6 +249,16 @@ async function restoreView(s) {
         await loadCatalog(target);
       }
       showView('scripts');
+    } else if (s.view === 'versions') {
+      if (!state.catalog.length) await loadCatalog(state.collection);
+      const root = state.catalog.find(r => r.id === s.id);
+      if (!root) {
+        await loadCatalog(null);
+        showView('scripts');
+        return;
+      }
+      renderVersions(root);
+      showView('versions');
     } else if (['characters', 'prep', 'playback', 'readall'].includes(s.view)) {
       if (!state.script && s.id) await fetchScript(s.id);
       if (!state.script) {
@@ -758,6 +807,7 @@ document.getElementById('back-to-scripts').addEventListener('click', () => {
   history.back();
 });
 document.getElementById('folder-back-btn').addEventListener('click', () => history.back());
+document.getElementById('back-from-versions').addEventListener('click', () => history.back());
 document.getElementById('back-to-characters').addEventListener('click', () => history.back());
 document.getElementById('back-from-readall').addEventListener('click', () => history.back());
 document.getElementById('advance-btn').addEventListener('click', advance);

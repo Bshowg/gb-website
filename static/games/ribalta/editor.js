@@ -524,7 +524,7 @@ function appendBeatRow(beatsEl, beat, insertAfter) {
         <textarea class="b-action" rows="2"></textarea>
       </div>
     </div>
-    <div class="form-row">
+    <div class="form-row improv-only">
       <label class="b-context-label">Contesto</label>
       <textarea class="b-context" rows="2"></textarea>
     </div>

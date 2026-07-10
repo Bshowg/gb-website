@@ -1,0 +1,1164 @@
+{
+  "title": "La mandragola",
+  "language": "it",
+  "description": "Adattamento condensato de «La mandragola» di Niccolò Machiavelli (1518), la più celebre commedia del Cinquecento italiano, nel suo fiorentino originale: le battute sono tagliate e ricucite, mai modernizzate; le parole difficili sono spiegate nelle note. Callimaco, per giacersi con l'onesta Lucrezia, si finge medico: una pozione di mandragola guarirà la sterilità, ma il primo uomo che dormirà con lei morrà — e il marito sciocco, la madre pratica e il frate venale faranno il resto. Testo dalla trascrizione di it.wikisource.org («Opere di Niccolò Machiavelli», vol. VI); i cinque atti sono ridotti a sei scene, le canzoni fra gli atti sono indicate nei suggerimenti musicali.",
+  "characters": [
+    {
+      "name": "Callimaco",
+      "description": "Giovane fiorentino cresciuto a Parigi, tornato in patria per la fama di madonna Lucrezia. Malato d'amore, passa in un lampo dall'esaltazione alla disperazione. Nella beffa fa la parte del gran medico e poi quella del garzonaccio rapito."
+    },
+    {
+      "name": "Ligurio",
+      "description": "Già sensale di matrimoni, ora scroccone di cene e regista di ogni inganno. Rapido, cinico, sempre tre mosse avanti a tutti: muove Nicia, il frate e lo stesso Callimaco come pedine."
+    },
+    {
+      "name": "Messer Nicia",
+      "description": "Dottore in legge, ricco e sciocchissimo, vuole un figlio a ogni costo. Borioso, credulone e sboccato: la vittima che coopera con entusiasmo alla propria beffa."
+    },
+    {
+      "name": "Frate Timoteo",
+      "description": "Confessore di casa: pio nei modi, mercantile nell'anima. Per danari trova una giustificazione teologica a qualunque cosa, e commenta l'inganno parlando al pubblico con disarmante franchezza."
+    },
+    {
+      "name": "Siro",
+      "description": "Servo fedele di Callimaco: esegue senza domandare, osserva e commenta tra sé la follia dei padroni. Parte accessoria."
+    },
+    {
+      "name": "Sostrata",
+      "description": "Madre di Lucrezia, «buona compagna» in gioventù e molto pratica: vuole un nipote e spinge la figlia dove serve. Parte accessoria."
+    },
+    {
+      "name": "Lucrezia",
+      "description": "Moglie di Nicia: onesta, savia e «atta a governare un regno». Nell'originale parla pochissimo — è storicamente così, non un taglio — ma le sue rare battute pesano come pietre, e alla fine è lei a decidere come andrà a finire. Parte accessoria ma decisiva."
+    }
+  ],
+  "scenes": [
+    {
+      "id": "scene_1",
+      "title": "Il mal d'amore di Callimaco",
+      "setting": "Firenze, primi del Cinquecento. Una piazza: da un lato la casa di Callimaco, dall'altro quella di messer Nicia, in fondo la chiesa. Come promette il Prologo, si vedrà «un nuovo caso in questa terra nato»: un amante meschino, un dottor poco astuto, un frate mal vissuto, un parassito di malizia el cucco.",
+      "music": "In apertura la canzone di ninfe e pastori «Perché la vita è brieve»; a fine scena la canzone dopo l'atto primo, «Chi non fa prova, Amore».",
+      "beats": [
+        {
+          "type": "stage_direction",
+          "action": "Callimaco esce di casa con Siro, come annuncia il Prologo: «Callimaco esce fuora e Siro con seco ha, suo famiglio, e dirà l'ordin di tutto. Stia ciascuno attento, né per ora aspettate altro argumento».",
+          "context": "Il Prologo in versi, qui accorciato, presentava la scena («Questa è Firenze vostra») e prometteva al pubblico «cosa da smascellarsi delle risa». Questa scena condensa l'intero atto primo."
+        },
+        {
+          "type": "line",
+          "speaker": "Callimaco",
+          "to": "Siro",
+          "line": "Siro, non ti partire: io ti voglio un poco. Io credo che ti maravigliassi della mia subita partita da Parigi, ed ora ti maravigli sendo io stato quì già un mese senza far alcuna cosa. Pertanto, pensando io di avere bisogno dell'opera tua, ti voglio dire il tutto.",
+          "context": "«Sendo» = essendo. Callimaco confida al servo il segreto che lo rode."
+        },
+        {
+          "type": "line",
+          "speaker": "Siro",
+          "to": "Callimaco",
+          "line": "Io vi son servidore: i servi non debbono mai domandare a' padroni d'alcuna cosa, nè cercare alcun loro fatto; ma quando per loro medesimi le dicono, debbono servirli con fede, e così ho fatto, e son per far io."
+        },
+        {
+          "type": "line",
+          "speaker": "Callimaco",
+          "to": "Siro",
+          "line": "Io aveva dieci anni quando, sendo mio padre e mia madre morti, io fui mandato a Parigi, dove io son stato vent'anni con una felicità grandissima. Ma, parendo alla Fortuna che io avessi troppo bel tempo, fece che capitò a Parigi un Cammillo Calfucci: noi venimmo in disputa dove erano più belle donne, o in Italia, o in Francia; e disse Cammillo, quasi che irato, che se tutte le donne italiane fussino mostri, che una sua parente era per riaver l'onor loro.",
+          "context": "Racconto condensato: nell'originale occupa mezza scena, con Siro che asseconda a ogni pausa."
+        },
+        {
+          "type": "line",
+          "speaker": "Siro",
+          "to": "Callimaco",
+          "line": "Io comincio a indovinarmi del mal vostro."
+        },
+        {
+          "type": "line",
+          "speaker": "Callimaco",
+          "to": "Siro",
+          "line": "E nominò madonna Lucrezia, moglie di messer Nicia Calfucci, alla quale dette tante laudi e di bellezze e di costumi, che in me destò tanto desiderio di vederla, ch'io mi messi a venir quì. Arrivato, ho trovato la fama di madonna Lucrezia essere minore assai che la verità, e sommi acceso in tanto desiderio d'essere seco, che io non truovo loco.",
+          "context": "«Sommi acceso» = mi sono acceso; «non truovo loco» = non trovo pace."
+        },
+        {
+          "type": "line",
+          "speaker": "Siro",
+          "to": "Callimaco",
+          "line": "A cotesto son io paratissimo; ma che speranza ci avete voi?"
+        },
+        {
+          "type": "line",
+          "speaker": "Callimaco",
+          "to": "Siro",
+          "line": "Ahimè, nessuna o poca. Mi fa guerra la natura di lei, che è onestissima e al tutto aliena dalle cose d'amore; avere il marito ricchissimo, e che al tutto si lascia governare da lei; non ha fante, nè famiglio, che non tremi di lei: in modo che non ci è luogo d'alcuna corruzione.",
+          "context": "«Fante» = serva; «famiglio» = servitore."
+        },
+        {
+          "type": "line",
+          "speaker": "Siro",
+          "to": "Callimaco",
+          "line": "Che pensate adunque poter fare?"
+        },
+        {
+          "type": "line",
+          "speaker": "Callimaco",
+          "to": "Siro",
+          "line": "Due cose mi fanno sperare. L'una, la semplicità di messer Nicia, che benchè sia dottore, egli è il più semplice e il più sciocco uomo di Firenze; l'altra, la voglia che lui e lei hanno di avere figliuoli, che, sendo stata sei anni a marito e non avendo ancor fatti, ne hanno un desiderio che muoiono. Tu conosci Ligurio: io me lo son fatto amico, e gli ho comunicato el mio amore; lui m'ha promesso d'aiutarmi con le mane e co' piè.",
+          "context": "«Dottore» = dottore in legge; «con le mane e co' piè» = con ogni mezzo."
+        },
+        {
+          "type": "line",
+          "speaker": "Siro",
+          "to": "Callimaco",
+          "line": "Guardate e' non v'inganni: questi pappatori non sogliono avere molta fede.",
+          "context": "«Pappatori» = scrocconi, mangiapane a tradimento."
+        },
+        {
+          "type": "line",
+          "speaker": "Callimaco",
+          "to": "Siro",
+          "line": "Egli è il vero. Nondimeno, quando una cosa fa per uno, si ha a credere che ti serva con fede. Ma eccogli di qua insieme: io mi vo' tirare da parte. Tu intanto ne va' in casa alle tue faccende.",
+          "context": "Nell'originale è Siro ad avvistarli («Eccogli di qua insieme»)."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Siro rientra in casa; Callimaco si apparta. Entrano messer Nicia e Ligurio, a metà di un discorso sui bagni termali che dovrebbero far ingravidare Lucrezia."
+        },
+        {
+          "type": "line",
+          "speaker": "Messer Nicia",
+          "to": "Ligurio",
+          "line": "Io credo che tua consigli sien buoni, e ne parlai jersera alla donna. Ma, a dirti il vero, io non ci vo di buone gambe: io mi spicco mal volentieri da bomba. E poi questi dottori di medicina non sanno quello che si pescono.",
+          "context": "«Spiccarsi da bomba» = allontanarsi da casa (la «bomba» è la tana nei giochi dei fanciulli); «non sanno quello che si pescono» = non sanno quel che fanno."
+        },
+        {
+          "type": "line",
+          "speaker": "Ligurio",
+          "to": "Messer Nicia",
+          "line": "E' vi debbe dar briga, perchè voi non sete uso a perdere la Cupola di veduta. Ma voi, che sete stato a Livorno: vedesti voi il mare? Quanto è egli maggiore che Arno?",
+          "context": "«La Cupola» = la cupola del Duomo di Firenze: Nicia non si è mai mosso da casa, ma si vanta d'aver viaggiato."
+        },
+        {
+          "type": "line",
+          "speaker": "Messer Nicia",
+          "to": "Ligurio",
+          "line": "Che Arno? Egli è per quattro volte, per più di sei, per più di sette, mi farai dire: e' non si vede se non acqua, acqua, acqua."
+        },
+        {
+          "type": "line",
+          "speaker": "Ligurio",
+          "to": "Messer Nicia",
+          "line": "Io mi maraviglio adunque, avendo voi pisciato in tante neve, che voi facciate tanta difficoltà d'andare ad uno bagno.",
+          "context": "«Avere pisciato in tante neve» = avere tanta esperienza del mondo (detto con perfetta ironia)."
+        },
+        {
+          "type": "line",
+          "speaker": "Messer Nicia",
+          "to": "Ligurio",
+          "line": "Tu hai la bocca piena di latte. E' ti pare a te una favola avere a sgominare tutta la casa? Pure, io ho tanta voglia d'avere figliuoli, che io son per fare ogni cosa. Ma parlane un poco tu con questi maestri; e io sarò intanto con la donna, e ritroveremci.",
+          "context": "«Tu hai la bocca piena di latte» = sei un ragazzino."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Nicia rientra in casa. Ligurio, rimasto solo, scorge Callimaco appostato."
+        },
+        {
+          "type": "line",
+          "speaker": "Ligurio",
+          "to": "Callimaco",
+          "line": "Io non credo che sia nel mondo el più sciocco uomo di costui; e quanto la fortuna lo ha favorito! Lui ricco, lei bella donna, savia, costumata, ed atta a governare un regno. Ma della pazzìa di costui se ne cava questo bene, che Callimaco ha che sperare. Che vai tu appostando, Callimaco?"
+        },
+        {
+          "type": "line",
+          "speaker": "Callimaco",
+          "to": "Ligurio",
+          "line": "Aspettavo che tu ti spiccassi da lui. Ma come ho a fare? A me bisogna tentare qualche cosa, sia grande, sia periculosa, sia dannosa, sia infame. Meglio è morire che vivere così: se io non sono tenuto in speranza da qualche partito, io mi morrò in ogni modo.",
+          "context": "«Partito» = piano, soluzione."
+        },
+        {
+          "type": "line",
+          "speaker": "Ligurio",
+          "to": "Callimaco",
+          "line": "Non dire così, raffrena cotesto impeto dell'animo. Io voglio che tu faccia a mio modo: che tu dica di avere studiato in medicina, e che abbi fatto a Parigi qualche sperienzia. Lui è per crederlo facilmente per la semplicità sua, e per essere tu litterato e poterli dire qualche cosa in grammatica.",
+          "context": "«In grammatica» = in latino."
+        },
+        {
+          "type": "line",
+          "speaker": "Callimaco",
+          "to": "Ligurio",
+          "line": "A che ci ha a servire cotesto?"
+        },
+        {
+          "type": "line",
+          "speaker": "Ligurio",
+          "to": "Callimaco",
+          "line": "Serviracci a pigliare un partito che io ho pensato, più corto, più certo, più riuscibile che 'l bagno. Se tu arai animo e se tu confiderai in me, io ti do questa cosa fatta, innanzi che sia domani questa otta.",
+          "context": "«Questa otta» = quest'ora; «arai» = avrai."
+        },
+        {
+          "type": "line",
+          "speaker": "Callimaco",
+          "to": "Ligurio",
+          "line": "Tu mi risuciti. Questa è troppa gran promessa, e pascimi di troppa gran speranza. Come farai?",
+          "context": "«Mi risuciti» = mi risusciti; «pascimi» = mi nutri."
+        },
+        {
+          "type": "line",
+          "speaker": "Ligurio",
+          "to": "Callimaco",
+          "line": "Tu il saprai, quando e' fia tempo. Tu, vanne in casa, e quivi m'aspetta, ed io anderò a trovare il dottore; e, se io lo conduco a te, andrai seguitando il mio parlare ed accomodandoti a quello.",
+          "context": "«Fia» = sarà."
+        },
+        {
+          "type": "line",
+          "speaker": "Callimaco",
+          "to": "Ligurio",
+          "line": "Così farò, ancora che tu mi riempia d'una speranza, che io temo non se ne vada in fumo."
+        }
+      ]
+    },
+    {
+      "id": "scene_2",
+      "title": "Il medico di Parigi",
+      "setting": "La stessa piazza, il giorno dopo. Ligurio conduce messer Nicia davanti alla casa di Callimaco, che gli è stato venduto come un gran medico tornato da Parigi.",
+      "music": "A fine scena la canzone dopo l'atto secondo: «Quanto felice sia ciascun sel vede, / chi nasce sciocco ed ogni cosa crede».",
+      "beats": [
+        {
+          "type": "line",
+          "speaker": "Ligurio",
+          "to": "Messer Nicia",
+          "line": "Come io vi ho detto, io credo che Dio ci abbia mandato costui, perchè voi adempiate il desiderio vostro. Egli ha fatto a Parigi esperienzie grandissime; e non vi maravigliate se a Firenze e' non ha fatto professione dell'arte: n'è suto cagione, prima, per essere ricco, secondo, perchè egli è ad ogni ora per tornare a Parigi.",
+          "context": "«Suto» = stato."
+        },
+        {
+          "type": "line",
+          "speaker": "Messer Nicia",
+          "to": "Ligurio",
+          "line": "Cotesto bene importa; perchè io non vorrei che mi mettessi in qualche lecceto, poi mi lasciassi in sulle secche. Ma della scienzia io ti dirò bene io, come io li parlo, s'egli è uom di dottrina: perchè a me non venderà egli vesciche.",
+          "context": "«Lecceto» = bosco di lecci, cioè un impiccio; «vendere vesciche» = vendere fumo."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Ligurio picchia all'uscio. Callimaco si affaccia in veste di medico, gravissimo."
+        },
+        {
+          "type": "line",
+          "speaker": "Messer Nicia",
+          "to": "Callimaco",
+          "line": "Bona dies, domine magister.",
+          "context": "Nicia sfoggia subito il suo latino da tribunale: «buongiorno, signor maestro»."
+        },
+        {
+          "type": "line",
+          "speaker": "Callimaco",
+          "to": "Messer Nicia",
+          "line": "Et vobis bona, domine doctor. A me non fia mai discaro fare piacere a voi ed a tutti li uomini virtuosi e da bene come voi.",
+          "context": "«E a voi, signor dottore». Il finto medico rende il saluto con gli interessi."
+        },
+        {
+          "type": "line",
+          "speaker": "Messer Nicia",
+          "to": "Callimaco",
+          "line": "Bene, alle guagnele! Vo cercando due cose, che un altro per avventura fuggirebbe: questo è di dare briga a me e ad altri. Io non ho figliuoli, e vorrene; e, per avere questa briga, vengo a dare impaccio a voi. Avete voi pensato che bagno fusse buono a disporre la donna mia ad impregnare?",
+          "context": "«Alle guagnele» = per i Vangeli (esclamazione); «vorrene» = ne vorrei."
+        },
+        {
+          "type": "line",
+          "speaker": "Callimaco",
+          "to": "Messer Nicia",
+          "line": "A volere adempiere il desiderio vostro, è necessario sapere la cagione della sterilità della donna vostra: nam causae sterilitatis sunt aut in semine, aut in matrice, aut in instrumentis seminariis, aut in virga, aut in causa extrinseca. Potrebbe anche causarsi questa sterilità da voi, per impotenzia: che quando questo fusse, non ci sarebbe rimedio alcuno.",
+          "context": "Latino da ciarlatano: «le cause di sterilità stanno nel seme, o nella matrice, o negli organi, o in causa esterna». Serve solo a far colpo su Nicia — e funziona."
+        },
+        {
+          "type": "line",
+          "speaker": "Messer Nicia",
+          "to": "Callimaco",
+          "line": "Impotente io? Oh! voi mi farete ridere! Io non credo che sia il più ferrigno ed il più rubizzo uomo in Firenze di me.",
+          "context": "«Ferrigno» = di ferro; «rubizzo» = vigoroso. Prima però ha mormorato tra sé: «Costui è il più degno uomo che si possa trovare!»"
+        },
+        {
+          "type": "line",
+          "speaker": "Ligurio",
+          "to": "Callimaco",
+          "line": "Non m'avete voi detto di sapere ordinare certe pozione, che indubitatamente fanno ingravidare?",
+          "context": "Ligurio imbecca il finto medico davanti a Nicia."
+        },
+        {
+          "type": "line",
+          "speaker": "Callimaco",
+          "to": "Messer Nicia",
+          "line": "Voi avete ad intender questo: che non è cosa più certa ad ingravidare una donna, che dargli bere una pozione fatta di mandragola. Questa è una cosa esperimentata da me dua paia di volte, e trovata sempre vera; e, se non era questo, la reina di Francia sarebbe sterile, ed infinite altre principesse di quello stato.",
+          "context": "La mandragola è una radice cui si attribuivano da secoli poteri fecondanti e magici: è il perno dell'inganno che dà il titolo alla commedia."
+        },
+        {
+          "type": "line",
+          "speaker": "Messer Nicia",
+          "to": "Callimaco",
+          "line": "E' egli possibile? Quando l'arebbe ella a pigliare?"
+        },
+        {
+          "type": "line",
+          "speaker": "Callimaco",
+          "to": "Messer Nicia",
+          "line": "Questa sera dopo cena, perchè la luna è ben disposta, ed il tempo non può essere più appropriato. Ma e' bisogna pensare a questo: che quello uomo che ha prima a fare seco, presa che l'ha cotesta pozione, muore infra otto giorni, e non lo camperebbe il mondo.",
+          "context": "Ecco la trappola: il primo uomo che giacerà con Lucrezia dopo la pozione morirà entro otto giorni."
+        },
+        {
+          "type": "line",
+          "speaker": "Messer Nicia",
+          "to": "Callimaco",
+          "line": "Cacasangue! Io non voglio cotesta suzzacchera! A me non l'apiccherai tu! Voi mi avete concio bene!",
+          "context": "«Suzzacchera» = intruglio, brutto affare; «concio» = conciato, sistemato."
+        },
+        {
+          "type": "line",
+          "speaker": "Callimaco",
+          "to": "Messer Nicia",
+          "line": "State saldo, e' ci è rimedio: fare dormire subito con lei un altro che tiri, standosi seco una notte, a sè tutta quella infezione della mandragola; dipoi vi iacerete voi senza pericolo.",
+          "context": "«Iacerete» = giacerete."
+        },
+        {
+          "type": "line",
+          "speaker": "Messer Nicia",
+          "to": "Callimaco",
+          "line": "Io non vo' far cotesto: perchè io non vo' fare la mia donna femmina e me becco.",
+          "context": "«Becco» = cornuto."
+        },
+        {
+          "type": "line",
+          "speaker": "Callimaco",
+          "to": "Messer Nicia",
+          "line": "Che dite voi, dottore? Oh! io non vi ho per savio come io credetti. Sì che voi dubitate di fare quello che ha fatto il re di Francia e tanti signori quanti sono là? Dirovvi: questa sera ci travestiremo, voi, Ligurio, Siro ed io; e el primo garzonaccio che noi troviamo scioperato lo imbavagliereno, ed a suon di mazzate lo condurreno in casa ed in camera vostra al buio. Dipoi, la mattina, ne manderete colui innanzi dì, farete lavare la vostra donna, e starete con lei a vostro piacere e sanza periculo.",
+          "context": "«Garzonaccio scioperato» = giovinastro sfaccendato. Il piano prevede, naturalmente, che il rapito sia Callimaco stesso."
+        },
+        {
+          "type": "line",
+          "speaker": "Messer Nicia",
+          "to": "Callimaco",
+          "line": "Io sono contento, poichè tu dì che re e principi e signori hanno tenuto questo modo. Ma sopratutto, che non si sappia, per amore degli Otto! Una fatica ci resta, e d'importanza: farne contenta mogliama, a che io non credo che la si disponga mai.",
+          "context": "Gli «Otto di Guardia» erano la magistratura criminale di Firenze; «mogliama» = mia moglie."
+        },
+        {
+          "type": "line",
+          "speaker": "Ligurio",
+          "to": "Messer Nicia",
+          "line": "Io ho pensato el rimedio: per via del confessore. Io, e danari, la cattività nostra, loro lo disporranno. E lei, farvela condurre alla madre: io so che la madre è della opinione nostra.",
+          "context": "«Cattività» = malizia. Nell'originale il piano è distillato in tre battute; qui è riunito in una."
+        },
+        {
+          "type": "line",
+          "speaker": "Messer Nicia",
+          "to": "Ligurio",
+          "line": "La le presta fede.",
+          "context": "«Le presta fede» = si fida di lei."
+        },
+        {
+          "type": "line",
+          "speaker": "Ligurio",
+          "to": "Callimaco",
+          "line": "Orsú! avanziam tempo, chè si fa sera. Vatti, Callimaco, a spasso, e fa' che alle ventitrè ore noi ti ritroviamo in casa con la pozione ad ordine. Noi n'andreno a casa la madre, el dottore ed io, a disporla; poi n'andreno al frate.",
+          "context": "Le «ventitré ore» = circa un'ora prima del tramonto (le ore si contavano dal tramonto precedente)."
+        },
+        {
+          "type": "line",
+          "speaker": "Callimaco",
+          "to": "Ligurio",
+          "line": "Deh! non mi lasciar solo."
+        },
+        {
+          "type": "line",
+          "speaker": "Ligurio",
+          "to": "Callimaco",
+          "line": "Tu mi pari cotto."
+        },
+        {
+          "type": "line",
+          "speaker": "Callimaco",
+          "to": "Ligurio",
+          "line": "Dove vuoi tu ch'io vadi ora? Io son morto."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Escono ciascuno per la sua via. Dalla casa sbuca Siro, che ha visto e sentito tutto."
+        },
+        {
+          "type": "line",
+          "speaker": "Siro",
+          "to": "Pubblico",
+          "line": "Se gli altri dottori fussero fatti come costui, noi faremmo a sassi pe' forni! Questo tristo di Ligurio e questo impazzato di questo mio patrone lo conducono in qualche loco, che gli faranno vergogna. Non so io che disegno si sia il loro, e dove si tenda questo loro inganno.",
+          "context": "«Fare a sassi pe' forni» = andrebbe tutto a rovescio, sarebbe il mondo alla rovescia. Monologo dell'atto secondo, spostato a chiusura di scena."
+        }
+      ]
+    },
+    {
+      "id": "scene_3",
+      "title": "Fra' Timoteo messo alla prova",
+      "setting": "Davanti alla chiesa, il pomeriggio stesso. Sostrata, la madre di Lucrezia, è già stata guadagnata alla causa. Per piegare il confessore, Ligurio ha in serbo un trucco: prima gli proporrà un caso finto e ben più scandaloso, e a Nicia ha ordinato di fingersi sordo perché non guasti tutto parlando.",
+      "beats": [
+        {
+          "type": "line",
+          "speaker": "Sostrata",
+          "to": "Messer Nicia",
+          "line": "Io ho sempre mai sentito dire che gli è ufizio d'un prudente pigliare de' cattivi partiti el migliore: se, ad avere figliuoli, voi non avete altro rimedio che questo, si vuole pigliarlo, quando e' non si gravi la conscienzia.",
+          "context": "«Quando e' non si gravi la conscienzia» = purché non pesi sulla coscienza. Apertura dell'atto terzo."
+        },
+        {
+          "type": "line",
+          "speaker": "Ligurio",
+          "to": "Sostrata",
+          "line": "Voi ve ne andrete a trovare la vostra figliuola, e messere ed io andreno a trovare fra' Timoteo suo confessoro, e narrerengli el caso, acciò che non abbiate a dirlo voi: vedrete quello che vi dirà.",
+          "context": "«Narrerengli» = gli narreremo."
+        },
+        {
+          "type": "line",
+          "speaker": "Sostrata",
+          "to": "Ligurio",
+          "line": "Così sarà fatto. Io vo a trovare la Lucrezia, e la merrò a parlare al frate, ad ogni modo.",
+          "context": "«La merrò» = la condurrò."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Sostrata esce. Avviandosi alla chiesa, Ligurio istruisce Nicia sul da farsi."
+        },
+        {
+          "type": "line",
+          "speaker": "Ligurio",
+          "to": "Messer Nicia",
+          "line": "Questi frati sono trincati, astuti. Io non vorrei che voi nel parlare guastassi ogni cosa: voi lascerete parlare a me, e non parlerete mai, s'io non vi accenno. Io gli dirò che voi sete assordato: voi non risponderete e non direte mai cosa alcuna, se noi non parliamo forte.",
+          "context": "«Trincati» = scaltri, navigati."
+        },
+        {
+          "type": "line",
+          "speaker": "Messer Nicia",
+          "to": "Ligurio",
+          "line": "Così farò."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Sul sagrato compare fra' Timoteo, che ha appena congedato una devota.",
+          "context": "È tagliata la scenetta del frate con una parrocchiana (messe pagate per il marito defunto e paure del Turco): un gioiello, ma fuori dalla trama."
+        },
+        {
+          "type": "line",
+          "speaker": "Frate Timoteo",
+          "to": "Ligurio",
+          "line": "Le piú caritative persone che sieno sono le donne, e le piú fastidiose. Chi le scaccia, fugge e fastidii e l'utile; chi le intrattiene, ha l'utile ed e fastidii insieme: e' non è el mele sanza le mosche. Che andate voi facendo, uomini da bene? Non riconosco io messer Nicia?",
+          "context": "La prima parte è detta tra sé, al pubblico."
+        },
+        {
+          "type": "line",
+          "speaker": "Ligurio",
+          "to": "Frate Timoteo",
+          "line": "Dite forte, ché gli è in modo assordato, che non ode quasi nulla."
+        },
+        {
+          "type": "line",
+          "speaker": "Frate Timoteo",
+          "to": "Messer Nicia",
+          "line": "Voi sete il ben venuto, messere!",
+          "context": "Urlato."
+        },
+        {
+          "type": "line",
+          "speaker": "Messer Nicia",
+          "to": "Frate Timoteo",
+          "line": "El ben trovato, padre!"
+        },
+        {
+          "type": "line",
+          "speaker": "Ligurio",
+          "to": "Frate Timoteo",
+          "line": "Qui messere Nicia ed un altro uomo da bene, che voi intenderete poi, hanno a fare distribuire in limosine parecchi centinaia di ducati; ed hanno disegnato che voi siate quello che li distribuiate.",
+          "context": "«Limosine» = elemosine. L'esca dei danari è gettata."
+        },
+        {
+          "type": "line",
+          "speaker": "Messer Nicia",
+          "to": "Ligurio",
+          "line": "Cacasangue!",
+          "context": "Nicia, che i ducati dovrebbe sborsarli lui, dimentica all'istante di essere sordo."
+        },
+        {
+          "type": "line",
+          "speaker": "Ligurio",
+          "to": "Frate Timoteo",
+          "line": "(Tacete, in malora, e' non fien molti!) Non vi maravigliate, padre, di cosa che dica, ché non ode, e pargli qualche volta udire, e non risponde a proposito. Ma prima bisogna che voi ci aiutiate d'un caso strano: una figliuola de' Calfucci, lasciata in serbanza in uno munistero, si truova gravida di quattro mesi. Se non ci si ripara con prudenzia, la casa de' Calfucci è vituperata; e il dottore, quando la non si palesi, è per dare trecento ducati per l'amore di Dio.",
+          "context": "«In serbanza» = in custodia; «vituperata» = disonorata. Il racconto, qui accorciato, è tutto inventato da Ligurio per saggiare il frate."
+        },
+        {
+          "type": "line",
+          "speaker": "Frate Timoteo",
+          "to": "Ligurio",
+          "line": "Come?"
+        },
+        {
+          "type": "line",
+          "speaker": "Ligurio",
+          "to": "Frate Timoteo",
+          "line": "Persuadere alla badessa che dia una pozione alla fanciulla per farla sconciare.",
+          "context": "«Sconciare» = abortire. La richiesta-esca è enorme: molto peggio di ciò che gli si chiederà davvero."
+        },
+        {
+          "type": "line",
+          "speaker": "Frate Timoteo",
+          "to": "Ligurio",
+          "line": "Cotesta è cosa da pensarla."
+        },
+        {
+          "type": "line",
+          "speaker": "Ligurio",
+          "to": "Frate Timoteo",
+          "line": "Guardate, nel far questo, quanti beni ne resulta: voi mantenete l'onore al monistero, alla fanciulla, a' parenti; rendete al padre una figliuola; fate tante elemosine, quante con questi trecento ducati potete fare; e, dall'altro canto, voi non offendete altro che un pezzo di carne non nata. Io credo che quello sia bene, che facci bene ai piú, e che e piú se ne contentino.",
+          "context": "Ligurio parodia il ragionamento casuistico che il frate stesso userà poi con Lucrezia."
+        },
+        {
+          "type": "line",
+          "speaker": "Frate Timoteo",
+          "to": "Ligurio",
+          "line": "Sia, col nome di Dio. Faccisi ciò che voi volete, e, per Dio e per carità, sia fatto ogni cosa. Ditemi el munistero, datemi la pozione, e, se vi pare, cotesti danari, da potere cominciare a fare qualche bene."
+        },
+        {
+          "type": "line",
+          "speaker": "Ligurio",
+          "to": "Frate Timoteo",
+          "line": "Or mi parete voi quel religioso, che io credevo che voi fussi. Ma io ho la gran nuova, padre: quella fanciulla si è sconcia per se stessa. E' bisogna però che voi facciate un'altra cosa in benefizio qui del dottore: cosa di minor carico, di minor scandolo, piú accetta a noi e piú utile a voi. Io ve lo vo' dire in chiesa, da me e voi.",
+          "context": "Superata la prova, Ligurio ritira l'esca (nell'originale finge di apprendere la notizia da una donna in chiesa) e passa alla vera richiesta: la beffa della mandragola."
+        },
+        {
+          "type": "line",
+          "speaker": "Messer Nicia",
+          "to": "Pubblico",
+          "line": "Come disse la botta a l'erpice!",
+          "context": "Proverbio: come il rospo disse all'erpice che gli era passato sopra — «e non tornare più!». Nicia, sempre «sordo», non si tiene."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Ligurio e il frate entrano in chiesa a confabulare. Nicia, piantato sul sagrato ad aspettare, sbotta."
+        },
+        {
+          "type": "line",
+          "speaker": "Messer Nicia",
+          "to": "Pubblico",
+          "line": "E' egli di dì o di notte? Sono io desto o sogno? Io mi truovo meno venticinque ducati, e del fatto mio non s'è ancora ragionato; ed ora m'hanno qui posto come un zugo a piuolo. Ma eccogli che tornano: in mala ora per loro, se non hanno ragionato del fatto mio!",
+          "context": "«Zugo a piuolo» = sciocco lasciato lì impalato come un palo."
+        },
+        {
+          "type": "line",
+          "speaker": "Frate Timoteo",
+          "to": "Messer Nicia",
+          "line": "Fate che le donne venghino. Io so quello che io ho a fare; e, se l'autorità mia varrà, noi concluderemo questo parentado questa sera.",
+          "context": "«Parentado» = l'accordo, l'affare di famiglia."
+        },
+        {
+          "type": "line",
+          "speaker": "Messer Nicia",
+          "to": "Frate Timoteo",
+          "line": "Tu mi ricrii tutto quanto. Fia egli maschio? Io lacrimo per la tenerezza.",
+          "context": "«Mi ricrii» = mi rianimi. Nell'originale è Ligurio a rispondergli, secco: «Maschio»."
+        }
+      ]
+    },
+    {
+      "id": "scene_4",
+      "title": "La conscienzia di Lucrezia",
+      "setting": "In chiesa, poco dopo. Fra' Timoteo aspetta madonna Lucrezia, che la madre trascina a farsi «consigliare». È la scena chiave: la donna onesta piegata a colpi di teologia.",
+      "music": "A fine scena la canzone dopo l'atto terzo: «Sí suave è l'inganno / al fin condotto imaginato e caro».",
+      "beats": [
+        {
+          "type": "line",
+          "speaker": "Frate Timoteo",
+          "to": "Pubblico",
+          "line": "Io non so chi s'abbi giuntato l'uno l'altro. Egli è vero che io ci sono suto giuntato; nondimeno, questo giunto è con mio utile. Messer Nicia e Callimaco sono ricchi, e da ciascuno sono per trarre assai; la cosa convien stia secreta, perché l'importa cosí a loro a dirla come a me. E' ben vero che io dubito non ci avere dificultà, perché madonna Lucrezia è savia e buona: ma io la giugnerò in sulla bontà. Ed eccola con la madre, la quale è bene una bestia, e sarammi uno grande adiuto.",
+          "context": "«Giuntato» = ingannato; «la giugnerò in sulla bontà» = la prenderò proprio per il verso della sua bontà."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Entrano Sostrata e Lucrezia, ferma e riluttante, a qualche passo dal frate."
+        },
+        {
+          "type": "line",
+          "speaker": "Sostrata",
+          "to": "Lucrezia",
+          "line": "Io credo che tu creda, figliuola mia, che io stimi l'onore ed el bene tuo quanto persona del mondo, e che io non ti consiglierei di cosa che non stessi bene. Io t'ho detto e ridicoti: se fra' Timoteo ti dice che non ci sia carico di conscienzia, che tu lo faccia sanza pensarvi.",
+          "context": "«Ridicoti» = te lo ridico."
+        },
+        {
+          "type": "line",
+          "speaker": "Lucrezia",
+          "to": "Sostrata",
+          "line": "Di tutte le cose che si son tentate, questa mi pare la piú strana: di avere a sottomettere el corpo mio a questo vituperio, ad esser cagione che uno uomo muoia per vituperarmi. Io non crederrei, se io fussi sola rimasa nel mondo e da me avessi a resurgere l'umana natura, che mi fussi simile partito concesso.",
+          "context": "«Vituperio» = disonore. La battuta più alta della commedia: Lucrezia vede benissimo l'enormità della cosa."
+        },
+        {
+          "type": "line",
+          "speaker": "Sostrata",
+          "to": "Lucrezia",
+          "line": "Io non ti so dire tante cose, figliuola mia. Tu parlerai al frate, e farai quello che tu dipoi sarai consigliata da lui, da noi, da chi ti vuole bene."
+        },
+        {
+          "type": "line",
+          "speaker": "Lucrezia",
+          "to": "Sostrata",
+          "line": "Io sudo per la passione.",
+          "context": "«Per la passione» = per l'angoscia."
+        },
+        {
+          "type": "line",
+          "speaker": "Frate Timoteo",
+          "to": "Lucrezia",
+          "line": "Voi siate le ben venute! Io so quello che voi volete intendere da me, perché messer Nicia m'ha parlato. Veramente, io sono stato in su' libri più di dua ore a studiare questo caso; e, dopo molte esamine, io truovo di molte cose che, e in particolare ed in generale, fanno per noi.",
+          "context": "«Fanno per noi» = giocano a nostro favore."
+        },
+        {
+          "type": "line",
+          "speaker": "Lucrezia",
+          "to": "Frate Timoteo",
+          "line": "Parlate voi da vero o motteggiate?",
+          "context": "«Motteggiate» = scherzate."
+        },
+        {
+          "type": "line",
+          "speaker": "Frate Timoteo",
+          "to": "Lucrezia",
+          "line": "Voi avete, quanto alla conscienzia, a pigliare questa generalità: che, dove è un bene certo ed un male incerto, non si debbe mai lasciare quel bene per paura di quel male. Qui è un bene certo: che voi ingraviderete, acquisterete una anima a messer Domenedio. Quanto allo atto, che sia peccato, questo è una favola, perché la volontà è quella che pecca, non el corpo; e la cagione del peccato è dispiacere al marito, e voi li compiacete; pigliarne piacere, e voi ne avete dispiacere. El fine vostro si è riempire una sedia in paradiso e contentare el marito vostro. Dice la Bibia che le figliuole di Lotto, credendosi essere rimase sole nel mondo, usorono con el padre; e, perché la loro intenzione fu buona, non peccorono.",
+          "context": "Il celebre sofisma del frate, appena accorciato: teologia piegata su misura, con tanto di esempio biblico (le figlie di Lot)."
+        },
+        {
+          "type": "line",
+          "speaker": "Lucrezia",
+          "to": "Frate Timoteo",
+          "line": "Che cosa mi persuadete voi?"
+        },
+        {
+          "type": "line",
+          "speaker": "Sostrata",
+          "to": "Lucrezia",
+          "line": "Làsciati persuadere, figliuola mia. Non vedi tu che una donna, che non ha figliuoli, non ha casa? Muorsi el marito, resta com'una bestia, abandonata da ognuno.",
+          "context": "«Muorsi el marito» = se il marito muore. L'argomento pratico della madre, accanto a quello teologico del frate."
+        },
+        {
+          "type": "line",
+          "speaker": "Frate Timoteo",
+          "to": "Lucrezia",
+          "line": "Io vi giuro, madonna, per questo petto sacrato, che tanta conscienzia vi è ottemperare in questo caso al marito vostro, quanto vi è mangiare carne el mercodedí: che è un peccato che se ne va con l'acqua benedetta.",
+          "context": "«El mercodedí» = il mercoledì, giorno di magro assai veniale."
+        },
+        {
+          "type": "line",
+          "speaker": "Lucrezia",
+          "to": "Frate Timoteo",
+          "line": "Io sono contenta: ma non credo mai essere viva domattina.",
+          "context": "La resa: detta con un filo di voce."
+        },
+        {
+          "type": "line",
+          "speaker": "Frate Timoteo",
+          "to": "Lucrezia",
+          "line": "Non dubitar, figliuola mia: io pregherrò Iddio per te, io dirò l'orazione dell'agnol Raffaello, che ti accompagni. Andate, in buona ora, e preparatevi a questo misterio, ché si fa sera.",
+          "context": "«L'agnol Raffaello» = l'angelo Raffaele, protettore dei viaggi... e qui d'altro."
+        },
+        {
+          "type": "line",
+          "speaker": "Sostrata",
+          "to": "Frate Timoteo",
+          "line": "Rimanete in pace, padre."
+        },
+        {
+          "type": "line",
+          "speaker": "Lucrezia",
+          "to": "Frate Timoteo",
+          "line": "Dio m'aiuti e la Nostra Donna, che io non càpiti male.",
+          "context": "«La Nostra Donna» = la Madonna."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Le donne escono. Dalla chiesa sbucano Ligurio e Nicia, che aspettavano nascosti."
+        },
+        {
+          "type": "line",
+          "speaker": "Frate Timoteo",
+          "to": "Ligurio",
+          "line": "O Ligurio, uscite qua! Le ne sono ite a casa disposte a fare ogni cosa, e non ci fia difficultà, perché la madre si andrà a stare seco, e vuolla mettere al letto lei.",
+          "context": "«Ite» = andate; «vuolla» = la vuole."
+        },
+        {
+          "type": "line",
+          "speaker": "Messer Nicia",
+          "to": "Frate Timoteo",
+          "line": "Dite voi el vero? Io sono el piú contento uomo del mondo."
+        },
+        {
+          "type": "line",
+          "speaker": "Frate Timoteo",
+          "to": "Messer Nicia",
+          "line": "Credolo. Voi vi beccherete un fanciul maschio, e chi non ha non abbia.",
+          "context": "«Vi beccherete» = vi guadagnerete. Con doppio senso feroce che Nicia non coglie."
+        },
+        {
+          "type": "line",
+          "speaker": "Ligurio",
+          "to": "Frate Timoteo",
+          "line": "Andate, frate, a le vostre orazioni. Voi, messere, andate a lei, per tenerla ferma in questa opinione; ed io andrò a trovare maestro Callimaco, che vi mandi la pozione: ed all'un'ora fate che io vi rivegga, per ordinare quello che si de' fare alle quattro.",
+          "context": "«All'un'ora... alle quattro» = ore di notte, contate dal tramonto: appuntamento a sera fatta, azione a notte fonda."
+        },
+        {
+          "type": "line",
+          "speaker": "Frate Timoteo",
+          "to": "Ligurio",
+          "line": "Andate sani."
+        }
+      ]
+    },
+    {
+      "id": "scene_5",
+      "title": "La notte della mandragola",
+      "setting": "La piazza, al calar della sera e poi a notte fonda. Lucrezia ha bevuto la pozione. Resta da consegnare nel suo letto un «garzonaccio» da sacrificare — e da risolvere un piccolo problema: Callimaco dovrebbe essere in due posti insieme.",
+      "music": "A fine scena la canzone dopo l'atto quarto: «Oh dolce notte, oh sante / ore notturne e quete». Per la serenata di Callimaco basta un liuto (o chi ce l'ha, una chitarra).",
+      "beats": [
+        {
+          "type": "stage_direction",
+          "action": "Sera. Callimaco, solo, cammina avanti e indietro divorato dall'ansia.",
+          "context": "L'atto quarto si apre con un lungo monologo, qui condensato nella battuta che segue."
+        },
+        {
+          "type": "line",
+          "speaker": "Callimaco",
+          "to": "Pubblico",
+          "line": "In quanta angustia d'animo sono io stato e sto! Quanto piú mi è cresciuta la speranza, tanto mi è cresciuto el timore. Io sono una nave vessata da dua diversi venti, che tanto piú teme, quanto ella è più presso al porto. Da ogni parte mi assalta tanto desio d'essere una volta con costei, che io mi sento tutto alterare: le gambe triemano, le viscere si commuovono, il cuore mi si sbarba del petto, le braccia s'abandonano, la lingua diventa muta, gli occhi abarbagliano, el cervello mi gira. Ma ecco Ligurio: el rapporto di costui mi farà o vivere allegro qualche poco o morire affatto.",
+          "context": "«Si sbarba» = si sradica; «abarbagliano» = si abbagliano, vedono confuso."
+        },
+        {
+          "type": "line",
+          "speaker": "Ligurio",
+          "to": "Callimaco",
+          "line": "Io non desiderai mai piú tanto di trovare Callimaco. Oh, Callimaco! dove sei tu stato? Le nuove sono buone, ottime: Lucrezia è contenta, el frate fece el bisogno; e la madre non restò mai di pregare, comandare, confortare la Lucrezia, tanto che ella la condusse al frate, e quivi operò in modo che la l'acconsentí. Ma el frate vorrà altro che prieghi: danari.",
+          "context": "Dialogo dell'atto quarto compresso: nell'originale Callimaco strappa le notizie una alla volta."
+        },
+        {
+          "type": "line",
+          "speaker": "Callimaco",
+          "to": "Ligurio",
+          "line": "Oh, Dio! Per quali mia meriti debbo io avere tanti beni? Io ho a morire per l'allegrezza!... Ohimè, ohimè, ohimè, io sono spacciato! E' non si è fatto nulla: io mi son murato un forno. O non sai tu che io ho detto a messer Nicia che tu, lui, Siro ed io piglieremo uno per metterlo a lato a la moglie? Se io sono con voi, non potrò essere quel che sia preso; s'io non sono, e' s'avvedrà dello inganno.",
+          "context": "«Mi son murato un forno» = mi sono rovinato con le mie mani. Dall'estasi al panico in una battuta sola."
+        },
+        {
+          "type": "line",
+          "speaker": "Ligurio",
+          "to": "Callimaco",
+          "line": "Io l'ho trovato. Noi abbiamo tutti a travestirci: io farò travestire el frate, che contrafarà la voce, el viso, l'abito, e dirò al dottore che tu sia quello; e' sel crederà. Tu, fo conto che tu ti metta un pitocchino indosso, e con un liuto in mano te ne venga costí, dal canto della sua casa, cantando un canzoncino.",
+          "context": "«Pitocchino» = mantelletto da pezzente; «dal canto» = dall'angolo."
+        },
+        {
+          "type": "line",
+          "speaker": "Callimaco",
+          "to": "Ligurio",
+          "line": "A viso scoperto? E' mi conoscerà."
+        },
+        {
+          "type": "line",
+          "speaker": "Ligurio",
+          "to": "Callimaco",
+          "line": "Non farà: perché io voglio che tu ti storca el viso, che tu apra, aguzzi o digrigni la bocca, chiugga un occhio. Pruova un poco.",
+          "context": "«Chiugga» = chiuda."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Callimaco prova una serie di smorfie orrende, una dopo l'altra."
+        },
+        {
+          "type": "line",
+          "speaker": "Callimaco",
+          "to": "Ligurio",
+          "line": "Fo io così?"
+        },
+        {
+          "type": "line",
+          "speaker": "Ligurio",
+          "to": "Callimaco",
+          "line": "Sí, sí, tieni a mente cotesto. Io ho un naso in casa: io vo' che tu te l'appicchi. E ricordati: che tu te la guadagni in questa notte; innanzi che tu ti parta, te le dia a conoscere, scuoprale lo inganno, mostrile l'amore le porti, e come sanza sua infamia la può esser tua amica, e con sua grande infamia tua nimica. È impossibile che la non convenghi teco.",
+          "context": "«Te l'appicchi» = te lo attacchi (un naso finto); «convenghi teco» = si accordi con te. Il consiglio decisivo: rivelarsi a Lucrezia prima dell'alba."
+        },
+        {
+          "type": "line",
+          "speaker": "Callimaco",
+          "to": "Ligurio",
+          "line": "Tu di' ben! Va' via."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Notte fonda. Arriva per primo fra' Timoteo, travestito da laico, gobbo e zoppicante.",
+          "context": "Sono tagliate le scene di raccordo con Siro che porta la pozione a casa di Nicia."
+        },
+        {
+          "type": "line",
+          "speaker": "Frate Timoteo",
+          "to": "Pubblico",
+          "line": "E' dicono el vero quelli che dicono che le cattive compagnie conducono gli uomini alle forche. Dio sa che io non pensavo ad iniurare persona: stavomi nella mia cella, dicevo el mio ufizio, intrattenevo e mia devoti. Capitommi inanzi questo diavolo di Ligurio, che mi fece intignere el dito in uno errore, donde io vi ho messo el braccio e tutta la persona, e non so ancora dove io m'abbia a capitare.",
+          "context": "«Iniurare» = far torto a; «intignere» = intingere. Il frate travestito si confessa... al pubblico."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Tornano Ligurio e Siro travestiti. Dalla sua casa esce messer Nicia, irriconoscibile: un guarnacchino corto che non lo copre, un cappuccio in capo, una spadaccina al fianco."
+        },
+        {
+          "type": "line",
+          "speaker": "Messer Nicia",
+          "to": "Pubblico",
+          "line": "Quanti lezzi ha fatti questa mia pazza! Innanzi che la ne sia voluta ire al letto, ell'ha fatto tante schifiltà: «Io non voglio!... Come farò io?... Che mi fate voi fare?... Oh me, mamma mia!» E, se non che la madre le disse il padre del porro, la non entrava in quel letto. Ma io sto pur bene! Chi mi conoscerebbe? Io paio maggiore, piú giovane, piú scarzo: e non sarebbe donna, che mi togliessi danari di letto.",
+          "context": "«Lezzi» = smancerie; «dire il padre del porro» = strapazzare per bene; «scarzo» = asciutto, snello."
+        },
+        {
+          "type": "line",
+          "speaker": "Ligurio",
+          "to": "Messer Nicia",
+          "line": "Buona sera, messere. Non abbiate paura, no' siàn noi."
+        },
+        {
+          "type": "line",
+          "speaker": "Messer Nicia",
+          "to": "Ligurio",
+          "line": "Oh! voi siete tutti qui? Tu, se' Ligurio? e tu, Siro? e quell'altro el maestro? ah? Oh, e' s'è contraffatto bene! e' non lo conoscerebbe Va-qua-tu!",
+          "context": "«Va-qua-tu» = il più sveglio degli sbirri: neanche lui lo riconoscerebbe. Il «maestro» travestito è in realtà il frate."
+        },
+        {
+          "type": "line",
+          "speaker": "Ligurio",
+          "to": "Messer Nicia",
+          "line": "Io gli ho fatto mettere dua noce in bocca, perché non sia conosciuto alla voce. E voi, togliete: mettetevi in bocca questa palla di cera.",
+          "context": "«Alla voce» = dalla voce."
+        },
+        {
+          "type": "line",
+          "speaker": "Messer Nicia",
+          "to": "Ligurio",
+          "line": "Dàlla qua... ca, pu, ca, co, co, cu, cu, spu... Che ti venga la seccaggine, pezzo di manigoldo! Di che, che, che era?",
+          "context": "La sputa disgustato."
+        },
+        {
+          "type": "line",
+          "speaker": "Ligurio",
+          "to": "Messer Nicia",
+          "line": "D'aloe.",
+          "context": "L'aloe: amarissima. «Perdonatemi — dice nell'originale — ve ne ho data una in scambio»."
+        },
+        {
+          "type": "line",
+          "speaker": "Messer Nicia",
+          "to": "Frate Timoteo",
+          "line": "Sia, in malora! Spu, spu... Maestro, voi non dite nulla?"
+        },
+        {
+          "type": "line",
+          "speaker": "Frate Timoteo",
+          "to": "Messer Nicia",
+          "line": "Ligurio m'ha fatto adirare.",
+          "context": "Il frate finge di essere Callimaco imbronciato."
+        },
+        {
+          "type": "line",
+          "speaker": "Messer Nicia",
+          "to": "Frate Timoteo",
+          "line": "Oh! voi contrafate bene la voce.",
+          "context": "Ovviamente: non è una voce contraffatta, è proprio un'altra persona."
+        },
+        {
+          "type": "line",
+          "speaker": "Ligurio",
+          "to": "Messer Nicia",
+          "line": "Non perdian piú tempo qui. Io voglio essere el capitano, e ordinare l'esercito per la giornata: al destro corno sia preposto Callimaco, al sinistro io, intra le dua corna starà qui el dottore; Siro fia retroguardo. El nome sia san Cucú.",
+          "context": "Parodia del linguaggio militare: «la giornata» = la battaglia; «el nome» = la parola d'ordine."
+        },
+        {
+          "type": "line",
+          "speaker": "Messer Nicia",
+          "to": "Ligurio",
+          "line": "Chi è san Cucú?"
+        },
+        {
+          "type": "line",
+          "speaker": "Ligurio",
+          "to": "Messer Nicia",
+          "line": "È el piú onorato santo che sia in Francia. Andiàn via, mettiàn l'aguato a questo canto. State a udire: io sento un liuto! Va' via, Siro: considera, essamina, torna presto, referisci.",
+          "context": "San Cucú è il santo dei becchi, cioè dei cornuti: la beffa è dichiarata in faccia a Nicia, che non capisce."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Siro corre a esplorare e torna subito, mentre gli altri si appiattano all'angolo."
+        },
+        {
+          "type": "line",
+          "speaker": "Siro",
+          "to": "Ligurio",
+          "line": "Egli è el piú bello garzonaccio, che voi vedessi mai! Non ha venticinque anni, e viensene solo, in pitocchino, sonando el liuto.",
+          "context": "Siro descrive Callimaco travestito come se non lo conoscesse: sta al gioco."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Callimaco compare all'angolo, col naso finto e il viso storto, strimpellando il liuto."
+        },
+        {
+          "type": "line",
+          "speaker": "Callimaco",
+          "to": "Pubblico",
+          "line": "«Venir vi possa el diavolo allo letto, dapoi ch'io non vi posso venir io!»",
+          "context": "Cantato: è il canzoncino della serenata, con dedica involontariamente profetica."
+        },
+        {
+          "type": "line",
+          "speaker": "Ligurio",
+          "to": "Callimaco",
+          "line": "Sta' forte! Da' qua questo liuto!"
+        },
+        {
+          "type": "line",
+          "speaker": "Callimaco",
+          "to": "Ligurio",
+          "line": "Ohimè! Che ho io fatto?",
+          "context": "Recitando la parte della vittima."
+        },
+        {
+          "type": "line",
+          "speaker": "Messer Nicia",
+          "to": "Ligurio",
+          "line": "Tu el vedrai! Cuoprili el capo, imbavaglialo! Dàgli un'altra volta! dagliene un'altra! mettetelo in casa!",
+          "context": "Nicia dirige con entusiasmo il rapimento del suo stesso ingannatore."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Trascinano Callimaco incappucciato in casa di Nicia. Sulla piazza vuota resta solo il frate.",
+          "context": "Qui cade la notte della mandragola. Il racconto di ciò che accade in casa arriverà tutto nella scena seguente."
+        },
+        {
+          "type": "line",
+          "speaker": "Frate Timoteo",
+          "to": "Pubblico",
+          "line": "E' sono intanati in casa, ed io me ne andrò al convento. E voi, spettatori, non ci appuntate: perché in questa notte non ci dormirà persona, sí che gli Atti non sono interrotti dal tempo. Io dirò l'uffizio; Ligurio e Siro ceneranno, ché non hanno mangiato oggi; el dottore andrà di camera in sala, perchè la cucina vadia netta. Callimaco e madonna Lucrezia non dormiranno, perché io so, se io fussi lui e se voi fussi lei, che noi non dormiremmo.",
+          "context": "«Non ci appuntate» = non fateci appunti, non criticateci. Il frate rompe la quarta parete per coprire il salto di tempo fino all'alba."
+        }
+      ]
+    },
+    {
+      "id": "scene_6",
+      "title": "In santo",
+      "setting": "La piazza all'alba, poi il sagrato della chiesa. Il «garzonaccio» va cacciato di casa prima che si faccia giorno; poi tutti in chiesa, dove Lucrezia deve «entrare in santo» — e dove ogni personaggio incassa il suo premio.",
+      "music": "Per il congedo si può riprendere la canzone d'apertura, o un liuto rinascimentale.",
+      "beats": [
+        {
+          "type": "line",
+          "speaker": "Frate Timoteo",
+          "to": "Pubblico",
+          "line": "Io non ho potuto questa notte chiudere occhio, tanto è el desiderio che io ho d'intendere come Callimaco e gli altri l'abbino fatta. Ma io sento un grande romore da casa messer Nicia. Eccogli: e' cavono fuora el prigione. Io sarò giunto a tempo: e' si fa appunto l'alba. Io voglio stare ad udire quel che dicono sanza scoprirmi.",
+          "context": "Tagliata la lamentela del frate sulla devozione che cala e le immagini votive impolverate: un altro gioiello fuori trama."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Nicia, Ligurio e Siro, ancora travestiti, spingono fuori di casa Callimaco incappucciato."
+        },
+        {
+          "type": "line",
+          "speaker": "Messer Nicia",
+          "to": "Siro",
+          "line": "Piglialo di costà, ed io di qua, e tu, Siro, lo tieni per il pitocco, di drieto.",
+          "context": "«Per il pitocco» = per il mantello; «di drieto» = da dietro."
+        },
+        {
+          "type": "line",
+          "speaker": "Callimaco",
+          "to": "Messer Nicia",
+          "line": "Non mi fate male!"
+        },
+        {
+          "type": "line",
+          "speaker": "Ligurio",
+          "to": "Siro",
+          "line": "Diangli dua volte, che non sappi donde e' si sia venuto. Giralo, Siro!",
+          "context": "«Diangli dua volte» = facciamogli fare due giri, per disorientarlo."
+        },
+        {
+          "type": "line",
+          "speaker": "Siro",
+          "to": "Ligurio",
+          "line": "Ecco fatto."
+        },
+        {
+          "type": "line",
+          "speaker": "Ligurio",
+          "to": "Callimaco",
+          "line": "Via, ribaldo, tira via! S'i' ti sento favellare, io ti taglierò el collo!",
+          "context": "«Favellare» = parlare."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Callimaco finge di fuggire; dietro l'angolo si sbarazza di naso finto e pitocco. Nicia si sfrega le mani."
+        },
+        {
+          "type": "line",
+          "speaker": "Messer Nicia",
+          "to": "Ligurio",
+          "line": "E' s'è fuggito. Oh! io vi ho da dire le belle cose. Mogliama era nel letto al buio; io giunsi su con questo garzonaccio, e lo menai in una dispensa dove era un certo lume annacquato, in modo ch'e' non mi poteva vedere in viso. Io lo feci spogliare: egli è brutto di viso — un nasaccio, una bocca torta — ma tu non vedesti mai le piú belle carne: bianco, morbido, pastoso!",
+          "context": "«Lume annacquato» = luce fioca. Il racconto di Nicia, capolavoro di comicità involontaria, è qui condensato in due battute."
+        },
+        {
+          "type": "line",
+          "speaker": "Ligurio",
+          "to": "Messer Nicia",
+          "line": "Con quanta prudenzia avete voi governata questa cosa!",
+          "context": "Detto con la faccia più seria del mondo."
+        },
+        {
+          "type": "line",
+          "speaker": "Messer Nicia",
+          "to": "Ligurio",
+          "line": "Al buio lo menai in camera e messi al letto; e, innanzi mi partissi, volli toccare con mano come la cosa andava, ché io non sono uso ad essermi dato ad intendere lucciole per lanterne. Poi me n'andai alla suocera al fuoco, e tutta notte abbiamo atteso a ragionare del bambino, che me lo pare tuttavia avere in braccio, el naccherino!",
+          "context": "«El naccherino» = il piccolino, il tamburellino."
+        },
+        {
+          "type": "line",
+          "speaker": "Ligurio",
+          "to": "Messer Nicia",
+          "line": "La cosa è ita bene. Ma egli è già chiaro el giorno: voi, che farete?",
+          "context": "«Ita» = andata."
+        },
+        {
+          "type": "line",
+          "speaker": "Messer Nicia",
+          "to": "Ligurio",
+          "line": "Andronne in casa, a mettermi e panni buoni. Farò levare e lavare la donna, e farolla venire alla chiesa, ad entrare in santo. Io vorrei che voi e Callimaco fussi là, per ringraziare el frate del bene che ci ha fatto.",
+          "context": "«Entrare in santo» = ricevere la benedizione di purificazione, come le puerpere. «Farolla» = la farò."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Nicia rientra. Callimaco, di nuovo in panni suoi, raggiunge Ligurio raggiante."
+        },
+        {
+          "type": "line",
+          "speaker": "Callimaco",
+          "to": "Ligurio",
+          "line": "Ligurio mio, poi che io me le fu' dato a conoscere, e ch'io l'ebbi dato ad intendere l'amore che io le portavo, doppo qualche sospiro, disse: «Poiché l'astuzia tua, la sciocchezza del mio marito, la semplicità di mia madre e la tristizia del mio confessoro mi hanno condutto a fare quello che mai per me medesima arei fatto, io voglio iudicare che venga da una celeste disposizione. Io ti prendo per signore, patrone, guida: e quel che 'l mio marito ha voluto per una sera, voglio ch'egli abbia sempre.» Io mi truovo el piú felice e contento uomo che fussi mai nel mondo.",
+          "context": "«Tristizia» = malvagità. Le parole di Lucrezia, riportate da Callimaco, sono il vero epilogo della commedia: la vittima prende in mano il gioco. Nell'originale le promette anche di sposarla, se Nicia morrà."
+        },
+        {
+          "type": "line",
+          "speaker": "Ligurio",
+          "to": "Callimaco",
+          "line": "Io ho gran piacere d'ogni tuo bene: ètti intervenuto quello che io ti dissi appunto. Ma andiàno verso la chiesa: io sento che le escono fuora, ed hanno el dottore drieto.",
+          "context": "«Ètti intervenuto» = ti è capitato."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Davanti alla chiesa arrivano Nicia, Lucrezia e Sostrata. Lucrezia ha un piglio nuovo, che il marito non le conosce."
+        },
+        {
+          "type": "line",
+          "speaker": "Messer Nicia",
+          "to": "Lucrezia",
+          "line": "Lucrezia, io credo che sia bene fare le cose con timore di Dio, e non alla pazzeresca.",
+          "context": "«Alla pazzeresca» = da matti."
+        },
+        {
+          "type": "line",
+          "speaker": "Lucrezia",
+          "to": "Messer Nicia",
+          "line": "Che s'ha egli a fare, ora?"
+        },
+        {
+          "type": "line",
+          "speaker": "Messer Nicia",
+          "to": "Sostrata",
+          "line": "Guarda come la risponde! La pare un gallo! Tu se' stamani molto ardita: ella pareva iersera mezza morta.",
+          "context": "La trasformazione di Lucrezia, vista con gli occhi di chi non capisce nulla."
+        },
+        {
+          "type": "line",
+          "speaker": "Lucrezia",
+          "to": "Messer Nicia",
+          "line": "Egli è la grazia vostra!",
+          "context": "Al limite dell'insolenza: «merito vostro!»."
+        },
+        {
+          "type": "line",
+          "speaker": "Frate Timoteo",
+          "to": "Lucrezia",
+          "line": "Voi sete le ben venute, e buon pro vi faccia, madonna: che Dio vi dia a fare un bel figliuolo maschio!",
+          "context": "Il frate le viene incontro sull'uscio della chiesa."
+        },
+        {
+          "type": "line",
+          "speaker": "Lucrezia",
+          "to": "Frate Timoteo",
+          "line": "Dio el voglia!"
+        },
+        {
+          "type": "stage_direction",
+          "action": "Callimaco e Ligurio escono dalla chiesa e si fanno incontro al gruppo."
+        },
+        {
+          "type": "line",
+          "speaker": "Messer Nicia",
+          "to": "Lucrezia",
+          "line": "Maestro, toccate la mano qui alla donna mia. Lucrezia, costui è quello che sarà cagione che noi aremo uno bastone che sostenga la nostra vecchiezza.",
+          "context": "«Aremo» = avremo. Nicia in persona mette la mano di Lucrezia in quella di Callimaco."
+        },
+        {
+          "type": "line",
+          "speaker": "Lucrezia",
+          "to": "Messer Nicia",
+          "line": "Io l'ho molto caro, e vuolsi che sia nostro compare.",
+          "context": "«Compare» = padrino del battesimo: Lucrezia stessa lega Callimaco alla famiglia, per sempre."
+        },
+        {
+          "type": "line",
+          "speaker": "Messer Nicia",
+          "to": "Lucrezia",
+          "line": "Or benedetta sia tu! E voglio che lui e Ligurio venghino stamani a desinare con esso noi; e vo' dar loro la chiave della camera terrena d'in su la loggia, perché possono tornarsene a loro posta, che non hanno donne in casa, e stanno come bestie.",
+          "context": "«A loro posta» = a loro piacimento. Nicia consegna a Callimaco la chiave di casa: la beffa è completa."
+        },
+        {
+          "type": "line",
+          "speaker": "Callimaco",
+          "to": "Messer Nicia",
+          "line": "Io l'accetto, per usarla quando mi accaggia.",
+          "context": "«Quando mi accaggia» = quando mi capiti l'occasione. Con doppio senso evidente a tutti tranne che a Nicia."
+        },
+        {
+          "type": "line",
+          "speaker": "Ligurio",
+          "to": "Messer Nicia",
+          "line": "Di Siro non è uomo che si ricordi?",
+          "context": "Ligurio pensa anche al servo: ognuno deve avere il suo premio."
+        },
+        {
+          "type": "line",
+          "speaker": "Messer Nicia",
+          "to": "Lucrezia",
+          "line": "Chiegga, ciò che io ho è suo. Tu, Lucrezia, quanti grossi hai a dare al frate, per entrare in santo?",
+          "context": "«Chiegga» = chieda; «grossi» = monete d'argento."
+        },
+        {
+          "type": "line",
+          "speaker": "Lucrezia",
+          "to": "Messer Nicia",
+          "line": "Dategliene mille.",
+          "context": "Cifra enorme, sparata con serenità regale: Lucrezia sa esattamente che cosa sta pagando, e a chi."
+        },
+        {
+          "type": "line",
+          "speaker": "Frate Timoteo",
+          "to": "Sostrata",
+          "line": "E voi, madonna Sostrata, avete, secondo che mi pare, messo un tallo in sul vecchio.",
+          "context": "«Messo un tallo in sul vecchio» = messo un germoglio sul ceppo vecchio: ringiovanita. Nicia intanto ha borbottato: «Affogaggine!»"
+        },
+        {
+          "type": "line",
+          "speaker": "Sostrata",
+          "to": "Frate Timoteo",
+          "line": "Chi non sarebbe allegra?"
+        },
+        {
+          "type": "line",
+          "speaker": "Frate Timoteo",
+          "to": "Pubblico",
+          "line": "Andianne tutti in chiesa, e quivi direno l'orazione ordinaria; dipoi, doppo l'uficio, ne andrete a desinare a vostra posta. Voi, aspettatori, non aspettate che noi usciàno piú fuora: l'uficio è lungo, io mi rimarrò in chiesa, e loro, per l'uscio del fianco, se n'andranno in città. Valète!",
+          "context": "«Aspettatori» = spettatori; «Valète» = state bene (congedo latino). Il frate chiude la commedia parlando al pubblico, come l'ha attraversata."
+        }
+      ]
+    }
+  ]
+}

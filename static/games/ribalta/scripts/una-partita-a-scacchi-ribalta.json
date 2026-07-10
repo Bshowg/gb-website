@@ -1,0 +1,1276 @@
+{
+  "title": "Una partita a scacchi (Ribalta)",
+  "language": "it",
+  "description": "«Una partita a scacchi» di Giuseppe Giacosa (1873) — versione alleggerita per Ribalta, fork del testo integrale: i lunghi monologhi sono condensati tagliando versi (mai riscritti), il servo è eliminato e il ritmo è pensato per la lettura in gruppo. Renato scommette col paggio Fernando la mano della figlia Iolanda su una partita a scacchi: posta segreta, in caso di sconfitta, la morte.",
+  "characters": [
+    {
+      "name": "Renato",
+      "description": "Vecchio castellano, antico uomo d'arme. Adora la figlia Iolanda, unico affetto rimastogli, e vorrebbe vederla sposa — ma la scommessa che lui stesso propone gli si rivolta contro."
+    },
+    {
+      "name": "Iolanda",
+      "description": "Figlia di Renato, cresciuta sola nel castello fra la montagna e la scacchiera. Imbattibile agli scacchi, finché il cuore non decide di perdere."
+    },
+    {
+      "name": "Oliviero",
+      "description": "Conte di Fombrone, vecchio amico e compagno d'armi di Renato, in visita al castello. Voce saggia e divertita della serata."
+    },
+    {
+      "name": "Fernando",
+      "description": "Paggio di Oliviero. Orfano senza nome né terre, tutto orgoglio, spada e liuto: si gioca la vita in una partita a scacchi."
+    }
+  ],
+  "scenes": [
+    {
+      "id": "scene_1",
+      "title": "Padre e figlia",
+      "setting": "Una sala di castello medievale, le pareti rivestite di arazzi: un ampio camino con le armi di famiglia dipinte sulla cappa, seggioloni dall'alta spalliera, una tavola con suvvi la scacchiera. Fuori, una sera di pioggia e di vento sulla valle. Renato e Iolanda stanno presso la finestra come per interrogare il tempo; i servi recano due lucerne ad olio e le posano sulla tavola.",
+      "beats": [
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Renato",
+          "line": "E la pioggia continua, fredda, incessante e greve!"
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Iolanda",
+          "line": "Oggi pioggia, Iolanda, domani avrem la neve,\nEssa è già nell’aria che turbina; io la sento.\nLa Becca era coperta stamane."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Renato",
+          "line": "E sempre il vento!"
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Iolanda",
+          "line": "L’ora?"
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Renato",
+          "line": "La sedicesima, padre."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Iolanda",
+          "line": "È già notte oscura!\nPovera mia fanciulla, va, la tua sorte è dura,\nVivere prigioniera con un bianco guardiano\nIn questa tetra valle, dimora all’uragano!\nChe nebbia fitta! Senti che fischi! La montagna\nRompe il vecchio nemico e nell’urto si lagna.\nChe crepiti d’abeti! Quanti son stesi al suolo!"
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Renato",
+          "line": "Una buona giornata doman pel boscaiuolo:\nLe buone piante! Quando ardono sull’alare,\nIo le guardo, le guardo, le ascolto sospirare\nCon quei lunghi sospiri e penso alla foresta,\nDove un giorno levarono fieramente la testa."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Iolanda",
+          "line": "Figlia, è freddo."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Renato",
+          "line": "Venite,\nPadre, a sciogliere al fuoco le membra intirizzite.\nMi direte le vostre gesta di cavaliero,\nOppur la bella fiaba di Aroldo e il suo corsiero.\nChiameremo compagni Cristoforo e Martino."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Seduto accanto al fuoco, nelle pareti del camino, e guardando la fiammata."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Iolanda",
+          "line": "Ne ho visti dei folletti su pel camino!\nNo, non chiamar nessuno, figlia, voglio te sola.\nTu sei la mia figliuola, Iolanda, il solo amore\nCh’io mi abbia in questa terra, il solo, e tu lo sai.\nVieni qui, figlia, senti, tu sei bella, e sei buona,\nE sei casta, il tuo nome val più che una corona.\nAvrai dieci castella, e possenti domini,\nMa..."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Renato",
+          "line": "Padre, ch’io continui? Se mi state a sentire,\nIo v’indovino tutto quello che vorreste dire."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Iolanda",
+          "line": "Ebbene?..."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Renato",
+          "line": "A vostra figlia manca ancora uno sposo."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Iolanda",
+          "line": "È vero. Un cavaliere nobile e generoso\nChe facendoti lieta faccia me pur felice.\nIo son presso al tramonto. Qualche cosa mi dice\nChe..."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Renato",
+          "line": "Non voglio sentirle queste brutte parole.\nRitornerete giovane coll’anno e colle viole."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Iolanda",
+          "line": "E poi questo castello ha troppi echi; le sale\nCosì vuote e sonore mi fanno tanto male!\nMi mancano bambocci che mi turbino il sonno,\nSai? Si diventa padre, per diventar poi nonno."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Renato",
+          "line": "Voglio essere io sola ad amarvi."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Iolanda",
+          "line": "Perchè?\nNe’ tuoi figli, Iolanda, non amerei che te.\nInsomma, tu sei donna; io, vecchio paladino,\nAnche quando ti abbraccio mi curvo ad un inchino;\nIo son mortale, o figlia, via provvedi a te stessa."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Renato",
+          "line": "Sì, fonderò un convento per farmene badessa."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Iolanda",
+          "line": "Tu ridi, folle."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Renato",
+          "line": "Ebbene, veniamo al serio. Anch’io,\nQuando mi trovo sola meco stessa e con Dio,\nSogno talora i gaudi dell’amore, e mi sento\nAddormentarsi l’anima tutta in un rapimento,\nE fingo che il mio fato conduca un forte e bello\nA superar la fossa del mio patrio castello.\nMi risveglio, e le sale del mio patrio castello\nNon suonan mai dei passi di questo forte e bello."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Iolanda",
+          "line": "Al marchese d’Andrate opponesti un rifiuto:\nEra un bel maritaggio."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Renato",
+          "line": "Non l’avevo veduto!"
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Iolanda",
+          "line": "Il duca di Rosalba..."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Renato",
+          "line": "Oh! Il duca... in fede mia\nE’ sarà stato un forte, padre, ma bello, via!"
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Iolanda",
+          "line": "L’animo generoso ogni bellezza avanza."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Renato",
+          "line": "Sì, ma non veggo l’animo e veggo la sembianza.\nSe io mi fossi quale, voi dite, ch’io non sono,\nAvessi pure il cuore divinamente buono,\nNon troverei nessuno di virtù così sante\nDa sceverar dall’animo la causa del sembiante.\nLa bellezza è l’impresa che i nostri sguardi arresta,\nSi cerca poi se al motto corrispondon le gesta."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Iolanda",
+          "line": "E vuoi condur la vita in codesta maniera,\nFra i trapunti ed il fuso, fra l’ago e la scacchiera?"
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Renato",
+          "line": "Oh! La scacchiera, giusto men fate sovvenire,\nVi debbo una rivincita."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Iolanda",
+          "line": "No, lasciami finire,\nTanto non ci riesco; con te non sono destro,\nL’allieva ha superato di gran lunga il maestro.\nTu sei come la rocca di Bard, la non si piglia:\nAggiungo questa gloria a quelle di famiglia.\nDunque, il duca di Rosalba?..."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Renato",
+          "line": "Ah! Torniamo al soggetto?\nSe mal non mi sovviene, un dì mi avete detto,\nChe m’avreste lasciata assoluta padrona\nNel dispor del mio cuore e della mia persona."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Iolanda",
+          "line": "È vero, e, contro gli usi de’ miei padri, ti voglio\nSignora più assoluta che una regina in soglio.\nMa fra tutt’i signori che alle mie corti aduno,\nIo non t’ho fatta libera di non sceglier nessuno.\nAmi forse in secreto?"
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Renato",
+          "line": "No."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Iolanda",
+          "line": "Tel credo; dal cuore\nAltero sulla fronte salirebbe il tuo amore.\nTu non sapresti infingerti."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Renato",
+          "line": "Voglio farvi contento:\nSceglietemi uno sposo voi stesso, io v’acconsento.\nLa libertà vi rendo che m’avete largita,\nE aspetto la mia sorte."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Iolanda",
+          "line": "Grazie, figlia."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Renato",
+          "line": "Ho sentita\nLa squilla della torre."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Iolanda",
+          "line": "Un Landmanno, venuto\nA rendermi d’omaggio il debito tributo."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Renato",
+          "line": "Son parecchi cavalli."
+        }
+      ]
+    },
+    {
+      "id": "scene_2",
+      "title": "La partita",
+      "setting": "La stessa sala. Squilla la torre: un servo annuncia visite — il conte Oliviero di Fombrone, vecchio compagno d'armi di Renato, col suo paggio Fernando.",
+      "beats": [
+        {
+          "type": "stage_direction",
+          "action": "Un servo annuncia: il conte di Fombrone sollecita la vista del suo nobil padrone."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Oliviero",
+          "line": "Il conte di Fombrone? Fategli tutti onore,\nE sia sulle mie terre, più che ospite, signore."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Entrano Oliviero e Fernando."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Oliviero",
+          "line": "Oliviero, ben giunto, nobile e vecchio amico,\nQuesto è un giorno di festa pel mio castello antico!"
+        },
+        {
+          "type": "line",
+          "speaker": "Oliviero",
+          "to": "Renato",
+          "line": "L’amicizia è l’altrice delle gioie più sante\nE non l’ho mai provata siccome in questo istante."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Prende per mano Iolanda e la presenta ad Oliviero."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Oliviero",
+          "line": "La mia figlia Iolanda."
+        },
+        {
+          "type": "line",
+          "speaker": "Oliviero",
+          "to": "Renato",
+          "line": "Dio lega opposte cose,\nIl rigor delle nevi, la beltà delle rose."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Iolanda",
+          "line": "Tu conosci il suo nome, fummo compagni, quando\nLe braccia eran robuste ed era aguzzo il brando,\nCorremmo insiem le corti e guerreggiammo allato,\nE se lo seppe il vinto signor di Monferrato."
+        },
+        {
+          "type": "line",
+          "speaker": "Oliviero",
+          "to": "Renato",
+          "line": "Il mio paggio Fernando."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Dopo aver guardato il paggio con attenzione benevola e riposto con un cenno del capo al suo grave inchino, volgendosi a Fombrone."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Oliviero",
+          "line": "Cresciuto alla tua scuola\nAvrà pronta la mano e lenta la parola.\nIl sangue assiderato vivo al fuoco discorra,\nSon pungenti le brezze che soffia questa forra.\nMescete il Mommeliano."
+        },
+        {
+          "type": "line",
+          "speaker": "Oliviero",
+          "to": "Renato",
+          "line": "Per Dio, ti giuro il vero,\nLa tua figliuola è bella, e forte è il tuo maniero."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Oliviero",
+          "line": "Dimmi di te, Oliviero, rechi in fronte dipinto\nChe lottasti cogli anni e, sempre, hai vinto."
+        },
+        {
+          "type": "line",
+          "speaker": "Oliviero",
+          "to": "Renato",
+          "line": "È passato il bel tempo."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Oliviero",
+          "line": "La quercia il gel non teme.\nChi direbbe a vederci che siam cresciuti insieme!\nNon ti dieder disagio queste brevi giornate?\nLe strade sono lunghe, Fombrone, e mal fidate;\nOdo narrar sovente di violenze e rapine.\nNon t’insorse disgrazia?"
+        },
+        {
+          "type": "line",
+          "speaker": "Oliviero",
+          "to": "Renato",
+          "line": "Per poco in sul confine\nDella montagna, dove la valle si disfalda\nNon uscivo malconcio."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Oliviero",
+          "line": "Come! Narra."
+        },
+        {
+          "type": "line",
+          "speaker": "Oliviero",
+          "to": "Iolanda",
+          "line": "La salda\nSpada, e l’animo ardito del mio paggio Fernando\nMi tolsero di briga. Venivam cavalcando\nIl mio paggio e due bravi, quando dalla foresta\nUscì un sibilo acuto: sollevammo la testa,\nE ci apparve sbucata sul margin della strada\nDi dieci malandrini armati una masnada;\nEran nove gagliardi, armati e risoluti,\nNoi quattro, io vecchio, i luoghi minacciosi e sconosciuti.\nIl mio paggio mi guarda, poi mi s’accosta, in atto\nDi chi voglia ricevere qualcosa di soppiatto,\nIndi a furia di spronate, lancia il cavallo a volo.\nSubito alle calcagna gli si muove uno stuolo\nDi cinque masnadieri; e a noi priva di gloria,\nMa sicura ed agevole rimase la vittoria."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Oliviero",
+          "line": "Fu raggiunto dai cinque?"
+        },
+        {
+          "type": "line",
+          "speaker": "Oliviero",
+          "to": "Iolanda",
+          "line": "Poco tratto di via\nPercorso egli si volse, e al branco che venia,\nVolse dell’armi audaci lo slancio impetuoso.\nEra solo, piantato come un Centauro antico,\nSul dorso flessuoso del corsiero.\nGià nei cozzi continui aveva rotta la spada,\nQuando sbrigati i quattro che ci stavano di fronte\nNoi giungemmo ed i ladri preser la via del monte\nLasciando di tre morti le spoglie il sul terreno."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Oliviero",
+          "line": "E non foste ferito?"
+        },
+        {
+          "type": "line",
+          "speaker": "Oliviero",
+          "to": "Fernando",
+          "line": "Io no, Fernando al seno\nEbbe una scalfitura ch’oggi è saldata, è vero?"
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Renato",
+          "line": "Sì, conte."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Fernando",
+          "line": "La tua mano, o giovine guerriero.\nSei un prode, in te il senno è pari all’ardimento.\nTuo padre nel ritorno t’abbraccerà contento."
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Renato",
+          "line": "Non ho padre, signore."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Fernando",
+          "line": "Così giovane? Avrai\nUna madre."
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Renato",
+          "line": "Neppure, e non li ebbi mai."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Fernando",
+          "line": "Il tuo nome?"
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Renato",
+          "line": "Fernando. La mia sorte è severa.\nSe mi farò uno stemma, avrà la sbarra nera."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Fernando",
+          "line": "Tu sei sangue di principi!"
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Renato",
+          "line": "Se mi dà vita Iddio,\nFarò diventi gloria l’esser sangue mio."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Fernando",
+          "line": "Fiere parole!"
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Renato",
+          "line": "Il vanto vuol essermi concesso,\nDacché tutto che sono, nol debbo che a me stesso."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Fernando",
+          "line": "Sei giovane e fidente, l’anima hai franca e ardita,\nApprenderai cogli anni la scienza della vita;\nMa ti darò un consiglio, io che ho vissuto tanto:\nL’opera è più gloriosa scompagnata dal vanto."
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Renato",
+          "line": "Io penso che su giovane bocca il vanto non convenga,\nSe il labbro non promette più che il braccio mantenga."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Fernando",
+          "line": "Non ti dolga, Fombrone, s’io biasimo le sue mende;\nAmo in lui la prodezza, ma l’orgoglio m’offende."
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Renato",
+          "line": "Rispetto in voi l’antico coraggio e il nome antico,\nE del mio buon signore il più fidato amico;\nMa portare dimessa la fronte io mai non soglio,\nÈ fra le mie virtudi, prima virtù, l’orgoglio."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Fernando",
+          "line": "Che sai tu della vita, fanciul, chi te l’apprese?\nPerchè la guancia hai bella e le pupille accese,\nPerfin contro il futuro spingi il folle ardimento?\nE gridi alla tua sorte: Io voglio e non pavento?\nMa non lo sai, fanciullo, non te l’han detto ancora\nChe assai lungo è il cammino, che la vita è di un’ora?\nE che prima di giungere al culmine agognato,\nAvrai le mani lacere e il viso insanguinato?\nE un giorno all’opra usata cesse il vigor, mi parve\nUn peso insopportabile la mia spada.\nE i miei sogni di gloria, non erano compiuti!"
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Renato",
+          "line": "Vecchio, sei grande e nobile, come nessun fu mai;\nDirò superbo un giorno: lo vidi e gli parlai.\nPerò la mia fortuna alla tua non somiglia:\nTu avesti in sorte un nome, un tetto, una famiglia.\nIo crebbi solo, un orfano no, non è mai fanciullo.\nNessun l’onor m’apprese, nessun m’apprese Iddio;\nL’onor, l’armi, la fede sono retaggio mio.\nOr che son fatto paggio e diverrò scudiero,\nVuoi ch’io sappia frenarmi e rimanermi muto?\nNo, no, no, nol posso, per tanti anni ho taciuto!\nSon forte, la mia spada nessuno al mondo agguaglia,\nE non è lieve impresa lo sfidarmi a battaglia."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Fernando",
+          "line": "Per Dio, soverchio ardire sopportar non mi giova.\nBada non mi sovvenga di metterti alla prova,\nChè se falli!..."
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Renato",
+          "line": "Signore, fate a vostro talento,\nAccetterò con gioia qualunque esperimento:\nPer studiare a tentarli ed a schermir gli attacchi,\nAppresi le difficili movenze degli scacchi,\nE nessuno mi supera..."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Fernando",
+          "line": "Dacchè ne porgi il destro,\nNoi ti vedremo all’opera, o d’ogni arte maestro.\nA te, figliuola, insegnagli, nè sarà poca gloria,\nCome si faccia a vincere, senza gridar vittoria.\nQui si porrà all’aperto la tua scienza nascosta.\nPerderai, tel predico."
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Renato",
+          "line": "Lo vedremo... E la posta?"
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Fernando",
+          "line": "La posta? Se tu vinci, io ti do per consorte\nLa mia figlia Iolanda."
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Renato",
+          "line": "E se perdo?"
+        },
+        {
+          "type": "stage_direction",
+          "action": "Renato trae Fernando in disparte e, sommesso:"
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Fernando",
+          "line": "La morte."
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Renato",
+          "line": "L’offerta è troppo bella per opporvi un rifiuto."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Fernando",
+          "line": "Accetti?"
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Renato",
+          "line": "Accetto, conte."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Fernando",
+          "line": "Se perdi..."
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Renato",
+          "line": "Avrò perduto.\nE non mi sentirete lagnarmi o maledire;\nSe non appresi a vivere, ho imparato a morire."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Fernando",
+          "line": "A te, figlia."
+        },
+        {
+          "type": "stage_direction",
+          "action": "I due si apprestano a giuocare."
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Renato",
+          "line": "Scusate il soverchio ardimento,\nMa un giuoco tal richiede un giuocatore attento.\nIl conte di Fombrone presso il fuoco vi aspetta,\nDirete insiem le gioie dell’età prediletta.\nQui si vuol esser soli."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Il tavolino a cui stanno seduti i due che giuocano è vicino al proscenio, mentre invece il camino è in fondo alla scena. Olivero è presso il camino."
+        },
+        {
+          "type": "line",
+          "speaker": "Oliviero",
+          "to": "Renato",
+          "line": "Il mio paggio ha ragione."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Oliviero",
+          "line": "Ed eccomi a’ suoi cenni. Mesci ancora, Fombrone."
+        },
+        {
+          "type": "line",
+          "speaker": "Oliviero",
+          "to": "Renato",
+          "line": "Fosti con lui severo."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Oliviero",
+          "line": "Troppo?"
+        },
+        {
+          "type": "line",
+          "speaker": "Oliviero",
+          "to": "Renato",
+          "line": "No. Anch’io soventi,\nEbbi a fargli rimbrotto, e con acerbi accenti;\nMa è così bello il roseo confidar nel futuro,\nChi ignora i disinganni! Renato, è così puro!\nEd io lo vidi all’opera, e lo so forte ed audace."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Pubblico",
+          "line": "Come sfida la morte con eroica fermezza!"
+        },
+        {
+          "type": "line",
+          "speaker": "Oliviero",
+          "to": "Renato",
+          "line": "Tu pensi?..."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Oliviero",
+          "line": "Nulla."
+        },
+        {
+          "type": "line",
+          "speaker": "Oliviero",
+          "to": "Renato",
+          "line": "Eppur ti leggo nelle ciglia..."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Oliviero",
+          "line": "Vorrei che avesse a vincere."
+        },
+        {
+          "type": "line",
+          "speaker": "Oliviero",
+          "to": "Renato",
+          "line": "Per sposare tua figlia."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Oliviero",
+          "line": "È vero!"
+        },
+        {
+          "type": "line",
+          "speaker": "Oliviero",
+          "to": "Renato",
+          "line": "Convien dire ch’ella giuochi a pennello,\nSe offristi al vincitore un premio come quello!\nE tu che avrai, se perde, in cambio alla fanciulla?"
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Oliviero",
+          "line": "Nulla."
+        },
+        {
+          "type": "line",
+          "speaker": "Oliviero",
+          "to": "Renato",
+          "line": "Nulla? Davvero?"
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Pubblico",
+          "line": "No, non voglio aver nulla,\nUn tal patto non regge."
+        },
+        {
+          "type": "line",
+          "speaker": "Oliviero",
+          "to": "Renato",
+          "line": "E Renato pretende\nRiprender la sua fede?"
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Iolanda",
+          "line": "E se egli me la rende?"
+        },
+        {
+          "type": "stage_direction",
+          "action": "I due continuano a parlare sommesso."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Fernando",
+          "line": "Che hai, paggio Fernando? Non giuochi e non favelli."
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Iolanda",
+          "line": "Ti guardavo negli occhi, che sono tanto belli."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Fernando",
+          "line": "Ed io senza periglio decimo le tue schiere;\nGià perdesti una Torre, e do scacco all’Alfiere,\nSe non provvedi tosto a metterlo da banda.\nAttento ai mali passi."
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Iolanda",
+          "line": "Grazie, bella Iolanda.\nPensavo a mille cose lontane, e stavo muto\nPer la triste certezza che tanto avrei perduto.\nEccomi a tal ridotto che un sol passo non feci."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Fernando",
+          "line": "Vuoi tu, paggio Fernando, che mutiamo le veci?"
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Iolanda",
+          "line": "No, tienti la tua sorte e lasciami la mia."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Fernando",
+          "line": "A te, non trovi nulla che t’ingombri la via?\nOh la sventata! Vedi che ho messo il piede in fallo.\nTi do scacco all’alfiere, e disarmo il Cavallo."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Fernando prende il cavallo."
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Iolanda",
+          "line": "Non ardirei di prenderlo, l’accetto come un dono."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Renato",
+          "line": "Vedi l’avventurata giocatrice ch’io sono!\nNeppur credi all’errore."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Fernando",
+          "line": "Come sta la partita?"
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Renato",
+          "line": "Io perdo."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Fernando",
+          "line": "Sì? Fanciullo, facciamola finita,\nSmetti il giuoco, fu scherzo la scommessa."
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Renato",
+          "line": "Vi pare!\nCon voi, nobil signore, non ardirei scherzare,\nNè con veruno al mondo, intorno a un argomento..."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Fernando",
+          "line": "Tu perdi, me l’hai detto tu stesso."
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Renato",
+          "line": "E non consento\nPerdente a grazia alcuna, ché vincitore, avrei\nAltamente vantati tutti i diritti miei."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Fernando",
+          "line": "Bada a tentar la sorte, paggio, bada!"
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Renato",
+          "line": "La tento.\nE data una parola, signor, non mi ripento."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Fernando",
+          "line": "E tal sia"
+        },
+        {
+          "type": "stage_direction",
+          "action": "S’allontana e poi ritorna."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": [
+            "Fernando",
+            "Iolanda"
+          ],
+          "line": "No, sei giovane, fanciullo, e ardimentoso\nE d’una tua disgrazia non mi darei riposo.\nSmetti quella fierezza, renditi al buon consiglio,\nIo te ne prego, come si pregherebbe un figlio.\nSei in tempo, ritraggiti, tu sai quanto t’aspetta...\nIolanda, te ne prego, digli che mi dia retta."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Renato",
+          "line": "Perché mi dovrò esporre io pure ad un rifiuto?\nUn istante può rendergli il terreno perduto."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Iolanda",
+          "line": "La vanità di vincere ti fa di questo avviso."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Renato",
+          "line": "O padre!"
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Fernando",
+          "line": "Ma tu ignori che s’ei perde, è deciso."
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Renato",
+          "line": "Conte... Fate opra inutile, nessuno mi cancella\nDal cuore una promessa."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Iolanda",
+          "line": "Ti lascio alla tua stella."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Renato va di nuovo presso Fombrone, con cui conversa a bassa voce. Iolanda e Fernando giocano per alcuni istanti senza far motto."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Fernando",
+          "line": "Che volle dir mio padre con quelle sue parole:\nSe egli perde è deciso?..."
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Iolanda",
+          "line": "Nulla ch’io sappia — fole..."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Fernando",
+          "line": "Eppure mi pareva che parlasse assennato,\nE tu l’interrompesti tutto quanto turbato.\nChe perdi tu, se perdi?"
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Iolanda",
+          "line": "Nulla che mi stia a cuore."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Fernando",
+          "line": "Mio padre più ti teme vinto che vincitore.\nNon so perchè, Fernando, son pensosa e afflitta."
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Iolanda",
+          "line": "Bella Iolanda, allegrati, sarà mia la sconfitta."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Fernando",
+          "line": "Oh! Perchè con sì tristi presagi ti martelli?"
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Iolanda",
+          "line": "Io? Ti guardo negli occhi, che sono tanto belli!"
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Fernando",
+          "line": "Sei mesto nel sembiante, perchè? La tua ferita\nTi duole forse?"
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Iolanda",
+          "line": "Punto... Com’è bella la vita!"
+        },
+        {
+          "type": "stage_direction",
+          "action": "Pausa."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Fernando",
+          "line": "Paggio Fernando, è molto lontano il tuo paese?"
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Iolanda",
+          "line": "Io nacqui dove l’aria è tepida e cortese;\nDove la terra è piena di cantici e di fiori.\nDove tutto è profumo, dove tutto è sorriso,\nDove non si vagheggia più bello il Paradiso,\nE quel vago paese è lontano, lontano."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Fernando",
+          "line": "Le donne vi saranno leggiadre e amorose."
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Iolanda",
+          "line": "Sì, facili all’amore, ma folli e obliose;\nMa noi cresciuti ai torridi meriggi, e in mezzo ai fiori\nInebrianti e pinti dei più vivi colori,\nAmiamo i molli petali flessuosi e pallenti,\nAmiamo le corolle bianche dei cieli algenti,\nEd una treccia bionda, e un occhio azzurro, e un bianco\nViso ed un abbandono soavemente stanco."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Pausa."
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Iolanda",
+          "line": "Tu sei bella, Iolanda."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Fernando",
+          "line": "Com’è dolce il tuo dire!"
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Iolanda",
+          "line": "Senti, hai tu mai pensato che si possa morire\nPrima d’aver provato che cosa sia l’amore?\nPrima che un sol fiorisca dei germogli del cuore?\nPrima di bisbigliarsi le più ardenti parole?\nPrima d’aver goduta la tua parte di sole?"
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Fernando",
+          "line": "Oh no!"
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Iolanda",
+          "line": "No, non è vero? Se non fosse che un’ora,\nUn’ora dell’ebbrezza che ogni ebbrezza scolora,\nLe mie pupille un’ora fissate nelle tue,\nE poi venga il destino."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Fernando",
+          "line": "Si morirebbe in due."
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Iolanda",
+          "line": "Che morbidi capelli!"
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Fernando",
+          "line": "Perché parli di morte\nQuasi che ti volessi doler della tua sorte?"
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Iolanda",
+          "line": "Come hai dolce il sorriso!"
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Fernando",
+          "line": "Perché, paggio Fernando,\nMi guardi così mesto mesto?"
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Iolanda",
+          "line": "Nulla, andavo pensando\nA speranze impossibili, a confusi desiri;\nGiochiamo, ho fatto un sogno d’oro..."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Fernando",
+          "line": "Perché sospiri?"
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Iolanda",
+          "line": "Sospiro... la mia pace, le mie terre lontane."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Fernando",
+          "line": "E gli sguardi ottenuti di belle castellane."
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Iolanda",
+          "line": "Bada, or sei tu che perdi."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Fernando",
+          "line": "Me ne dai con premura\nL’avviso, la vittoria par ti metta paura."
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Iolanda",
+          "line": "Oh! Ma non sai, Iolanda, che ho giocato la vita?\nNon lo sai che se perdo questa volta è finita?\nNon lo sai che sei bella, come nessuna al mondo?\nChe amo il tuo fronte bianco ed il tuo crine biondo?\nChe di mio non ho nulla che il sangue delle vene?\nChe sono solo al mondo se tu non mi vuoi bene?"
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Oliviero",
+          "line": "E tu, cieco, non vedi che m’affanno da un’ora\nPer goder quest’ebbrezza che ogni ebbrezza scolora?"
+        },
+        {
+          "type": "line",
+          "speaker": "Oliviero",
+          "to": "Renato",
+          "line": "Guarda com’è pensoso, colla testa china..."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Fernando",
+          "line": "Come va la partita?"
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Iolanda",
+          "line": "Do scacco alla Regina."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Fernando",
+          "line": "Ascoltami, Fernando, questa è la prima volta\nChe mi giunge una voce d’amore a me rivolta.\nSe tu sapessi come li ho sognati soventi,\nLa tua maschia sembianza, i tuoi nobili accenti!\nVenner marchesi e conti a cercarmi in isposa,\nMa tutti li respinsi per ripugnanza ascosa.\nTu giungesti, Fernando, tu che sei forte, e bello,\nE una voce nell’anima mi gridò tosto: è quello."
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Iolanda",
+          "line": "La tua mano, Iolanda. Mano bianca, sottile,\nNon avrai tu la sorte di un umil paggio a vile?"
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Renato",
+          "line": "È il destin che ci unisce nella sapienza sua;\nGuarda, due mosse ancora e la vittoria è tua."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Iolanda",
+          "line": "A che ne siamo?"
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Renato",
+          "line": "Padre, la vostra figlia invitta\nMedita il disonore di una prima sconfitta."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Iolanda",
+          "line": "Perdesti?"
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Renato",
+          "line": "Non ancora, ma perderò."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Fernando",
+          "line": "Fernando,\nAscoltami, sospendi, io vaneggiavo quando\nT’offersi quella sfida. Scegli fra i miei castelli\nIl più forte, il più ricco, è tuo; ma si cancelli\nQuesto patto impossibile, rendimi la mia fede,\nTi farò ricco e nobile... è un padre che tel chiede."
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Renato",
+          "line": "Signore, a tanta offerta una risposta sola:\nAmo la figlia vostra — Conte, ho la tua parola."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Iolanda",
+          "line": "La terrò, se lo imponi, ma se onor ti consiglia,\nSe in cuore un po’ d’affetto tu nutri per mia figlia,\nPensa che già respinse una ducal corona,\nPensa che più d’un principe invidia il suo retaggio."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Fernando esita; Iolanda se n’avvede e lo spinge con gesti a giuocare."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Renato",
+          "line": "Giuoca, Fernando."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Iolanda",
+          "line": "Un giorno, paggio, tu pure, è vero,\nSarai forse possente e ricco cavaliero,\nMa finor..."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Renato",
+          "line": "Giuoca, giuoca, un passo sol."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Iolanda",
+          "line": "Finora\nDi tua vita, Fernando, tu non sei che l’aurora;\nIolanda è bella, è ricca, e... suo padre tel dice,\nA lungo non potrebbe con teco esser felice."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Mentre Fernando esita, Iolanda di soppiatto lo piglia dolcemente per mano, e fa lei una mossa per lui."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Renato",
+          "line": "Padre, è tardo il consiglio, quello che è fatto è fatto,\nL’onor vostro è impegnato."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Iolanda",
+          "line": "Che dici?"
+        },
+        {
+          "type": "stage_direction",
+          "action": "Alzandosi e con lei tutti."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Renato",
+          "line": "Scacco matto."
+        },
+        {
+          "type": "line",
+          "speaker": "Oliviero",
+          "to": "Iolanda",
+          "line": "Fernando ebbe il demonio o l’amor dalle sue."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Renato",
+          "line": "M’offrivate uno sposo e lo scegliemmo in due."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Iolanda",
+          "line": "E così mi ti mostri vergognosa ed afflitta?"
+        },
+        {
+          "type": "stage_direction",
+          "action": "Abbracciando suo padre e porgendo una mano a Fernando."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Renato",
+          "line": "Chi vince è di famiglia, quindi non c’è sconfitta."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Fernando",
+          "line": "Dacchè il fasto di un nome non ti concesse Iddio,\nTi sembra a sufficienza degno ed illustre il mio?"
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Renato",
+          "line": "Signor..."
+        },
+        {
+          "type": "line",
+          "speaker": "Renato",
+          "to": "Iolanda",
+          "line": "Sei prode all’opera e assennato al consiglio,\nEd io ringrazio il cielo che m’ha donato un figlio."
+        },
+        {
+          "type": "stage_direction",
+          "action": "Dopo di essersi inginocchiato ai piedi di Renato il quale gli pone le mani sul capo, s’alza e si volge a Iolanda senza dire parola."
+        },
+        {
+          "type": "line",
+          "speaker": "Iolanda",
+          "to": "Fernando",
+          "line": "E ancor, paggio Fernando, mi affisi e non favelli?"
+        },
+        {
+          "type": "line",
+          "speaker": "Fernando",
+          "to": "Iolanda",
+          "line": "Io ti guardo negli occhi, che sono tanto belli."
+        }
+      ]
+    }
+  ]
+}

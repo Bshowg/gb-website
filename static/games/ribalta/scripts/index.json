@@ -11,5 +11,7 @@
   { "file": "la-congiura-dei-pazzi.json", "title": "La congiura dei Pazzi", "actors": 4, "scenes": 4, "language": "it" },
   { "file": "pinocchio-e-il-campo-dei-miracoli.json", "title": "Pinocchio e il Campo dei miracoli", "actors": 4, "scenes": 6, "language": "it" },
   { "file": "cece-pirandello.json", "title": "Cecè", "actors": 3, "scenes": 3, "language": "it" },
-  { "file": "il-processo-a-galileo.json", "title": "Il processo a Galileo", "actors": 3, "scenes": 4, "language": "it" }
+  { "file": "il-processo-a-galileo.json", "title": "Il processo a Galileo", "actors": 3, "scenes": 4, "language": "it" },
+  { "file": "la-mandragola.json", "title": "La mandragola", "actors": 7, "scenes": 6, "language": "it" },
+  { "file": "una-partita-a-scacchi.json", "title": "Una partita a scacchi", "actors": 5, "scenes": 2, "language": "it" }
 ]
