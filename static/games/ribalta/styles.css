@@ -770,28 +770,71 @@ button {
 #editor-form .b-constraint-row.stage-hidden { display: none; }
 #fork-info.hidden { display: none; }
 
-/* ---------- Editor: sticky action sidebar on desktop ---------- */
-@media (min-width: 900px) {
-  #editor-form {
-    display: flex;
-    align-items: flex-start;
-    gap: 1.25rem;
-  }
+/* ---------- Editor: action panel fixed OUTSIDE the container on desktop.
+   The container is 640px centered; the panel floats in the free space to
+   its left, so the writing area keeps its full width. Active only when
+   there is actually room for it (640 + 2x220 = 1080 -> 1100px). ---------- */
+@media (min-width: 1100px) {
   #editor-form > #form-actions {
-    position: sticky;
+    position: fixed;
     top: 1rem;
+    left: calc(50% - 320px - 220px);
+    width: 200px;
     flex-direction: column;
     align-items: stretch;
-    width: 200px;
-    flex-shrink: 0;
     margin: 0;
     padding: 0.75rem;
     background: var(--panel);
     border: 1px solid var(--border);
     border-radius: 0.5rem;
+    z-index: 50;
   }
   #editor-form > #form-actions button { width: 100%; text-align: center; }
-  #editor-form .editor-main { flex: 1; min-width: 0; }
+}
+
+/* ---------- Editor: script list rows (name + Modifica + Forka) ---------- */
+.script-line {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.6rem 0.5rem 0.9rem;
+}
+.script-line .script-line-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  font-weight: 600;
+}
+.script-line .script-line-name .script-meta {
+  display: block;
+  font-weight: 400;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.list .script-line button.line-btn {
+  width: auto;
+  flex-shrink: 0;
+  padding: 0.4rem 0.7rem;
+  font-size: 0.85rem;
+  text-align: center;
+  background: transparent;
+  color: var(--gold);
+  border: 1px solid var(--gold);
+  border-radius: 0.375rem;
+}
+.list .script-line button.line-btn:hover { background: var(--gold); color: var(--on-gold); }
+.list .script-line button.line-btn small {
+  display: block;
+  font-size: 0.62rem;
+  font-weight: 400;
+  opacity: 0.85;
+  text-transform: none;
 }
 
 /* ---------- "How" guide overlay ---------- */

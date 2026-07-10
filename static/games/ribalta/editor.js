@@ -63,52 +63,40 @@ function renderListView() {
 
     roots.forEach(root => forkSubtree(rows, root).forEach(({ row, depth }) => {
       const li = document.createElement('li');
-      li.className = 'draft-row';
+      li.className = 'script-line';
       if (depth > 0) li.style.marginLeft = `${Math.min(depth, 4) * 1.1}rem`;
 
-      const btn = document.createElement('button');
-      const title = document.createElement('div');
-      title.className = 'script-title';
-      title.textContent = (depth > 0 ? '↳ ' : '') + row.title;
-      btn.appendChild(title);
       const metaParts = [];
       if (row.collection) metaParts.push(row.collection);
       metaParts.push(`${row.actors} personaggi · ${row.scenes} scene`);
       if (depth > 0) metaParts.push(row.fork_note ? `Fork: ${row.fork_note}` : 'Fork');
       if (row.author) metaParts.push(`di ${row.author}`);
-      const meta = document.createElement('div');
-      meta.className = 'script-meta';
-      meta.textContent = metaParts.join(' · ');
-      btn.appendChild(meta);
-      btn.addEventListener('click', () => openScript(row.id));
-      li.appendChild(btn);
+
+      const name = document.createElement('div');
+      name.className = 'script-line-name';
+      name.textContent = (depth > 0 ? '↳ ' : '') + row.title;
+      name.title = metaParts.join(' · ');
+      name.addEventListener('click', () => openScript(row.id));
+      li.appendChild(name);
+
+      const editBtn = document.createElement('button');
+      editBtn.className = 'line-btn';
+      editBtn.textContent = 'Modifica';
+      editBtn.addEventListener('click', () => openScript(row.id));
+      li.appendChild(editBtn);
 
       const forkBtn = document.createElement('button');
-      forkBtn.className = 'row-delete';
-      forkBtn.textContent = 'Forka';
-      forkBtn.addEventListener('click', async e => {
-        e.stopPropagation();
-        const note = prompt('Cosa cambierà in questo fork? (opzionale)') || '';
+      forkBtn.className = 'line-btn';
+      forkBtn.innerHTML = 'Forka<small>crea una tua variante</small>';
+      forkBtn.title = 'Crea una copia collegata all’originale, da modificare liberamente';
+      forkBtn.addEventListener('click', async () => {
+        const note = prompt('Cosa cambierà nella tua variante? (opzionale)') || '';
         try {
           const { id } = await apiPost({ action: 'fork', id: row.id }, { fork_note: note });
           await openScript(id);
         } catch (err) { alert(err.message); }
       });
       li.appendChild(forkBtn);
-
-      const del = document.createElement('button');
-      del.className = 'row-delete';
-      del.textContent = 'Elimina';
-      del.addEventListener('click', async e => {
-        e.stopPropagation();
-        if (!confirm(`Eliminare definitivamente «${row.title}»?`)) return;
-        try {
-          await apiPost({ action: 'delete', id: row.id });
-          await loadCatalog();
-          renderListView();
-        } catch (err) { alert(err.message); }
-      });
-      li.appendChild(del);
 
       listEl.appendChild(li);
     }));
