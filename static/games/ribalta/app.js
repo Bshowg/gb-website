@@ -1,11 +1,11 @@
-const MODE_BASE = { lettura: 'scripts', improv: 'improv' };
+const API = './api/api.php';
 const MODE_KEY = 'ribalta:mode';
 
 const state = {
-  manifest: [],
-  currentPath: '',
-  folderStack: [],
+  catalog: [],
+  collection: null,
   script: null,
+  scriptMeta: null,
   characters: [],
   sceneIdx: 0,
   beatIdx: 0,
@@ -99,12 +99,16 @@ function isUserSpeaker(beat) {
   return asArray(beat.speaker).some(s => state.characters.includes(s));
 }
 
-async function loadManifest(path = '') {
-  const base = MODE_BASE[state.mode] || 'scripts';
-  const res = await fetch(`./${base}/${path}index.json`);
-  state.manifest = await res.json();
-  state.currentPath = path;
-  renderManifestList();
+async function loadCatalog(collection = null) {
+  const res = await fetch(`${API}?action=list&mode=${encodeURIComponent(state.mode)}`);
+  if (!res.ok) {
+    alert('Impossibile caricare i copioni. Riprova più tardi.');
+    state.catalog = [];
+  } else {
+    state.catalog = await res.json();
+  }
+  state.collection = collection;
+  renderCatalog();
 }
 
 function syncScriptsModeToggle() {
@@ -113,53 +117,77 @@ function syncScriptsModeToggle() {
   });
 }
 
-function renderManifestList() {
-  const inFolder = state.folderStack.length > 0;
+function forkSubtree(rows, root) {
+  const out = [];
+  (function visit(row, depth) {
+    out.push({ row, depth });
+    rows
+      .filter(r => r.parent_id === row.id)
+      .forEach(child => visit(child, depth + 1));
+  })(root, 0);
+  return out;
+}
+
+function renderCatalog() {
+  const inFolder = !!state.collection;
   document.querySelector('#view-scripts .hero').classList.toggle('hidden', inFolder);
   document.getElementById('scripts-top-bar').classList.toggle('hidden', !inFolder);
   document.getElementById('editor-link').classList.toggle('hidden', inFolder);
 
+  const rows = state.catalog;
+  const roots = rows.filter(r => r.parent_id === null);
+
   const list = document.getElementById('script-list');
   list.innerHTML = '';
-  state.manifest.forEach(entry => {
+
+  function appendScript({ row, depth }) {
     const li = document.createElement('li');
     const btn = document.createElement('button');
+    if (depth > 0) btn.style.marginLeft = `${Math.min(depth, 4) * 1.1}rem`;
     const title = document.createElement('div');
     title.className = 'script-title';
-    title.textContent = entry.title;
+    title.textContent = (depth > 0 ? '↳ ' : '') + row.title;
     btn.appendChild(title);
-    if (entry.folder) {
-      btn.classList.add('folder-entry');
-      const meta = document.createElement('div');
-      meta.className = 'script-meta';
-      meta.textContent = 'Cartella';
-      btn.appendChild(meta);
-      btn.addEventListener('click', () => enterFolder(entry));
-    } else {
-      const metaParts = [];
-      if (entry.actors != null) metaParts.push(`${entry.actors} personaggi`);
-      if (entry.scenes != null) metaParts.push(`${entry.scenes} scene`);
-      if (metaParts.length) {
-        const meta = document.createElement('div');
-        meta.className = 'script-meta';
-        meta.textContent = metaParts.join(' · ');
-        btn.appendChild(meta);
-      }
-      btn.addEventListener('click', () => loadScript(entry));
-    }
+    const metaParts = [`${row.actors} personaggi`, `${row.scenes} scene`];
+    if (depth > 0) metaParts.unshift(row.fork_note ? `Fork: ${row.fork_note}` : 'Fork');
+    if (row.author) metaParts.push(`di ${row.author}`);
+    const meta = document.createElement('div');
+    meta.className = 'script-meta';
+    meta.textContent = metaParts.join(' · ');
+    btn.appendChild(meta);
+    btn.addEventListener('click', () => loadScript(row.id));
     li.appendChild(btn);
     list.appendChild(li);
-  });
-}
-
-function folderStackFor(path) {
-  if (!path) return [];
-  const segs = path.split('/').filter(Boolean);
-  const stack = [];
-  for (let i = 0; i < segs.length; i++) {
-    stack.push(i === 0 ? '' : segs.slice(0, i).join('/') + '/');
   }
-  return stack;
+
+  function appendFolder(name) {
+    const li = document.createElement('li');
+    const btn = document.createElement('button');
+    btn.classList.add('folder-entry');
+    const title = document.createElement('div');
+    title.className = 'script-title';
+    title.textContent = name;
+    btn.appendChild(title);
+    const meta = document.createElement('div');
+    meta.className = 'script-meta';
+    meta.textContent = 'Cartella';
+    btn.appendChild(meta);
+    btn.addEventListener('click', () => enterCollection(name));
+    li.appendChild(btn);
+    list.appendChild(li);
+  }
+
+  if (!inFolder) {
+    const collections = [...new Set(roots.filter(r => r.collection).map(r => r.collection))];
+    collections.forEach(appendFolder);
+    roots
+      .filter(r => !r.collection)
+      .forEach(root => forkSubtree(rows, root).forEach(appendScript));
+  } else {
+    roots
+      .filter(r => r.collection === state.collection)
+      .forEach(root => forkSubtree(rows, root).forEach(appendScript));
+  }
 }
 
 function pushNav(s) {
@@ -173,42 +201,57 @@ function replaceNav(s) {
 }
 
 async function restoreView(s) {
-  if (!s) s = { view: 'scripts', path: '' };
+  if (!s) s = { view: 'scripts', collection: null };
   state.suppressNav = true;
   try {
     if (s.view === 'scripts') {
-      const target = s.path || '';
-      if (state.currentPath !== target || !state.manifest.length) {
-        state.folderStack = folderStackFor(target);
-        await loadManifest(target);
+      const target = s.collection || null;
+      if (state.collection !== target || !state.catalog.length) {
+        await loadCatalog(target);
       }
       showView('scripts');
-    } else if (s.view === 'characters') {
-      showView('characters');
-    } else if (s.view === 'prep') {
-      showView('prep');
-    } else if (s.view === 'playback') {
-      showView('playback');
-    } else if (s.view === 'readall') {
-      showView('readall');
+    } else if (['characters', 'prep', 'playback', 'readall'].includes(s.view)) {
+      if (!state.script && s.id) await fetchScript(s.id);
+      if (!state.script) {
+        await loadCatalog(null);
+        showView('scripts');
+        return;
+      }
+      if (s.view === 'characters') showCharacterPicker(state.script);
+      showView(s.view);
     }
   } finally {
     state.suppressNav = false;
   }
 }
 
-function enterFolder(entry) {
-  state.folderStack.push(state.currentPath);
-  const newPath = state.currentPath + entry.folder + '/';
-  pushNav({ view: 'scripts', path: newPath });
-  loadManifest(newPath);
+function enterCollection(name) {
+  pushNav({ view: 'scripts', collection: name });
+  state.collection = name;
+  renderCatalog();
 }
 
-async function loadScript(entry) {
-  const base = MODE_BASE[state.mode] || 'scripts';
-  const res = await fetch(`./${base}/${state.currentPath}${entry.file}`);
-  state.script = await res.json();
-  pushNav({ view: 'characters' });
+async function fetchScript(id) {
+  const res = await fetch(`${API}?action=get&id=${id}`);
+  if (!res.ok) return;
+  const data = await res.json();
+  state.script = data.content;
+  // title/language live in the row columns, not in the content document:
+  // merge them back so the rest of the app reads one self-contained object.
+  if (state.script && typeof state.script === 'object') {
+    if (!state.script.title) state.script.title = data.title;
+    if (!state.script.language) state.script.language = data.language;
+  }
+  state.scriptMeta = data;
+}
+
+async function loadScript(id) {
+  await fetchScript(id);
+  if (!state.script) {
+    alert('Impossibile caricare il copione.');
+    return;
+  }
+  pushNav({ view: 'characters', id });
   showCharacterPicker(state.script);
 }
 
@@ -301,7 +344,8 @@ function startPlayback(characters) {
   if (state.characters.length === 0) view = 'readall';
   else if (isImprovScript()) view = 'prep';
   else view = 'playback';
-  if (history.state && history.state.view !== view) pushNav({ view });
+  const navId = state.scriptMeta ? state.scriptMeta.id : undefined;
+  if (history.state && history.state.view !== view) pushNav({ view, id: navId });
   if (view === 'readall') {
     renderReadAll();
     showView('readall');
@@ -315,7 +359,8 @@ function startPlayback(characters) {
 }
 
 function beginImprovPlayback() {
-  if (history.state && history.state.view !== 'playback') pushNav({ view: 'playback' });
+  const navId = state.scriptMeta ? state.scriptMeta.id : undefined;
+  if (history.state && history.state.view !== 'playback') pushNav({ view: 'playback', id: navId });
   showView('playback');
   render();
 }
@@ -733,11 +778,9 @@ document.getElementById('scripts-mode-toggle').addEventListener('click', e => {
   if (newMode === state.mode) return;
   state.mode = newMode;
   localStorage.setItem(MODE_KEY, newMode);
-  state.currentPath = '';
-  state.folderStack = [];
   syncScriptsModeToggle();
-  loadManifest('').then(() => {
-    replaceNav({ view: 'scripts', path: '' });
+  loadCatalog(null).then(() => {
+    replaceNav({ view: 'scripts', collection: null });
   });
 });
 document.getElementById('restart-btn').addEventListener('click', () => {
@@ -748,7 +791,7 @@ window.addEventListener('popstate', e => restoreView(e.state));
 
 (function bootstrap() {
   const savedMode = localStorage.getItem(MODE_KEY);
-  if (savedMode && MODE_BASE[savedMode]) state.mode = savedMode;
+  if (savedMode === 'lettura' || savedMode === 'improv') state.mode = savedMode;
   syncScriptsModeToggle();
 
   const params = new URLSearchParams(location.search);
@@ -765,7 +808,7 @@ window.addEventListener('popstate', e => restoreView(e.state));
     replaceNav({ view: 'characters' });
     showCharacterPicker(state.script);
   } else {
-    replaceNav({ view: 'scripts', path: '' });
-    loadManifest();
+    replaceNav({ view: 'scripts', collection: null });
+    loadCatalog(null);
   }
 })();

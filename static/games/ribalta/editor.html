@@ -21,23 +21,27 @@
         <input type="file" id="import-input" accept="application/json" hidden>
       </div>
 
-      <h2>Bozze salvate</h2>
-      <p class="hint hidden" id="drafts-empty">Nessuna bozza. Crea un nuovo copione o forkane uno esistente.</p>
-      <ul class="list" id="drafts-list"></ul>
+      <h2>Copioni — Lettura</h2>
+      <p class="hint hidden" id="empty-lettura">Nessun copione.</p>
+      <ul class="list" id="list-lettura"></ul>
 
-      <h2>Copioni esistenti — tocca per modificare come bozza</h2>
-      <ul class="list" id="manifest-list"></ul>
+      <h2>Copioni — Improvvisa</h2>
+      <p class="hint hidden" id="empty-improv">Nessun copione.</p>
+      <ul class="list" id="list-improv"></ul>
     </section>
 
-    <section id="editor-form" class="hidden">
+    <section id="editor-form" class="hidden editor-mode-lettura">
       <datalist id="characters-suggest"></datalist>
       <div class="top-bar editor-actions">
-        <button class="back-btn" id="back-to-list">← Bozze</button>
+        <button class="back-btn" id="back-to-list">← Copioni</button>
         <button id="save-btn">Salva</button>
         <button id="prova-btn">Prova</button>
         <button id="export-btn" class="secondary">Esporta</button>
+        <button id="import-form-btn" class="secondary">Importa JSON</button>
         <button id="delete-btn" class="danger hidden">Elimina</button>
+        <input type="file" id="import-form-input" accept="application/json" hidden>
       </div>
+      <p class="hint" id="fork-info"></p>
 
       <div class="editor-section">
         <h2>Metadati</h2>
@@ -46,13 +50,51 @@
           <input id="f-title" type="text" placeholder="Titolo del copione">
         </div>
         <div class="form-row">
+          <label for="f-mode">Modalità</label>
+          <select id="f-mode">
+            <option value="lettura">Lettura</option>
+            <option value="improv">Improvvisa</option>
+          </select>
+        </div>
+        <div class="form-row">
           <label for="f-language">Lingua</label>
           <input id="f-language" type="text" value="it">
+        </div>
+        <div class="form-row">
+          <label for="f-collection">Cartella <span class="hint">opzionale, per serie (es. Mecha Padre Pio)</span></label>
+          <input id="f-collection" type="text">
+        </div>
+        <div class="form-row">
+          <label for="f-author">Autore <span class="hint">opzionale</span></label>
+          <input id="f-author" type="text">
         </div>
         <div class="form-row">
           <label for="f-description">Descrizione</label>
           <textarea id="f-description" rows="3" placeholder="Sinossi, contesto…"></textarea>
         </div>
+      </div>
+
+      <div class="editor-section improv-only" id="prep-section">
+        <h2>Preparazione (improv)</h2>
+        <div class="form-row">
+          <label for="p-premise">Premessa</label>
+          <textarea id="p-premise" rows="3" placeholder="La situazione di partenza e cosa la scena deve restare."></textarea>
+        </div>
+        <div class="form-row">
+          <label for="p-tone">Tono</label>
+          <textarea id="p-tone" rows="2" placeholder="Il registro: commedia, tensione reale…"></textarea>
+        </div>
+        <div class="form-row">
+          <label for="p-ending">Finale da preservare</label>
+          <textarea id="p-ending" rows="2" placeholder="Il finale fisso verso cui tutti devono remare."></textarea>
+        </div>
+        <div class="form-row">
+          <label for="p-rules">Regole di continuità <span class="hint">una per riga</span></label>
+          <textarea id="p-rules" rows="5"></textarea>
+        </div>
+        <h3>Ripasso (background)</h3>
+        <div id="background-list"></div>
+        <button class="add-btn" id="add-background-btn" type="button">+ Aggiungi scheda di ripasso</button>
       </div>
 
       <div class="editor-section">

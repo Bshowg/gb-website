@@ -763,3 +763,9 @@ button {
   color: var(--text);
   line-height: 1.55;
 }
+
+/* ---------- Editor: lettura/improv mode toggling ---------- */
+#editor-form.editor-mode-lettura .improv-only { display: none; }
+#editor-form.editor-mode-improv .lettura-only { display: none; }
+#editor-form .b-constraint-row.stage-hidden { display: none; }
+#fork-info.hidden { display: none; }
