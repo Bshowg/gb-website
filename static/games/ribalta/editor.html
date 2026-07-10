@@ -18,6 +18,7 @@
       <div class="editor-actions">
         <button id="new-btn">+ Nuovo copione</button>
         <button id="import-btn" class="secondary">Importa file .json</button>
+        <button id="how-btn-list" class="secondary">How</button>
         <input type="file" id="import-input" accept="application/json" hidden>
       </div>
 
@@ -32,15 +33,17 @@
 
     <section id="editor-form" class="hidden editor-mode-lettura">
       <datalist id="characters-suggest"></datalist>
-      <div class="top-bar editor-actions">
+      <div class="top-bar editor-actions" id="form-actions">
         <button class="back-btn" id="back-to-list">← Copioni</button>
         <button id="save-btn">Salva</button>
         <button id="prova-btn">Prova</button>
         <button id="export-btn" class="secondary">Esporta</button>
         <button id="import-form-btn" class="secondary">Importa JSON</button>
+        <button id="how-btn-form" class="secondary">Consigli</button>
         <button id="delete-btn" class="danger hidden">Elimina</button>
         <input type="file" id="import-form-input" accept="application/json" hidden>
       </div>
+      <div class="editor-main">
       <p class="hint" id="fork-info"></p>
 
       <div class="editor-section">
@@ -108,8 +111,57 @@
         <div id="scenes-list"></div>
         <button class="add-btn" id="add-scene-btn">+ Aggiungi scena</button>
       </div>
+      </div><!-- /.editor-main -->
     </section>
 
+  </div>
+
+  <div class="how-overlay hidden" id="how-overlay">
+    <div class="how-panel">
+      <div class="how-header">
+        <h2>Come funziona</h2>
+        <button id="how-close" aria-label="Chiudi">✕</button>
+      </div>
+      <div class="how-body">
+        <h3>Le due modalità</h3>
+        <p><strong>Lettura</strong> — il copione è scritto parola per parola: ogni battuta ha
+          <em>chi parla</em>, <em>a chi</em>, il <em>testo da leggere ad alta voce</em> e un
+          <em>contesto</em> opzionale (una nota di regia: tono, intenzione, sottotesto).
+          Durante il gioco ognuno vede evidenziate le proprie battute e, come imbeccata,
+          le ultime parole della battuta precedente.</p>
+        <p><strong>Improvvisa</strong> — nessuna battuta scritta: ogni beat dà all'attore un
+          <em>contesto</em> (cosa deve ottenere, in seconda persona) e un <em>vincolo</em>
+          (un paletto da non superare). In più si prepara la scena con: <em>premessa</em>,
+          <em>tono</em>, <em>finale da preservare</em>, <em>regole di continuità</em> (i fatti
+          che nessuno può contraddire), le schede di <em>ripasso</em> (materiale vero da cui
+          pescare in scena), il <em>da non fare</em> di ogni personaggio e, per ogni scena,
+          la preparazione e il riassunto per la scaletta. Cambiando la Modalità, l'editor
+          mostra solo i campi che servono.</p>
+
+        <h3>Le azioni</h3>
+        <p><strong>Salva</strong> scrive il copione nel database (i conteggi di personaggi e
+          scene si aggiornano da soli). <strong>Prova</strong> apre l'anteprima giocabile.
+          <strong>Esporta</strong> scarica il JSON completo; <strong>Importa JSON</strong>
+          riempie il modulo da un file. Dall'elenco puoi <strong>Forkare</strong> un copione
+          per creare una variante collegata all'originale.</p>
+
+        <h3>Le 3 regole d'oro</h3>
+        <ol class="golden-rules">
+          <li><strong>Mai due volte di fila.</strong> Un attore non parla in due beat
+            consecutivi: se succede, uniscili in un beat solo (con «A chi» che elenca tutti
+            i destinatari). Un'indicazione scenica in mezzo interrompe la sequenza e la
+            rende legittima.</li>
+          <li><strong>Una battuta, un attore</strong> <em>(solo Lettura)</em>. Niente battute
+            a più voci: se nel materiale parlano insieme, dividi in un beat per attore,
+            ognuno con le sue parole (uno dice, l'altro fa eco). Nell'Improvvisa i beat
+            a più attori sono ammessi.</li>
+          <li><strong>Equilibrio di scena.</strong> Con 4 o meno personaggi, tieni il numero
+            di beat più o meno pari per tutti — non identico, ma nessuno deve stare a
+            guardare. Con più di 4, bilancia i 4 protagonisti: gli altri possono essere
+            ruoli di contorno.</li>
+        </ol>
+      </div>
+    </div>
   </div>
 
   <script src="./editor.js"></script>

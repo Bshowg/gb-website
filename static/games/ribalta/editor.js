@@ -751,6 +751,21 @@ document.getElementById('add-scene-btn').addEventListener('click', () => {
 });
 document.getElementById('f-mode').addEventListener('change', syncModeUI);
 
+// ---------- "How" guide ----------
+
+function toggleHow(show) {
+  document.getElementById('how-overlay').classList.toggle('hidden', !show);
+}
+document.getElementById('how-btn-list').addEventListener('click', () => toggleHow(true));
+document.getElementById('how-btn-form').addEventListener('click', () => toggleHow(true));
+document.getElementById('how-close').addEventListener('click', () => toggleHow(false));
+document.getElementById('how-overlay').addEventListener('click', e => {
+  if (e.target === e.currentTarget) toggleHow(false);
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') toggleHow(false);
+});
+
 // ---------- Init ----------
 
 (async function init() {

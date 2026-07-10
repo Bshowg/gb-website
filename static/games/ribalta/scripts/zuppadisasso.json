@@ -3,15 +3,42 @@
   "language": "it",
   "description": "Un vecchio lupo arriva in un villaggio di animali e chiede ospitalità alla gallina per preparare la sua zuppa di sasso. Nonostante la paura iniziale, gli animali si lasciano coinvolgere e contribuiscono con ingredienti diversi, trasformando la situazione in una festa conviviale. Alla fine, il lupo rivela che il sasso non è ancora cotto e se lo riprende, lasciando gli animali a chiedersi chi sarà il prossimo ospite del lupo.",
   "characters": [
-    { "name": "Narratrice", "description": "" },
-    { "name": "Lupo", "description": "" },
-    { "name": "Gallina", "description": "" },
-    { "name": "Porcello", "description": "" },
-    { "name": "Cavallo", "description": "" },
-    { "name": "Oca", "description": "" },
-    { "name": "Pecora", "description": "" },
-    { "name": "Capra", "description": "" },
-    { "name": "Cane", "description": "" }
+    {
+      "name": "Narratrice",
+      "description": ""
+    },
+    {
+      "name": "Lupo",
+      "description": ""
+    },
+    {
+      "name": "Gallina",
+      "description": ""
+    },
+    {
+      "name": "Porcello",
+      "description": ""
+    },
+    {
+      "name": "Cavallo",
+      "description": ""
+    },
+    {
+      "name": "Oca",
+      "description": ""
+    },
+    {
+      "name": "Pecora",
+      "description": ""
+    },
+    {
+      "name": "Capra",
+      "description": ""
+    },
+    {
+      "name": "Cane",
+      "description": ""
+    }
   ],
   "scenes": [
     {
@@ -176,15 +203,23 @@
         },
         {
           "type": "line",
-          "speaker": ["Cavallo", "Oca"],
+          "speaker": "Cavallo",
           "to": "Gruppo",
-          "line": "Tutto bene?",
-          "context": "Cavallo e oca chiedono se la situazione è sotto controllo."
+          "line": "Tutto bene? Abbiamo visto entrare il lupo!"
+        },
+        {
+          "type": "line",
+          "speaker": "Oca",
+          "to": "Gruppo",
+          "line": "Che cosa sta succedendo qui dentro?"
         },
         {
           "type": "line",
           "speaker": "Porcello",
-          "to": ["Cavallo", "Oca"],
+          "to": [
+            "Cavallo",
+            "Oca"
+          ],
           "line": "Con il lupo e la gallina stiamo preparando la zuppa di sasso con sedano e zucchine.",
           "context": "Il porcello aggiorna i nuovi arrivati sugli ingredienti già aggiunti."
         },
@@ -218,15 +253,30 @@
         },
         {
           "type": "line",
-          "speaker": ["Pecora", "Capra", "Cane"],
+          "speaker": "Pecora",
           "to": "Gruppo",
-          "line": "Cosa state facendo?",
-          "context": "I nuovi arrivati chiedono spiegazioni."
+          "line": "Cosa state facendo?"
+        },
+        {
+          "type": "line",
+          "speaker": "Capra",
+          "to": "Gruppo",
+          "line": "Abbiamo visto entrare il lupo e ci siamo preoccupati!"
+        },
+        {
+          "type": "line",
+          "speaker": "Cane",
+          "to": "Gruppo",
+          "line": "È tutto bene qui dentro?"
         },
         {
           "type": "line",
           "speaker": "Cavallo",
-          "to": ["Pecora", "Capra", "Cane"],
+          "to": [
+            "Pecora",
+            "Capra",
+            "Cane"
+          ],
           "line": "Con il lupo, la gallina, il porcello e l’oca stiamo preparando la zuppa di sasso con sedano, zucchine e porri.",
           "context": "Il cavallo riassume la situazione e gli ingredienti."
         },

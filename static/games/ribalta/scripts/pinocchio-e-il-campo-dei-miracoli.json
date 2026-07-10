@@ -708,13 +708,17 @@
         },
         {
           "type": "line",
-          "speaker": [
-            "La Volpe",
-            "Il Gatto"
-          ],
+          "speaker": "La Volpe",
           "to": "Pinocchio",
           "line": "Noi non vogliamo regali! A noi ci basta di averti insegnato il modo di arricchire senza durar fatica, e siamo contenti come pasque.",
-          "context": "«Risposero que' due malanni», scrive Collodi. Salutano ed escono, augurandogli una buona raccolta."
+          "context": "«Risposero que' due malanni», scrive Collodi: nella lettura, la Volpe parla per tutti e due."
+        },
+        {
+          "type": "line",
+          "speaker": "Il Gatto",
+          "to": "Pinocchio",
+          "line": "Contenti come pasque!",
+          "context": "L'eco di rito. Salutano ed escono, augurandogli una buona raccolta."
         },
         {
           "type": "stage_direction",

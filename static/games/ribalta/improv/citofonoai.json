@@ -70,7 +70,7 @@
 },
 {
 "scene": "scene_4",
-"summary": "La parte tecnica. Damiano interroga Luca e, a mezza voce, gli rivela la verità sul prodotto."
+"summary": "La prova pratica. La demo di CitofonAI si ribella; il buon senso di Luca sembra un miracolo, e Damiano gli rivela la verità a mezza voce."
 },
 {
 "scene": "scene_5",
@@ -227,32 +227,38 @@
 
 {
 "id": "scene_4",
-"title": "La domanda tecnica",
-"setting": "Scrivania di Damiano, sommersa di tazze e post-it. Sullo schermo, un grafico che scende. Damiano lo gira in fretta prima che Luca lo veda bene.",
-"scene_prep": "Questa scena rivela la verità: il prodotto non funziona e Damiano è solo. La complicità tra Damiano e Luca deve crescere, mentre Ascanio non capisce nulla di ciò che sente.",
+"title": "La prova pratica",
+"setting": "Scrivania di Damiano, sommersa di tazze e post-it. Su un trespolo, il pezzo forte: la demo di CitofonAI, un citofono con un occhio a LED e troppi fili.",
+"scene_prep": "La 'prova tecnica' è in realtà una prova pratica con la demo: nessuno in scena deve sapere nulla di tecnologia, i malfunzionamenti si improvvisano liberamente. La competenza di Luca è il puro buon senso, che in questa azienda sembra un miracolo. La scena rivela la verità: il prodotto non funziona e Damiano è solo.",
 "beats": [
 {
 "speaker": "Damiano Croce",
 "to": "Luca Bonetti",
-"context": "Fai una domanda tecnica vera e ragionevole, la prima dell'intera giornata. Illuminati appena Luca inizia a rispondere sensatamente.",
-"constraint": "Resta professionale: sei affamato di competenza."
+"context": "Annuncia la prova pratica, la prima cosa concreta dell'intera giornata: chiedi a Luca semplicemente di far suonare la demo di CitofonAI.",
+"constraint": "Non avvertirlo di che cosa lo aspetta."
 },
 {
 "speaker": "Luca Bonetti",
 "to": "Damiano Croce",
-"context": "Rispondi bene, da persona competente. Rilassati: finalmente una cosa che sai fare.",
-"constraint": "Questa risposta deve essere solida, senza gag."
+"context": "Prova le cose più ovvie con calma professionale, commentando ad alta voce quello che il citofono fa: qualsiasi cosa tranne suonare. Inventa tu i malfunzionamenti (ti scambia per il postino, parla in un'altra lingua, chiama qualcuno...).",
+"constraint": "Non arrenderti e non prendere in giro il prodotto."
 },
 {
 "speaker": "Ascanio Ferri",
 "to": "Gruppo",
-"context": "Non hai capito niente della risposta, ma commentala come se fosse una visione strategica. Usa almeno tre buzzword a caso.",
-"constraint": "Non fare domande di chiarimento: fingeresti di aver capito."
+"context": "Commenta ogni malfunzionamento come se fosse una funzionalità rivoluzionaria e voluta (esempio: non suona? 'privacy by design').",
+"constraint": "Usa almeno tre buzzword, mai una spiegazione vera."
+},
+{
+"speaker": "Luca Bonetti",
+"to": "Gruppo",
+"context": "Proponi la soluzione più banale del mondo, da puro buon senso: spegnere e riaccendere, leggere le istruzioni, togliere un filo di troppo. E la demo, miracolosamente, suona.",
+"constraint": "Dilla come una cosa ovvia, non da genio."
 },
 {
 "speaker": "Damiano Croce",
 "to": "Luca Bonetti",
-"context": "Abbassa la voce e digli la verità a mezze frasi: il server è un portatile nel ripostiglio, la demo funziona solo se non la tocca nessuno, e tu non dormi da mesi.",
+"context": "Reagisci come davanti a un miracolo: è la prima volta che suona da mesi. Poi abbassa la voce e digli la verità a mezze frasi: il server è un portatile nel ripostiglio, la demo funziona solo se non la tocca nessuno, e tu non dormi da mesi.",
 "constraint": "Ascanio non deve sentire o capire."
 },
 {
@@ -270,7 +276,7 @@
 {
 "speaker": "Ascanio Ferri",
 "to": "Gruppo",
-"context": "Dopo l'urlo, dichiara di aver 'sentito qualcosa di speciale' e annuncia che è il momento della decisione.",
+"context": "Dichiara di aver 'sentito qualcosa di speciale' e annuncia che è il momento della decisione.",
 "constraint": "Prepara la deliberazione, non anticipare l'esito."
 }
 ]

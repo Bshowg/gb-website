@@ -458,13 +458,17 @@
         },
         {
           "type": "line",
-          "speaker": [
-            "Tommaso Grieco",
-            "Lidia Giostra"
-          ],
+          "speaker": "Tommaso Grieco",
           "to": "Rómulo Candela",
           "line": "Non l'ho uccisa io!",
           "context": "Reazione corale e quasi simultanea: ognuno dei due urla di non essere l'assassino."
+        },
+        {
+          "type": "line",
+          "speaker": "Lidia Giostra",
+          "to": "Rómulo Candela",
+          "line": "Nemmeno io! Non l'ho uccisa io!",
+          "context": "Subito dopo Tommaso, quasi sovrapponendosi: le due negazioni una sull'altra."
         },
         {
           "type": "line",
