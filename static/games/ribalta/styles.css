@@ -774,7 +774,7 @@ button {
    The container is 640px centered; the panel floats in the free space to
    its left, so the writing area keeps its full width. Active only when
    there is actually room for it (640 + 2x220 = 1080 -> 1100px). ---------- */
-@media (min-width: 1100px) {
+@media (min-width: 1000px) {
   #editor-form > #form-actions {
     position: fixed;
     top: 1rem;
@@ -795,7 +795,7 @@ button {
 /* ---------- Editor: on small screens keep only Salva / Prova / Consigli
    (plus the back arrow for navigation). Esporta, Importa JSON and Elimina
    are available on desktop, where the action panel has room. ---------- */
-@media (max-width: 1099.98px) {
+@media (max-width: 1000px) {
   #form-actions #export-btn,
   #form-actions #import-form-btn,
   #form-actions #delete-btn { display: none; }
