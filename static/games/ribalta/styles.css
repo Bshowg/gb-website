@@ -792,6 +792,15 @@ button {
   #editor-form > #form-actions button { width: 100%; text-align: center; }
 }
 
+/* ---------- Editor: on small screens keep only Salva / Prova / Consigli
+   (plus the back arrow for navigation). Esporta, Importa JSON and Elimina
+   are available on desktop, where the action panel has room. ---------- */
+@media (max-width: 1099.98px) {
+  #form-actions #export-btn,
+  #form-actions #import-form-btn,
+  #form-actions #delete-btn { display: none; }
+}
+
 /* ---------- Editor: script list rows (name + Modifica + Forka) ---------- */
 .script-line {
   display: flex;
