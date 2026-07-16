@@ -31,55 +31,81 @@ export class InputHandler {
     }
     
     setupListeners() {
+        // Keep handler references so destroy() can remove every listener
+        // (otherwise each rematch stacks another live InputHandler)
+        this.boundHandlers = {
+            touchstart: (e) => this.handleTouchStart(e),
+            touchmove: (e) => this.handleTouchMove(e),
+            touchend: (e) => this.handleTouchEnd(e),
+            docTouchmove: (e) => {
+                if (this.activeTouch !== null) {
+                    this.handleTouchMove(e);
+                }
+            },
+            docTouchend: (e) => {
+                if (this.activeTouch !== null) {
+                    this.handleTouchEnd(e);
+                }
+            },
+            mousedown: (e) => this.handleMouseDown(e),
+            docMousemove: (e) => {
+                if (this.activeTouch === 'mouse') {
+                    this.handleMouseMove(e);
+                }
+            },
+            docMouseup: (e) => {
+                if (this.activeTouch === 'mouse') {
+                    this.handleMouseUp(e);
+                }
+            },
+            visibilitychange: () => {
+                if (document.hidden) {
+                    this.cancelSlide();
+                }
+            },
+            orientationchange: () => this.cancelSlide(),
+        };
+        const h = this.boundHandlers;
+
         // Touch events for mobile devices
-        this.canvas.addEventListener('touchstart', (e) => this.handleTouchStart(e), { passive: false, capture: true });
-        this.canvas.addEventListener('touchmove', (e) => this.handleTouchMove(e), { passive: false, capture: true });
-        this.canvas.addEventListener('touchend', (e) => this.handleTouchEnd(e), { passive: false, capture: true });
-        this.canvas.addEventListener('touchcancel', (e) => this.handleTouchEnd(e), { passive: false, capture: true });
-        
+        this.canvas.addEventListener('touchstart', h.touchstart, { passive: false, capture: true });
+        this.canvas.addEventListener('touchmove', h.touchmove, { passive: false, capture: true });
+        this.canvas.addEventListener('touchend', h.touchend, { passive: false, capture: true });
+        this.canvas.addEventListener('touchcancel', h.touchend, { passive: false, capture: true });
+
         // Fallback document-level listeners for better touch handling
-        document.addEventListener('touchmove', (e) => {
-            if (this.activeTouch !== null) {
-                this.handleTouchMove(e);
-            }
-        }, { passive: false });
-        
-        document.addEventListener('touchend', (e) => {
-            if (this.activeTouch !== null) {
-                this.handleTouchEnd(e);
-            }
-        }, { passive: false });
-        
-        document.addEventListener('touchcancel', (e) => {
-            if (this.activeTouch !== null) {
-                this.handleTouchEnd(e);
-            }
-        }, { passive: false });
-        
+        document.addEventListener('touchmove', h.docTouchmove, { passive: false });
+        document.addEventListener('touchend', h.docTouchend, { passive: false });
+        document.addEventListener('touchcancel', h.docTouchend, { passive: false });
+
         // Mouse events for desktop devices. Move/up listen on the document so
         // the fold drag keeps working when the cursor passes over UI overlays
         // (canvas-only listeners lose the pointer there and snapped cards back)
-        this.canvas.addEventListener('mousedown', (e) => this.handleMouseDown(e), { passive: false });
-        document.addEventListener('mousemove', (e) => {
-            if (this.activeTouch === 'mouse') {
-                this.handleMouseMove(e);
-            }
-        }, { passive: false });
-        document.addEventListener('mouseup', (e) => {
-            if (this.activeTouch === 'mouse') {
-                this.handleMouseUp(e);
-            }
-        }, { passive: false });
-        
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                this.cancelSlide();
-            }
-        });
-        
-        window.addEventListener('orientationchange', () => {
-            this.cancelSlide();
-        });
+        this.canvas.addEventListener('mousedown', h.mousedown, { passive: false });
+        document.addEventListener('mousemove', h.docMousemove, { passive: false });
+        document.addEventListener('mouseup', h.docMouseup, { passive: false });
+
+        document.addEventListener('visibilitychange', h.visibilitychange);
+        window.addEventListener('orientationchange', h.orientationchange);
+    }
+
+    destroy() {
+        this.cancelSlide();
+        const h = this.boundHandlers;
+        this.canvas.removeEventListener('touchstart', h.touchstart, { capture: true });
+        this.canvas.removeEventListener('touchmove', h.touchmove, { capture: true });
+        this.canvas.removeEventListener('touchend', h.touchend, { capture: true });
+        this.canvas.removeEventListener('touchcancel', h.touchend, { capture: true });
+        document.removeEventListener('touchmove', h.docTouchmove);
+        document.removeEventListener('touchend', h.docTouchend);
+        document.removeEventListener('touchcancel', h.docTouchend);
+        this.canvas.removeEventListener('mousedown', h.mousedown);
+        document.removeEventListener('mousemove', h.docMousemove);
+        document.removeEventListener('mouseup', h.docMouseup);
+        document.removeEventListener('visibilitychange', h.visibilitychange);
+        window.removeEventListener('orientationchange', h.orientationchange);
+        this.peekSliders.forEach(slider => slider.destroy());
+        this.peekSliders = [];
     }
     
     handleTouchStart(e) {

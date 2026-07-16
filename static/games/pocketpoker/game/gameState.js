@@ -8,8 +8,8 @@ export class GameState {
     constructor(seed = null) {
         this.seed = seed;
         this.players = [
-            { stack: 1000, hole: [], currentBet: 0, folded: false, isDealer: false },
-            { stack: 1000, hole: [], currentBet: 0, folded: false, isDealer: true }
+            { stack: 1000, hole: [], currentBet: 0, totalBet: 0, folded: false, isDealer: false },
+            { stack: 1000, hole: [], currentBet: 0, totalBet: 0, folded: false, isDealer: true }
         ];
         this.blinds = { sb: 5, bb: 10 };
         this.pot = 0;
@@ -65,6 +65,7 @@ export class GameState {
         this.players.forEach(p => {
             p.hole = [];
             p.currentBet = 0;
+            p.totalBet = 0;
             p.folded = false;
         });
         
@@ -85,18 +86,25 @@ export class GameState {
         // Shuffle and deal
         this.shuffleDeck();
         
-        // Heads-up: dealer posts SB
+        // Heads-up: dealer posts SB. A short stack posts what it has
+        // (all-in for the blind) instead of going negative
         const sbIndex = this.dealerIndex;
         const bbIndex = (this.dealerIndex + 1) % 2;
-        
-        this.players[sbIndex].stack -= this.blinds.sb;
-        this.players[sbIndex].currentBet = this.blinds.sb;
-        this.players[bbIndex].stack -= this.blinds.bb;
-        this.players[bbIndex].currentBet = this.blinds.bb;
-        
-        this.pot = this.blinds.sb + this.blinds.bb;
-        this.currentBet = this.blinds.bb;
-        this.minRaise = this.blinds.bb * 2;
+
+        const sbAmount = Math.min(this.players[sbIndex].stack, this.blinds.sb);
+        const bbAmount = Math.min(this.players[bbIndex].stack, this.blinds.bb);
+
+        this.players[sbIndex].stack -= sbAmount;
+        this.players[sbIndex].currentBet = sbAmount;
+        this.players[sbIndex].totalBet = sbAmount;
+        this.players[bbIndex].stack -= bbAmount;
+        this.players[bbIndex].currentBet = bbAmount;
+        this.players[bbIndex].totalBet = bbAmount;
+
+        this.pot = sbAmount + bbAmount;
+        this.currentBet = Math.max(sbAmount, bbAmount);
+        // minRaise is the minimum raise INCREMENT over the current bet
+        this.minRaise = this.blinds.bb;
         
         // Deal hole cards
         for (let i = 0; i < 2; i++) {
@@ -121,14 +129,18 @@ export class GameState {
             const callAmount = Math.min(amount, player.stack);
             player.stack -= callAmount;
             player.currentBet += callAmount;
+            player.totalBet += callAmount;
             this.pot += callAmount;
         } else if (action === 'raise') {
             const raiseAmount = Math.min(amount, player.stack);
+            const previousBet = this.currentBet;
             player.stack -= raiseAmount;
             player.currentBet += raiseAmount;
+            player.totalBet += raiseAmount;
             this.pot += raiseAmount;
             this.currentBet = player.currentBet;
-            this.minRaise = Math.max(this.minRaise, raiseAmount);
+            // Next raise must add at least this raise's increment (>= BB)
+            this.minRaise = Math.max(this.blinds.bb, this.currentBet - previousBet);
             this.lastAggressorIndex = this.toAct;
             // Reset actions tracking since there's been a raise
             this.actionsThisStreet.clear();
@@ -214,6 +226,22 @@ export class GameState {
         this.minRaise = this.blinds.bb;
     }
     
+    // At hand end, return the uncalled portion of the highest bet to its
+    // owner (heads-up equivalent of a side pot): if a bet was never fully
+    // matched — opponent folded or was all-in for less — the excess never
+    // belonged in the pot
+    refundUncalledBet() {
+        const diff = this.players[0].totalBet - this.players[1].totalBet;
+        if (diff === 0) return null;
+
+        const payerIndex = diff > 0 ? 0 : 1;
+        const amount = Math.abs(diff);
+        this.players[payerIndex].stack += amount;
+        this.players[payerIndex].totalBet -= amount;
+        this.pot -= amount;
+        return { playerIndex: payerIndex, amount };
+    }
+
     determineWinner() {
         if (this.players[0].folded) {
             return { playerIndex: 1, handName: 'Opponent folded', tie: false };

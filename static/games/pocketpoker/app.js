@@ -101,14 +101,9 @@ class PokerGame {
                 // Listen for wheel changes
                 controls.wheel.addEventListener('rollerchange', (e) => {
                     if (this.gameState.toAct === playerId) {
-                        const value = e.detail.value;
-                        console.log(`Player ${playerId} wheel change: ${value}`);
-                        
+                        console.log(`Player ${playerId} wheel change: ${e.detail.value}`);
                         // Update action button text based on new wheel value
-                        const currentPlayer = this.gameState.players[playerId];
-                        const toCall = this.gameState.currentBet - currentPlayer.currentBet;
-                        const canCheck = toCall === 0;
-                        this.updateActionButtonText(controls, canCheck, toCall);
+                        this.updateActionButtonText(controls, playerId);
                     }
                 });
             }
@@ -127,13 +122,14 @@ class PokerGame {
             const max = currentPlayer.stack;
             
             if (wheelInstance) {
-                const minValue = Math.max(0, toCall);
+                // Never let min exceed max: a short stack calls all-in for less
+                const minValue = Math.max(0, Math.min(toCall, max));
                 const maxValue = max;
-                
+
                 console.log(`Updating wheel ${playerId}: min=${minValue}, max=${maxValue}, toCall=${toCall}`);
-                
-                wheelInstance.configure({ 
-                    min: minValue, 
+
+                wheelInstance.configure({
+                    min: minValue,
                     max: maxValue,
                     step: 1
                 });
@@ -150,28 +146,12 @@ class PokerGame {
             // Action button - executes action based on wheel amount or handles continue in all-in
             controls.actionBtn.addEventListener('click', () => {
                 console.log(`Player ${playerId} action button clicked, toAct: ${this.gameState.toAct}`);
-                
+
                 // Normal betting flow - only active player can act
                 if (this.gameState.toAct === playerId) {
-                    const currentPlayer = this.gameState.players[playerId];
-                    const toCall = this.gameState.currentBet - currentPlayer.currentBet;
-                    const wheelAmount = this.wheelInstances[playerId] ? this.wheelInstances[playerId].value : 0;
-                    
-                    console.log(`Action: toCall=${toCall}, wheelAmount=${wheelAmount}`);
-                    
-                    if (toCall === 0 && wheelAmount === 0) {
-                        // Check (no money to call, wheel at 0)
-                        this.gameState.processAction('call', 0);
-                    } else if (wheelAmount === toCall) {
-                        // Call (wheel amount equals call amount)
-                        this.gameState.processAction('call', toCall);
-                    } else if (wheelAmount > toCall) {
-                        // Raise/Bet (wheel amount is more than call)
-                        this.gameState.processAction('raise', wheelAmount);
-                    } else {
-                        // Call with whatever amount is on wheel (shouldn't happen with proper wheel setup)
-                        this.gameState.processAction('call', wheelAmount);
-                    }
+                    const effective = this.getEffectiveAction(playerId);
+                    console.log(`Action: ${effective.action} $${effective.amount}`);
+                    this.gameState.processAction(effective.action, effective.amount);
                     this.saveGameState(); // Auto-save after action
                     this.checkForNextStreet();
                 }
@@ -179,22 +159,40 @@ class PokerGame {
         });
     }
 
-    updateActionButtonText(controls, canCheck, toCall, isAllIn=false) {
-        // Find the wheel instance for this control
-        const playerId = controls.wheel?.id === 'top-bet-wheel' ? 1 : 0;
+    // Resolve the wheel value into the action that will actually be taken,
+    // enforcing the minimum raise (a raise must add at least the previous
+    // raise increment, unless it puts the player all-in)
+    getEffectiveAction(playerId) {
+        const gs = this.gameState;
+        const player = gs.players[playerId];
+        const toCall = gs.currentBet - player.currentBet;
+        const stack = player.stack;
         const wheelAmount = this.wheelInstances[playerId] ? this.wheelInstances[playerId].value : 0;
-        
+
+        if (toCall === 0 && wheelAmount === 0) {
+            return { action: 'call', amount: 0, label: 'Check' };
+        }
+
+        if (wheelAmount <= toCall) {
+            const amount = Math.min(toCall, stack);
+            return { action: 'call', amount, label: amount >= stack ? `All-In $${amount}` : 'Call' };
+        }
+
+        // Raise: bump sub-minimum raises up to the legal minimum
+        const minRaiseTotal = toCall + gs.minRaise;
+        let amount = Math.max(wheelAmount, Math.min(minRaiseTotal, stack));
+        if (amount >= stack) {
+            return { action: 'raise', amount: stack, label: `All-In $${stack}` };
+        }
+        return { action: 'raise', amount, label: `$${amount}` };
+    }
+
+    updateActionButtonText(controls, playerId, isAllIn = false) {
         if (isAllIn) {
             controls.actionBtn.textContent = 'Continue';
-        } else if (canCheck && wheelAmount === 0) {
-            controls.actionBtn.textContent = 'Check';
-        } else if (wheelAmount === toCall) {
-            controls.actionBtn.textContent = `Call`;
-        } else if (wheelAmount > toCall) {
-            controls.actionBtn.textContent = `$${wheelAmount}`;
-        } else {
-            controls.actionBtn.textContent = `Call`;
+            return;
         }
+        controls.actionBtn.textContent = this.getEffectiveAction(playerId).label;
     }
 
     
@@ -251,12 +249,19 @@ class PokerGame {
             if (this.showingWinnerMessage) { // Only advance if still showing winner message
                 this.awardPotAndStartNextHand();
             }
-        }, 30000); // 3 second delay to read the result
+        }, 30000); // 30 second delay to read the result (pot click skips it)
     }
     
     awardPotAndStartNextHand() {
+        // Return any uncalled bet before awarding: money the opponent never
+        // matched (fold, or all-in for less) goes back to whoever bet it
+        const refund = this.gameState.refundUncalledBet();
+        if (refund) {
+            console.log(`Refunded uncalled bet of $${refund.amount} to player ${refund.playerIndex}`);
+        }
+
         const winner = this.gameState.determineWinner();
-        
+
         // Award the pot to the winner
         if (winner.tie) {
             // Split the pot
@@ -287,7 +292,10 @@ class PokerGame {
         this.matchStats.handsPlayed++;
         this.matchStats.biggestPot = Math.max(this.matchStats.biggestPot, this.gameState.pot);
         this.matchStats.totalPots += this.gameState.pot;
-        
+
+        // The pot has been paid out
+        this.gameState.pot = 0;
+
         // Check if match is over (one player eliminated)
         if (this.isMatchComplete()) {
             this.showEndScreen();
@@ -367,41 +375,40 @@ class PokerGame {
                     }
                     controls.actionBtn.disabled = false;
                     if (controls.wheel) controls.wheel.style.pointerEvents = 'none';
-                    
-                
+
+
                     // Update action button text
-                    this.updateActionButtonText(controls, canCheck, toCall, isAllInScenario);
-                    
+                    this.updateActionButtonText(controls, playerId, isAllInScenario);
+
                     // Enable controls for active player
                     controls.container.classList.remove('disabled');
                     console.log(`Enabled controls for player ${playerId}`);
                     return;
                 }
-                
+
                 // Show all controls (in case they were hidden during all-in)
                 if (controls.wheel) controls.wheel.style.display = '';
-                
+
                 // Update wheel to reflect next action
-                const callAmount = toCall;
                 const max = currentPlayer.stack;
-                
-                // Wheel should start with call amount, range up to all-in
-                const minWheelValue = callAmount; // Minimum is the call amount
-                const maxWheelValue = max; // Maximum is all-in
-                
+
+                // Wheel starts at the call amount (all-in if short), up to all-in
+                const minWheelValue = Math.min(toCall, max);
+                const maxWheelValue = max;
+
                 if (wheelInstance) {
-                    wheelInstance.configure({ 
-                        min: minWheelValue, 
+                    wheelInstance.configure({
+                        min: minWheelValue,
                         max: maxWheelValue,
                         step: 1
                     });
                     // Set to call amount by default
-                    wheelInstance.setValue(callAmount);
+                    wheelInstance.setValue(minWheelValue);
                 }
-                
-                
+
+
                 // Update action button text
-                this.updateActionButtonText(controls, canCheck, toCall, isAllInScenario);
+                this.updateActionButtonText(controls, playerId, isAllInScenario);
 
                 // Enable controls for active player
                 controls.container.classList.remove('disabled');
@@ -417,7 +424,7 @@ class PokerGame {
                 if (controls.wheel) controls.wheel.style.display = '';
                 
                 // Show what the action would be if it were their turn
-                controls.actionBtn.textContent = canCheck ? 'Check' : `Call $${toCall}`;
+                controls.actionBtn.textContent = canCheck ? 'Check' : `Call $${Math.min(toCall, currentPlayer.stack)}`;
                 
                 // Disable controls
                 controls.actionBtn.disabled = true;
@@ -539,17 +546,22 @@ class PokerGame {
     }
     
     setupAutoSave() {
-        // Auto-save on page unload
-        window.addEventListener('beforeunload', () => {
-            this.saveGameState();
-        });
-        
-        // Auto-save on page visibility change (when user switches tabs)
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                this.saveGameState();
+        // Keep references so cleanup() can remove them: a stale instance's
+        // auto-save would otherwise overwrite the save after the game ends
+        this.autoSaveHandlers = {
+            beforeunload: () => this.saveGameState(),
+            visibilitychange: () => {
+                if (document.hidden) {
+                    this.saveGameState();
+                }
             }
-        });
+        };
+
+        // Auto-save on page unload
+        window.addEventListener('beforeunload', this.autoSaveHandlers.beforeunload);
+
+        // Auto-save on page visibility change (when user switches tabs)
+        document.addEventListener('visibilitychange', this.autoSaveHandlers.visibilitychange);
     }
     
     setupPWA() {
@@ -644,15 +656,6 @@ class PokerGame {
             installButton.classList.add('hidden');
             installPrompt.classList.add('hidden');
         });
-        
-        // Debug: Show button after 3 seconds if not shown naturally (for testing)
-        setTimeout(() => {
-            if (installButton.classList.contains('hidden') && !isStandalone) {
-                console.log('Debug: Force showing install button for testing');
-                installButton.classList.remove('hidden');
-                installButton.textContent = '📱 Add to Home Screen (Debug)';
-            }
-        }, 3000);
     }
     
     start(resumeFromSave = false) {
@@ -690,6 +693,7 @@ class PokerGame {
                     stack: player.stack,
                     hole: player.hole,
                     currentBet: player.currentBet,
+                    totalBet: player.totalBet,
                     folded: player.folded,
                     isDealer: player.isDealer
                 })),
@@ -748,6 +752,7 @@ class PokerGame {
                 stack: playerData.stack,
                 hole: playerData.hole || [],
                 currentBet: playerData.currentBet || 0,
+                totalBet: playerData.totalBet || playerData.currentBet || 0,
                 folded: playerData.folded || false,
                 isDealer: playerData.isDealer || false
             }));
@@ -1068,8 +1073,9 @@ class PokerGame {
         
         // Reset UI state flags
         this.showingWinnerMessage = false;
-        
-        // Apply settings and start
+
+        // Apply settings and start (cleanup() above removed the previous
+        // auto-save listeners, so re-adding them here does not duplicate)
         this.applyUserSettings();
         this.setupAutoSave();
         this.gameState.startNewHand();
@@ -1097,7 +1103,14 @@ class PokerGame {
         if (this.animationId) {
             cancelAnimationFrame(this.animationId);
         }
-        
+
+        // Remove auto-save listeners so a stale instance can't keep saving
+        if (this.autoSaveHandlers) {
+            window.removeEventListener('beforeunload', this.autoSaveHandlers.beforeunload);
+            document.removeEventListener('visibilitychange', this.autoSaveHandlers.visibilitychange);
+            this.autoSaveHandlers = null;
+        }
+
         // Clean up renderer resources
         if (this.renderer) {
             // Clear all card meshes from the scene
@@ -1107,37 +1120,35 @@ class PokerGame {
                 if (mesh.material && mesh.material.map) mesh.material.map.dispose();
                 if (mesh.material) mesh.material.dispose();
             });
-            
+
             this.renderer.cardMeshes.player1.forEach(mesh => {
                 this.renderer.scene.remove(mesh);
                 if (mesh.geometry) mesh.geometry.dispose();
                 if (mesh.material && mesh.material.map) mesh.material.map.dispose();
                 if (mesh.material) mesh.material.dispose();
             });
-            
+
             this.renderer.cardMeshes.board.forEach(mesh => {
                 this.renderer.scene.remove(mesh);
                 if (mesh.geometry) mesh.geometry.dispose();
                 if (mesh.material && mesh.material.map) mesh.material.map.dispose();
                 if (mesh.material) mesh.material.dispose();
             });
-            
+
             // Clear the card mesh arrays
             this.renderer.cardMeshes.player0 = [];
             this.renderer.cardMeshes.player1 = [];
             this.renderer.cardMeshes.board = [];
         }
-        
-        // Clear input handlers
+
+        // Detach input handlers (canvas + document listeners, peek sliders)
         if (this.input) {
-            this.input.activeTouch = null;
-            this.input.targetOwner = null;
-            this.input.clearAutoHideTimer();
+            this.input.destroy();
         }
-        
-        // Dispose of Three.js renderer
-        if (this.renderer && this.renderer.renderer) {
-            this.renderer.renderer.dispose();
+
+        // Dispose of the renderer and its window listeners
+        if (this.renderer) {
+            this.renderer.dispose();
         }
     }
 }

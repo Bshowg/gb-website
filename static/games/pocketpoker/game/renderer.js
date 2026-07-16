@@ -49,14 +49,22 @@ export class GameRenderer {
         this.tempVector = new THREE.Vector3();
         this.tempEuler = new THREE.Euler();
         
-        // Handle resize
-        this.handleResize();
-        window.addEventListener('resize', () => this.handleResize());
-        window.addEventListener('orientationchange', () => {
+        // Handle resize (references kept so dispose() can remove them)
+        this.onWindowResize = () => this.handleResize();
+        this.onOrientationChange = () => {
             setTimeout(() => this.handleResize(), 100);
-        });
-        
+        };
+        this.handleResize();
+        window.addEventListener('resize', this.onWindowResize);
+        window.addEventListener('orientationchange', this.onOrientationChange);
+
         console.log('Renderer initialized');
+    }
+
+    dispose() {
+        window.removeEventListener('resize', this.onWindowResize);
+        window.removeEventListener('orientationchange', this.onOrientationChange);
+        this.renderer.dispose();
     }
     
     handleResize() {

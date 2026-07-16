@@ -17,16 +17,33 @@ const urlsToCache = [
 ];
 
 self.addEventListener('install', event => {
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => cache.addAll(urlsToCache))
   );
 });
 
+// Stale-while-revalidate: serve from cache for speed/offline, but always
+// refresh the cache from the network in the background so a deployed
+// update reaches users on their next visit (cache-first alone kept users
+// on the first version they ever loaded)
 self.addEventListener('fetch', event => {
+  if (event.request.method !== 'GET') return;
+
   event.respondWith(
-    caches.match(event.request)
-      .then(response => response || fetch(event.request))
+    caches.open(CACHE_NAME).then(async cache => {
+      const cached = await cache.match(event.request);
+      const network = fetch(event.request)
+        .then(response => {
+          if (response && response.ok && event.request.url.startsWith(self.location.origin)) {
+            cache.put(event.request, response.clone());
+          }
+          return response;
+        })
+        .catch(() => cached);
+      return cached || network;
+    })
   );
 });
 
@@ -40,6 +57,6 @@ self.addEventListener('activate', event => {
           }
         })
       );
-    })
+    }).then(() => self.clients.claim())
   );
 });
