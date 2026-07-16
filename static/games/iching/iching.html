@@ -4,12 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>I Ching</title>
-    <link rel="stylesheet" href="../style.css" />
+    <link rel="stylesheet" href="../../../style.css" />
     <script
       defer
       src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
     ></script>
-    <link href="../../output.css" rel="stylesheet"></link>
+    <link href="../../../output.css" rel="stylesheet"></link>
     <script>
       // Function to simulate coin toss
       function tossCoins() {
@@ -85,7 +85,7 @@
           },
           goToDescription(hexagram) {
             url =
-              "/static/iching-single.html?binary=" +
+              "/static/games/iching/iching-single.html?binary=" +
               hexagram.binary
             window.open(url, "_blank");
           },
