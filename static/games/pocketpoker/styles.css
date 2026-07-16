@@ -135,6 +135,7 @@ body.dragging-cards #ui-overlay * {
     font-size: 12px;
     color: #9ca3af;
     margin-bottom: 6px;
+    white-space: pre-line; /* winner message uses \n for the continue hint */
 }
 
 .player-game-info .dealer-button {

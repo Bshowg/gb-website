@@ -233,9 +233,10 @@ class PokerGame {
         const topStreetDisplay = document.getElementById('top-street-display');
         const bottomStreetDisplay = document.getElementById('bottom-street-display');
         
-        const winnerMessage = winner.tie 
+        const winnerMessage = (winner.tie
             ? `Tie! Both players split the pot. ${winner.handName}`
-            : `Player ${winner.playerIndex + 1} wins with ${winner.handName}!`;
+            : `Player ${winner.playerIndex + 1} wins with ${winner.handName}!`)
+            + '\nPress the pot to continue';
             
         topStreetDisplay.textContent = winnerMessage;
         bottomStreetDisplay.textContent = winnerMessage;
