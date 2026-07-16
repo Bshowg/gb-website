@@ -57,6 +57,18 @@ function asArray(v) {
   return Array.isArray(v) ? v : [v];
 }
 
+// Render text into an element preserving line breaks. Handles real newline
+// characters AND literal "\n" sequences (which can survive SQL escaping),
+// so verse scripts break line-by-line. Text-node based, so XSS-safe.
+function setMultiline(el, text) {
+  el.textContent = '';
+  const parts = String(text == null ? '' : text).split(/\r\n|\r|\n|\\n/);
+  parts.forEach((part, i) => {
+    if (i > 0) el.appendChild(document.createElement('br'));
+    el.appendChild(document.createTextNode(part));
+  });
+}
+
 function currentScene() { return state.script.scenes[state.sceneIdx]; }
 function currentBeat()  { return currentScene().beats[state.beatIdx]; }
 
@@ -452,7 +464,7 @@ function renderReadAll() {
         head.textContent = `${asArray(beat.speaker).join(' & ')} → ${asArray(beat.to).join(' & ')}`;
         const line = document.createElement('div');
         line.className = 'line';
-        line.textContent = beat.line || '';
+        setMultiline(line, beat.line);
         row.appendChild(head);
         row.appendChild(line);
       }
@@ -732,7 +744,7 @@ function render() {
       lineEl.classList.remove('hidden');
       contextEl.textContent = beat.constraint ? `Vincolo: ${beat.constraint}` : '';
     } else {
-      lineEl.textContent = beat.line || '';
+      setMultiline(lineEl, beat.line);
       lineEl.classList.remove('hidden');
       const cue = lastWordsNoPunctuation(beatText(prevBeat()), 4);
       contextEl.textContent = cue ? `… ${cue}` : '';
