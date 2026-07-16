@@ -319,7 +319,9 @@ export class GameRenderer {
         this.cardMeshes.player1 = [];
         this.cardMeshes.board = [];
         
-        const isShowdown = gameState.street === 'showdown' || gameState.players.some(p => p.folded);
+        // Reveal hole cards only at a real showdown — a fold ends the hand
+        // without anyone having to show their cards
+        const isShowdown = gameState.street === 'showdown';
         const viewport = this.getViewportDimensions();
         const cardHeight = 1.96; // Card height
         const cardOffsetOut = cardHeight * -0.6; // 20% of card height outside

@@ -16,7 +16,7 @@ export const CONFIG = {
 };
 
 class PokerGame {
-    constructor() {
+    constructor(resumeFromSave = false) {
         this.canvas = document.getElementById('gameCanvas');
         this.gameState = new GameState(CONFIG.seed);
         this.renderer = new GameRenderer(this.canvas, CONFIG);
@@ -41,7 +41,7 @@ class PokerGame {
         this.setupQA();
         this.setupPWA();
         this.setupAutoSave();
-        this.start();
+        this.start(resumeFromSave);
     }
     
     setupUI() {
@@ -200,6 +200,11 @@ class PokerGame {
     
     checkForNextStreet() {
         if (this.gameState.isHandComplete()) {
+            // Hand ended without a fold: mark the real showdown so the
+            // renderer reveals both hands (a fold keeps every card hidden)
+            if (!this.gameState.players.some(p => p.folded)) {
+                this.gameState.street = 'showdown';
+            }
             this.showResults();
         } else if (this.gameState.isStreetComplete()) {
             setTimeout(() => {
@@ -649,9 +654,14 @@ class PokerGame {
         }, 3000);
     }
     
-    start() {
-        this.gameState.startNewHand();
-        this.saveGameState(); // Auto-save initial game state
+    start(resumeFromSave = false) {
+        // When resuming, load the save BEFORE dealing anything: dealing a new
+        // hand first would call saveGameState() and overwrite the saved game.
+        const resumed = resumeFromSave && this.loadGameState();
+        if (!resumed) {
+            this.gameState.startNewHand();
+            this.saveGameState(); // Auto-save initial game state
+        }
         this.renderer.updateScene(this.gameState);
         this.updateUI();
         // Update wheel ranges after starting new hand
@@ -860,7 +870,7 @@ class PokerGame {
         // Reset CONFIG to defaults
         CONFIG.autoHideMs = 1200;
         CONFIG.turnGate = "freePeek";
-        CONFIG.longPressDurationMs = 3000;
+        CONFIG.longPressDurationMs = 1500;
         CONFIG.fpsDebug = false; // Always false, not a user setting
         
         // Update form
@@ -1217,7 +1227,7 @@ function resetStartDefaults() {
     localStorage.removeItem('pocketPokerSettings');
     CONFIG.autoHideMs = 1200;
     CONFIG.turnGate = "freePeek";
-    CONFIG.longPressDurationMs = 3000;
+    CONFIG.longPressDurationMs = 1500;
     loadDefaultSettingsIntoForm();
 }
 
@@ -1245,18 +1255,13 @@ function continueGame() {
     // Hide start screen and show game
     document.getElementById('start-screen').classList.add('hidden');
     document.getElementById('game-container').classList.remove('hidden');
-    
-    // Initialize game instance and load saved state
-    gameInstance = new PokerGame();
-    
+
+    // Initialize game instance and load saved state; falls back to a new
+    // hand inside start() if the save is missing or invalid
+    gameInstance = new PokerGame(true);
+
     // Expose game instance globally for input handler
     window.gameInstance = gameInstance;
-    
-    // Try to load saved state, if it fails start a new game
-    if (!gameInstance.loadGameState()) {
-        console.log('Failed to load saved game, starting new game');
-        // The game is already initialized with a new hand from the constructor
-    }
 }
 
 function openStartSettings() {

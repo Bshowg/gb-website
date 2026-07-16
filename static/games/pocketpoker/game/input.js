@@ -10,11 +10,8 @@ export class InputHandler {
         this.activeTouch = null;
         this.targetOwner = null;
         this.autoHideTimer = null;
-        this.slidePosition = {}; // Track slide position for each player
-        this.slidePosition[0] = 0; // Player 0 slide position
-        this.slidePosition[1] = 0; // Player 1 slide position
         this.startX = 0;
-        
+
         // Drag-to-fold functionality
         this.longPressTimer = null;
         this.isDragging = false;
@@ -22,8 +19,15 @@ export class InputHandler {
         this.dragStartPosition = { x: 0, y: 0 };
         this.currentDragPosition = { x: 0, y: 0 };
         this.draggedCard = null;
-        
+
         this.setupListeners();
+
+        // Card peeking lives on dedicated sliders, so the canvas gestures
+        // above stay reserved for drag-to-fold and never conflict
+        this.peekSliders = [
+            new PeekSlider(document.getElementById('bottom-peek-slider'), 0, renderer, gameState, config),
+            new PeekSlider(document.getElementById('top-peek-slider'), 1, renderer, gameState, config)
+        ];
     }
     
     setupListeners() {
@@ -52,11 +56,20 @@ export class InputHandler {
             }
         }, { passive: false });
         
-        // Mouse events for desktop devices
+        // Mouse events for desktop devices. Move/up listen on the document so
+        // the fold drag keeps working when the cursor passes over UI overlays
+        // (canvas-only listeners lose the pointer there and snapped cards back)
         this.canvas.addEventListener('mousedown', (e) => this.handleMouseDown(e), { passive: false });
-        this.canvas.addEventListener('mousemove', (e) => this.handleMouseMove(e), { passive: false });
-        this.canvas.addEventListener('mouseup', (e) => this.handleMouseUp(e), { passive: false });
-        this.canvas.addEventListener('mouseleave', (e) => this.handleMouseUp(e), { passive: false });
+        document.addEventListener('mousemove', (e) => {
+            if (this.activeTouch === 'mouse') {
+                this.handleMouseMove(e);
+            }
+        }, { passive: false });
+        document.addEventListener('mouseup', (e) => {
+            if (this.activeTouch === 'mouse') {
+                this.handleMouseUp(e);
+            }
+        }, { passive: false });
         
         document.addEventListener('visibilitychange', () => {
             if (document.hidden) {
@@ -83,35 +96,23 @@ export class InputHandler {
         const y = touch.clientY - rect.top;
         const owner = y < rect.height / 2 ? 1 : 0;
         
-        // Check if touching in player's area and if there are cards to reveal
+        // Check if touching in player's area and if there are cards to fold
         const playerCards = this.renderer.getPlayerCards(owner);
         if (playerCards.length === 0) {
             this.activeTouch = null;
             return;
         }
-        
-        // Check turn gate
-        if (this.config.turnGate === 'ownerOnly') {
-            // Always allow in this mode for peek mechanics
-        } else if (this.config.turnGate === 'turnOnly') {
-            if (this.gameState.toAct !== owner) {
-                this.activeTouch = null;
-                return;
-            }
-        }
-        
+
         this.targetOwner = owner;
         this.startX = touch.clientX;
-        
+
         // Store initial drag position
         this.dragStartPosition.x = touch.clientX;
         this.dragStartPosition.y = touch.clientY;
         this.dragStartTime = Date.now();
-        
+
         // Start long press timer for drag-to-fold
         this.startLongPressTimer();
-        
-        this.startAutoHideTimer();
     }
     
     handleTouchMove(e) {
@@ -127,40 +128,9 @@ export class InputHandler {
         this.currentDragPosition.x = touch.clientX;
         this.currentDragPosition.y = touch.clientY;
         
-        // Check if we're in drag mode
+        // Only drag-to-fold uses canvas movement; peeking happens on the sliders
         if (this.isDragging) {
-            // Handle drag-to-fold functionality
             this.updateDragVisuals();
-            return;
-        }
-        
-        // Regular card peek functionality
-        // Calculate horizontal slide distance (can be positive or negative)
-        const deltaX = touch.clientX - this.startX;
-        const rect = this.canvas.getBoundingClientRect();
-        const slideDistance = Math.abs(deltaX) / (rect.width * 0.3); // Normalize slide distance magnitude
-        
-        // Cancel long press timer if significant movement is detected (more than slide)
-        const totalMovement = Math.sqrt(
-            Math.pow(touch.clientX - this.dragStartPosition.x, 2) + 
-            Math.pow(touch.clientY - this.dragStartPosition.y, 2)
-        );
-        if (totalMovement > 30) { // 30px threshold for movement
-            this.clearLongPressTimer();
-        }
-        
-        // Clamp slide to 0-1 range (0 = hidden, 1 = fully revealed at 180°)
-        this.slidePosition[this.targetOwner] = Math.max(0, Math.min(1, slideDistance));
-        
-        
-        // Update QA if enabled
-        if (this.config.fpsDebug && window.game) {
-            window.game.updateQA(
-                `${touch.clientX.toFixed(0)}, ${touch.clientY.toFixed(0)}`,
-                `ΔX: ${deltaX.toFixed(0)}, Slide: ${this.slidePosition[this.targetOwner].toFixed(2)}`,
-                `Rotation: ${(this.slidePosition[this.targetOwner] * 180).toFixed(1)}°`,
-                this.slidePosition[this.targetOwner] > 0.5 ? 'REVEALED' : 'HIDDEN'
-            );
         }
     }
     
@@ -195,35 +165,23 @@ export class InputHandler {
         const y = e.clientY - rect.top;
         const owner = y < rect.height / 2 ? 1 : 0;
         
-        // Check if clicking in player's area and if there are cards to reveal
+        // Check if clicking in player's area and if there are cards to fold
         const playerCards = this.renderer.getPlayerCards(owner);
         if (playerCards.length === 0) {
             this.activeTouch = null;
             return;
         }
-        
-        // Check turn gate
-        if (this.config.turnGate === 'ownerOnly') {
-            // Always allow in this mode for peek mechanics
-        } else if (this.config.turnGate === 'turnOnly') {
-            if (this.gameState.toAct !== owner) {
-                this.activeTouch = null;
-                return;
-            }
-        }
-        
+
         this.targetOwner = owner;
         this.startX = e.clientX;
-        
+
         // Store initial drag position
         this.dragStartPosition.x = e.clientX;
         this.dragStartPosition.y = e.clientY;
         this.dragStartTime = Date.now();
-        
+
         // Start long press timer for drag-to-fold
         this.startLongPressTimer();
-        
-        this.startAutoHideTimer();
     }
     
     handleMouseMove(e) {
@@ -236,39 +194,9 @@ export class InputHandler {
         this.currentDragPosition.x = e.clientX;
         this.currentDragPosition.y = e.clientY;
         
-        // Check if we're in drag mode
+        // Only drag-to-fold uses canvas movement; peeking happens on the sliders
         if (this.isDragging) {
-            // Handle drag-to-fold functionality
             this.updateDragVisuals();
-            return;
-        }
-        
-        // Regular card peek functionality
-        // Calculate horizontal slide distance (can be positive or negative)
-        const deltaX = e.clientX - this.startX;
-        const rect = this.canvas.getBoundingClientRect();
-        const slideDistance = Math.abs(deltaX) / (rect.width * 0.3); // Normalize slide distance magnitude
-        
-        // Cancel long press timer if significant movement is detected (more than slide)
-        const totalMovement = Math.sqrt(
-            Math.pow(e.clientX - this.dragStartPosition.x, 2) + 
-            Math.pow(e.clientY - this.dragStartPosition.y, 2)
-        );
-        if (totalMovement > 30) { // 30px threshold for movement
-            this.clearLongPressTimer();
-        }
-        
-        // Clamp slide to 0-1 range (0 = hidden, 1 = fully revealed at 180°)
-        this.slidePosition[this.targetOwner] = Math.max(0, Math.min(1, slideDistance));
-        
-        // Update QA if enabled
-        if (this.config.fpsDebug && window.game) {
-            window.game.updateQA(
-                `${e.clientX.toFixed(0)}, ${e.clientY.toFixed(0)}`,
-                `ΔX: ${deltaX.toFixed(0)}, Slide: ${this.slidePosition[this.targetOwner].toFixed(2)}`,
-                `Rotation: ${(this.slidePosition[this.targetOwner] * 180).toFixed(1)}°`,
-                this.slidePosition[this.targetOwner] > 0.5 ? 'REVEALED' : 'HIDDEN'
-            );
         }
     }
     
@@ -286,49 +214,27 @@ export class InputHandler {
         }
     }
     
-    startAutoHideTimer() {
-        this.clearAutoHideTimer();
-        
-        if (this.config.autoHideMs > 0) {
-            this.autoHideTimer = setTimeout(() => {
-                if (this.targetOwner !== null) {
-                    this.slidePosition[this.targetOwner] = 0;
-                    this.renderer.updatePlayerCardsRotation(this.targetOwner, 0);
-                }
-            }, this.config.autoHideMs);
-        }
-    }
-    
     clearAutoHideTimer() {
         if (this.autoHideTimer) {
             clearTimeout(this.autoHideTimer);
             this.autoHideTimer = null;
         }
     }
-    
-    
+
     cancelSlide() {
-        if (this.targetOwner !== null) {
-            this.slidePosition[this.targetOwner] = 0;
-            this.renderer.updatePlayerCardsRotation(this.targetOwner, 0);
-        }
-        
-        
-        // Clean up drag state
+        // Clean up any pending fold gesture
+        document.body.classList.remove('dragging-cards');
         this.isDragging = false;
         this.draggedCard = null;
-        
+
         this.activeTouch = null;
         this.targetOwner = null;
         this.clearAutoHideTimer();
         this.clearLongPressTimer();
     }
-    
+
     update() {
-        if (this.targetOwner !== null && this.activeTouch !== null) {
-            const rotationAngle = this.slidePosition[this.targetOwner] * 180; // 0 to 180 degrees
-            this.renderer.updatePlayerCardsRotation(this.targetOwner, rotationAngle);
-        }
+        // Peek rotation is driven by the sliders; drag visuals by move events
     }
     
     startLongPressTimer() {
@@ -352,11 +258,15 @@ export class InputHandler {
         if (this.gameState.toAct !== this.targetOwner) {
             return;
         }
-        
+
         console.log(`Starting drag mode for player ${this.targetOwner}`);
         this.isDragging = true;
         this.clearAutoHideTimer(); // Stop auto-hide during drag
-        
+
+        // Fade the UI overlay and stop it from catching the pointer, so the
+        // drag survives passing over the sliders/betting controls
+        document.body.classList.add('dragging-cards');
+
         // Scale up cards and start following touch
         this.renderer.startCardDrag(this.targetOwner, 1.5);
     }
@@ -405,6 +315,7 @@ export class InputHandler {
         }
         
         // Clean up drag state
+        document.body.classList.remove('dragging-cards');
         this.isDragging = false;
         this.draggedCard = null;
         this.activeTouch = null;
@@ -432,5 +343,100 @@ export class InputHandler {
     returnCardsToPosition() {
         // Animate cards back to original position
         this.renderer.resetCardDrag(this.targetOwner);
+    }
+}
+
+// Dedicated peek control: drag the card-back knob to rotate your own cards.
+// Springs back (and hides the cards) on release, so a peek is always momentary.
+export class PeekSlider {
+    constructor(el, owner, renderer, gameState, config) {
+        // Rebinding on a new match: detach the previous instance's listeners
+        if (el._peekSlider) {
+            el._peekSlider.destroy();
+        }
+        el._peekSlider = this;
+
+        this.el = el;
+        this.track = el.querySelector('.peek-track');
+        this.thumb = el.querySelector('.peek-thumb');
+        this.owner = owner;
+        this.renderer = renderer;
+        this.gameState = gameState;
+        this.config = config;
+        this.pointerId = null;
+        this.idleTimer = null;
+
+        this.onDown = this.onDown.bind(this);
+        this.onMove = this.onMove.bind(this);
+        this.onUp = this.onUp.bind(this);
+
+        this.track.addEventListener('pointerdown', this.onDown);
+        this.track.addEventListener('pointermove', this.onMove);
+        this.track.addEventListener('pointerup', this.onUp);
+        this.track.addEventListener('pointercancel', this.onUp);
+    }
+
+    onDown(e) {
+        if (this.pointerId !== null) return;
+        if (this.renderer.getPlayerCards(this.owner).length === 0) return;
+        if (this.config.turnGate === 'turnOnly' && this.gameState.toAct !== this.owner) return;
+
+        this.pointerId = e.pointerId;
+        try { this.track.setPointerCapture(e.pointerId); } catch (err) { /* synthetic events */ }
+        this.thumb.classList.add('dragging');
+        this.applyClientX(e.clientX);
+    }
+
+    onMove(e) {
+        if (this.pointerId === null || e.pointerId !== this.pointerId) return;
+        this.applyClientX(e.clientX);
+    }
+
+    onUp(e) {
+        if (this.pointerId === null || e.pointerId !== this.pointerId) return;
+        this.release();
+    }
+
+    applyClientX(clientX) {
+        const rect = this.track.getBoundingClientRect();
+        let fraction = (clientX - rect.left) / rect.width;
+        fraction = Math.max(0, Math.min(1, fraction));
+        // The top player's slider is rendered rotated 180°, so screen X is inverted
+        if (this.owner === 1) fraction = 1 - fraction;
+
+        const travel = this.track.clientWidth - this.thumb.offsetWidth - 4;
+        this.thumb.style.transform = `translateX(${fraction * travel}px)`;
+        this.renderer.updatePlayerCardsRotation(this.owner, fraction * 180);
+        this.restartIdleTimer();
+    }
+
+    restartIdleTimer() {
+        clearTimeout(this.idleTimer);
+        if (this.config.autoHideMs > 0) {
+            this.idleTimer = setTimeout(() => this.release(), this.config.autoHideMs);
+        }
+    }
+
+    release() {
+        clearTimeout(this.idleTimer);
+        this.idleTimer = null;
+        if (this.pointerId !== null) {
+            try { this.track.releasePointerCapture(this.pointerId); } catch (err) { /* already released */ }
+            this.pointerId = null;
+        }
+        this.thumb.classList.remove('dragging');
+        this.thumb.style.transform = 'translateX(0px)';
+        this.renderer.updatePlayerCardsRotation(this.owner, 0);
+    }
+
+    destroy() {
+        this.release();
+        this.track.removeEventListener('pointerdown', this.onDown);
+        this.track.removeEventListener('pointermove', this.onMove);
+        this.track.removeEventListener('pointerup', this.onUp);
+        this.track.removeEventListener('pointercancel', this.onUp);
+        if (this.el._peekSlider === this) {
+            this.el._peekSlider = null;
+        }
     }
 }

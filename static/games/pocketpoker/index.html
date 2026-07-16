@@ -27,8 +27,8 @@
                 
                 <div class="start-instructions">
                     <p>Two players share one device</p>
-                    <p>Touch and drag cards to reveal them</p>
-                    <p>Hold cards for 3s to drag and fold</p>
+                    <p>Slide the card knob to peek at your cards</p>
+                    <p>Hold your cards, then drag them to the center to fold</p>
                     <p>Press Pot to go to next hand</p>
                     <p>T is Ten (10)</p>
                 </div>
@@ -142,15 +142,27 @@
                                     id="top-bet-wheel">
                                     <span class="sr-only">Drag left/right to roll. Home/End jump to limits; arrows adjust by step.</span>
                                 </div>
-                            
+
                         </div>
                         <button id="top-action-btn" class="action-btn primary">Check</button>
                     </div>
-                    
+
+                </div>
+                <div id="top-peek-slider" class="peek-slider top-peek">
+                    <div class="peek-track" role="slider" aria-label="Slide to peek at your cards">
+                        <span class="peek-hint">slide to peek &rsaquo;</span>
+                        <div class="peek-thumb"></div>
+                    </div>
                 </div>
             </div>
             
             <div id="bottom-player-info" class="player-info">
+                <div id="bottom-peek-slider" class="peek-slider">
+                    <div class="peek-track" role="slider" aria-label="Slide to peek at your cards">
+                        <span class="peek-hint">slide to peek &rsaquo;</span>
+                        <div class="peek-thumb"></div>
+                    </div>
+                </div>
                 <div id="bottom-player-controls" class="player-controls bottom-controls disabled">
                     <div class="control-group">
                         <div class="bet-control">
@@ -240,8 +252,9 @@
                         <label for="long-press-duration">Drag Hold Duration (ms)</label>
                         <select id="long-press-duration">
                             <option value="1000">1000ms (1s)</option>
+                            <option value="1500" selected>1500ms (1.5s)</option>
                             <option value="2000">2000ms (2s)</option>
-                            <option value="3000" selected>3000ms (3s)</option>
+                            <option value="3000">3000ms (3s)</option>
                             <option value="4000">4000ms (4s)</option>
                             <option value="5000">5000ms (5s)</option>
                         </select>

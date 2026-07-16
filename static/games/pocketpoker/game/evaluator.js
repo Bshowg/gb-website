@@ -3,7 +3,7 @@ const RANKS = '23456789TJQKA';
 
 export function evaluateHand(cards) {
     if (cards.length < 5) {
-        return { rank: 10000, name: 'Invalid' };
+        return { rank: 10000000, name: 'Invalid' };
     }
     
     // Generate all 5-card combinations from 7 cards
@@ -50,7 +50,7 @@ function evaluateFiveCards(cards) {
     if (isFlush && isStraight) {
         const highCard = isStraight === 'wheel' ? 3 : ranks[0];
         return {
-            rank: 1000 + (14 - highCard),
+            rank: 1000000 + (14 - highCard),
             name: isStraight === 'wheel' ? 'Straight Flush (Wheel)' : 'Straight Flush'
         };
     }
@@ -60,7 +60,7 @@ function evaluateFiveCards(cards) {
         const quad = uniqueRanks.find(r => rankCounts[r] === 4);
         const kicker = uniqueRanks.find(r => rankCounts[r] === 1);
         return {
-            rank: 2000 + (14 - quad) * 15 + (14 - kicker),
+            rank: 2000000 + (14 - quad) * 15 + (14 - kicker),
             name: 'Four of a Kind'
         };
     }
@@ -70,7 +70,7 @@ function evaluateFiveCards(cards) {
         const trip = uniqueRanks.find(r => rankCounts[r] === 3);
         const pair = uniqueRanks.find(r => rankCounts[r] === 2);
         return {
-            rank: 3000 + (14 - trip) * 15 + (14 - pair),
+            rank: 3000000 + (14 - trip) * 15 + (14 - pair),
             name: 'Full House'
         };
     }
@@ -82,7 +82,7 @@ function evaluateFiveCards(cards) {
             rankValue += (14 - ranks[i]) * Math.pow(15, 4 - i);
         }
         return {
-            rank: 4000 + rankValue,
+            rank: 4000000 + rankValue,
             name: 'Flush'
         };
     }
@@ -91,7 +91,7 @@ function evaluateFiveCards(cards) {
     if (isStraight) {
         const highCard = isStraight === 'wheel' ? 3 : ranks[0];
         return {
-            rank: 5000 + (14 - highCard),
+            rank: 5000000 + (14 - highCard),
             name: isStraight === 'wheel' ? 'Straight (Wheel)' : 'Straight'
         };
     }
@@ -101,7 +101,7 @@ function evaluateFiveCards(cards) {
         const trip = uniqueRanks.find(r => rankCounts[r] === 3);
         const kickers = uniqueRanks.filter(r => rankCounts[r] === 1).sort((a, b) => b - a);
         return {
-            rank: 6000 + (14 - trip) * 225 + (14 - kickers[0]) * 15 + (14 - kickers[1]),
+            rank: 6000000 + (14 - trip) * 225 + (14 - kickers[0]) * 15 + (14 - kickers[1]),
             name: 'Three of a Kind'
         };
     }
@@ -111,7 +111,7 @@ function evaluateFiveCards(cards) {
         const pairs = uniqueRanks.filter(r => rankCounts[r] === 2).sort((a, b) => b - a);
         const kicker = uniqueRanks.find(r => rankCounts[r] === 1);
         return {
-            rank: 7000 + (14 - pairs[0]) * 225 + (14 - pairs[1]) * 15 + (14 - kicker),
+            rank: 7000000 + (14 - pairs[0]) * 225 + (14 - pairs[1]) * 15 + (14 - kicker),
             name: 'Two Pair'
         };
     }
@@ -121,7 +121,7 @@ function evaluateFiveCards(cards) {
         const pair = uniqueRanks.find(r => rankCounts[r] === 2);
         const kickers = uniqueRanks.filter(r => rankCounts[r] === 1).sort((a, b) => b - a);
         return {
-            rank: 8000 + (14 - pair) * 3375 + (14 - kickers[0]) * 225 + (14 - kickers[1]) * 15 + (14 - kickers[2]),
+            rank: 8000000 + (14 - pair) * 3375 + (14 - kickers[0]) * 225 + (14 - kickers[1]) * 15 + (14 - kickers[2]),
             name: 'Pair'
         };
     }
@@ -132,7 +132,7 @@ function evaluateFiveCards(cards) {
         rankValue += (14 - ranks[i]) * Math.pow(15, 4 - i);
     }
     return {
-        rank: 9000 + rankValue,
+        rank: 9000000 + rankValue,
         name: 'High Card'
     };
 }

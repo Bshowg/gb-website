@@ -1,5 +1,5 @@
 // /sw.js
-const CACHE_NAME = 'pocket-poker-v1';
+const CACHE_NAME = 'pocket-poker-v2';
 const urlsToCache = [
   './',
   './index.html',
