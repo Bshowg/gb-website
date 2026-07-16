@@ -246,7 +246,7 @@ button {
   cursor: not-allowed;
 }
 
-.beat-line { font-size: inherit; }
+.beat-line { font-size: inherit; white-space: pre-line; }
 
 .beat-context {
   margin-top: auto;
@@ -330,7 +330,7 @@ button {
   color: var(--muted-cool);
   margin-bottom: 0.25rem;
 }
-.readall-beat .line { color: var(--text); }
+.readall-beat .line { color: var(--text); white-space: pre-line; }
 .readall-beat.stage-direction .action {
   font-style: italic;
   color: var(--muted);
