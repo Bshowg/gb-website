@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="80%">
+      <stop offset="0%" stop-color="#141a2e"/>
+      <stop offset="100%" stop-color="#05070d"/>
+    </radialGradient>
+    <linearGradient id="beam" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fde68a" stop-opacity="0.55"/>
+      <stop offset="70%" stop-color="#fbbf24" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#fbbf24" stop-opacity="0.05"/>
+    </linearGradient>
+    <radialGradient id="floorGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fcd34d" stop-opacity="0.75"/>
+      <stop offset="60%" stop-color="#f59e0b" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="curtainL" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0a0d18"/>
+      <stop offset="80%" stop-color="#161d33"/>
+      <stop offset="100%" stop-color="#232c4a"/>
+    </linearGradient>
+    <linearGradient id="curtainR" x1="1" y1="0" x2="0" y2="0">
+      <stop offset="0%" stop-color="#0a0d18"/>
+      <stop offset="80%" stop-color="#161d33"/>
+      <stop offset="100%" stop-color="#232c4a"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="400" fill="url(#bg)"/>
+  <!-- spotlight beam -->
+  <polygon points="200,-15 105,345 295,345" fill="url(#beam)"/>
+  <ellipse cx="200" cy="342" rx="120" ry="26" fill="url(#floorGlow)"/>
+  <!-- dust in the light -->
+  <g fill="#fde68a">
+    <circle cx="182" cy="120" r="1.6" opacity="0.5"/>
+    <circle cx="215" cy="170" r="1.3" opacity="0.4"/>
+    <circle cx="192" cy="228" r="1.8" opacity="0.45"/>
+    <circle cx="226" cy="265" r="1.4" opacity="0.35"/>
+    <circle cx="171" cy="290" r="1.6" opacity="0.4"/>
+  </g>
+  <!-- left curtain, drawn back with gold tieback -->
+  <path d="M-5 -5H148C138 55 132 110 96 165C74 199 64 240 70 300C72 330 66 370 46 405H-5Z" fill="url(#curtainL)"/>
+  <g stroke="#06080f" fill="none" opacity="0.9">
+    <path d="M28 0C32 90 40 170 30 260C26 310 30 360 22 400" stroke-width="13"/>
+    <path d="M66 0C74 80 78 140 62 210C52 258 58 330 48 396" stroke-width="11"/>
+    <path d="M104 0C108 60 100 115 80 165C66 200 62 235 66 280" stroke-width="9"/>
+  </g>
+  <path d="M148 0C138 55 132 110 96 165C74 199 64 240 70 300" stroke="#8a6d2f" stroke-width="2.5" fill="none" opacity="0.8"/>
+  <path d="M52 208C74 200 92 202 104 214C96 228 68 232 50 224Z" fill="#d4a944"/>
+  <path d="M52 208C74 200 92 202 104 214" stroke="#f6d878" stroke-width="3" fill="none"/>
+  <!-- right curtain -->
+  <path d="M405 -5H252C262 55 268 110 304 165C326 199 336 240 330 300C328 330 334 370 354 405H405Z" fill="url(#curtainR)"/>
+  <g stroke="#06080f" fill="none" opacity="0.9">
+    <path d="M372 0C368 90 360 170 370 260C374 310 370 360 378 400" stroke-width="13"/>
+    <path d="M334 0C326 80 322 140 338 210C348 258 342 330 352 396" stroke-width="11"/>
+    <path d="M296 0C292 60 300 115 320 165C334 200 338 235 334 280" stroke-width="9"/>
+  </g>
+  <path d="M252 0C262 55 268 110 304 165C326 199 336 240 330 300" stroke="#8a6d2f" stroke-width="2.5" fill="none" opacity="0.8"/>
+  <path d="M348 208C326 200 308 202 296 214C304 228 332 232 350 224Z" fill="#d4a944"/>
+  <path d="M348 208C326 200 308 202 296 214" stroke="#f6d878" stroke-width="3" fill="none"/>
+  <!-- floor line -->
+  <rect x="0" y="345" width="400" height="55" fill="#04060b"/>
+  <rect x="0" y="345" width="400" height="3" fill="#1a2138"/>
+</svg>

@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <defs>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="6" result="b"/>
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="400" height="400" fill="#0f172a"/>
+  <g stroke="#1e293b" stroke-width="1">
+    <path d="M40 0V400M80 0V400M120 0V400M160 0V400M200 0V400M240 0V400M280 0V400M320 0V400M360 0V400"/>
+    <path d="M0 40H400M0 80H400M0 120H400M0 160H400M0 200H400M0 240H400M0 280H400M0 320H400M0 360H400"/>
+  </g>
+  <!-- glider -->
+  <g fill="#8b5cf6" filter="url(#glow)">
+    <rect x="84" y="44" width="32" height="32" rx="5"/>
+    <rect x="124" y="84" width="32" height="32" rx="5"/>
+    <rect x="44" y="124" width="32" height="32" rx="5"/>
+    <rect x="84" y="124" width="32" height="32" rx="5"/>
+    <rect x="124" y="124" width="32" height="32" rx="5"/>
+  </g>
+  <!-- blinker -->
+  <g fill="#34d399" filter="url(#glow)">
+    <rect x="244" y="284" width="32" height="32" rx="5"/>
+    <rect x="284" y="284" width="32" height="32" rx="5"/>
+    <rect x="324" y="284" width="32" height="32" rx="5"/>
+  </g>
+  <!-- scattered cells -->
+  <g fill="#8b5cf6" opacity="0.85" filter="url(#glow)">
+    <rect x="324" y="84" width="32" height="32" rx="5"/>
+    <rect x="284" y="124" width="32" height="32" rx="5"/>
+    <rect x="44" y="324" width="32" height="32" rx="5"/>
+  </g>
+  <g fill="#34d399" opacity="0.8" filter="url(#glow)">
+    <rect x="204" y="44" width="32" height="32" rx="5"/>
+    <rect x="164" y="244" width="32" height="32" rx="5"/>
+    <rect x="84" y="284" width="32" height="32" rx="5"/>
+    <rect x="324" y="204" width="32" height="32" rx="5"/>
+  </g>
+</svg>
