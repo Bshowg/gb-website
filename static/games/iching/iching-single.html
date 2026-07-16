@@ -9,11 +9,11 @@
       defer
       src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
     ></script>
-    <link href="../output.css" rel="stylesheet"></link>
+    <link href="../../output.css" rel="stylesheet"></link>
     <script>
       // Fetch hexagram data from the JSON file
       async function fetchHexagrams() {
-        const response = await fetch("../data/iching_data.json");
+        const response = await fetch("../../../data/iching_data_ita.json");
         const data = await response.json();
         return data;
       }
@@ -62,7 +62,7 @@
           },
           goToDescription(hexagram) {
             url =
-              "/static/iching-single.html?binary=" +
+              "/static/games/iching/iching-single.html?binary=" +
               hexagram.binary
             window.open(url, "_blank");
           },
@@ -73,7 +73,7 @@
   <body class="notebook" x-data="ichingViewer">
 
     <!-- Include the new header component -->
-    <div x-data x-init="$el.innerHTML = await (await fetch('../components/header.html')).text().then(html => html.replace('{{ title }}', 'I KING').replace('{{ subtitle }}', hexagramObject?.english))"></div>
+    <div x-data x-init="$el.innerHTML = await (await fetch('../../../components/header.html')).text().then(html => html.replace('{{ title }}', 'I KING').replace('{{ subtitle }}', hexagramObject?.english))"></div>
 
     <header
       class="max-w-4xl mx-auto pb-8 flex items-center flex-col text-center py-12 bg-white"
@@ -327,7 +327,7 @@
         e.preventDefault();
         const binaryCode = document.getElementById("binaryInput").value;
         if (/^[01]{6}$/.test(binaryCode)) {
-          url = "/static/iching-single.html?binary=" + binaryCode;
+          url = "/static/games/iching/iching-single.html?binary=" + binaryCode;
           console.log(url);
           window.open(url, "_blank");
         } else {
@@ -339,5 +339,5 @@
   </script>
 
   <!-- Include the footer component -->
-  <div x-data x-init="$el.innerHTML = await (await fetch('../components/footer.html')).text()"></div>
+  <div x-data x-init="$el.innerHTML = await (await fetch('../../../components/footer.html')).text()"></div>
 </html>

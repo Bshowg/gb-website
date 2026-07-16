@@ -9,7 +9,7 @@
       defer
       src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
     ></script>
-    <link href="../output.css" rel="stylesheet"></link>
+    <link href="../../output.css" rel="stylesheet"></link>
     <script>
       // Function to simulate coin toss
       function tossCoins() {
@@ -27,7 +27,7 @@
 
       // Fetch hexagram data from a JSON file
       async function fetchHexagrams() {
-        const response = await fetch("../data/iching_data.json");
+        const response = await fetch("../../../data/iching_data_ita.json");
         const data = await response.json();
         return data;
       }
@@ -104,7 +104,7 @@
   <body class="notebook">
 
     <!-- Include the new header component -->
-    <div x-data x-init="$el.innerHTML = await (await fetch('../components/header.html')).text().then(html => html.replace('{{ title }}', 'I KING').replace('{{ subtitle }}', 'Millenaria Saggezza'))"></div>
+    <div x-data x-init="$el.innerHTML = await (await fetch('../../../components/header.html')).text().then(html => html.replace('{{ title }}', 'I KING').replace('{{ subtitle }}', 'Millenaria Saggezza'))"></div>
 
     <div x-data="iching">
       <div
@@ -510,6 +510,6 @@
     </div>
 
     <!-- Include the footer component -->
-    <div x-data x-init="$el.innerHTML = await (await fetch('../components/footer.html')).text()"></div>
+    <div x-data x-init="$el.innerHTML = await (await fetch('../../../components/footer.html')).text()"></div>
   </body>
 </html>
