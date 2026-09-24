@@ -891,7 +891,7 @@ window.addEventListener('popstate', e => restoreView(e.state));
  * ===================================================================== */
 
 const ROOM_KEY = 'ribalta:room';
-const POLL_MS = 1500;   // follower position poll
+const POLL_MS = 1000;   // follower position poll
 const ROSTER_MS = 3000; // host roster poll
 
 state.room = null;      // { code, role:'host'|'follower', hostToken?, memberToken, scriptId, lastRev }
