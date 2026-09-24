@@ -893,3 +893,92 @@ button {
   padding-left: 0.35rem;
 }
 .golden-rules li::marker { color: var(--gold); font-weight: 700; }
+
+/* ---------- Multiplayer "regia": group entry, room bar, lobby, roster ---------- */
+.group-bar { display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 0.5rem 0 1rem; }
+.group-bar button { flex: 1 1 auto; padding: 0.7rem 0.9rem; font-size: 0.95rem; }
+.group-bar button.secondary {
+  background: transparent;
+  color: var(--gold);
+  border: 1px solid var(--gold);
+}
+.group-bar button.secondary:hover { background: var(--gold); color: var(--on-gold); }
+
+.room-bar {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.75rem;
+  background: var(--gold);
+  color: var(--on-gold);
+  border-radius: 0.4rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.room-bar-leave {
+  background: transparent;
+  border: 1px solid var(--on-gold);
+  color: var(--on-gold);
+  border-radius: 0.375rem;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.room-code-box {
+  text-align: center;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  padding: 1rem;
+  margin: 1rem 0 1.25rem;
+}
+.room-code-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.12em; }
+.room-code {
+  font-size: 3rem;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  color: var(--gold);
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  margin: 0.25rem 0;
+  padding-left: 0.3em; /* balance the letter-spacing */
+}
+
+.roster { gap: 0.4rem; }
+.roster-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.6rem 0.8rem;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+}
+.roster-name { font-weight: 600; }
+.roster-parts { color: var(--muted); font-size: 0.9rem; text-align: right; }
+.roster-empty { color: var(--muted); font-style: italic; padding: 0.6rem 0.2rem; }
+
+.wait-card { text-align: center; padding: 2.5rem 1rem; color: var(--muted); }
+.wait-spinner {
+  width: 40px; height: 40px; margin: 0 auto 1.25rem;
+  border: 3px solid var(--border);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: ribalta-spin 1s linear infinite;
+}
+@keyframes ribalta-spin { to { transform: rotate(360deg); } }
+
+/* Follower devices: the director drives, so hide every playback/navigation
+   control regardless of which view is showing. Only present on followers. */
+.following .top-bar,
+.following #advance-btn,
+.following .nav-row,
+.following #start-improv-btn,
+.following #restart-btn { display: none !important; }

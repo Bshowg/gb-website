@@ -43,6 +43,11 @@ const views = {
   playback: document.getElementById('view-playback'),
   readall: document.getElementById('view-readall'),
   end: document.getElementById('view-end'),
+  // Multiplayer "regia" views (additive — see the MULTIPLAYER section at the end)
+  join: document.getElementById('view-join'),
+  hostSetup: document.getElementById('view-host-setup'),
+  roomHost: document.getElementById('view-room-host'),
+  followWait: document.getElementById('view-follow-wait'),
 };
 
 function showView(name) {
@@ -874,3 +879,400 @@ window.addEventListener('popstate', e => restoreView(e.state));
     loadCatalog(null);
   }
 })();
+
+/* =====================================================================
+ * MULTIPLAYER "regia" — host drives playback, phones follow (polling).
+ *
+ * Purely additive: this block never modifies the single-device functions
+ * above. It reuses the pure display functions (render/renderPrep/
+ * renderReadAll/showView/showCharacterPicker/fetchScript) by CALLING them,
+ * hooks the director's pushes with EXTRA listeners on the existing playback
+ * buttons, and drives followers with its own poll loop.
+ * ===================================================================== */
+
+const ROOM_KEY = 'ribalta:room';
+const POLL_MS = 1500;   // follower position poll
+const ROSTER_MS = 3000; // host roster poll
+
+state.room = null;      // { code, role:'host'|'follower', hostToken?, memberToken, scriptId, lastRev }
+state.roomPoll = null;  // interval id (follower position OR host roster)
+
+// ---- tiny API helpers (mirror editor.js) ----
+async function mpGet(params) {
+  const res = await fetch(`${API}?${new URLSearchParams(params)}`);
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || `Errore ${res.status}`);
+  return data;
+}
+async function mpPost(params, body) {
+  const res = await fetch(`${API}?${new URLSearchParams(params)}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body || {}),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || `Errore ${res.status}`);
+  return data;
+}
+
+// ---- session persistence (survive a page refresh) ----
+function saveRoom() {
+  try {
+    if (state.room) sessionStorage.setItem(ROOM_KEY, JSON.stringify({ ...state.room, characters: state.characters }));
+    else sessionStorage.removeItem(ROOM_KEY);
+  } catch (e) { /* private mode: ignore */ }
+}
+function clearRoomPoll() {
+  if (state.roomPoll) { clearInterval(state.roomPoll); state.roomPoll = null; }
+}
+async function leaveRoom() {
+  clearRoomPoll();
+  const room = state.room;
+  state.room = null;
+  document.body.classList.remove('following');
+  hideRoomBar();
+  try { sessionStorage.removeItem(ROOM_KEY); } catch (e) {}
+  if (room && room.role === 'host') {
+    mpPost({ action: 'room_close' }, { code: room.code, host_token: room.hostToken }).catch(() => {});
+  }
+  showView('scripts');
+  await loadCatalog(null);
+  replaceNav({ view: 'scripts', collection: null });
+}
+
+// ---- room bar (shown for both roles while in a room) ----
+function showRoomBar() { document.getElementById('room-bar').classList.remove('hidden'); }
+function hideRoomBar() { document.getElementById('room-bar').classList.add('hidden'); }
+function setRoomBar(text) {
+  document.getElementById('room-bar-info').textContent = text;
+  showRoomBar();
+}
+
+// ---- which standard view is on screen right now ----
+function visibleViewName() {
+  return Object.keys(views).find(k => !views[k].classList.contains('hidden'));
+}
+
+// =========================== DIRECTOR (host) ===========================
+
+function openHostSetup() {
+  showView('hostSetup');
+  renderHostSetupList(state.mode);
+}
+
+async function renderHostSetupList(mode) {
+  const list = document.getElementById('host-setup-list');
+  list.innerHTML = '';
+  document.querySelectorAll('#host-setup-mode-toggle button').forEach(b =>
+    b.classList.toggle('active', b.dataset.mode === mode));
+  let rows;
+  try {
+    rows = await mpGet({ action: 'list', mode });
+  } catch (e) {
+    list.innerHTML = '';
+    const li = document.createElement('li');
+    li.textContent = 'Impossibile caricare i copioni.';
+    list.appendChild(li);
+    return;
+  }
+  rows.forEach(row => {
+    const li = document.createElement('li');
+    const btn = document.createElement('button');
+    const title = document.createElement('div');
+    title.className = 'script-title';
+    title.textContent = row.title;
+    btn.appendChild(title);
+    const parts = [`${row.actors} personaggi`, `${row.scenes} scene`];
+    if (row.collection) parts.unshift(row.collection);
+    if (row.parent_id) parts.push(row.fork_note ? `Variante: ${row.fork_note}` : 'Variante');
+    if (row.author) parts.push(`di ${row.author}`);
+    const meta = document.createElement('div');
+    meta.className = 'script-meta';
+    meta.textContent = parts.join(' · ');
+    btn.appendChild(meta);
+    btn.addEventListener('click', () => hostCreateRoom(row.id));
+    li.appendChild(btn);
+    list.appendChild(li);
+  });
+}
+
+async function hostCreateRoom(scriptId) {
+  let created;
+  try {
+    created = await mpPost({ action: 'room_create' }, { script_id: scriptId });
+  } catch (e) {
+    alert(`Impossibile creare la stanza: ${e.message}`);
+    return;
+  }
+  await fetchScript(scriptId);
+  if (!state.script) { alert('Impossibile caricare il copione.'); return; }
+  state.room = {
+    code: created.code, role: 'host', hostToken: created.host_token,
+    memberToken: created.member_token, scriptId, lastRev: 1,
+  };
+  saveRoom();
+  enterHostLobby();
+}
+
+function enterHostLobby() {
+  document.getElementById('host-room-title').textContent = state.script ? state.script.title : '';
+  document.getElementById('host-room-code').textContent = state.room.code;
+  showView('roomHost');
+  setRoomBar(`Stanza ${state.room.code}`);
+  startRosterPoll();
+}
+
+function startRosterPoll() {
+  clearRoomPoll();
+  const tick = async () => {
+    if (!state.room || state.room.role !== 'host') return;
+    let members;
+    try {
+      members = await mpGet({ action: 'room_members', code: state.room.code, host_token: state.room.hostToken });
+    } catch (e) {
+      if (/404/.test(e.message)) { leaveRoom(); }
+      return;
+    }
+    renderRoster(members);
+    const others = members.filter(m => !m.is_host).length;
+    setRoomBar(`Stanza ${state.room.code} · ${others} in sala`);
+  };
+  tick();
+  state.roomPoll = setInterval(tick, ROSTER_MS);
+}
+
+function renderRoster(members) {
+  const list = document.getElementById('host-roster');
+  if (!list) return;
+  list.innerHTML = '';
+  const players = members.filter(m => !m.is_host);
+  if (players.length === 0) {
+    const li = document.createElement('li');
+    li.className = 'roster-empty';
+    li.textContent = 'Nessuno ancora in sala. Condividi il codice!';
+    list.appendChild(li);
+    return;
+  }
+  players.forEach(m => {
+    const li = document.createElement('li');
+    li.className = 'roster-row';
+    const who = document.createElement('span');
+    who.className = 'roster-name';
+    who.textContent = m.name || 'Ospite';
+    li.appendChild(who);
+    const parts = document.createElement('span');
+    parts.className = 'roster-parts';
+    parts.textContent = (m.characters && m.characters.length) ? m.characters.join(', ') : '— sceglie…';
+    li.appendChild(parts);
+    list.appendChild(li);
+  });
+}
+
+// director's own start (never calls startPlayback, so the empty->readall rule
+// is not involved) — beat-by-beat playback with no character highlighted.
+function hostStart() {
+  state.characters = [];
+  state.sceneIdx = 0;
+  state.beatIdx = 0;
+  if (isImprovScript()) { renderPrep(); showView('prep'); }
+  else { showView('playback'); render(); }
+  showRoomBar();
+  pushRoomState();
+}
+
+function pushRoomState() {
+  if (!state.room || state.room.role !== 'host') return;
+  const vv = visibleViewName();
+  const view = vv === 'roomHost' ? 'lobby' : vv; // roomHost lobby maps to 'lobby'
+  if (!['prep', 'playback', 'readall', 'end', 'lobby', 'characters'].includes(view)) return;
+  mpPost({ action: 'room_push' }, {
+    code: state.room.code, host_token: state.room.hostToken,
+    script_id: state.room.scriptId, view, scene_idx: state.sceneIdx, beat_idx: state.beatIdx,
+  }).then(r => { if (r && r.rev) state.room.lastRev = r.rev; }).catch(() => {});
+}
+
+// =========================== FOLLOWER ===========================
+
+async function followJoin() {
+  const errEl = document.getElementById('join-error');
+  errEl.classList.add('hidden');
+  const code = (document.getElementById('join-code').value || '').trim().toUpperCase();
+  const name = (document.getElementById('join-name').value || '').trim();
+  if (code.length !== 4) { errEl.textContent = 'Il codice ha 4 lettere.'; errEl.classList.remove('hidden'); return; }
+  let joined;
+  try {
+    joined = await mpPost({ action: 'room_join' }, { code, name });
+  } catch (e) {
+    errEl.textContent = /404/.test(e.message) ? 'Stanza non trovata. Controlla il codice.' : e.message;
+    errEl.classList.remove('hidden');
+    return;
+  }
+  const scriptId = joined.state.script_id;
+  await fetchScript(scriptId);
+  if (!state.script) { errEl.textContent = 'Impossibile caricare il copione.'; errEl.classList.remove('hidden'); return; }
+  state.room = {
+    code, role: 'follower', memberToken: joined.member_token,
+    scriptId, lastRev: 0,
+  };
+  saveRoom();
+  setRoomBar(`Segui la regia · Stanza ${code}`);
+  openFollowerPicker();
+}
+
+function openFollowerPicker() {
+  showCharacterPicker(state.script); // reuse; it shows view 'characters'
+  document.getElementById('start-playback-btn').classList.add('hidden');
+  // hide the solo "Solo lettura (nessun personaggio)" shortcut for followers
+  const solo = document.querySelector('#character-list .subtle');
+  if (solo) solo.closest('li').classList.add('hidden');
+  const followBtn = document.getElementById('follow-start-btn');
+  followBtn.classList.remove('hidden');
+  followBtn.disabled = true;
+  followBtn.textContent = 'Entra nella scena';
+}
+
+function selectedPickerNames() {
+  return [...document.querySelectorAll('#character-list .character-pick.selected .char-body .script-title')]
+    .map(el => el.textContent);
+}
+
+async function startFollowing() {
+  state.characters = selectedPickerNames();
+  document.body.classList.add('following');
+  showView('followWait');
+  try {
+    await mpPost({ action: 'room_sync' }, { code: state.room.code, member_token: state.room.memberToken, characters: state.characters });
+  } catch (e) { /* keep going; poll will retry */ }
+  saveRoom();
+  startFollowPoll();
+}
+
+function startFollowPoll() {
+  clearRoomPoll();
+  const tick = async () => {
+    if (!state.room || state.room.role !== 'follower') return;
+    let rs;
+    try {
+      rs = await mpPost({ action: 'room_sync' }, { code: state.room.code, member_token: state.room.memberToken });
+    } catch (e) {
+      if (/404/.test(e.message)) { alert('La stanza è stata chiusa dal regista.'); leaveRoom(); }
+      return;
+    }
+    applyRoomState(rs);
+  };
+  tick();
+  state.roomPoll = setInterval(tick, POLL_MS);
+}
+
+async function applyRoomState(rs, opts) {
+  opts = opts || {};
+  if (rs.rev === state.room.lastRev && !opts.force) return;
+  state.room.lastRev = rs.rev;
+
+  // Director switched to a different script/version: reload and re-pick.
+  if (rs.script_id && rs.script_id !== state.room.scriptId) {
+    state.room.scriptId = rs.script_id;
+    saveRoom();
+    await fetchScript(rs.script_id);
+    if (state.room.role === 'follower') { document.body.classList.remove('following'); openFollowerPicker(); }
+    return;
+  }
+
+  state.sceneIdx = rs.scene_idx || 0;
+  state.beatIdx = rs.beat_idx || 0;
+
+  switch (rs.view) {
+    case 'playback': showView('playback'); render(); break;
+    case 'prep':     renderPrep(); showView('prep'); break;
+    case 'readall':  renderReadAll(); showView('readall'); break;
+    case 'end':      showView('end'); break;
+    default:         // 'lobby' / 'characters' — waiting for the director
+      if (state.room.role === 'follower') showView('followWait');
+  }
+  if (state.room.role === 'follower') showRoomBar();
+}
+
+// =========================== reconnection ===========================
+
+async function resumeRoomIfAny() {
+  if (state.previewMode) return;
+  let saved;
+  try {
+    const raw = sessionStorage.getItem(ROOM_KEY);
+    if (!raw) return;
+    saved = JSON.parse(raw);
+  } catch (e) { return; }
+  if (!saved || !saved.code || !saved.role) return;
+
+  state.room = {
+    code: saved.code, role: saved.role, hostToken: saved.hostToken,
+    memberToken: saved.memberToken, scriptId: saved.scriptId, lastRev: 0,
+  };
+  state.characters = Array.isArray(saved.characters) ? saved.characters : [];
+
+  try {
+    if (saved.role === 'host') {
+      // verify the room still exists (host_token-gated)
+      await mpGet({ action: 'room_members', code: saved.code, host_token: saved.hostToken });
+      await fetchScript(saved.scriptId);
+      if (!state.script) throw new Error('script');
+      const rs = await mpPost({ action: 'room_sync' }, { code: saved.code, member_token: saved.memberToken });
+      setRoomBar(`Stanza ${saved.code}`);
+      if (rs.view === 'lobby') { enterHostLobby(); }
+      else { startRosterPoll(); await applyRoomState(rs, { force: true }); }
+    } else {
+      await fetchScript(saved.scriptId);
+      if (!state.script) throw new Error('script');
+      document.body.classList.add('following');
+      setRoomBar(`Segui la regia · Stanza ${saved.code}`);
+      showView('followWait');
+      startFollowPoll();
+    }
+  } catch (e) {
+    // room gone or unreachable: fall back to the normal menu
+    state.room = null;
+    document.body.classList.remove('following');
+    hideRoomBar();
+    try { sessionStorage.removeItem(ROOM_KEY); } catch (e2) {}
+  }
+}
+
+// =========================== wiring (additive listeners) ===========================
+
+document.getElementById('create-room-btn').addEventListener('click', openHostSetup);
+document.getElementById('join-room-btn').addEventListener('click', () => showView('join'));
+document.getElementById('back-from-join').addEventListener('click', () => showView('scripts'));
+document.getElementById('back-from-host-setup').addEventListener('click', () => showView('scripts'));
+document.getElementById('join-submit-btn').addEventListener('click', followJoin);
+document.getElementById('host-start-btn').addEventListener('click', hostStart);
+document.getElementById('host-close-btn').addEventListener('click', leaveRoom);
+document.getElementById('room-bar-leave').addEventListener('click', leaveRoom);
+document.getElementById('follow-start-btn').addEventListener('click', () => {
+  if (selectedPickerNames().length === 0) return;
+  startFollowing();
+});
+document.getElementById('host-setup-mode-toggle').addEventListener('click', e => {
+  const btn = e.target.closest('button[data-mode]');
+  if (!btn) return;
+  renderHostSetupList(btn.dataset.mode);
+});
+// keep the follower's "Entra nella scena" button in sync with picks
+document.getElementById('character-list').addEventListener('click', () => {
+  if (!state.room || state.room.role !== 'follower') return;
+  document.getElementById('follow-start-btn').disabled = selectedPickerNames().length === 0;
+});
+// director push hooks: run AFTER the native handlers (registered earlier), read the new position
+['advance-btn', 'back-btn-beat', 'skip-btn-user'].forEach(id => {
+  document.getElementById(id).addEventListener('click', () => {
+    if (state.room && state.room.role === 'host') pushRoomState();
+  });
+});
+document.getElementById('start-improv-btn').addEventListener('click', () => {
+  if (state.room && state.room.role === 'host') pushRoomState();
+});
+document.getElementById('restart-btn').addEventListener('click', () => {
+  // native handler ran startPlayback([]) (→ readall for the director); force playback back.
+  if (state.room && state.room.role === 'host') hostStart();
+});
+
+resumeRoomIfAny();

@@ -9,8 +9,17 @@
 <body>
   <div class="container">
 
+    <div class="room-bar hidden" id="room-bar">
+      <span class="room-bar-info" id="room-bar-info"></span>
+      <button class="room-bar-leave" id="room-bar-leave">Esci</button>
+    </div>
+
     <section id="view-scripts">
       <img class="hero" src="./images/hero.png" alt="Ribalta">
+      <div class="group-bar" id="group-bar">
+        <button id="create-room-btn">🎬 Crea stanza (fai il regista)</button>
+        <button id="join-room-btn" class="secondary">📲 Entra con un codice</button>
+      </div>
       <div class="mode-toggle scripts-mode-toggle" id="scripts-mode-toggle">
         <button data-mode="lettura" class="active">Lettura</button>
         <button data-mode="improv">Improvvisa</button>
@@ -42,6 +51,7 @@
       <h2>Scegli uno o più ribaltati</h2>
       <ul class="list" id="character-list"></ul>
       <button class="advance-btn" id="start-playback-btn" disabled>Inizia</button>
+      <button class="advance-btn hidden" id="follow-start-btn" disabled>Entra nella scena</button>
     </section>
 
     <section id="view-playback" class="hidden">
@@ -104,6 +114,60 @@
       <div class="end-card">
         <h2>Bravi tutti</h2>
         <button id="restart-btn">Ricomincia</button>
+      </div>
+    </section>
+
+    <section id="view-join" class="hidden">
+      <div class="top-bar">
+        <button class="back-btn" id="back-from-join">← Indietro</button>
+      </div>
+      <h1>Entra in una stanza</h1>
+      <p class="hint">Chiedi al regista il codice della stanza.</p>
+      <div class="form-row">
+        <label for="join-code">Codice stanza</label>
+        <input id="join-code" type="text" maxlength="4" autocomplete="off" autocapitalize="characters" placeholder="ABCD">
+      </div>
+      <div class="form-row">
+        <label for="join-name">Il tuo nome (opzionale)</label>
+        <input id="join-name" type="text" maxlength="40" autocomplete="off" placeholder="Come ti chiamano">
+      </div>
+      <button class="advance-btn" id="join-submit-btn">Entra</button>
+      <p class="hint hidden" id="join-error"></p>
+    </section>
+
+    <section id="view-host-setup" class="hidden">
+      <div class="top-bar">
+        <button class="back-btn" id="back-from-host-setup">← Indietro</button>
+      </div>
+      <h1>Crea una stanza</h1>
+      <div class="mode-toggle scripts-mode-toggle" id="host-setup-mode-toggle">
+        <button data-mode="lettura" class="active">Lettura</button>
+        <button data-mode="improv">Improvvisa</button>
+      </div>
+      <h2>Scegli il copione da dirigere</h2>
+      <ul class="list" id="host-setup-list"></ul>
+    </section>
+
+    <section id="view-room-host" class="hidden">
+      <div class="top-bar">
+        <button class="back-btn" id="host-close-btn">← Termina serata</button>
+      </div>
+      <h1 id="host-room-title"></h1>
+      <div class="room-code-box">
+        <div class="room-code-label">Codice stanza</div>
+        <div class="room-code" id="host-room-code">····</div>
+        <div class="hint">Gli altri lo inseriscono in “Entra con un codice”.</div>
+      </div>
+      <h2>In sala</h2>
+      <ul class="list roster" id="host-roster"></ul>
+      <button class="advance-btn" id="host-start-btn">Inizia la scena</button>
+    </section>
+
+    <section id="view-follow-wait" class="hidden">
+      <h1 id="follow-wait-title">Sei in scena</h1>
+      <div class="wait-card">
+        <div class="wait-spinner"></div>
+        <p id="follow-wait-msg">In attesa che il regista inizi…</p>
       </div>
     </section>
 
