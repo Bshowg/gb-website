@@ -1,0 +1,1910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#060812">
+<meta name="description" content="Decoherence: a survivors-like in which you are an algorithm on a noisy quantum computer. Cancel the wrong, amplify the right, and know when to look.">
+<title>Decoherence</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
+<style>html,body{margin:0;background:#060812;color-scheme:dark;overscroll-behavior:none}[hidden]{display:none!important}</style>
+<style>
+/* Layout: the canvas fills the viewport at an integer pixel scale (short side about 200 world px), HUD pinned to its corners.
+   The screen is the algorithm's own monitor: the instrument is cold and few-coloured, the register's noise floor is many-hued, red belongs to the classical world. */
+:root{
+  --bg:#060812;
+  --ink:#cfd6ff;
+  --dim:#6b78a8;
+  --cyan:#7fdfff;
+  --warm:#ff7a3d;
+  --violet:#7a6cff;
+  --gold:#ffcc55;
+  --mint:#9affd6;
+  --amber:#ffb347;
+  --danger:#ff3b5c;
+  --font-ui:'Press Start 2P','Courier New',monospace;
+  color-scheme:dark;
+}
+html,body{height:100%}
+[hidden]{display:none!important}
+body{
+  margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-ui);overflow:hidden;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:0;
+  -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;
+}
+#stage{height:100%;display:flex;align-items:center;justify-content:center}
+#frame{position:relative;line-height:0}
+canvas{image-rendering:pixelated;image-rendering:crisp-edges;background:#060812;outline:none;display:block;touch-action:none}
+canvas:focus-visible{box-shadow:0 0 0 2px var(--cyan)}
+.hud{position:absolute;font-size:8px;line-height:1.9;text-shadow:0 2px 0 #000;pointer-events:none;white-space:pre;font-variant-numeric:tabular-nums}
+#hl{left:0;top:0;padding:12px 8px 8px}
+#hr{right:0;top:0;padding:12px 8px 8px;text-align:right}
+#log{left:0;bottom:0;padding:0 8px 84px;font-size:7px;line-height:1.7;color:var(--dim);max-width:46%}
+#log span{display:block;white-space:pre}
+.screen{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;
+  background:rgba(6,8,18,.86);text-align:center;font-size:10px;line-height:2;cursor:pointer;padding:16px;box-sizing:border-box;overflow:auto;
+}
+.screen h1{font-size:18px;margin:0;color:var(--cyan);letter-spacing:1px;text-wrap:balance}
+#dead h1{color:var(--danger)}
+#won h1{color:var(--mint)}
+#levelup h1{color:var(--mint)}
+#levelup{cursor:default}
+.screen p{margin:0;max-width:40ch;text-wrap:balance}
+.screen .k{color:var(--warm)}
+.screen .c{color:var(--cyan)}
+.screen .v{color:var(--violet)}
+.screen .g{color:var(--gold)}
+.screen .m{color:var(--mint)}
+.screen .r{color:var(--danger)}
+.screen .go{color:var(--cyan);animation:pulse 1.2s steps(2,end) infinite}
+.screen .sheet{color:var(--dim);font-size:8px;line-height:2;white-space:pre-line;max-width:46ch}
+.screen .sheet b{color:var(--warm);font-weight:normal}
+#cards{display:flex;flex-direction:column;gap:10px;width:min(380px,100%)}
+.card{
+  display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:#060812;border:2px solid var(--dim);color:var(--ink);
+  font-family:inherit;font-size:8px;line-height:1.9;padding:10px 12px;cursor:pointer;box-sizing:border-box;min-height:56px;
+}
+.card .art{flex:0 0 25%;display:flex;align-items:center;justify-content:center;min-width:0}
+.card .body{flex:1 1 auto;min-width:0}
+.card:hover,.card:focus-visible{border-color:var(--mint);outline:none}
+.card .t{color:var(--cyan);font-size:9px}
+.card.weapon .t{color:var(--warm)}
+.card.weapon{border-color:#8a4a2c}
+.card .lv{float:right;color:var(--dim)}
+.card .f{color:var(--dim);display:block}
+.card .d{color:var(--ink);display:block}
+.card .cli{color:var(--mint);display:block}
+.card canvas.circ{display:block;width:70%;height:auto;image-rendering:pixelated}
+.card canvas.icon{display:block;width:72%;height:auto;image-rendering:pixelated}
+#algocard{width:min(380px,100%);cursor:default;border-color:var(--gold);text-align:left}
+#algocard .t{color:var(--gold)}
+#algocard canvas{display:block;width:70%;height:auto;image-rendering:pixelated}
+.sr{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+#titlecv{width:200px;height:28px;image-rendering:pixelated;display:block;margin-bottom:6px}
+#overlay{cursor:default}
+.menu,.howto{display:flex;flex-direction:column;align-items:center;gap:18px;max-width:100%}
+.menu .tag{color:var(--ink);max-width:46ch}
+.howto{gap:12px;max-width:48ch}
+.howto h2{font-size:12px;color:var(--mint);margin:0 0 4px;letter-spacing:1px}
+.howto p{text-align:left;max-width:48ch;line-height:1.9}
+.howto p .m{display:block;letter-spacing:1px;margin-bottom:2px}
+.btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:6px}
+.btn{font-family:inherit;font-size:10px;letter-spacing:1px;line-height:1;color:var(--cyan);background:#060812;border:2px solid var(--dim);padding:16px 22px;min-width:150px;cursor:pointer}
+.btn.primary{color:var(--gold);border-color:var(--gold)}
+.btn:hover,.btn:focus-visible{border-color:var(--mint);color:var(--mint);outline:none}
+.btn:active{background:#101830}
+.dump{font-family:inherit;font-size:7px;line-height:1.9;text-align:left;color:var(--dim);margin:0;white-space:pre;max-width:100%;overflow-x:auto}
+.dump b{font-weight:normal;color:var(--ink)}
+@keyframes pulse{50%{opacity:.3}}
+@media (max-width:600px){.hud{font-size:7px}.screen{font-size:8px;gap:12px}.screen h1{font-size:13px}.card{font-size:7px;padding:8px 10px}.card .t{font-size:8px}.btn{font-size:9px;padding:15px 18px;min-width:130px}.howto h2{font-size:10px}}
+@media (prefers-reduced-motion:reduce){.screen .go{animation:none}}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="frame">
+    <canvas id="c" tabindex="0" aria-label="Decoherence prototype"></canvas>
+    <div class="hud" id="hl" hidden></div>
+    <div class="hud" id="hr" hidden></div>
+    <div class="hud" id="log" hidden></div>
+    <div id="levelup" class="screen" hidden>
+      <h1>COMPILE</h1>
+      <p class="m" id="lvtitle">Compile a gate</p>
+      <div id="cards"></div>
+    </div>
+    <div id="won" class="screen" hidden>
+      <h1>ANSWER FOUND</h1>
+      <pre id="wonstats" class="dump"></pre>
+      <p class="go">TAP OR PRESS R</p>
+    </div>
+    <div id="dead" class="screen" hidden>
+      <h1>OUTPUT: NOISE</h1>
+      <pre id="deadstats" class="dump"></pre>
+      <p class="go">TAP OR PRESS R</p>
+    </div>
+    <div id="overlay" class="screen">
+      <div id="menu" class="menu">
+        <h1 class="sr">DECOHERENCE</h1>
+        <canvas id="titlecv" width="200" height="28" aria-hidden="true"></canvas>
+        <p class="tag">An algorithm on a noisy quantum computer.<br>Cancel the wrong, amplify the right, and know when to look.</p>
+        <div class="card algo" id="algocard"><span class="art"><canvas id="algoart" width="20" height="20" aria-hidden="true"></canvas></span><span class="body"><span class="t" id="algoname"></span><span class="lv">ALGORITHM</span><span class="f" id="algotag"></span><span class="d" id="algogate"></span></span></div>
+        <div class="btns">
+          <button class="btn primary" id="btnrun" type="button">RUN</button>
+          <button class="btn" id="btnhow" type="button">HOW TO PLAY</button>
+        </div>
+      </div>
+      <div id="howto" class="howto" hidden>
+        <h2>HOW TO PLAY</h2>
+        <p><span class="m">ITERATE</span>  <span class="k">Drag anywhere</span> to move, or use <span class="k">WASD</span>. Candidates fill the register and converge on you. Most are <span class="v">wrong</span>, and wrong answers bite. Inside your <span class="c">window</span> every tile shows its colour and your gates fire at their own kind: eliminate gates cancel wrong answers a notch per hit, amplify gates raise <span class="g">right</span> answers a notch per hit. The oracle pulses every few seconds to show the whole screen. Outside the window everything is a warp in the matrix.</p>
+        <p><span class="m">READ OUT</span>  <span class="k">Lift your thumb</span> to read out the window. Only loud answers are measured, as one outcome rolled on the <span class="c">P(SUCCESS)</span> dial. Win the roll and loud right answers score and refund fidelity. Lose it and the register returns noise and costs fidelity. Either way the window collapses to uniform. Quiet answers survive. Past the peak a right answer goes quiet again, so watch the dial.</p>
+        <p><span class="m">FIDELITY</span>  Your fidelity drains all the time and wrong answers bite it. Only correct reads refund it. At zero the run halts.</p>
+        <p><span class="m">COMPILE</span>  Each depth you compile a <span class="k">gate</span> or a <span class="c">flag</span>. Every gate owns one verb: <span class="v">eliminate</span> wrong answers, <span class="g">amplify</span> right ones, or <span class="m">correct</span> errors. A gate aims at its own kind inside your window and holds fire when there is none. Flags tune the algorithm.</p>
+        <p><span class="m">ERRORS</span>  Errors never bite. <span class="r">Noise</span> heats wrong answers and spoils reads. <span class="k">Bugs</span> flip markings. <span class="v">Phase-flip zones</span> run your window backwards. Crosstalk makes two answers share a fate. The simulator reads your amplified answers for itself. Fallen errors leave <span class="c">lenses</span> that change the window.</p>
+        <p><span class="m">THE READOUT</span>  At two minutes a <span class="r">needle</span> sweeps the register and collapses what its beam passes. Correct reads push it back, errors let it advance. Push it off the edge and the answer is yours.</p>
+        <div class="btns">
+          <button class="btn" id="btnback" type="button">BACK</button>
+          <button class="btn primary" id="btnrun2" type="button">RUN</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+const TAU=Math.PI*2;
+let W=320,H=180,SCALE=2;
+const cv=document.getElementById('c');
+const ctx=cv.getContext('2d');
+const hl=document.getElementById('hl'),hr=document.getElementById('hr'),overlay=document.getElementById('overlay'),stage=document.getElementById('stage');
+const deadEl=document.getElementById('dead'),deadStats=document.getElementById('deadstats');
+const wonEl=document.getElementById('won'),wonStats=document.getElementById('wonstats');
+const lvEl=document.getElementById('levelup'),cardsEl=document.getElementById('cards'),lvTitle=document.getElementById('lvtitle');
+const logEl=document.getElementById('log');
+
+/* the canvas fills the stage: pick an integer scale so the short side is about 200 world pixels */
+function fit(){
+  const sw=Math.max(1,stage.clientWidth),sh=Math.max(1,stage.clientHeight);
+  SCALE=Math.max(1,Math.round(Math.min(sw,sh)/200));
+  W=Math.max(160,Math.floor(sw/SCALE));H=Math.max(120,Math.floor(sh/SCALE));
+  cv.width=W;cv.height=H;ctx.imageSmoothingEnabled=false;
+  cv.style.width=(W*SCALE)+'px';cv.style.height=(H*SCALE)+'px';
+  const tk=Math.max(1,Math.floor(Math.min(400,sw*0.92)/200)),tcv=document.getElementById('titlecv');
+  if(tcv){tcv.style.width=(200*tk)+'px';tcv.style.height=(28*tk)+'px';}
+}
+addEventListener('resize',fit);
+if(window.ResizeObserver)new ResizeObserver(fit).observe(stage);
+
+/* ---------- helpers ---------- */
+function rnd(a,b){return a+Math.random()*(b-a);}
+function dist(ax,ay,bx,by){const dx=ax-bx,dy=ay-by;return Math.sqrt(dx*dx+dy*dy);}
+
+/* ---------- audio ---------- */
+let AC=null,lastClick=0,lastGem=0;
+function ensureAudio(){try{if(!AC)AC=new (window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();}catch(e){}}
+function click(){
+  if(!AC)return;const t=AC.currentTime;if(t-lastClick<0.012)return;lastClick=t;
+  const n=Math.floor(AC.sampleRate*0.018),buf=AC.createBuffer(1,n,AC.sampleRate),d=buf.getChannelData(0);
+  for(let i=0;i<n;i++){const e=1-i/n;d[i]=(Math.random()*2-1)*e*e*e;}
+  const src=AC.createBufferSource();src.buffer=buf;
+  const f=AC.createBiquadFilter();f.type='highpass';f.frequency.value=2200;
+  const g=AC.createGain();g.gain.value=0.7;
+  src.connect(f);f.connect(g);g.connect(AC.destination);src.start(t);
+}
+function tone(type,f0,f1,dur,vol,delay){
+  if(!AC)return;const t=AC.currentTime+(delay||0),o=AC.createOscillator(),g=AC.createGain();
+  o.type=type;o.frequency.setValueAtTime(f0,t);o.frequency.exponentialRampToValueAtTime(f1,t+dur);
+  g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(0.001,t+dur+0.02);
+  o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+dur+0.04);
+}
+function thump(){tone('sine',110,40,0.18,0.5);}
+function zap(){tone('square',880,220,0.06,0.06);}
+function chimeUp(){tone('square',440,880,0.12,0.08);}
+function chimeDown(){tone('square',660,330,0.12,0.08);}
+function sparkSfx(){tone('sawtooth',200,1600,0.25,0.1);}
+function gemSfx(){if(!AC)return;const t=AC.currentTime;if(t-lastGem<0.05)return;lastGem=t;tone('square',1320,1760,0.04,0.03);}
+function levelSfx(){tone('square',523,523,0.08,0.08,0);tone('square',659,659,0.08,0.08,0.09);tone('square',784,1046,0.16,0.08,0.18);}
+function waveSfx(){tone('sine',600,120,0.3,0.12);}
+function pairSfx(){tone('square',1200,900,0.05,0.05,0);tone('square',900,1200,0.05,0.05,0.06);}
+function boxSfx(){tone('triangle',300,150,0.12,0.1);}
+function boxOpenSfx(){tone('square',150,1200,0.18,0.12);}
+function holeSfx(){tone('sine',70,30,0.6,0.25);}
+function linkSfx(){tone('sine',1500,1500,0.08,0.05,0);tone('sine',1500,1500,0.08,0.05,0.1);}
+function watchSfx(){tone('square',200,120,0.25,0.1);}
+function detectorSfx(){tone('sine',90,60,0.6,0.2,0);tone('sine',120,70,0.6,0.2,0.5);}
+function winSfx(){tone('square',523,523,0.1,0.08,0);tone('square',659,659,0.1,0.08,0.12);tone('square',784,784,0.1,0.08,0.24);tone('square',1046,1046,0.4,0.1,0.36);}
+function readStartSfx(){tone('sine',320,640,0.18,0.07);}
+function readOkSfx(){tone('square',880,1320,0.08,0.07);}
+function readErrSfx(){tone('sawtooth',220,90,0.25,0.12);}
+function oracleSfx(){tone('sine',440,440,0.5,0.05,0);tone('sine',660,660,0.5,0.04,0);tone('sine',880,880,0.5,0.03,0.05);}
+function resetSfx(){tone('sawtooth',200,1600,0.25,0.1);}
+function flipSfx(){tone('square',300,600,0.05,0.08,0);tone('square',600,300,0.05,0.08,0.06);}
+function sweepSfx(){tone('triangle',520,880,0.07,0.1,0);}
+function zoneSfx(){tone('sine',160,110,0.5,0.12,0);tone('sine',110,160,0.5,0.1,0.4);}
+function xtSfx(){tone('sine',1100,1100,0.1,0.05,0);tone('sine',1400,1400,0.1,0.05,0.12);}
+
+/* ---------- sprites ---------- */
+const SPR={
+  quanto:["..###..",".#####.","#######","#######","#######",".#####.","..###.."],
+  phA:["..###..",".#bbb#.","#bobob#","#bbbbb#",".#bbb#.","..#.#..",".#...#."],
+  phB:["..###..",".#bbb#.","#bobob#","#bbbbb#",".#bbb#.","..#.#..","..#.#.."],
+  brA:[".#######.","#########","##o###o##","#########","####.####","#########","#.#.#.#.#","#########",".##...##."],
+  brB:[".#######.","#########","##o###o##","#########","####.####","#########","#.#.#.#.#","#########","..##.##.."],
+  lensW:["..###..",".#...#.","#..o..#","#.ooo.#","#..o..#",".#...#.","..###.."],
+  lensN:["..###..",".#...#.","#.....#","#.ooo.#","#.....#",".#...#.","..###.."],
+  spark:["#...#",".#.#.","..o..",".#.#.","#...#"],
+  gem:[".#.","#o#",".#."],
+  gemBig:["..#..",".#o#.","#ooo#",".#o#.","..#.."],
+  qmark:[".##.","#..#","...#","..#.",".#..","....",".#.."],
+  d0:[".###.","#...#","#..##","#.#.#","##..#","#...#",".###."],
+  d1:["..#..",".##..","..#..","..#..","..#..","..#..",".###."],
+  orb:[".###.","#ooo#","#o@o#","#ooo#",".###."],
+  eye:["....#######....","..##.......##..",".#...........#.","#....#####....#","#...#ooooo#...#","#...#ooooo#...#","#...#ooooo#...#","#....#####....#",".#...........#.","..##.......##..","....#######...."]
+};
+function spr(rows,x,y,pal){
+  for(let r=0;r<rows.length;r++){const row=rows[r];
+    for(let c=0;c<row.length;c++){const ch=row[c];if(ch==='.')continue;ctx.fillStyle=pal[ch];ctx.fillRect(x+c,y+r,1,1);}}
+}
+
+/* ---------- tuning ---------- */
+const CFG={
+  Rmin:24,Rmax:150,Rstep:10,
+  candSpeed:[44,60],hover:[10,28],a0:0.3,pMarked:0.3,ampRate:0.45,cancelRate:0.16,readLoud:0.6,readErr:10,readRefund:5,readSignal:3,
+  stepAmp:0.26,stepCancel:0.32,biteBase:3,biteAmp:6,heatRate:0.25,noiseSpoil:0.15,noiseFloor:0.35,warpMax:40,
+  /* errors keep their own clock, by depth: seconds between arrivals, indexed by depth (0 = none). A few named problems, never a flood. */
+  errDepth:3,noiseEvery:[0,0,0,8,6,5,4,3.5,3],noiseSpeed:[34,46],noiseHp:2,noiseLife:14,
+  bugAfter:20,bugEvery:[0,0,0,0,14,12,10,9,8],bugHp:2,bugSpeed:44,bugRange:90,flipCd:1.2,bugLife:20,
+  xtDepth:4,zoneDepth:5,bruteDepth:5,bruteEats:3,
+  pairDur:6,pairWound:2,orbitR:8,orbitTouch:4,orbitCd:0.6,
+  sweepCd:0.8,sweepArc:1.4,
+  zoneAfter:45,zoneEvery:15,zoneLife:20,zoneR:30,zoneMax:1,
+  xtAfter:40,xtEvery:8,xtDur:8,xtRange:110,
+  dmg:10,
+  boltCd:0.16,boltSpd:260,boltRange:130,boltLife:0.9,
+  burst:6,rate0:1.2,rateK:0.05,maxEnemies:260,
+  bruteFirst:45,bruteEvery:40,bruteHp:6,
+  dropLife:25,magnet:24,pickup:5,dropPickup:6,gemDrift:14,pWide:0.08,pNarrow:0.05,pBlink:0.03,
+  stickMax:16,stickDead:3,
+  stillDelay:0.3,readTime:0.3,
+  oracleEvery:4.5,oracleShow:0.7,
+  roAt:120,roSpeed:1/45,roPush:0.05,roErr:0.08,roBand:10,roWork:1.2,roFloor:-0.1,
+  xpBase:6,xpStep:5,maxGems:500,
+  waveCd:3.0,waveSpd:110,waveBand:7,waveAmp:0.3,waveCancel:0.25,
+  pairCd:1.4,pairSpd:200,pairLife:1.1,pairDmg:1.2,pairLink:4,pairShare:0.75,
+  boxCd:7,boxSize:44,boxHold:3.5,boxDie:0.5,
+  hawkCd:6,hawkPull:60,hawkHorizon:8,hawkDmg:2.0,hawkDur:3,hawkBurst:2.0,hawkRange:120
+};
+function xpNeed(lvl){return CFG.xpBase+CFG.xpStep*(lvl-1);}
+
+/* ---------- characters: algorithms. Grover is the reference: every multiplier is 1, every bonus is 0. ---------- */
+const CHARS={
+  grover:{
+    name:'GROVER',tag:'Unstructured search. The baseline: every multiplier at one.',
+    hpMax:100,      /* fidelity */
+    regen:0,        /* fidelity per second */
+    drain:0.8,      /* fidelity lost per second: decoherence */
+    refund:1.0,     /* multiplies the fidelity refund per correct readout */
+    speed:72,       /* world px per second */
+    radius:56,      /* starting window radius */
+    damage:1.0,     /* multiplies every gate's damage */
+    rate:1.0,       /* multiplies every gate's rate */
+    amount:0,       /* extra projectiles for every gate */
+    pierce:0,       /* extra pierce for every projectile */
+    area:1.0,       /* multiplies areas: pulse, block, reset */
+    projSpeed:1.0,  /* multiplies projectile speed */
+    armor:0,        /* flat damage taken reduction */
+    invul:0.6,      /* seconds of invulnerability after a hit */
+    hitbox:5.5,     /* contact radius in world px */
+    magnet:1.0,     /* multiplies pickup range */
+    luck:1.0,       /* multiplies drop chances */
+    growth:1.0,     /* multiplies signal gained */
+    amp:1.0,        /* multiplies amplification rate */
+    cancel:1.0,     /* multiplies cancellation rate */
+    readSpeed:1.0,  /* multiplies readout speed */
+    zeno:0,         /* slow applied to everything hostile inside the window */
+    mitigate:0,     /* share of a failed read's cost forgiven */
+    oracleRate:1.0, /* multiplies how often the oracle pulses */
+    resist:0,       /* share of every error's effect suppressed */
+    weapon:'bolt',quirk:null
+  }
+};
+const CHAR=CHARS.grover;
+function statsFrom(c){
+  return {hpMax:c.hpMax,regen:c.regen,drain:c.drain,refund:c.refund,speed:c.speed,damage:c.damage,rate:c.rate,amount:c.amount,pierce:c.pierce,area:c.area,projSpeed:c.projSpeed,
+    armor:c.armor,invul:c.invul,hitbox:c.hitbox,magnet:c.magnet,luck:c.luck,growth:c.growth,amp:c.amp,cancel:c.cancel,readSpeed:c.readSpeed,zeno:c.zeno,mitigate:c.mitigate,oracleRate:c.oracleRate,resist:c.resist};
+}
+
+/* ---------- power-ups: gates have level tracks, compiler flags are passive stats ----------
+   Crowd gates act on candidates only: every hit is one Grover step. Error gates act on errors only. */
+function LV(desc,apply){return {desc:desc,apply:apply};}
+const POW=[
+  {id:'bolt',type:'weapon',verb:'elim',short:'KICK',name:'PHASE KICK',flavor:'One query, one notch.',max:8,track:[
+    LV('ELIMINATE. A bolt at the nearest wrong answer in the window; each hit cancels it a notch. Bolts pass through right answers',function(){}),
+    LV('+1 kick per shot',function(){S.nBolts+=1;}),
+    LV('Kick notch +30%',function(){S.boltDmg+=0.3;}),
+    LV('Kicks pierce one more tile',function(){S.pierce+=1;}),
+    LV('+1 kick per shot',function(){S.nBolts+=1;}),
+    LV('Kick notch +30%',function(){S.boltDmg+=0.3;}),
+    LV('Kicks pierce one more tile',function(){S.pierce+=1;}),
+    LV('+1 kick per shot',function(){S.nBolts+=1;})]},
+  {id:'sweep',type:'weapon',verb:'elim',short:'H',name:'HADAMARD SWEEP',flavor:'Every wrong answer in reach, in one stroke.',max:6,track:[
+    LV('ELIMINATE. An arc in front of Grover; every wrong answer in it is cancelled a notch',function(){S.wp.sweep.on=true;}),
+    LV('Wider arc',function(){S.wp.sweep.arc+=0.5;}),
+    LV('Sweeps 25% faster',function(){S.wp.sweep.rate+=0.25;}),
+    LV('A second arc behind',function(){S.wp.sweep.both=true;}),
+    LV('Sweep notch +30%',function(){S.wp.sweep.mul+=0.3;}),
+    LV('Wider arc',function(){S.wp.sweep.arc+=0.5;})]},
+  {id:'wave',type:'weapon',verb:'amp',short:'QFT',name:'QFT PULSE',flavor:'Every right answer, louder at once.',max:6,track:[
+    LV('AMPLIFY. A ring from Grover; every right answer it crosses gains a notch',function(){S.wave=1;}),
+    LV('Pulse notch +40%',function(){S.waveDmgMul+=0.4;}),
+    LV('Pulses 25% more often',function(){S.waveRate+=0.25;}),
+    LV('Wider pulse band',function(){S.waveBandAdd+=3;}),
+    LV('Pulse notch +40%',function(){S.waveDmgMul+=0.4;}),
+    LV('Pulses 25% more often',function(){S.waveRate+=0.25;})]},
+  {id:'orbit',type:'weapon',verb:'amp',short:'ORB',name:'ANCILLA ORBIT',flavor:'Helper qubits, circling.',max:6,track:[
+    LV('AMPLIFY. The qubits circling Grover gain a notch for every right answer they touch',function(){S.wp.orbit.on=true;}),
+    LV('+2 ancillas',function(){S.q.push({oa:rnd(0,TAU),da:rnd(0,TAU),r:8},{oa:rnd(0,TAU),da:rnd(0,TAU),r:8});}),
+    LV('Wider orbit',function(){S.wp.orbit.r+=3;}),
+    LV('Touch notch +30%',function(){S.wp.orbit.mul+=0.3;}),
+    LV('+2 ancillas',function(){S.q.push({oa:rnd(0,TAU),da:rnd(0,TAU),r:8},{oa:rnd(0,TAU),da:rnd(0,TAU),r:8});}),
+    LV('Wider orbit',function(){S.wp.orbit.r+=3;})]},
+  {id:'pair',type:'weapon',verb:'corr',short:'CNOT',name:'CNOT',flavor:'Couple it, then look.',max:6,track:[
+    LV('CORRECT. A shot couples the nearest error in the window to Grover and slows it. Your next read corrects everything coupled',function(){S.wp.pair.on=true;}),
+    LV('Holds one more coupling',function(){S.wp.pair.max+=1;}),
+    LV('Couplings last 3s longer',function(){S.wp.pair.dur+=3;}),
+    LV('Simulator wound +1',function(){S.wp.pair.wound+=1;}),
+    LV('Holds one more coupling',function(){S.wp.pair.max+=1;}),
+    LV('Recharges 30% faster',function(){S.wp.pair.rate+=0.3;})]},
+  {id:'box',type:'weapon',verb:'corr',short:'CODE',name:'CODE BLOCK',flavor:'Redundancy, frozen in place.',max:6,track:[
+    LV('CORRECT. Drops a block when an error is in the window. Inside, time stops. It opens: half the errors inside are corrected, the rest stunned',function(){S.wp.box.on=true;}),
+    LV('Bigger block',function(){S.wp.box.size+=12;}),
+    LV('Correction odds 60%',function(){S.wp.box.pDie=0.6;}),
+    LV('Recharges 30% faster',function(){S.wp.box.rate+=0.3;}),
+    LV('Bigger block',function(){S.wp.box.size+=12;}),
+    LV('Correction odds 70%',function(){S.wp.box.pDie=0.7;})]},
+  {id:'spin',type:'ability',name:'CLOCK SPEED',flavor:'Iterations per second.',desc:'Crowd gates fire 15% faster',flag:'--clock +15%',max:5,apply:function(){S.st.rate+=0.15;}},
+  {id:'amplify',type:'ability',name:'AMPLITUDE GAIN',flavor:'Make the right answer louder, sooner.',desc:'Each hit on a right answer steps 25% further',flag:'--gain +25%',max:4,apply:function(){S.st.amp+=0.25;}},
+  {id:'cancel',type:'ability',name:'DESTRUCTIVE INTERFERENCE',flavor:'Wrong answers cancel faster.',desc:'Each hit on a wrong answer steps 30% further',flag:'--cancel +30%',max:4,apply:function(){S.st.cancel+=0.3;}},
+  {id:'ancilla',type:'ability',name:'ANCILLA',flavor:'A helper qubit for every gate.',desc:'+1 kick per shot, +1 qubit on the orbit',flag:'--ancilla +1',max:2,apply:function(){S.st.amount+=1;S.q.push({oa:rnd(0,TAU),da:rnd(0,TAU),r:8});}},
+  {id:'readfast',type:'ability',name:'FAST READOUT',flavor:'Look quickly, before the noise does.',desc:'Readout 30% faster',flag:'--readout +30%',max:3,apply:function(){S.st.readSpeed+=0.3;}},
+  {id:'emission',type:'ability',name:'STIMULATED EMISSION',flavor:'Each signal brings another.',desc:'Signal worth +25%',flag:'--signal +25%',max:3,apply:function(){S.st.growth+=0.25;}},
+  {id:'mitigation',type:'ability',name:'ERROR MITIGATION',flavor:'Average away what you cannot correct.',desc:'A failed read costs half the fidelity',flag:'--mitigate 50%',max:1,apply:function(){S.st.mitigate=0.5;}},
+  {id:'oracle',type:'ability',name:'ORACLE RATE',flavor:'Ask more often.',desc:'The oracle pulses 25% more often',flag:'--oracle +25%',max:3,apply:function(){S.st.oracleRate+=0.25;}},
+  {id:'coherence',type:'ability',name:'COHERENCE TIME',flavor:'Longer before the noise wins.',desc:'Fidelity drains 15% slower',flag:'--t2 +15%',max:4,apply:function(){S.st.drain*=0.85;}},
+  {id:'ecc',type:'ability',name:'ERROR CORRECTION',flavor:'Redundancy against the noise.',desc:'Restore 35 fidelity, max +10',flag:'--ecc +35 --max +10',max:9,apply:function(){S.st.hpMax+=10;S.hp=Math.min(S.st.hpMax,S.hp+35);}},
+  {id:'suppression',type:'ability',name:'ERROR SUPPRESSION',flavor:'The noise still comes. It does less.',desc:'Errors affect the register 20% less',flag:'--suppress +20%',max:4,apply:function(){S.st.resist=Math.min(0.8,S.st.resist+0.2);}},
+  {id:'zeno',type:'ability',name:'ZENO EFFECT',flavor:'A watched state never moves.',desc:'Everything hostile in your window 15% slower',flag:'--zeno 15%',max:4,apply:function(){S.st.zeno+=0.15;}},
+  {id:'momentum',type:'ability',name:'MOMENTUM',flavor:'Know where you go, not where you are.',desc:'Move speed +10%',flag:'--speed +10%',max:3,apply:function(){S.st.speed+=CHAR.speed*0.1;}},
+  {id:'debroglie',type:'ability',name:'LONG WAVELENGTH',flavor:'Reach without touching.',desc:'Pickup range +40%',flag:'--pickup +40%',max:3,apply:function(){S.st.magnet+=0.4;}},
+  {id:'syndrome',type:'ability',name:'SYNDROME',flavor:'Read the error before it reads you.',desc:'Error gates damage +20%',flag:'--syndrome +20%',max:5,apply:function(){S.st.damage+=0.2;}}
+];
+/* a gate's circuit snippet: a wire with the gate's symbol on it, or two wires with control and target for CNOT */
+const GLYPH={bolt:'Z',sweep:'H',wave:'QFT',box:'ECC',hawking:'|0>'};
+/* a gate's picture, 24x24: what the gate does, drawn with the game's own sprites. Grover's orb, bit tiles, noise blobs. */
+function drawCircuit(cvs,id){
+  const c=cvs.getContext('2d');c.clearRect(0,0,24,24);c.imageSmoothingEnabled=false;
+  const px=function(x,y,col,w,h){c.fillStyle=col;c.fillRect(x,y,w||1,h||1);};
+  const orb=function(x,y){const rows=SPR.orb,pal={'#':'#7fdfff','o':'#e8fbff','@':'#ffffff'};for(let r=0;r<5;r++)for(let k=0;k<5;k++){const ch=rows[r][k];if(ch!=='.')px(x+k,y+r,pal[ch]);}};
+  const tile=function(x,y,col){px(x,y,col,5,1);px(x,y+4,col,5,1);px(x,y+1,col,1,3);px(x+4,y+1,col,1,3);px(x+1,y+1,col,2,2);px(x+3,y+3,col);};
+  const blob=function(x,y){px(x+1,y,'#8a90a8',2,1);px(x,y+1,'#b8bcd0',1,2);px(x+1,y+1,'#8a90a8',2,2);px(x+3,y+1,'#8a90a8');px(x+1,y+3,'#b8bcd0');};
+  const dim='rgba(127,223,255,0.55)',hi='#e8fbff',gold='#ffcc55',violet='#7a6cff';
+  if(id==='bolt'){
+    /* the kick: a bolt leaves the orb and strikes a tile, which rings gold: one step up */
+    orb(2,16);px(8,15,'rgba(127,223,255,0.35)');px(10,13,dim);px(12,11,'#7fdfff');px(14,9,hi);
+    tile(16,3,gold);px(13,5,gold);px(23,5,gold);px(18,10,gold);px(18,0,gold);
+    return;
+  }
+  if(id==='sweep'){
+    /* the sweep: an arc in front of the orb, a marked tile and an unmarked one inside it */
+    orb(2,10);
+    for(let k=0;k<=12;k++){const a=-1.05+2.1*k/12;px(Math.round(4+Math.cos(a)*14),Math.round(12+Math.sin(a)*14),hi);if(k%2===0)px(Math.round(4+Math.cos(a)*10),Math.round(12+Math.sin(a)*10),dim);}
+    tile(13,2,gold);tile(14,17,violet);
+    return;
+  }
+  if(id==='wave'){
+    /* the pulse: a ring with fringes around the orb, crossing a marked tile and an unmarked one */
+    orb(10,10);
+    for(let k=0;k<28;k++){const a=k/28*TAU;px(Math.round(12+Math.cos(a)*9),Math.round(12+Math.sin(a)*9),(k%4<2)?hi:dim);}
+    tile(17,1,gold);tile(2,17,violet);
+    return;
+  }
+  if(id==='pair'){
+    /* the CNOT: a shot from the orb to a noise blob, and the dotted coupling that ties it back to the orb */
+    orb(2,14);px(8,15,dim);px(10,13,hi);
+    blob(16,3);
+    for(let k=0;k<=8;k++){if(k%2)continue;px(Math.round(5+k*1.6),Math.round(15-k*1.3),'#9affd6');}
+    px(14,2,'#9affd6',2,1);px(14,2,'#9affd6',1,2);px(21,8,'#9affd6',2,1);px(22,7,'#9affd6',1,2);
+    return;
+  }
+  if(id==='orbit'){
+    /* the ancilla orbit: the qubits circling the orb, two of them touching gold tiles */
+    orb(10,10);
+    for(let i=0;i<6;i++){const a=-Math.PI/2+i*TAU/6,x=12+Math.cos(a)*8,y=12+Math.sin(a)*8,cc=Math.cos(a),ss=Math.sin(a);px(Math.round(x-cc),Math.round(y-ss),dim);px(Math.round(x),Math.round(y),'#7fdfff');px(Math.round(x+cc),Math.round(y+ss),hi);}
+    tile(17,1,gold);tile(1,15,gold);
+    return;
+  }
+  if(id==='box'){
+    /* the code block: a frozen square with two noise blobs and a bug caught inside, stun brackets at the corners */
+    px(3,3,'#ff7a3d',18,1);px(3,20,'#ff7a3d',18,1);px(3,3,'#ff7a3d',1,18);px(20,3,'#ff7a3d',1,18);
+    blob(6,6);blob(13,13);
+    px(15,7,'#ffb347',1,4);px(14,8,'#ffb347');
+    px(8,15,hi);px(11,12,hi);px(17,8,hi);px(10,17,hi);
+    const b='rgba(127,223,255,0.7)';px(0,0,b,3,1);px(0,0,b,1,3);px(21,0,b,3,1);px(23,0,b,1,3);px(0,23,b,3,1);px(0,21,b,1,3);px(21,23,b,3,1);px(23,21,b,1,3);
+    return;
+  }
+  /* any other gate: its symbol in a box on a wire */
+  const g=GLYPH[id]||'?';
+  px(0,12,'#4a5a8a',24,1);px(4,6,'#060812',16,13);px(4,6,'#ff7a3d',16,1);px(4,18,'#ff7a3d',16,1);px(4,6,'#ff7a3d',1,13);px(19,6,'#ff7a3d',1,13);
+  c.fillStyle='#ff7a3d';c.font='8px "Press Start 2P", monospace';c.textAlign='center';c.textBaseline='middle';c.fillText(g,12,12);
+}
+/* a flag's glyph: a small pixel diagram of what the flag does, drawn in the instrument's cyan */
+const FLAGSPR={
+  spin:["..##..##..##","..##..##..##","..##..##..##","..##..##..##","###..##..##.","............","..#...#...#.",".###.###.###"],
+  amplify:["..........##","..........##",".......##.##",".......##.##","....##.##.##","....##.##.##",".##.##.##.##",".##.##.##.##"],
+  cancel:[".#...#......","#.#.#.#.....","...#...#....","............","...#...#....","#.#.#.#.....",".#...#......","........####"],
+  ancilla:["....##......","...####.....","...####..#..","....##..###.","..........#.","....##......","...####.....","....##......"],
+  readfast:["....####....","..##....##..",".#........#.",".#.....#..#.","#.....#....#","#....#.....#","#...#......#","############"],
+  emission:[".#.#....#.#.","#.#.#..#.#.#","............",".....##.....","............",".#.#....#.#.","#.#.#..#.#.#","............"],
+  mitigation:[".#.....#....","#.#.#.#.#...","....#....#..","............","............","....####....","####....####","............"],
+  oracle:[".....##.....","...#....#...","..#..##..#..","..#.####.#..","..#.####.#..","..#..##..#..","...#....#...",".....##....."],
+  coherence:["#...........","#...........","##..........",".##.........","..###.......",".....####...","........####","............"],
+  ecc:["###.###.###.","#.#.#.#.#.#.","###.###.###.","............",".......#....","....#.#.....",".....#......","............"],
+  suppression:["...#........","..#.#.......",".#...#.#....","#.....#.#.##","............","............","############","............"],
+  zeno:["...######...",".##..##..##.","#...####...#","#...####...#",".##..##..##.","...######...","............","............"],
+  momentum:["........#...","..#.....##..",".###.....##.","#########.##",".###.....##.","..#.....##..","........#...","............"],
+  debroglie:["..###.......",".#...#......","#.....#....#","#......#..#.",".......#..#.","........##..","............","............"],
+  syndrome:["##.##.##.##.","##.##.##.##.","......##....","......##....","......##....","............","......##....","......##...."]
+};
+function drawFlag(cvs,id){
+  const c=cvs.getContext('2d');c.clearRect(0,0,12,8);const rows=FLAGSPR[id];if(!rows)return;
+  for(let r=0;r<rows.length;r++)for(let k=0;k<rows[r].length;k++){if(rows[r][k]==='.')continue;c.fillStyle=id==='suppression'&&r===6?'#9affd6':'#7fdfff';c.fillRect(k,r,1,1);}
+}
+const POWMAP={};for(const p of POW)POWMAP[p.id]=p;
+function cardDesc(p,have){return p.type==='weapon'?p.track[have].desc:p.desc;}
+function cardApply(p,have){if(p.type==='weapon')p.track[have].apply();else p.apply();}
+
+/* ---------- palette: the instrument is cold and few-coloured, the noise floor is many-hued ---------- */
+const PAL={bg:'#060812',gridMinor:'#10172a',gridMajor:'#1a2440',gridTick:'#2a3a66',phos:'#7fdfff',phosHi:'#e8fbff',dim:'#4a5a8a',amber:'#ffb347',red:'#ff3b5c',mint:'#9affd6',
+  marked:'#ffcc55',unmarked:'#7a6cff',neutral:'#5a5f8a',
+  foam:['#2b2f7a','#4a3aa8','#7a3fbf','#b23f9a','#2f6fbf','#2fa0a0']};
+/* noise-floor tiles: six frames of coloured bits and small bubbles, blitted outside the window */
+const FT=64,FOAM=[];
+(function(){
+  for(let f=0;f<6;f++){
+    const oc=document.createElement('canvas');oc.width=FT;oc.height=FT;const o=oc.getContext('2d');
+    for(let i=0;i<190;i++){o.fillStyle=PAL.foam[Math.floor(Math.random()*6)];o.globalAlpha=0.25+Math.random()*0.6;o.fillRect(Math.floor(Math.random()*FT),Math.floor(Math.random()*FT),1,1);}
+    for(let i=0;i<7;i++){const x=Math.floor(Math.random()*(FT-3)),y=Math.floor(Math.random()*(FT-3));o.fillStyle=PAL.foam[Math.floor(Math.random()*6)];o.globalAlpha=0.55;o.fillRect(x+1,y,1,1);o.fillRect(x,y+1,1,1);o.fillRect(x+2,y+1,1,1);o.fillRect(x+1,y+2,1,1);}
+    FOAM.push(oc);
+  }
+})();
+/* the register outside the window: cells of eight pixels with one bit in each, flipping at random in low-saturation phase hues, on a cold blue ground */
+const REG=[];
+(function(){
+  for(let f=0;f<6;f++){
+    const oc=document.createElement('canvas');oc.width=FT;oc.height=FT;const o=oc.getContext('2d');
+    o.fillStyle='#0a1024';for(let k=0;k<FT;k+=8){o.fillRect(k,0,1,FT);o.fillRect(0,k,FT,1);}
+    for(let cy=0;cy<FT;cy+=8)for(let cx=0;cx<FT;cx+=8){
+      if(Math.random()<0.45)continue;
+      o.fillStyle=PAL.foam[Math.floor(Math.random()*6)];o.globalAlpha=0.3+Math.random()*0.45;
+      o.fillRect(cx+3,cy+3,2,2);
+    }
+    o.globalAlpha=1;
+    /* the gold plate line of the machine, once per tile */
+    o.fillStyle='rgba(201,162,74,0.35)';o.fillRect(0,0,FT,1);
+    REG.push(oc);
+  }
+})();
+/* the chip floor inside the window: the superconducting processor the algorithm runs on, seen from above. Cross-shaped
+   qubits on a 64 px lattice, each with a SQUID loop at the foot of one arm, capacitive gaps to square-wave coupling
+   resonators between neighbours, a feedline with airbridges every 192 px, and a lattice of flux-trapping holes in the
+   ground plane. Three frames differ only in a sprinkle of quasiparticles. Period 192 px. */
+const CT=192,CHIP=[];
+(function(){
+  const M='#5f70a4',MH='#aab7dd',G='#03050c';
+  for(let f=0;f<3;f++){
+    const oc=document.createElement('canvas');oc.width=CT;oc.height=CT;const o=oc.getContext('2d');
+    const px=function(x,y,w,h){o.fillRect(((x%CT)+CT)%CT,((y%CT)+CT)%CT,w||1,h||1);};
+    /* ground plane holes */
+    o.fillStyle='#121b3e';for(let y=4;y<CT;y+=8)for(let x=4;x<CT;x+=8)o.fillRect(x,y,1,1);
+    /* the feedline along y=0: a dark gap either side of the metal, bridged every 24 px */
+    o.fillStyle=G;px(0,-3,CT,1);px(0,3,CT,1);
+    o.fillStyle=M;o.globalAlpha=0.75;px(0,-2,CT,2);px(0,0,CT,3);o.globalAlpha=1;
+    o.fillStyle=MH;o.globalAlpha=0.55;for(let x=12;x<CT;x+=24){px(x-2,-4,5,1);px(x-2,4,5,1);px(x-2,-3,1,7);px(x+2,-3,1,7);}o.globalAlpha=1;
+    for(let j=0;j<3;j++)for(let i=0;i<3;i++){
+      const cx=32+i*64,cy=32+j*64;
+      /* the qubit: a cross with three-pixel arms, a brighter pad at the centre, the SQUID loop at the foot of the lower arm */
+      o.fillStyle=M;o.globalAlpha=0.9;px(cx-11,cy-1,23,3);px(cx-1,cy-11,3,23);o.globalAlpha=1;
+      o.fillStyle=MH;px(cx-1,cy-1,3,3);
+      px(cx-1,cy+12,3,1);px(cx-1,cy+14,3,1);px(cx-1,cy+13,1,1);px(cx+1,cy+13,1,1);
+      /* coupling resonator to the right: a square-wave meander after a one-pixel capacitive gap */
+      o.fillStyle=M;o.globalAlpha=0.75;
+      for(let t=0;t<38;t++){const x=cx+13+t,off=(Math.floor(t/4)%2===0)?-2:2;px(x,cy+off,1,1);if(t%4===0&&t>0)px(x,cy-2,1,5);}
+      /* coupler downward: a straight line with two airbridges */
+      px(cx,cy+17,1,34);o.globalAlpha=1;
+      o.fillStyle=MH;o.globalAlpha=0.55;px(cx-1,cy+26,3,2);px(cx-1,cy+42,3,2);o.globalAlpha=1;
+    }
+    /* quasiparticles: a few coloured specks that differ from frame to frame */
+    for(let i=0;i<26;i++){o.fillStyle=PAL.foam[Math.floor(Math.random()*6)];o.globalAlpha=0.3+Math.random()*0.3;o.fillRect(Math.floor(Math.random()*CT),Math.floor(Math.random()*CT),1,1);}
+    o.globalAlpha=1;
+    CHIP.push(oc);
+  }
+})();
+/* scratch canvas for warping the floor under an unresolved candidate */
+const WARP=document.createElement('canvas');WARP.width=48;WARP.height=40;const wctx=WARP.getContext('2d');
+/* recording static: grey and white, flecked with red. The frame being written over, not the noise floor. */
+const STATIC=[];
+(function(){
+  const greys=['#6a7090','#9aa0b8','#d8dcff','#ffffff'];
+  for(let f=0;f<6;f++){
+    const oc=document.createElement('canvas');oc.width=FT;oc.height=FT;const o=oc.getContext('2d');
+    for(let i=0;i<260;i++){o.fillStyle=greys[Math.floor(Math.random()*4)];o.globalAlpha=0.25+Math.random()*0.6;o.fillRect(Math.floor(Math.random()*FT),Math.floor(Math.random()*FT),1,1);}
+    for(let i=0;i<12;i++){o.fillStyle=PAL.red;o.globalAlpha=0.8;o.fillRect(Math.floor(Math.random()*FT),Math.floor(Math.random()*FT),1,1);}
+    for(let i=0;i<3;i++){o.fillStyle=greys[1];o.globalAlpha=0.3;const y=Math.floor(Math.random()*FT);o.fillRect(0,y,FT,1);}
+    STATIC.push(oc);
+  }
+})();
+let frameDt=1/60;
+/* the classical world's gaze: a sparse red dither, blitted inside the Lens's circle */
+const REDD=document.createElement('canvas');REDD.width=16;REDD.height=16;
+(function(){const o=REDD.getContext('2d');o.fillStyle=PAL.red;for(let y=0;y<16;y++)for(let x=0;x<16;x++)if((x+y)%4===0)o.fillRect(x,y,1,1);})();
+/* the readout's dither: the same pattern in phosphor */
+const CYD=document.createElement('canvas');CYD.width=16;CYD.height=16;
+(function(){const o=CYD.getContext('2d');o.fillStyle=PAL.phos;for(let y=0;y<16;y++)for(let x=0;x<16;x++)if((x+y)%4===0)o.fillRect(x,y,1,1);})();
+/* a phase-flip zone's dither: the inverted lattice, in the unmarked hue */
+const VID=document.createElement('canvas');VID.width=16;VID.height=16;
+(function(){const o=VID.getContext('2d');o.fillStyle=PAL.unmarked;for(let y=0;y<16;y++)for(let x=0;x<16;x++)if((x-y+32)%4===0)o.fillRect(x,y,1,1);})();
+
+/* ---------- state ---------- */
+let S;
+function reset(){
+  const st=statsFrom(CHAR);
+  S={t:0,frame:0,px:0,py:0,dirx:1,diry:0,R:CHAR.radius,Rt:CHAR.radius,st:st,hp:st.hpMax,inv:0,shake:0,moving:false,qb:0,qbT:3,gridRot:0,
+     still:0,read:0,readIdx:0,readList:[],readDone:false,reading:false,
+     oracle:0,oracleT:3,psucc:0,pread:0,
+     zones:[],zoneT:CFG.zoneEvery,xtT:CFG.xtEvery,inverted:false,log:[],logDirty:true,
+     ro:{on:false,p:0,work:0,warned:false,crossed:false,tick:0,flash:0,recoil:0},won:false,
+     q:[0,1,2,3,4,5].map(function(i){return {oa:i*TAU/6,da:rnd(0,TAU),r:8};}),qTarget:-Math.PI/2,
+     cancelled:0,correct:0,errors:0,kills:0,clicks:[],dead:false,paused:false,
+     blink:0,blinkCd:0,boltT:0,nextId:1,
+     lvl:1,xp:0,taken:{},
+     boltDmg:1,nBolts:1,pierce:0,
+     wave:0,waveT:1.0,waveDmgMul:1,waveRate:1,waveBandAdd:0,
+     wp:{
+       pair:{on:false,t:1.0,max:1,dur:CFG.pairDur,wound:CFG.pairWound,rate:1},
+       orbit:{on:false,r:CFG.orbitR,mul:1,rate:1},
+       box:{on:false,t:1.5,size:CFG.boxSize,pDie:CFG.boxDie,hold:CFG.boxHold,rate:1},
+       hawk:{on:false,t:1.5,pull:1,dmg:CFG.hawkDmg,dur:CFG.hawkDur,count:1,burst:1},
+       sweep:{on:false,t:0.8,arc:CFG.sweepArc,both:false,mul:1,rate:1}
+     },
+     readOk:false,readBad:null,readP:0,noiseAcc:0,bugAcc:0,
+     pairShots:[],boxes:[],holes:[],
+     enemies:[],bolts:[],fx:[],drops:[],gems:[],labels:[],pulses:[],spawnAcc:0,bruteT:1};
+  cardApply(POWMAP[CHAR.weapon],0);S.taken[CHAR.weapon]=1;
+  /* the opening crowd starts close, so the first iterations happen at once */
+  for(let i=0;i<CFG.burst;i++){spawnCandidate();const e=S.enemies[S.enemies.length-1];const a=rnd(0,TAU),r=rnd(35,100);e.x=S.px+Math.cos(a)*r;e.y=S.py+Math.sin(a)*r;}
+  deadEl.hidden=true;lvEl.hidden=true;wonEl.hidden=true;
+}
+
+function spawnDist(){return Math.sqrt(W*W/4+H*H/4);}
+function bitsOf(id){let s='';for(let k=3;k>=0;k--)s+=((id>>k)&1)?'1':'0';return s;}
+/* a candidate: one basis state, a bit tile with its own pattern, a hidden marking, and an amplitude that starts uniform.
+   Every candidate converges on Grover. A wrong one bites on contact; a right one hovers close and is harmless. */
+function spawnCandidate(){
+  const a=Math.random()*TAU,d=spawnDist()+rnd(16,50),id=S.nextId++;
+  S.enemies.push({id:id,x:S.px+Math.cos(a)*d,y:S.py+Math.sin(a)*d,state:0,hp:1,
+    spd:rnd(CFG.candSpeed[0],CFG.candSpeed[1]),hover:rnd(CFG.hover[0],CFG.hover[1]),wa:rnd(0,TAU),
+    marked:Math.random()<CFG.pMarked,a:CFG.a0,th:Math.asin(CFG.a0),ampT:rnd(0,0.5),pat:Math.floor(Math.random()*33554432),bits:bitsOf(id),flipT:0,xtDir:1,hit:0,
+    brute:false,noise:false,flash:0,dead:false,boxed:false,link:0,linkT:0,col:0});
+}
+/* thermal noise: the error that walks into the crowd and heats it */
+function spawnNoise(){
+  const a=Math.random()*TAU,d=spawnDist()+rnd(16,50);
+  S.enemies.push({id:S.nextId++,x:S.px+Math.cos(a)*d,y:S.py+Math.sin(a)*d,state:1,hp:CFG.noiseHp,
+    spd:rnd(CFG.noiseSpeed[0],CFG.noiseSpeed[1]),wa:rnd(0,TAU),ph:Math.floor(rnd(0,12)),life:CFG.noiseLife,
+    brute:false,noise:true,flash:0,dead:false,boxed:false,link:0,linkT:0,col:0});
+}
+/* a bit-flip bug: hunts loud candidates and swaps their marking on touch */
+function spawnBug(){
+  const a=Math.random()*TAU,d=spawnDist()+rnd(16,50);
+  S.enemies.push({id:S.nextId++,x:S.px+Math.cos(a)*d,y:S.py+Math.sin(a)*d,state:1,hp:CFG.bugHp,spd:CFG.bugSpeed,wa:rnd(0,TAU),ph:Math.floor(rnd(0,12)),
+    brute:false,noise:false,bug:true,flipCd:0,frozen:0,digit:0,life:CFG.bugLife,flash:0,dead:false,boxed:false,link:0,linkT:0,col:0});
+}
+function inZone(x,y){for(const z of S.zones)if(dist(x,y,z.x,z.y)<z.r)return true;return false;}
+/* the classical simulator: a block of solid bits that brute-forces across the register */
+function spawnBrute(){
+  const a=Math.random()*TAU,d=spawnDist()+20;
+  S.enemies.push({id:S.nextId++,x:S.px+Math.cos(a)*d,y:S.py+Math.sin(a)*d,state:1,hp:CFG.bruteHp,spd:18,wa:rnd(0,TAU),ph:0,
+    brute:true,noise:false,cnt:Math.floor(rnd(0,16)),cntT:0,bits:[Math.floor(Math.random()*4294967296),Math.floor(Math.random()*4294967296)],flash:0,dead:false,boxed:false,link:0,linkT:0,col:0});
+}
+/* the Readout: the classical world comes to read the register. A needle sweeps the view; its beam collapses what it passes. */
+function startReadout(){
+  S.ro.on=true;S.ro.p=0;S.ro.work=0;S.ro.crossed=false;detectorSfx();
+  label(S.px,S.py-12,'THE READOUT BEGINS','#ff3b5c');
+}
+/* a correct read pushes the needle back and counts toward satisfying it. The needle never banks credit beyond the left edge. */
+function roPushBack(){S.ro.p=Math.max(CFG.roFloor,S.ro.p-CFG.roPush);S.ro.work+=CFG.roPush;S.ro.flash=0.3;S.ro.recoil=0.12;}
+/* the end screens are core dumps: what the machine knew when it halted */
+function dump(kind,result){
+  const gates=POW.filter(function(p){return p.type==='weapon'&&S.taken[p.id];}).map(function(p){return p.short.toLowerCase()+' '+S.taken[p.id];}).join('  ')||'none';
+  const flags=POW.filter(function(p){return p.type==='ability'&&S.taken[p.id];}).map(function(p){return p.id+' '+S.taken[p.id];}).join('  ')||'none';
+  return ['== '+kind+' ==',
+    'result     <b>'+result+'</b>',
+    'backend    superconducting',
+    'algorithm  '+CHAR.name.toLowerCase(),
+    'halted     '+fmt(S.t),
+    'depth      '+S.lvl,
+    'reads      '+S.correct+' ok  '+S.errors+' err',
+    'cancelled  '+S.cancelled,
+    'fidelity   '+Math.max(0,S.hp).toFixed(0)+'/'+S.st.hpMax,
+    'readout    '+(S.ro.on?Math.round(Math.max(0,S.ro.p)*100)+'%  satisfied '+Math.round(Math.min(1,S.ro.work/CFG.roWork)*100)+'%':'not reached'),
+    'gates      '+gates,
+    'flags      '+flags].join('\n');
+}
+function win(){
+  S.won=true;joy.on=false;joy.mag=0;K.clear();
+  wonStats.innerHTML=dump('HALT','the readout is satisfied');
+  wonEl.hidden=false;winSfx();
+}
+function closeRegister(){
+  S.fx.push({x:S.px,y:S.py,t:0,kind:13,life:0.4});
+  S.hp=0;S.dead=true;joy.on=false;joy.mag=0;
+  deadStats.innerHTML=dump('REGISTER CLOSED','the readout finished first');
+  deadEl.hidden=false;
+}
+/* a forced readout of the whole window, when the beam crosses the algorithm itself */
+function forcedRead(){
+  const inWin=S.enemies.filter(function(e){return e.state===0&&!e.dead&&!e.boxed&&dist(e.x,e.y,S.px,S.py)<S.R;});
+  label(S.px,S.py-14,'FORCED READ','#ff3b5c');
+  for(const e of inWin){if(S.dead||S.won)break;readOut(e);}
+  S.still=0;S.read=0;S.readIdx=0;S.readList=[];S.readDone=true;S.reading=false;
+}
+function findById(id){for(const e of S.enemies)if(e.id===id)return e;return null;}
+/* Blink is a Hadamard: every candidate in view goes back to uniform amplitude, errors and progress alike */
+function doBlink(force){
+  if(S.dead)return;
+  if(!force&&S.blinkCd>0)return;
+  S.blink=0.5;S.blinkCd=4;
+  for(const e of S.enemies){if(e.state===0&&!e.boxed){e.a=CFG.a0;e.th=Math.asin(CFG.a0);}e.link=0;}
+  for(const q of S.q)q.da=rnd(0,TAU);
+  S.fx.push({x:S.px,y:S.py,t:0,kind:2});
+  resetSfx();
+}
+/* every label the world prints also scrolls into the log */
+function label(x,y,text,col){
+  const n=S.labels.filter(function(l){return l.t<0.5;}).length;S.labels.push({x:x,y:y-n*9,t:0,text:text,col:col});
+  S.log.push({text:text,col:col});if(S.log.length>5)S.log.shift();S.logDirty=true;
+}
+/* fallen errors leave lenses: a wide one or a narrow one. The simulator always leaves a wide lens. */
+function dropFor(e){
+  if(e.brute)return 'wide';
+  const L=S.st.luck,r=Math.random();
+  if(r<CFG.pNarrow*L)return 'narrow';
+  if(r<(CFG.pNarrow+CFG.pWide)*L)return 'wide';
+  return null;
+}
+function applyDrop(d){
+  if(d.kind==='wide'){S.Rt=Math.min(CFG.Rmax,S.Rt+CFG.Rstep);label(S.px,S.py-8,'WINDOW+','#7fdfff');chimeUp();S.fx.push({x:S.px,y:S.py,t:0,kind:3,col:'127,223,255'});}
+  else if(d.kind==='narrow'){S.Rt=Math.max(CFG.Rmin,S.Rt-CFG.Rstep);label(S.px,S.py-8,'WINDOW-','#ff3b5c');chimeDown();S.fx.push({x:S.px,y:S.py,t:0,kind:3,col:'255,59,92'});}
+}
+function gem(x,y,v){if(v<=0)return;if(S.gems.length>=CFG.maxGems)S.gems.shift();S.gems.push({x:x+rnd(-2,2),y:y+rnd(-2,2),v:v,ph:rnd(0,TAU)});}
+function dissolveFx(e,col){
+  const pts=[],n=e.detector?28:(e.brute?16:10);
+  for(let q=0;q<n;q++){const a=rnd(0,TAU),s=rnd(14,42);pts.push([e.x,e.y,Math.cos(a)*s,Math.sin(a)*s]);}
+  S.fx.push({x:e.x,y:e.y,t:0,kind:7,pts:pts,life:0.6,col:col});
+}
+/* damage: only errors can be hurt. Candidates are handled by the window and the gates that act on amplitude. */
+function hurt(e,dmg,mirrored){
+  if(e.dead||e.boxed||e.state===0)return;
+  if(e.link&&!mirrored&&e.linkT>S.t){
+    const p=findById(e.link);
+    if(p&&!p.dead&&p.link===e.id)hurt(p,dmg*S.wp.pair.share,true);
+  }
+  e.hp-=dmg;e.flash=0.08;if(e.hp<=0)kill(e);
+}
+function kill(e){
+  if(e.dead)return;e.dead=true;
+  S.kills++;zap();
+  dissolveFx(e,e.brute?'#b8485a':(e.bug?PAL.amber:'#9aa0b8'));
+  const kind=dropFor(e);if(kind)S.drops.push({x:e.x,y:e.y,kind:kind,t:0,ph:rnd(0,TAU)});
+  if(e.brute){
+    gem(e.x,e.y,3);S.hp=Math.min(S.st.hpMax,S.hp+S.st.refund*2);
+    /* the simulator's bits fall out of it and lie on the floor before dissolving */
+    const pts=[];for(let q=0;q<8;q++){const a=rnd(0,TAU),s=rnd(30,70);pts.push([e.x,e.y,Math.cos(a)*s,Math.sin(a)*s]);}
+    S.fx.push({x:e.x,y:e.y,t:0,kind:12,pts:pts,life:1.1});
+  }
+}
+/* a candidate cancelled to nothing dissolves back into the noise floor */
+function cancelled(e){
+  if(e.dead)return;e.dead=true;S.cancelled++;
+  dissolveFx(e,PAL.unmarked);
+  const kind=dropFor(e);if(kind&&Math.random()<0.5)S.drops.push({x:e.x,y:e.y,kind:kind,t:0,ph:rnd(0,TAU)});
+  /* crosstalk: what happens to one happens to the other */
+  if(e.xt){const p=findById(e.xt);if(p&&!p.dead&&p.state===0)cancelled(p);}
+}
+/* a measurement collapses a candidate back to uniform amplitude: it was looked at and not taken */
+function collapse(e){
+  if(e.dead||e.state!==0)return;
+  e.a=CFG.a0;e.th=Math.asin(CFG.a0);
+  S.fx.push({x:e.x,y:e.y,t:0,kind:9,life:0.25});
+}
+/* a gate's hit on a candidate. Every gate owns a verb: 'amp' raises a right answer a notch, 'elim' cancels a wrong one a notch.
+   A hit on the other kind only reveals the tile. Inside a phase-flip zone right and wrong swap. Returns true when the verb applied. */
+function isRight(e){return e.marked!==inZone(e.x,e.y);}
+function query(e,strength,verb){
+  if(e.dead||e.boxed||e.state!==0)return false;
+  e.hit=0.25;
+  const right=isRight(e);
+  if(verb==='amp'){
+    if(!right)return false;
+    e.th+=CFG.stepAmp*strength*S.st.amp;e.a=Math.abs(Math.sin(e.th));S.fx.push({x:e.x,y:e.y,t:0,kind:8,life:0.3});return true;
+  }
+  if(right)return false;
+  e.a-=CFG.stepCancel*strength*S.st.cancel;S.fx.push({x:e.x,y:e.y,t:0,kind:9,life:0.25});if(e.a<=0)cancelled(e);return true;
+}
+/* the Readout's beam reads a tile where it stands: a loud marked answer is correct, a loud unmarked one is an error,
+   a quiet one is not measured and only collapses */
+function readOut(e){
+  if(e.dead)return;
+  const loud=e.a>=CFG.readLoud;
+  S.clicks.push(S.t);click();
+  if(loud&&e.marked){
+    e.dead=true;
+    S.correct++;gem(e.x,e.y,CFG.readSignal);S.hp=Math.min(S.st.hpMax,S.hp+CFG.readRefund*S.st.refund);
+    label(e.x,e.y-8,'READ '+e.bits+' OK',PAL.mint);readOkSfx();
+    S.fx.push({x:e.x,y:e.y,t:0,kind:0});
+    if(S.ro.on)roPushBack();
+  }else if(loud){
+    e.dead=true;
+    S.errors++;S.hp-=Math.max(1,CFG.readErr-S.st.armor);S.shake=0.2;
+    label(e.x,e.y-8,'READ '+e.bits+' ERR',PAL.red);readErrSfx();
+    dissolveFx(e,PAL.red);
+    if(S.ro.on){S.ro.p+=CFG.roErr;S.ro.flash=0.3;}
+    if(S.hp<=0)die();
+  }else{
+    collapse(e);
+  }
+  /* crosstalk: reading one reads the other, wherever it is */
+  if(e.xt){const p=findById(e.xt);if(p&&!p.dead&&p.state===0&&!S.dead)readOut(p);}
+}
+/* the player's read: the loud candidates in the window are measured once, as one outcome rolled on P(success).
+   Noise in the window spoils the odds. On a success every loud marked answer pays and the loud wrong ones cancel.
+   On a failure one loud wrong answer is the result and the register returns noise. Either way the window collapses to uniform. */
+function beginRead(Reff){
+  const loud=S.enemies.filter(function(e){return e.state===0&&!e.dead&&!e.boxed&&e.a>=CFG.readLoud&&dist(e.x,e.y,S.px,S.py)<Reff;})
+    .sort(function(a,b){return dist(a.x,a.y,S.px,S.py)-dist(b.x,b.y,S.px,S.py);});
+  if(!loud.length){S.readDone=true;label(S.px,S.py-14,'NOTHING LOUD',PAL.dim);return;}
+  const P=S.pread;
+  S.readP=P;S.readOk=Math.random()<P;S.readBad=null;
+  if(!S.readOk){
+    const wrong=loud.filter(function(e){return !e.marked;});
+    let tot=0;for(const e of wrong)tot+=e.a*e.a;
+    let r=Math.random()*tot;for(const e of wrong){r-=e.a*e.a;if(r<=0){S.readBad=e;break;}}
+    if(!S.readBad&&wrong.length)S.readBad=wrong[0];
+  }
+  S.reading=true;S.readList=loud;S.read=0;S.readIdx=0;readStartSfx();
+}
+function readTile(e){
+  if(e.dead)return;
+  S.clicks.push(S.t);click();
+  if(S.readOk){
+    if(e.marked){
+      e.dead=true;S.correct++;gem(e.x,e.y,CFG.readSignal);S.hp=Math.min(S.st.hpMax,S.hp+CFG.readRefund*S.st.refund);
+      label(e.x,e.y-8,'READ '+e.bits+' OK',PAL.mint);readOkSfx();S.fx.push({x:e.x,y:e.y,t:0,kind:0});
+      if(S.ro.on)roPushBack();
+    }else{cancelled(e);}
+  }else if(e===S.readBad){
+    e.dead=true;label(e.x,e.y-8,'READ '+e.bits+' ERR',PAL.red);dissolveFx(e,PAL.red);
+  }else collapse(e);
+}
+function endRead(Reff){
+  if(!S.readOk){
+    S.errors++;S.hp-=Math.max(1,CFG.readErr*(1-S.st.mitigate)-S.st.armor);S.shake=0.25;
+    label(S.px,S.py-14,'OUTPUT: NOISE  P='+Math.round(S.readP*100)+'%',PAL.red);readErrSfx();
+    if(S.ro.on){S.ro.p+=CFG.roErr;S.ro.flash=0.3;}
+  }
+  /* syndrome: every error a CNOT coupled is corrected by the read, whatever the roll said */
+  let fixed=0;
+  for(const e of S.enemies){if(e.state!==1||e.dead||!(e.cpT>S.t))continue;e.cpT=0;if(e.brute)hurt(e,S.wp.pair.wound*S.st.damage);else kill(e);fixed++;}
+  if(fixed)label(S.px,S.py-22,fixed+' CORRECTED',PAL.mint);
+  /* re-prepare: everything in the window back to uniform, with a Hadamard flash */
+  for(const e of S.enemies)if(e.state===0&&!e.dead&&!e.boxed&&dist(e.x,e.y,S.px,S.py)<Reff)collapse(e);
+  S.fx.push({x:S.px,y:S.py,t:0,kind:2});
+  S.readDone=true;S.reading=false;S.read=0;S.readIdx=0;S.readList=[];S.readBad=null;
+  if(S.hp<=0)die();
+}
+function linkPair(a,b){
+  if(a===b||a.dead||b.dead)return;
+  a.link=b.id;b.link=a.id;a.linkT=b.linkT=S.t+S.wp.pair.link;
+  linkSfx();
+}
+function die(){
+  S.hp=0;S.dead=true;joy.on=false;joy.mag=0;
+  deadStats.innerHTML=dump('CORE DUMP','fidelity reached zero');
+  deadEl.hidden=false;
+}
+
+/* ---------- level-ups ---------- */
+function pickCards(){
+  const pool=POW.filter(function(p){return (S.taken[p.id]||0)<p.max;});
+  for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=pool[i];pool[i]=pool[j];pool[j]=t;}
+  const pick=pool.slice(0,3);
+  /* the tools come before the trouble: from the compile before errors begin, until you hold an error gate, one card is one */
+  if(S.lvl>=CFG.errDepth-1&&!POW.some(function(p){return p.verb==='corr'&&S.taken[p.id];})){
+    const eg=pool.filter(function(p){return p.verb==='corr';});
+    if(eg.length&&!pick.some(function(p){return p.verb==='corr';}))pick[2]=eg[Math.floor(Math.random()*eg.length)];
+  }
+  return pick;
+}
+let offer=[];
+function openLevelUp(){
+  S.paused=true;joy.on=false;joy.mag=0;joy.id=null;K.clear();
+  offer=pickCards();
+  cardsEl.innerHTML='';
+  lvTitle.textContent='DEPTH '+S.lvl+'  COMPILE A GATE';
+  offer.forEach(function(p,i){
+    const b=document.createElement('button');b.className='card '+p.type;b.type='button';b.id='card'+i;
+    const have=S.taken[p.id]||0;
+    b.innerHTML='<span class="art"></span><span class="body"><span class="t"></span><span class="lv"></span><span class="f"></span><span class="d"></span></span>';
+    const art=b.querySelector('.art'),body=b.querySelector('.body');
+    b.querySelector('.t').textContent=p.name;
+    b.querySelector('.lv').textContent=(p.type==='weapon'?'GATE':'FLAG')+' '+(have===0?'NEW':'LV '+have+' > '+(have+1));
+    b.querySelector('.f').textContent=p.flavor;
+    b.querySelector('.d').textContent=cardDesc(p,have);
+    if(p.type==='weapon'){const cc=document.createElement('canvas');cc.className='circ';cc.width=24;cc.height=24;drawCircuit(cc,p.id);art.appendChild(cc);}
+    else{
+      const ic=document.createElement('canvas');ic.className='icon';ic.width=12;ic.height=8;drawFlag(ic,p.id);art.appendChild(ic);
+      const cli=document.createElement('span');cli.className='cli';cli.textContent='$ compile '+p.flag;body.appendChild(cli);
+    }
+    b.addEventListener('click',function(ev){ev.stopPropagation();choose(i);});
+    cardsEl.appendChild(b);
+  });
+  lvEl.hidden=false;levelSfx();
+  const first=document.getElementById('card0');if(first)first.focus();
+}
+function choose(i){
+  const p=offer[i];if(!p||!S.paused)return;
+  const have=S.taken[p.id]||0;
+  cardApply(p,have);S.taken[p.id]=have+1;
+  S.gridRot=(Math.random()<0.5?1:-1)*TAU/4;
+  lvEl.hidden=true;S.paused=false;S.inv=Math.max(S.inv,0.4);
+  label(S.px,S.py-10,p.name,'#9affd6');
+  cv.focus();
+}
+reset();
+
+/* ---------- input: keyboard plus a floating touch stick ---------- */
+const K=new Set();
+const joy={on:false,id:null,ox:0,oy:0,x:0,y:0,dx:0,dy:0,mag:0};
+let started=false;
+function start(){if(started)return;started=true;overlay.hidden=true;hl.hidden=false;hr.hidden=false;logEl.hidden=false;ensureAudio();cv.focus();}
+addEventListener('keydown',e=>{
+  if(e.code==='Space'||e.code.startsWith('Arrow'))e.preventDefault();
+  if(e.repeat)return;
+  if(!started){if(e.code==='Enter'&&!(document.activeElement&&document.activeElement.tagName==='BUTTON'))start();return;}
+  if(S.paused){if(e.code==='Digit1'||e.code==='Numpad1')choose(0);if(e.code==='Digit2'||e.code==='Numpad2')choose(1);if(e.code==='Digit3'||e.code==='Numpad3')choose(2);return;}
+  K.add(e.code);
+  if(e.code==='BracketLeft')S.Rt=Math.max(CFG.Rmin,S.Rt-CFG.Rstep);
+  if(e.code==='BracketRight')S.Rt=Math.min(CFG.Rmax,S.Rt+CFG.Rstep);
+  if(e.code==='KeyR')reset();
+});
+addEventListener('keyup',e=>K.delete(e.code));
+addEventListener('blur',()=>{K.clear();joy.on=false;joy.mag=0;});
+const menuEl=document.getElementById('menu'),howEl=document.getElementById('howto');
+document.getElementById('btnrun').addEventListener('click',start);
+document.getElementById('btnrun2').addEventListener('click',start);
+document.getElementById('btnhow').addEventListener('click',()=>{menuEl.hidden=true;howEl.hidden=false;overlay.scrollTop=0;});
+document.getElementById('btnback').addEventListener('click',()=>{howEl.hidden=true;menuEl.hidden=false;overlay.scrollTop=0;});
+deadEl.addEventListener('click',()=>reset());
+wonEl.addEventListener('click',()=>reset());
+function toCanvas(e){const r=cv.getBoundingClientRect();return [(e.clientX-r.left)/r.width*W,(e.clientY-r.top)/r.height*H];}
+cv.addEventListener('pointerdown',e=>{
+  start();if(S.dead||S.paused||S.won)return;
+  const p=toCanvas(e);
+  joy.on=true;joy.id=e.pointerId;joy.ox=p[0];joy.oy=p[1];joy.x=p[0];joy.y=p[1];joy.dx=0;joy.dy=0;joy.mag=0;
+  try{cv.setPointerCapture(e.pointerId);}catch(err){}
+  e.preventDefault();
+});
+cv.addEventListener('pointermove',e=>{
+  if(!joy.on||e.pointerId!==joy.id)return;
+  const p=toCanvas(e);let dx=p[0]-joy.ox,dy=p[1]-joy.oy;let d=Math.hypot(dx,dy);
+  if(d>CFG.stickMax){joy.ox=p[0]-dx/d*CFG.stickMax;joy.oy=p[1]-dy/d*CFG.stickMax;dx=dx/d*CFG.stickMax;dy=dy/d*CFG.stickMax;d=CFG.stickMax;}
+  joy.x=joy.ox+dx;joy.y=joy.oy+dy;
+  if(d<CFG.stickDead){joy.dx=0;joy.dy=0;joy.mag=0;}
+  else{joy.dx=dx/d;joy.dy=dy/d;joy.mag=Math.min(1,(d-CFG.stickDead)/(CFG.stickMax-CFG.stickDead));}
+});
+function stickUp(e){if(joy.id===null||e.pointerId===joy.id){joy.on=false;joy.id=null;joy.mag=0;}}
+cv.addEventListener('pointerup',stickUp);
+cv.addEventListener('pointercancel',stickUp);
+
+/* ---------- update ---------- */
+function inBox(e,b){return Math.abs(e.x-b.x)<=b.half&&Math.abs(e.y-b.y)<=b.half;}
+function update(dt){
+  if(S.dead||S.paused||S.won)return;
+  S.t+=dt;S.frame++;
+
+  /* the Readout arrives on a clock, sweeps the view, and is pushed back by correct reads or let forward by errors */
+  if(!S.ro.on){
+    if(S.t>=CFG.roAt)startReadout();
+    else if(!S.ro.warned&&S.t>=CFG.roAt-5){S.ro.warned=true;label(S.px,S.py-12,'SOMETHING IS READING','#ff3b5c');tone('sine',90,60,0.6,0.2);}
+  }
+  if(S.ro.on){
+    S.ro.p+=CFG.roSpeed*dt;
+    S.ro.tick-=dt;if(S.ro.tick<=0){S.ro.tick=1;tone('square',1400,1400,0.03,0.05);}
+    /* satisfied: enough correct reads have pushed it, and it stands at the left edge */
+    if(S.ro.p<=0&&S.ro.work>=CFG.roWork){win();return;}
+    if(S.ro.p>=1){closeRegister();return;}
+  }
+
+  let ix=0,iy=0,mag=1;
+  if(K.has('KeyW')||K.has('ArrowUp'))iy-=1;
+  if(K.has('KeyS')||K.has('ArrowDown'))iy+=1;
+  if(K.has('KeyA')||K.has('ArrowLeft'))ix-=1;
+  if(K.has('KeyD')||K.has('ArrowRight'))ix+=1;
+  if(joy.on&&joy.mag>0){ix=joy.dx;iy=joy.dy;mag=joy.mag;}
+  const il=Math.hypot(ix,iy);
+  if(il>0.01){ix/=il;iy/=il;const sp=S.st.speed*mag*dt;S.px+=ix*sp;S.py+=iy*sp;S.dirx=ix;S.diry=iy;}
+  S.moving=il>0.01;
+  if(S.moving)S.qTarget=Math.atan2(S.diry,S.dirx);
+  /* Grover's qubits: they orbit, wander while the computation is uncertain, line up as P(success) climbs, and fall inward at readout */
+  for(let i=0;i<S.q.length;i++){
+    const q=S.q[i];
+    q.oa+=(1.1+i*0.07)*dt;
+    const want=S.reading?0:(S.wp.orbit.on?S.wp.orbit.r:8);q.r+=(want-q.r)*Math.min(1,dt*(S.reading?14:6));
+    let diff=S.qTarget-q.da;diff=Math.atan2(Math.sin(diff),Math.cos(diff));
+    q.da+=diff*Math.min(1,S.psucc*S.psucc*dt*8)+rnd(-1,1)*dt*4*(1-S.psucc);
+  }
+  if(S.ro.flash>0)S.ro.flash-=dt;if(S.ro.recoil>0)S.ro.recoil-=dt;
+
+  S.R+=(S.Rt-S.R)*Math.min(1,dt*6);
+  if(S.blinkCd>0)S.blinkCd-=dt;
+  if(S.blink>0)S.blink-=dt;
+  if(S.inv>0)S.inv-=dt;
+  if(S.shake>0)S.shake-=dt;
+  if(S.st.regen>0&&S.hp<S.st.hpMax)S.hp=Math.min(S.st.hpMax,S.hp+S.st.regen*dt);
+  if(S.st.drain>0){S.hp-=S.st.drain*dt;if(S.hp<=0){die();return;}}
+  const Reff=S.blink>0?0:S.R;
+
+  /* the beam: a band ahead of the needle, fixed to the view. Candidates it passes are read where they stand; cross the algorithm and the whole window is read. */
+  if(S.ro.on){
+    const camxNow=Math.round(S.px-W/2),nx=camxNow+S.ro.p*W;
+    for(const e of S.enemies){
+      if(e.dead||e.boxed||e.state!==0)continue;
+      if(e.x>=nx&&e.x<nx+CFG.roBand){readOut(e);if(S.dead||S.won)return;}
+    }
+    const onMe=S.px>=nx-2&&S.px<nx+CFG.roBand;
+    if(onMe&&!S.ro.crossed){S.ro.crossed=true;forcedRead();if(S.dead||S.won)return;}
+    else if(!onMe&&S.ro.crossed&&Math.abs(S.px-nx)>CFG.roBand*2)S.ro.crossed=false;
+  }
+
+  /* the oracle whispers on a cycle: for a moment every candidate shows its phase */
+  S.oracleT-=dt;if(S.oracleT<=0){S.oracleT=CFG.oracleEvery/S.st.oracleRate;S.oracle=CFG.oracleShow;oracleSfx();label(S.px,S.py-14,'ORACLE',PAL.marked);}
+  if(S.oracle>0)S.oracle-=dt;
+
+  /* readout: no input for a moment and the loud candidates in the window are measured once, as one outcome */
+  if(il>0.01){S.still=0;S.read=0;S.readIdx=0;S.readList=[];S.readDone=false;S.reading=false;}
+  else{
+    S.still+=dt;
+    if(S.still>CFG.stillDelay&&!S.readDone){
+      if(!S.reading)beginRead(Reff);
+      if(S.reading){
+        S.read+=dt/CFG.readTime*S.st.readSpeed;
+        const n=S.readList.length;
+        while(S.readIdx<n&&S.readIdx/n<=S.read){readTile(S.readList[S.readIdx]);S.readIdx++;}
+        if(S.read>=1){endRead(Reff);if(S.dead)return;}
+      }
+    }
+  }
+
+  /* spawning: the crowd ramps with time. Errors keep their own clock, by depth: a clean register until the third compile,
+     then noise every few seconds, then bugs, then the classical simulator now and then */
+  const rate=CFG.rate0+S.t*CFG.rateK;
+  S.spawnAcc+=rate*dt;
+  while(S.spawnAcc>=1){S.spawnAcc-=1;if(S.enemies.length<CFG.maxEnemies)spawnCandidate();}
+  const di=Math.min(S.lvl,CFG.noiseEvery.length-1),ne=CFG.noiseEvery[di],be=CFG.bugEvery[di];
+  if(ne>0){S.noiseAcc+=dt/ne;if(S.noiseAcc>=1){S.noiseAcc-=1;spawnNoise();}}
+  if(be>0&&S.t>CFG.bugAfter){S.bugAcc+=dt/be;if(S.bugAcc>=1){S.bugAcc-=1;spawnBug();}}
+  if(S.lvl>=CFG.bruteDepth&&S.t>CFG.bruteFirst){S.bruteT-=dt;if(S.bruteT<=0){S.bruteT=CFG.bruteEvery;spawnBrute();}}
+
+  /* phase-flip zones: patches of inverted lattice that drift across the register */
+  if(S.lvl>=CFG.zoneDepth&&S.t>CFG.zoneAfter){
+    S.zoneT-=dt;
+    if(S.zoneT<=0){S.zoneT=CFG.zoneEvery;
+      if(S.zones.length<CFG.zoneMax){const a=rnd(0,TAU),dd=rnd(40,100),va=rnd(0,TAU);S.zones.push({x:S.px+Math.cos(a)*dd,y:S.py+Math.sin(a)*dd,r:CFG.zoneR,t:0,vx:Math.cos(va)*6,vy:Math.sin(va)*6});zoneSfx();label(S.px,S.py-14,'PHASE FLIP',PAL.unmarked);}
+    }
+  }
+  for(let i=S.zones.length-1;i>=0;i--){const z=S.zones[i];z.t+=dt;z.x+=z.vx*dt;z.y+=z.vy*dt;if(z.t>CFG.zoneLife)S.zones.splice(i,1);}
+  S.inverted=inZone(S.px,S.py);
+
+  /* crosstalk: two candidates near the window get linked, and share every change for a while */
+  if(S.lvl>=CFG.xtDepth&&S.t>CFG.xtAfter){
+    S.xtT-=dt;
+    if(S.xtT<=0){S.xtT=CFG.xtEvery;
+      const near=S.enemies.filter(function(c){return !c.dead&&c.state===0&&!c.xt&&dist(c.x,c.y,S.px,S.py)<CFG.xtRange;});
+      if(near.length>=2){
+        const ia=Math.floor(Math.random()*near.length);let ib=Math.floor(Math.random()*(near.length-1));if(ib>=ia)ib++;
+        const a=near[ia],b=near[ib];
+        a.xt=b.id;b.xt=a.id;a.xtT=b.xtT=S.t+CFG.xtDur;xtSfx();label((a.x+b.x)/2,(a.y+b.y)/2-8,'CROSSTALK','#ff6ad5');
+      }
+    }
+  }
+
+  const E=S.enemies;
+  /* anything inside a closed block is frozen */
+  if(S.boxes.length){for(const e of E){e.boxed=false;if(e.detector)continue;for(const b of S.boxes){if(inBox(e,b)){e.boxed=true;break;}}}}
+  let pm=0,pt=0;
+  for(let i=0;i<E.length;i++){
+    const e=E[i];if(e.dead)continue;
+    if(e.flash>0)e.flash-=dt;
+    if(e.hit>0)e.hit-=dt;
+    if(e.flipT>0)e.flipT-=dt;
+    if(e.frozen>0)e.frozen-=dt;
+    if(e.brute){e.cntT+=dt;if(e.cntT>0.5){e.cntT=0;e.cnt=(e.cnt+1)%16;}}
+    if(e.boxed)continue;
+    const dx=S.px-e.x,dy=S.py-e.y,d=Math.hypot(dx,dy)||1,ux=dx/d,uy=dy/d;
+    const inside=d<Reff;
+    if(e.state===0){
+      const aBefore=e.a;
+      /* every candidate converges on Grover. A right answer hovers close; a wrong one presses in and bites, harder the louder it is */
+      const csp=e.spd*(inside&&S.st.zeno>0?Math.max(0.3,1-S.st.zeno):1);
+      if(e.marked){
+        if(d>e.hover){e.x+=ux*csp*dt;e.y+=uy*csp*dt;}
+        else{e.wa+=rnd(-1,1)*dt*2;e.x+=Math.cos(e.wa)*csp*0.25*dt;e.y+=Math.sin(e.wa)*csp*0.25*dt;}
+      }else{
+        if(d>S.st.hitbox-1){e.x+=ux*csp*dt;e.y+=uy*csp*dt;}
+        if(d<S.st.hitbox&&S.inv<=0){
+          S.hp-=Math.max(1,CFG.biteBase+CFG.biteAmp*e.a-S.st.armor);S.inv=S.st.invul;S.shake=0.15;thump();
+          if(S.hp<=0){die();return;}
+        }
+      }
+      /* inside the window the operator runs slowly on its own: marked amplitudes rotate up, unmarked ones cancel.
+         The gates do the same work many times faster. Inside a phase-flip zone it runs backwards. */
+      if(inside){
+        e.ampT+=dt;
+        const amplify=e.marked!==inZone(e.x,e.y);
+        if(amplify){
+          e.th+=CFG.ampRate*S.st.amp*dt;e.a=Math.abs(Math.sin(e.th));
+          if(e.ampT>0.8){e.ampT=0;S.fx.push({x:e.x,y:e.y,t:0,kind:8,life:0.3});}
+        }else{
+          e.a-=CFG.cancelRate*S.st.cancel*dt;
+          if(e.ampT>0.8){e.ampT=0;S.fx.push({x:e.x,y:e.y,t:0,kind:9,life:0.25});}
+        }
+        pt+=e.a*e.a;if(e.marked)pm+=e.a*e.a;
+      }
+      e.da=e.a-aBefore;
+      continue;
+    }
+    /* thermal noise and bugs are transient: they dissipate after a while, so a run without error gates is not a death spiral */
+    if(e.life!==undefined){e.life-=dt;if(e.life<=0){e.dead=true;dissolveFx(e,e.bug?PAL.amber:'#9aa0b8');continue;}}
+    /* a bit-flip bug hunts the loudest nearby candidate, swaps its marking on touch, and moves on */
+    if(e.bug){
+      if(e.flipCd>0)e.flipCd-=dt;
+      let tg=null,td=CFG.bugRange;
+      for(const c of E){if(c.dead||c.state!==0||c.a<0.45)continue;const dd=dist(c.x,c.y,e.x,e.y);if(dd<td){td=dd;tg=c;}}
+      let tx=S.px,ty=S.py;if(tg){tx=tg.x;ty=tg.y;}
+      const ddx=tx-e.x,ddy=ty-e.y,dl=Math.hypot(ddx,ddy)||1;
+      e.x+=ddx/dl*e.spd*dt;e.y+=ddy/dl*e.spd*dt;
+      if(tg&&td<6&&e.flipCd<=0){
+        e.flipCd=CFG.flipCd;
+        if(S.st.resist>0&&Math.random()<S.st.resist){label(tg.x,tg.y-8,'SUPPRESSED',PAL.mint);e.frozen=0.2;}
+        else{
+          tg.marked=!tg.marked;tg.flipT=0.3;e.frozen=0.35;e.digit=tg.marked?1:0;
+          label(tg.x,tg.y-8,'FLIP',PAL.amber);flipSfx();S.fx.push({x:tg.x,y:tg.y,t:0,kind:10,life:0.3});
+        }
+      }
+      continue;
+    }
+    /* errors walk toward the algorithm but never bite. Noise heats the wrong answers it touches; the simulator reads the
+       amplified right answers it steps on for itself and feeds the Readout. */
+    const sp=e.spd*(inside&&S.st.zeno>0?Math.max(0.3,1-S.st.zeno):1)*(e.cpT>S.t?0.5:1);
+    if(d>(e.brute?8:5)){e.x+=ux*sp*dt;e.y+=uy*sp*dt;}
+    if(e.noise){
+      for(const c of E){
+        if(c.dead||c.state!==0||c.marked||c.boxed)continue;
+        if(Math.abs(c.x-e.x)<7&&Math.abs(c.y-e.y)<7){c.a=Math.min(1,c.a+CFG.heatRate*(1-S.st.resist)*dt);c.th=Math.asin(c.a);if(Math.random()<dt*3)S.fx.push({x:c.x,y:c.y,t:0,kind:8,life:0.3});}
+      }
+    }else if(e.brute){
+      for(const c of E){
+        if(c.dead||c.state!==0||!c.marked||c.a<CFG.readLoud||c.boxed)continue;
+        if(Math.abs(c.x-e.x)<9&&Math.abs(c.y-e.y)<9){
+          c.dead=true;dissolveFx(c,PAL.red);label(c.x,c.y-8,'READ '+c.bits+' BY SIM',PAL.red);click();
+          if(S.ro.on){S.ro.p+=CFG.roErr*0.5*(1-S.st.resist);S.ro.flash=0.3;}
+          /* the simulator leaves once it has read its fill */
+          e.eaten=(e.eaten||0)+1;if(e.eaten>=CFG.bruteEats){e.dead=true;dissolveFx(e,'#b8485a');label(e.x,e.y-10,'SIM HALTED',PAL.red);break;}
+        }
+      }
+    }
+  }
+  S.psucc=pt>0?pm/pt:0;
+  /* the read odds: the dial's share, spoiled by every noise error inside the window, never below a floor */
+  let nz=0;for(const e of E)if(e.state===1&&e.noise&&!e.dead&&!e.boxed&&dist(e.x,e.y,S.px,S.py)<Reff)nz++;
+  S.pread=S.psucc*Math.max(CFG.noiseFloor,Math.pow(1-CFG.noiseSpoil*(1-S.st.resist),nz));
+  /* crosstalk mirrors this frame's amplitude change onto the partner, then anything cancelled to nothing dissolves */
+  for(const e of E){
+    if(e.dead||e.state!==0||!e.xt)continue;
+    const p=findById(e.xt);
+    if(!p||p.dead||p.state!==0||p.xt!==e.id){
+      if(p&&e.id<p.id)S.fx.push({x:(e.x+p.x)/2,y:(e.y+p.y)/2,t:0,kind:11,life:0.3});
+      e.xt=0;continue;
+    }
+    if(e.xtT<=S.t){if(e.id<p.id)S.fx.push({x:(e.x+p.x)/2,y:(e.y+p.y)/2,t:0,kind:11,life:0.3});e.xt=0;continue;}
+    if(p.da){e.a=Math.max(0,Math.min(1,e.a+p.da));e.th=e.th>Math.PI/2?Math.PI-Math.asin(e.a):Math.asin(e.a);e.xtDir=p.da>0?1:-1;}
+  }
+  for(const e of E){if(!e.dead&&e.state===0&&e.a<=0)cancelled(e);}
+
+  /* soft separation so the crowd near Grover and the errors don't stack into one pixel */
+  const P=[],C=[],NEAR=[];
+  for(const e of E){if(e.dead||e.boxed)continue;if(e.state===1)P.push(e);else C.push(e);if(dist(e.x,e.y,S.px,S.py)<Reff+24)NEAR.push(e);}
+  for(let i=0;i<NEAR.length;i++){const a=NEAR[i];
+    for(let j=i+1;j<NEAR.length;j++){const b=NEAR[j];
+      let dx=b.x-a.x,dy=b.y-a.y;const dd=dx*dx+dy*dy,md=(a.brute||b.brute)?7:5;
+      if(dd<md*md){
+        if(dd<0.0001){a.x+=rnd(-1,1);a.y+=rnd(-1,1);continue;}
+        const d2=Math.sqrt(dd),push=(md-d2)*0.5;dx/=d2;dy/=d2;
+        a.x-=dx*push;a.y-=dy*push;b.x+=dx*push;b.y+=dy*push;
+      }
+    }
+  }
+
+  /* phase kicks: ELIMINATE. Autofire at the nearest wrong answer inside the window, where every tile shows its colour. No wrong answer, no shot. */
+  S.boltT-=dt;
+  if(S.boltT<=0){
+    const near=[];
+    for(const e of C){if(isRight(e))continue;const d=dist(e.x,e.y,S.px,S.py);if(d<Reff)near.push([d,e]);}
+    if(near.length){
+      near.sort(function(a,b){return a[0]-b[0];});
+      S.boltT=CFG.boltCd/S.st.rate;
+      const nb=S.nBolts+S.st.amount,bs=CFG.boltSpd*S.st.projSpeed;
+      for(let n=0;n<nb;n++){
+        const tg=near[n%near.length][1];
+        const dx=tg.x-S.px,dy=tg.y-S.py;
+        let a=Math.atan2(dy,dx);if(n>=near.length)a+=(n%2?1:-1)*0.15*Math.ceil(n/near.length);
+        S.bolts.push({x:S.px,y:S.py,vx:Math.cos(a)*bs,vy:Math.sin(a)*bs,t:CFG.boltLife,left:1+S.pierce+S.st.pierce,hit:[]});
+      }
+    }
+  }
+  for(let i=S.bolts.length-1;i>=0;i--){
+    const b=S.bolts[i];b.x+=b.vx*dt;b.y+=b.vy*dt;b.t-=dt;
+    for(const e of C){
+      if(e.dead||b.hit.indexOf(e.id)>=0)continue;
+      if(Math.abs(e.x-b.x)<4&&Math.abs(e.y-b.y)<4){b.hit.push(e.id);if(query(e,S.boltDmg,'elim')){b.left--;if(b.left<=0)break;}}
+    }
+    if(b.left<=0||b.t<=0)S.bolts.splice(i,1);
+  }
+
+  /* Hadamard sweep: an arc in front of Grover; every candidate in it takes one step. Holds when the arc is empty. */
+  const WP=S.wp;
+  if(WP.sweep.on){
+    WP.sweep.t-=dt;
+    if(WP.sweep.t<=0){
+      const face=Math.atan2(S.diry,S.dirx),half=WP.sweep.arc/2;
+      const inArc=function(e,ang){const a=Math.atan2(e.y-S.py,e.x-S.px);let df=a-ang;df=Math.atan2(Math.sin(df),Math.cos(df));return Math.abs(df)<=half;};
+      const hits=[];
+      for(const e of C){if(isRight(e)||dist(e.x,e.y,S.px,S.py)>=Reff)continue;if(inArc(e,face)||(WP.sweep.both&&inArc(e,face+Math.PI)))hits.push(e);}
+      if(hits.length){
+        WP.sweep.t=CFG.sweepCd/(WP.sweep.rate*S.st.rate);
+        for(const e of hits)query(e,WP.sweep.mul,'elim');
+        S.fx.push({x:S.px,y:S.py,t:0,kind:14,ang:face,arc:WP.sweep.arc,r:Reff,both:WP.sweep.both,life:0.28});sweepSfx();
+      }
+    }
+  }
+
+  /* ancilla orbit: AMPLIFY. The qubits circling Grover give a notch to every right answer they touch, each tile once per short while */
+  if(WP.orbit.on){
+    for(const e of C){
+      if(!isRight(e)||(e.orbT||0)>S.t||dist(e.x,e.y,S.px,S.py)>=Reff+6)continue;
+      for(const q of S.q){
+        const qx=S.px+Math.cos(q.oa)*q.r,qy=S.py+Math.sin(q.oa)*q.r;
+        if(Math.abs(qx-e.x)<CFG.orbitTouch&&Math.abs(qy-e.y)<CFG.orbitTouch){query(e,WP.orbit.mul,'amp');e.orbT=S.t+CFG.orbitCd/(WP.orbit.rate*S.st.rate);break;}
+      }
+    }
+  }
+
+  /* CNOT: CORRECT. A shot at the nearest uncoupled error in the window; a hit couples it to Grover and slows it, until the next read corrects it */
+  if(WP.pair.on){
+    WP.pair.t-=dt;
+    if(WP.pair.t<=0){
+      let held=0;for(const e of P)if(e.cpT>S.t)held++;
+      let best=null,bd=Reff;
+      if(held<WP.pair.max)for(const e of P){if(e.cpT>S.t)continue;const d=dist(e.x,e.y,S.px,S.py);if(d<bd){bd=d;best=e;}}
+      if(best){
+        WP.pair.t=CFG.pairCd/WP.pair.rate;
+        const a=Math.atan2(best.y-S.py,best.x-S.px),ps=CFG.pairSpd*S.st.projSpeed;
+        S.pairShots.push({x:S.px,y:S.py,vx:Math.cos(a)*ps,vy:Math.sin(a)*ps,t:CFG.pairLife,slot:'a'});pairSfx();
+      }
+    }
+  }
+  for(let i=S.pairShots.length-1;i>=0;i--){
+    const s=S.pairShots[i];s.x+=s.vx*dt;s.y+=s.vy*dt;s.t-=dt;let hit=false;
+    for(const e of P){
+      if(e.dead||e.cpT>S.t)continue;
+      const hr=e.brute?8:4;
+      if(Math.abs(e.x-s.x)<hr&&Math.abs(e.y-s.y)<hr){e.cpT=S.t+WP.pair.dur;e.flash=0.1;label(e.x,e.y-8,'COUPLED',PAL.mint);linkSfx();hit=true;break;}
+    }
+    if(hit||s.t<=0)S.pairShots.splice(i,1);
+  }
+
+  /* QFT pulse: AMPLIFY. An expanding ring that gives a notch to every right answer it crosses. Holds while no right answer is in the window. */
+  if(S.wave>0){
+    S.waveT-=dt;
+    if(S.waveT<=0){
+      let any=false;for(const e of C){if(isRight(e)&&dist(e.x,e.y,S.px,S.py)<Reff){any=true;break;}}
+      if(any){
+        S.waveT=Math.max(0.8,CFG.waveCd/(S.waveRate*S.st.rate));
+        S.pulses.push({x:S.px,y:S.py,r:0,max:(Math.max(Reff,40)*1.5+20)*S.st.area,hit:{}});waveSfx();
+      }
+    }
+  }
+  const wamp=CFG.waveAmp*S.waveDmgMul,wcan=CFG.waveCancel*S.waveDmgMul,band=(CFG.waveBand+S.waveBandAdd)*S.st.area;
+  for(let i=S.pulses.length-1;i>=0;i--){
+    const p=S.pulses[i];p.r+=CFG.waveSpd*dt;
+    if(p.r>p.max){S.pulses.splice(i,1);continue;}
+    for(const e of E){
+      if(e.dead||e.boxed||e.state!==0||p.hit[e.id])continue;
+      if(Math.abs(dist(e.x,e.y,p.x,p.y)-p.r)>band)continue;
+      p.hit[e.id]=1;query(e,S.waveDmgMul,'amp');
+    }
+  }
+
+  /* code block: an error gate. Dropped when an error is in the window; freezes what's inside, then opens: half the errors die, the rest are stunned */
+  if(WP.box.on){
+    WP.box.t-=dt;
+    if(WP.box.t<=0){
+      let any=false;for(const e of P){if(dist(e.x,e.y,S.px,S.py)<Reff){any=true;break;}}
+      if(any){
+        WP.box.t=CFG.boxCd/WP.box.rate;
+        S.boxes.push({x:S.px,y:S.py,half:WP.box.size*S.st.area/2,t:0,hold:WP.box.hold,pDie:WP.box.pDie});boxSfx();
+      }
+    }
+  }
+  for(let i=S.boxes.length-1;i>=0;i--){
+    const b=S.boxes[i];b.t+=dt;
+    if(b.t>=b.hold){
+      let died=0;
+      for(const e of E){
+        if(e.dead||!inBox(e,b))continue;
+        e.boxed=false;
+        if(e.state!==1)continue;
+        if(Math.random()<b.pDie){kill(e);died++;}else{e.flash=0.15;e.frozen=0.6;}
+      }
+      S.fx.push({x:b.x,y:b.y,t:0,kind:4,half:b.half});
+      if(died>0)label(b.x,b.y-b.half-6,died+' CORRECTED','#ffe08a');
+      boxOpenSfx();S.boxes.splice(i,1);
+    }
+  }
+
+  /* reset sink: pulls everything near it in, burns the errors that cross its horizon, then releases */
+  if(WP.hawk.on){
+    WP.hawk.t-=dt;
+    if(WP.hawk.t<=0){
+      WP.hawk.t=CFG.hawkCd/S.st.rate;
+      const cands=[];for(const e of E){if(!e.dead&&!e.boxed&&e.state===1&&dist(e.x,e.y,S.px,S.py)<CFG.hawkRange)cands.push(e);}
+      for(let k=0;k<WP.hawk.count;k++){
+        let hx,hy;
+        if(cands.length){const c=cands.splice(Math.floor(Math.random()*cands.length),1)[0];hx=c.x;hy=c.y;}
+        else{const a=Math.random()*TAU;hx=S.px+Math.cos(a)*50;hy=S.py+Math.sin(a)*50;}
+        S.holes.push({x:hx,y:hy,t:0,dur:WP.hawk.dur,pullR:CFG.hawkPull*WP.hawk.pull*S.st.area,hr:CFG.hawkHorizon*S.st.area,dmg:WP.hawk.dmg*S.st.damage,burst:CFG.hawkBurst*WP.hawk.burst*S.st.damage});
+      }
+      holeSfx();
+    }
+  }
+  for(let i=S.holes.length-1;i>=0;i--){
+    const h=S.holes[i];h.t+=dt;
+    const ending=h.t>=h.dur;
+    for(const e of E){
+      if(e.dead||e.boxed)continue;
+      const dx=h.x-e.x,dy=h.y-e.y,d=Math.hypot(dx,dy)||1;
+      if(d>h.pullR)continue;
+      if(ending){if(d<h.pullR*0.6)hurt(e,h.burst);continue;}
+      const str=(e.brute?0.5:1)*140*(1-d/h.pullR)*dt;
+      const step=Math.min(str,Math.max(0,d-2));
+      e.x+=dx/d*step;e.y+=dy/d*step;
+      if(d<h.hr+2)hurt(e,h.dmg*dt);
+    }
+    if(ending){S.fx.push({x:h.x,y:h.y,t:0,kind:5,r:h.pullR*0.6});S.holes.splice(i,1);}
+  }
+
+  for(let i=E.length-1;i>=0;i--)if(E[i].dead)E.splice(i,1);
+
+  /* lenses and sparks stay where they fell: you walk onto them on purpose, or around them */
+  for(let i=S.drops.length-1;i>=0;i--){
+    const d=S.drops[i];d.t+=dt;
+    const dd=dist(S.px,S.py,d.x,d.y);
+    if(dd<CFG.dropPickup){applyDrop(d);S.drops.splice(i,1);continue;}
+    if(d.t>CFG.dropLife)S.drops.splice(i,1);
+  }
+  /* signal flows to the algorithm that read it: a slow drift always, a fast pull once close */
+  const mag_r=CFG.magnet*S.st.magnet;
+  let gained=0;
+  for(let i=S.gems.length-1;i>=0;i--){
+    const g=S.gems[i];
+    const dx=S.px-g.x,dy=S.py-g.y,dd=Math.hypot(dx,dy)||1;
+    const sp=dd<mag_r?140:CFG.gemDrift;
+    g.x+=dx/dd*sp*dt;g.y+=dy/dd*sp*dt;
+    if(dd<CFG.pickup){gained+=g.v;S.gems.splice(i,1);}
+  }
+  if(gained>0){S.xp+=gained*S.st.growth;gemSfx();}
+  if(S.xp>=xpNeed(S.lvl)){S.xp-=xpNeed(S.lvl);S.lvl++;openLevelUp();}
+
+  for(let i=S.fx.length-1;i>=0;i--){const f=S.fx[i];f.t+=dt;if(f.t>(f.life||0.3))S.fx.splice(i,1);}
+  for(let i=S.labels.length-1;i>=0;i--){const l=S.labels[i];l.t+=dt;if(l.t>0.9)S.labels.splice(i,1);}
+  while(S.clicks.length&&S.t-S.clicks[0]>1)S.clicks.shift();
+}
+
+/* ---------- render ---------- */
+function ring(cx,cy,r,n,col1,col2,skip,rot){
+  rot=rot||0;
+  for(let i=0;i<n;i++){
+    if(skip&&(i+skip)%3===0)continue;
+    const a=rot+i/n*TAU;ctx.fillStyle=(i%2)?col1:col2;
+    ctx.fillRect(Math.round(cx+Math.cos(a)*r),Math.round(cy+Math.sin(a)*r),1,1);
+  }
+}
+function dotLine(x0,y0,x1,y1,col1,col2,phase){
+  const n=Math.max(1,Math.round(dist(x0,y0,x1,y1)/2));
+  for(let i=0;i<=n;i++){
+    if((i+phase)%2)continue;
+    const t=i/n;ctx.fillStyle=(i%4<2)?col1:col2;
+    ctx.fillRect(Math.round(x0+(x1-x0)*t),Math.round(y0+(y1-y0)*t),1,1);
+  }
+}
+function raceLine(x0,y0,x1,y1,col1,col2,shift){
+  const n=Math.max(1,Math.round(dist(x0,y0,x1,y1)/2));
+  for(let i=0;i<=n;i++){
+    const k=((i+shift)%4+4)%4;if(k>1)continue;
+    const t=i/n;ctx.fillStyle=k===0?col1:col2;
+    ctx.fillRect(Math.round(x0+(x1-x0)*t),Math.round(y0+(y1-y0)*t),1,1);
+  }
+}
+function dotRect(cx,cy,half,col,phase){
+  const side=half*2,per=Math.round(side*4/2);
+  ctx.fillStyle=col;
+  for(let i=0;i<per;i++){
+    if((i+phase)%2)continue;
+    const s=i*2;let x,y;
+    if(s<side){x=cx-half+s;y=cy-half;}
+    else if(s<side*2){x=cx+half;y=cy-half+(s-side);}
+    else if(s<side*3){x=cx+half-(s-side*2);y=cy+half;}
+    else{x=cx-half;y=cy+half-(s-side*3);}
+    ctx.fillRect(Math.round(x),Math.round(y),1,1);
+  }
+}
+/* a candidate's bit tile: a 7x7 frame with its four bits as quadrants inside, a 1 solid and a 0 a single dim pixel.
+   Solidity follows amplitude, hue follows phase. A flip inverts the top row of bits first, then the bottom. */
+const QPOS=[[-2,-2],[1,-2],[-2,1],[1,1]];
+/* anything unresolved: the matrix under it is sheared row by row, a ripple whose reach and depth grow with amplitude.
+   w and rb widen it for bigger things. Only the window resolves. The rows are drawn from the register tile itself,
+   never copied back from the screen, and only a budget of warps per frame get the full treatment. */
+let CAMX=0,CAMY=0,WINX=0,WINY=0,WINR=0,warpN=0;
+function warpRow(ff,y,x0,x1,sh){
+  const wx=x1-x0;if(wx<=0)return;
+  const ty=(((y+CAMY)%FT)+FT)%FT,tx=(((x0+CAMX)%FT)+FT)%FT,n1=Math.min(wx,FT-tx);
+  ctx.fillStyle=PAL.bg;ctx.fillRect(x0,y,wx,1);
+  ctx.drawImage(ff,tx,ty,n1,1,x0+sh,y,n1,1);
+  if(n1<wx)ctx.drawImage(ff,0,ty,wx-n1,1,x0+sh+n1,y,wx-n1,1);
+}
+function warp(cx,cy,a,seed,w,rb){
+  w=w||22;rb=rb||5;
+  const r=rb+Math.round(a*4),x0=cx-(w>>1),y0=cy-r,h=r*2+1;
+  const sx=Math.max(0,x0),sy=Math.max(0,y0),ex=Math.min(W,x0+w),ey=Math.min(H,y0+h);
+  if(ex-sx<4||ey-sy<3)return;
+  const amp=1.5+3.5*a,ph=S.t*5+seed*0.7;
+  if(warpN>=CFG.warpMax){ctx.fillStyle=PAL.neutral;ctx.globalAlpha=0.35;ctx.fillRect(cx-2,cy,5,1);ctx.fillRect(cx,cy-2,1,5);ctx.globalAlpha=1;return;}
+  warpN++;
+  const ff=REG[Math.floor(S.t*9)%6];
+  for(let y=sy;y<ey;y++){
+    const u=(y-cy)/r,sh=Math.round(Math.sin(u*Math.PI*1.5+ph)*amp*(1-u*u));
+    if(sh===0)continue;
+    /* keep the shear outside the window: split the row around the chip's circle */
+    const dy=y-WINY;
+    if(WINR>1&&Math.abs(dy)<WINR){
+      const hw=Math.sqrt(WINR*WINR-dy*dy),l=Math.floor(WINX-hw),rr=Math.ceil(WINX+hw);
+      if(ex<=l||sx>=rr)warpRow(ff,y,sx,ex,sh);
+      else{if(sx<l)warpRow(ff,y,sx,l,sh);if(ex>rr)warpRow(ff,y,rr,ex,sh);}
+    }else warpRow(ff,y,sx,ex,sh);
+  }
+  /* the crease: the shear profile itself, drawn as a faint wavering line through the warp */
+  ctx.fillStyle=PAL.neutral;ctx.globalAlpha=0.45;
+  for(let y=sy;y<ey;y++){const u=(y-cy)/r,sh=Math.sin(u*Math.PI*1.5+ph)*amp*(1-u*u);ctx.fillRect(cx+Math.round(sh*1.5),y,1,1);}
+  ctx.globalAlpha=1;
+}
+/* a hint of what the warp is: a wash of the thing's own colour */
+function hint(cx,cy,col,w,h,al){ctx.fillStyle=col;ctx.globalAlpha=al;ctx.fillRect(cx-(w>>1),cy-(h>>1),w,h);ctx.globalAlpha=1;}
+function tile(cx,cy,hue,a,bval,loud,flipRows,hot){
+  ctx.globalAlpha=0.25+0.75*a;ctx.fillStyle=hue;
+  ctx.fillRect(cx-3,cy-3,7,1);ctx.fillRect(cx-3,cy+3,7,1);ctx.fillRect(cx-3,cy-2,1,5);ctx.fillRect(cx+3,cy-2,1,5);
+  for(let i=0;i<4;i++){
+    let on=((bval>>(3-i))&1)===1;
+    if(flipRows){if(i<2&&flipRows>=1)on=!on;if(i>=2&&flipRows>=3)on=!on;}
+    if(((i*37)%4)/4>a+0.3)continue;
+    const dx=cx+QPOS[i][0],dy=cy+QPOS[i][1];
+    if(on)ctx.fillRect(dx,dy,2,2);
+    else{ctx.globalAlpha=(0.25+0.75*a)*0.45;ctx.fillRect(dx,dy,1,1);ctx.globalAlpha=0.25+0.75*a;}
+  }
+  ctx.globalAlpha=1;
+  if(loud&&hot){
+    /* a loud wrong answer: a spiked ring that flickers hot, and a bright outline every other frame. It bites. */
+    const fl=Math.floor(S.t*10)%2===0;
+    ctx.fillStyle=fl?'#d8ccff':hue;
+    for(let k=0;k<8;k++){const an=k*TAU/8-S.t*2.5,r1=k%2?6:8;ctx.fillRect(Math.round(cx+Math.cos(an)*r1),Math.round(cy+Math.sin(an)*r1),1,1);if(k%2===0)ctx.fillRect(Math.round(cx+Math.cos(an)*(r1-1)),Math.round(cy+Math.sin(an)*(r1-1)),1,1);}
+    if(fl){ctx.fillStyle='#d8ccff';ctx.fillRect(cx-4,cy-4,9,1);ctx.fillRect(cx-4,cy+4,9,1);ctx.fillRect(cx-4,cy-3,1,7);ctx.fillRect(cx+4,cy-3,1,7);}
+  }else if(loud){ctx.fillStyle=hue;ctx.globalAlpha=0.5;for(let k=0;k<8;k++){const an=k*TAU/8+S.t*1.5;ctx.fillRect(Math.round(cx+Math.cos(an)*6),Math.round(cy+Math.sin(an)*6),1,1);}ctx.globalAlpha=1;}
+}
+function render(){
+  const jx=S.shake>0?rnd(-1.5,1.5):0,jy=S.shake>0?rnd(-1.5,1.5):0;
+  const camx=Math.round(S.px-W/2+jx),camy=Math.round(S.py-H/2+jy);
+  const Reff=S.blink>0?0:S.R;
+  const ghost=Math.floor(S.t*10)%2===0;
+  const qcx=Math.round(S.px-camx),qcy=Math.round(S.py-camy);
+  CAMX=camx;CAMY=camy;WINX=qcx;WINY=qcy;WINR=Reff;warpN=0;
+
+  /* phosphor persistence: the last frame fades instead of vanishing */
+  ctx.fillStyle=PAL.bg;ctx.globalAlpha=Math.min(1,1-Math.pow(0.42,frameDt*60));ctx.fillRect(0,0,W,H);ctx.globalAlpha=1;
+
+  /* the register outside the window: cells with bits flipping, gold plates and rods of the machine around the chip */
+  const ff=REG[Math.floor(S.t*9)%6];
+  ctx.save();ctx.beginPath();ctx.rect(0,0,W,H);if(Reff>1)ctx.arc(qcx,qcy,Reff,0,TAU);ctx.clip('evenodd');
+  const fox=((-camx%FT)+FT)%FT,foy=((-camy%FT)+FT)%FT;
+  for(let x=fox-FT;x<W;x+=FT)for(let y=foy-FT;y<H;y+=FT)ctx.drawImage(ff,x,y);
+  ctx.fillStyle='rgba(201,162,74,0.14)';
+  for(let x=((-camx%192)+192)%192;x<W;x+=192)ctx.fillRect(x,0,1,H);
+  ctx.restore();
+
+  /* inside the window: the chip itself, qubits and resonators on the ground plane. A compiled gate pivots it a quarter turn: a change of basis. */
+  if(Math.abs(S.gridRot)>0.004)S.gridRot*=Math.pow(0.015,frameDt);else S.gridRot=0;
+  if(Reff>1){
+    const cf=CHIP[Math.floor(S.t*6)%3];
+    ctx.save();ctx.beginPath();ctx.arc(qcx,qcy,Reff,0,TAU);ctx.clip();
+    ctx.translate(qcx,qcy);if(S.gridRot!==0)ctx.rotate(S.gridRot);
+    const ext=Math.ceil(Reff)+2,ox=-Math.round(((S.px%CT)+CT)%CT),oy=-Math.round(((S.py%CT)+CT)%CT);
+    for(let x=ox-CT;x<ext;x+=CT){if(x+CT<-ext)continue;for(let y=oy-CT;y<ext;y+=CT){if(y+CT<-ext)continue;ctx.drawImage(cf,x,y);}}
+    ctx.restore();
+    /* matrix brackets at the window's sides, and index ticks along its top edge */
+    const bh=Math.round(Reff*0.9),bx1=Math.round(qcx-Reff-4),bx2=Math.round(qcx+Reff+4);
+    ctx.fillStyle='rgba(127,223,255,0.55)';
+    ctx.fillRect(bx1,qcy-bh,1,bh*2);ctx.fillRect(bx1,qcy-bh,3,1);ctx.fillRect(bx1,qcy+bh,3,1);
+    ctx.fillRect(bx2,qcy-bh,1,bh*2);ctx.fillRect(bx2-2,qcy-bh,3,1);ctx.fillRect(bx2-2,qcy+bh,3,1);
+    /* readout sweep: a bright ring expands from the centre as tiles are read, with a faint dither behind it */
+    if(S.reading){
+      const rr=Reff*Math.min(1,S.read);
+      ctx.save();ctx.beginPath();ctx.arc(qcx,qcy,rr,0,TAU);ctx.clip();ctx.globalAlpha=0.35;
+      const rx0=Math.floor((qcx-rr)/16)*16,ry0=Math.floor((qcy-rr)/16)*16;
+      for(let x=rx0;x<qcx+rr;x+=16)for(let y=ry0;y<qcy+rr;y+=16)ctx.drawImage(CYD,x,y);
+      ctx.globalAlpha=1;ctx.restore();
+      ring(qcx,qcy,rr,Math.max(16,Math.round(rr*1.5)),PAL.phosHi,PAL.phos,0);
+    }
+  }
+
+  /* the Readout: a needle fixed to the view with an instrument head, a scanning beam ahead of it, a ghost a second ahead, and the read side tinted */
+  if(S.ro.on){
+    const nx=Math.round(S.ro.p*W),hx=nx-(S.ro.recoil>0?2:0);
+    ctx.save();ctx.beginPath();ctx.rect(nx,0,CFG.roBand,H);ctx.clip();ctx.globalAlpha=0.5;
+    for(let x=Math.floor(nx/16)*16;x<nx+CFG.roBand;x+=16)for(let y=0;y<H;y+=16)ctx.drawImage(REDD,x,y);
+    ctx.globalAlpha=0.55;ctx.fillStyle='#ffffff';
+    for(let k=0;k<4;k++){const sy=Math.round((S.t*140+k*H/4)%H);ctx.fillRect(nx,sy,CFG.roBand,1);}
+    ctx.globalAlpha=1;ctx.restore();
+    ctx.fillStyle='rgba(255,59,92,0.12)';ctx.fillRect(0,0,nx,H);
+    const gx=Math.round((S.ro.p+CFG.roSpeed)*W);
+    ctx.fillStyle='rgba(255,59,92,0.3)';for(let y=0;y<H;y+=3)ctx.fillRect(gx,y,1,1);
+    ctx.fillStyle=PAL.red;ctx.fillRect(nx,0,1,H);
+    const lit=S.ro.flash>0?'#ffffff':PAL.red;
+    ctx.fillStyle=PAL.red;ctx.fillRect(hx-3,4,7,1);ctx.fillRect(hx-3,5,1,4);ctx.fillRect(hx+3,5,1,4);
+    ctx.fillStyle=lit;ctx.fillRect(hx-1,6,3,2);ctx.fillRect(hx,9,1,2);
+  }
+
+  /* phase-flip zones: the lattice drawn as its own negative, a rotor turning the wrong way at the heart, a ring that runs backwards */
+  for(const z of S.zones){
+    const zx=z.x-camx,zy=z.y-camy,fade=Math.min(1,z.t*2,(CFG.zoneLife-z.t)*2);
+    ctx.save();ctx.beginPath();ctx.arc(zx,zy,z.r,0,TAU);ctx.clip();
+    ctx.globalAlpha=fade;
+    ctx.fillStyle='rgba(122,108,255,0.12)';ctx.fillRect(zx-z.r,zy-z.r,z.r*2,z.r*2);
+    ctx.fillStyle='rgba(180,170,255,0.45)';
+    const g=8,zox=((-camx%g)+g)%g,zoy=((-camy%g)+g)%g;
+    for(let x=zox;x<W;x+=g){if(x<zx-z.r||x>zx+z.r)continue;ctx.fillRect(x,Math.round(zy-z.r),1,Math.round(z.r*2));}
+    for(let y=zoy;y<H;y+=g){if(y<zy-z.r||y>zy+z.r)continue;ctx.fillRect(Math.round(zx-z.r),y,Math.round(z.r*2),1);}
+    ctx.globalAlpha=1;ctx.restore();
+    const ra=-S.t*3,rc=Math.cos(ra),rs=Math.sin(ra);
+    for(let r=1;r<=3;r++){ctx.fillStyle=r===3?'#ffffff':PAL.unmarked;ctx.fillRect(Math.round(zx+rc*r),Math.round(zy+rs*r),1,1);}
+    ring(zx,zy,z.r,Math.round(z.r*1.2),'rgba(122,108,255,'+(0.5*fade).toFixed(2)+')','rgba(180,170,255,'+(0.8*fade).toFixed(2)+')',2,-S.t*1.4);
+  }
+
+  /* blocks: marching-ants square with a question mark */
+  const antPh=Math.floor(S.t*8)%2;
+  for(const b of S.boxes){
+    const cx=b.x-camx,cy=b.y-camy;
+    dotRect(cx,cy,b.half,'rgba(255,224,138,0.7)',antPh);
+    const inner=Math.max(2,b.half-3);
+    dotRect(cx,cy,inner,'rgba(255,224,138,0.25)',1-antPh);
+    if(Math.floor(S.t*3)%2===0)spr(SPR.qmark,Math.round(cx)-2,Math.round(cy)-3,{'#':'#ffe08a'});
+  }
+
+  /* sinks: dark disc, fast dotted horizon, faint pull ring */
+  for(const h of S.holes){
+    const cx=h.x-camx,cy=h.y-camy,r=Math.round(h.hr);
+    const life=1-h.t/h.dur;
+    ring(cx,cy,h.pullR,Math.round(h.pullR*0.8),'rgba(127,223,255,'+(0.12*life).toFixed(2)+')','rgba(127,223,255,'+(0.25*life).toFixed(2)+')',1,-S.t*0.5);
+    ctx.fillStyle='#000000';
+    for(let dy=-r;dy<=r;dy++)for(let dx=-r;dx<=r;dx++)if(dx*dx+dy*dy<=r*r)ctx.fillRect(Math.round(cx)+dx,Math.round(cy)+dy,1,1);
+    ring(cx,cy,r+1,Math.max(12,r*5),'rgba(255,255,255,0.9)','rgba(127,223,255,0.9)',1,S.t*9);
+    for(let k=0;k<3;k++){const a=S.t*6+k*2.1;const rr=r+3+k;ctx.fillStyle='#ffe08a';ctx.fillRect(Math.round(cx+Math.cos(a)*rr),Math.round(cy+Math.sin(a)*rr*0.6),1,1);}
+  }
+
+  /* candidates. Inside the window they resolve into bit tiles whose hue tells marked from unmarked. Outside it they are
+     not resolved: only a warp in the matrix where they stand, louder ones warping more, tinted while the oracle speaks. */
+  for(const e of S.enemies){
+    if(e.state!==0)continue;
+    if(e.boxed&&ghost)continue;
+    const cx=Math.round(e.x-camx),cy=Math.round(e.y-camy);
+    if(cx<-12||cx>W+12||cy<-12||cy>H+12)continue;
+    const inWin=dist(e.x,e.y,S.px,S.py)<Reff;
+    /* inside a phase-flip zone the hue reads inverted around the wheel: that is what a phase flip means */
+    let shown=e.marked;if(inZone(e.x,e.y))shown=!shown;
+    if(!inWin&&e.flash<=0&&!(e.hit>0)){
+      warp(cx,cy,e.a,e.id);
+      if(S.oracle>0){ctx.fillStyle=shown?PAL.marked:PAL.unmarked;ctx.globalAlpha=0.22*Math.min(1,S.oracle/0.3);ctx.fillRect(cx-6,cy-5,13,11);ctx.globalAlpha=1;}
+      if(e.xt&&e.xtT>S.t){ctx.fillStyle='#ff6ad5';ctx.fillRect(cx-4,cy-4,2,1);ctx.fillRect(cx-4,cy-4,1,2);ctx.fillRect(cx+3,cy+4,2,1);ctx.fillRect(cx+4,cy+3,1,2);}
+      continue;
+    }
+    const hue=e.flash>0?'#ffffff':(shown?PAL.marked:PAL.unmarked);
+    const flipRows=e.flipT>0?Math.min(5,Math.ceil((1-e.flipT/0.3)*6)):0;
+    /* a loud wrong answer jitters: it is the one tile in the crowd that will hurt */
+    const hot=!shown&&e.a>=CFG.readLoud;
+    const jx=hot?((Math.floor(S.t*12)+e.id)%3)-1:0,jy=hot?((Math.floor(S.t*12)+e.id*7)%3)-1:0;
+    tile(cx+jx,cy+jy,hue,e.a,e.id&15,e.a>=CFG.readLoud,flipRows,hot);
+    if(e.xt&&e.xtT>S.t){ctx.fillStyle='#ff6ad5';ctx.fillRect(cx-4,cy-4,2,1);ctx.fillRect(cx-4,cy-4,1,2);ctx.fillRect(cx+3,cy+4,2,1);ctx.fillRect(cx+4,cy+3,1,2);}
+  }
+  /* crosstalk links: dashes racing from one tile to the other, a coupler of facing brackets at the midpoint */
+  for(const e of S.enemies){
+    if(e.state!==0||e.dead||!e.xt||e.xtT<=S.t||e.id>e.xt)continue;
+    const p=findById(e.xt);if(!p||p.dead)continue;
+    raceLine(e.x-camx,e.y-camy,p.x-camx,p.y-camy,'rgba(255,106,213,0.95)','rgba(255,179,234,0.6)',Math.floor(S.t*24)*e.xtDir);
+    const mx=Math.round((e.x+p.x)/2-camx),my=Math.round((e.y+p.y)/2-camy);
+    ctx.fillStyle='#ff6ad5';
+    ctx.fillRect(mx-2,my-2,1,5);ctx.fillRect(mx-3,my-2,1,1);ctx.fillRect(mx-3,my+2,1,1);
+    ctx.fillRect(mx+2,my-2,1,5);ctx.fillRect(mx+3,my-2,1,1);ctx.fillRect(mx+3,my+2,1,1);
+  }
+
+  /* window as a bezel: rotating dashes, fixed ticks every thirty degrees, a slow sweep inside */
+  if(Reff>0){
+    const N=Math.max(24,Math.round(Reff*0.9)),rot=S.t*0.6,ph=Math.floor(S.t*6);
+    for(let i=0;i<N;i++){
+      if((i+ph)%3===0)continue;
+      const a=rot+i/N*TAU;
+      ctx.fillStyle=(i%2)?'rgba(127,223,255,0.4)':'rgba(127,223,255,0.75)';
+      ctx.fillRect(Math.round(qcx+Math.cos(a)*Reff),Math.round(qcy+Math.sin(a)*Reff),1,1);
+    }
+    ctx.fillStyle=S.reading?PAL.phosHi:(S.inverted?PAL.unmarked:PAL.phos);
+    for(let k=0;k<12;k++){const a=k*TAU/12,c=Math.cos(a),s=Math.sin(a);for(let r=Reff-1;r<=Reff+2;r++)ctx.fillRect(Math.round(qcx+c*r),Math.round(qcy+s*r),1,1);}
+    const sw=(S.inverted?-1:1)*S.t*TAU/2.5,sc=Math.cos(sw),ss=Math.sin(sw);
+    ctx.fillStyle=S.inverted?'rgba(122,108,255,0.3)':'rgba(127,223,255,0.18)';
+    for(let r=5;r<Reff;r+=2)ctx.fillRect(Math.round(qcx+sc*r),Math.round(qcy+ss*r),1,1);
+  }
+
+  /* QFT pulses: an expanding ring with interference fringes and a fainter trailing ring */
+  for(const p of S.pulses){
+    const a=Math.min(1,1.2*(1-p.r/p.max)),cx=p.x-camx,cy=p.y-camy,n=Math.max(32,Math.round(p.r*1.8));
+    for(let i=0;i<n;i++){
+      const ang=i/n*TAU,fr=0.35+0.65*Math.max(0,Math.cos(ang*8));
+      ctx.fillStyle='rgba(220,245,255,'+(a*fr).toFixed(2)+')';ctx.fillRect(Math.round(cx+Math.cos(ang)*p.r),Math.round(cy+Math.sin(ang)*p.r),1,1);
+      if(i%2===0){ctx.fillStyle='rgba(127,223,255,'+(a*fr*0.45).toFixed(2)+')';ctx.fillRect(Math.round(cx+Math.cos(ang)*(p.r-3)),Math.round(cy+Math.sin(ang)*(p.r-3)),1,1);}
+    }
+  }
+
+  /* CNOT couplings: a dotted line from Grover to every error it holds, waiting for the read */
+  const linkPh=Math.floor(S.t*12)%2;
+  for(const e of S.enemies){
+    if(e.state!==1||e.dead||!(e.cpT>S.t))continue;
+    dotLine(qcx,qcy,e.x-camx,e.y-camy,'rgba(154,255,214,0.9)','rgba(154,255,214,0.45)',linkPh);
+    const ex=Math.round(e.x-camx),ey=Math.round(e.y-camy);ctx.fillStyle=PAL.mint;ctx.fillRect(ex-5,ey-5,2,1);ctx.fillRect(ex-5,ey-5,1,2);ctx.fillRect(ex+4,ey+4,2,1);ctx.fillRect(ex+5,ey+3,1,2);
+  }
+
+  /* signal and drops */
+  const palG={'#':'#9affd6','o':'#ffffff'};
+  for(const q of S.gems){
+    const cx=Math.round(q.x-camx),cy=Math.round(q.y-camy);
+    if(cx<-6||cx>W+6||cy<-6||cy>H+6)continue;
+    if(dist(q.x,q.y,S.px,S.py)>=Reff){warp(cx,cy,0.3,q.ph*10,14,3);hint(cx,cy,'#9affd6',q.v>1?8:6,q.v>1?8:6,0.2);continue;}
+    const bob=Math.floor(S.t*3+q.ph)%2;
+    if(q.v>1)spr(SPR.gemBig,cx-2,cy-2+bob,palG);
+    else if(q.v<1){ctx.fillStyle='#9affd6';ctx.fillRect(cx,cy+bob,1,1);}
+    else spr(SPR.gem,cx-1,cy-1+bob,palG);
+  }
+  const palW={'#':'#7fdfff','o':'#ffffff'},palN={'#':'#ff3b5c','o':'#ffffff'},palS={'#':'#ffe08a','o':'#ffffff'};
+  const pulse=Math.floor(S.t*4)%2===0;
+  for(const d of S.drops){
+    if(d.t>CFG.dropLife-5&&Math.floor(d.t*8)%2===0)continue;
+    const bob=Math.round(Math.sin(S.t*4+d.ph));
+    const cx=Math.round(d.x-camx),cy=Math.round(d.y-camy)+bob;
+    if(cx<-10||cx>W+10||cy<-10||cy>H+10)continue;
+    if(dist(d.x,d.y,S.px,S.py)>=Reff){warp(cx,cy,0.45,d.ph*10);hint(cx,cy,d.kind==='wide'?'#7fdfff':'#ff3b5c',12,9,0.18);continue;}
+    if(d.kind==='wide'){if(pulse)ring(cx,cy,6,16,'rgba(127,223,255,0.35)','rgba(127,223,255,0.35)',0);spr(SPR.lensW,cx-3,cy-3,palW);}
+    else if(d.kind==='narrow'){if(!pulse)ring(cx,cy,6,16,'rgba(255,59,92,0.45)','rgba(255,59,92,0.45)',0);spr(SPR.lensN,cx-3,cy-3,palN);}
+  }
+
+  /* errors: thermal noise as static that walks, the bug as a digit that can't decide, the simulator as a block that counts */
+  const greys=['#5a6080','#8a90a8','#b8bcd0','#e8ecff'];
+  for(const e of S.enemies){
+    if(e.state!==1)continue;
+    if(e.boxed&&ghost)continue;
+    const cx=Math.round(e.x-camx),cy=Math.round(e.y-camy);
+    if(cx<-12||cx>W+12||cy<-12||cy>H+12)continue;
+    const linked=e.link&&e.linkT>S.t,hot=e.flash>0;
+    /* outside the window an error is a warp too, with a wash of its colour; a hit from a gate shows it for a moment */
+    if(!hot&&dist(e.x,e.y,S.px,S.py)>=Reff){
+      if(e.brute){warp(cx,cy,1,e.id,34,9);hint(cx,cy,'#ff3b5c',16,16,0.2);}
+      else if(e.bug){warp(cx,cy,0.5,e.id);hint(cx,cy,PAL.amber,8,8,0.2);}
+      else{warp(cx,cy,0.5,e.id);hint(cx,cy,linked?'#ff9cd6':'#b8bcd0',8,8,0.14);}
+      continue;
+    }
+    if(e.brute){
+      const stomp=Math.floor(S.t*2.5)%2===0?-1:0,by=cy+stomp;
+      ctx.fillStyle='rgba(0,0,0,0.5)';ctx.fillRect(cx-6,cy+8,13,2);
+      ctx.fillStyle='#000000';ctx.fillRect(cx-7,by-7,15,15);
+      ctx.fillStyle=hot?'#ffffff':'#c8ccdd';
+      for(let k=0;k<36;k++){const on=k<32?((e.bits[0]>>k)&1):((e.bits[1]>>(k-32))&1);if(!on)continue;const bx=cx-6+(k%6)*2,bby=by-6+Math.floor(k/6)*2;if(Math.abs(bby-by)<=1)continue;ctx.fillRect(bx,bby,2,2);}
+      for(let b=0;b<4;b++){const on=(e.cnt>>(3-b))&1;ctx.fillStyle=on?(hot?'#ffffff':PAL.marked):'#2a2f44';ctx.fillRect(cx-6+b*4,by-1,2,2);}
+      ctx.fillStyle=hot?'#ffffff':'#6a7090';ctx.fillRect(cx-7,by-7,15,1);ctx.fillRect(cx-7,by+7,15,1);ctx.fillRect(cx-7,by-6,1,13);ctx.fillRect(cx+7,by-6,1,13);
+    }
+    else if(e.bug){
+      const digit=e.frozen>0?e.digit:((Math.floor(S.t*12)+e.ph)%2),jx=e.frozen>0?0:Math.floor(rnd(-1,2)),jy=e.frozen>0?0:Math.floor(rnd(-1,2));
+      spr(digit?SPR.d1:SPR.d0,cx-2+jx,cy-3+jy,{'#':hot||e.frozen>0?'#ffffff':PAL.amber});
+    }
+    else{
+      /* static that walks: a wobbling outline around an interior redrawn every frame */
+      for(let k=0;k<10;k++){const a=k*TAU/10,rr=3.5+((S.frame*7+k*13)%3-1)*0.5;ctx.fillStyle=hot?'#ffffff':(linked?'#ff9cd6':greys[1]);ctx.fillRect(Math.round(cx+Math.cos(a)*rr),Math.round(cy+Math.sin(a)*rr),1,1);}
+      for(let yy=-2;yy<=2;yy++)for(let xx=-2;xx<=2;xx++){const r=Math.random();if(r<0.4)continue;ctx.fillStyle=hot?'#ffffff':(r>0.92?PAL.foam[Math.floor(Math.random()*6)]:greys[Math.floor(Math.random()*4)]);ctx.fillRect(cx+xx,cy+yy,1,1);}
+    }
+  }
+
+  /* kicks and CNOT shots */
+  for(const b of S.bolts){
+    const bx=Math.round(b.x-camx),by=Math.round(b.y-camy);
+    ctx.fillStyle='#7fdfff';ctx.fillRect(Math.round(bx-b.vx/CFG.boltSpd*2),Math.round(by-b.vy/CFG.boltSpd*2),1,1);
+    ctx.fillStyle='#e8fbff';ctx.fillRect(bx,by,1,1);
+  }
+  for(const s of S.pairShots){
+    const sx=Math.round(s.x-camx),sy=Math.round(s.y-camy);
+    ctx.fillStyle=s.slot==='a'?'#7fdfff':'#d58cff';ctx.fillRect(sx-1,sy,3,1);ctx.fillRect(sx,sy-1,1,3);
+  }
+
+  /* fx */
+  for(const f of S.fx){
+    const cx=Math.round(f.x-camx),cy=Math.round(f.y-camy);
+    if(f.kind===0){
+      if(f.t<0.08){ctx.fillStyle='#ffffff';ctx.fillRect(cx-1,cy,3,1);ctx.fillRect(cx,cy-1,1,3);}
+      else if(f.t<0.16){ctx.fillStyle='#9affd6';ctx.fillRect(cx-3,cy,1,1);ctx.fillRect(cx+3,cy,1,1);ctx.fillRect(cx,cy-3,1,1);ctx.fillRect(cx,cy+3,1,1);}
+      else{ctx.fillStyle='rgba(154,255,214,0.4)';ctx.fillRect(cx-4,cy,1,1);ctx.fillRect(cx+4,cy,1,1);ctx.fillRect(cx,cy-4,1,1);ctx.fillRect(cx,cy+4,1,1);}
+    }else if(f.kind===2){
+      const r=Math.round(f.t*300),a=(0.5*(1-f.t/0.3)).toFixed(2);
+      ring(cx,cy,r,48,'rgba(255,255,255,'+a+')','rgba(255,255,255,'+a+')',0);
+    }else if(f.kind===3){
+      const r=Math.round(6+f.t*60),a=(0.8*(1-f.t/0.3)).toFixed(2);
+      ring(cx,cy,r,36,'rgba('+f.col+','+a+')','rgba('+f.col+','+a+')',0);
+    }else if(f.kind===4){
+      const a=(0.9*(1-f.t/0.3)).toFixed(2);
+      ctx.fillStyle='rgba(255,224,138,'+(a*0.25).toFixed(2)+')';ctx.fillRect(Math.round(cx-f.half),Math.round(cy-f.half),Math.round(f.half*2),Math.round(f.half*2));
+      dotRect(cx,cy,f.half+Math.round(f.t*20),'rgba(255,255,255,'+a+')',0);
+    }else if(f.kind===5){
+      const r=Math.round(f.r*(f.t/0.3)),a=(0.9*(1-f.t/0.3)).toFixed(2);
+      ring(cx,cy,r,Math.max(24,r),'rgba(255,255,255,'+a+')','rgba(255,224,138,'+a+')',0);
+    }else if(f.kind===7){
+      /* dissolution: the measured colour drifts outward, slows, and turns back into noise before fading */
+      const u=Math.min(1,f.t/f.life),slow=f.t*(1-0.5*u);
+      for(let q=0;q<f.pts.length;q++){const p=f.pts[q];ctx.fillStyle=u<0.35?f.col:PAL.foam[q%6];ctx.globalAlpha=1-u;ctx.fillRect(Math.round(p[0]+p[2]*slow-camx),Math.round(p[1]+p[3]*slow-camy),1,1);}
+      ctx.globalAlpha=1;
+    }else if(f.kind===8){
+      /* constructive: a ripple converging on the tile */
+      const u=f.t/f.life,r=Math.round(11-9*u),a=(0.7*(1-u*0.5)).toFixed(2);
+      ring(cx,cy,r,Math.max(12,r*3),'rgba(255,204,85,'+a+')','rgba(255,240,180,'+a+')',0);
+    }else if(f.kind===9){
+      /* destructive: two wavefronts crossing through the tile */
+      const u=f.t/f.life,o=Math.round(6-12*u);
+      ctx.fillStyle='rgba(122,108,255,'+(0.8*(1-u)).toFixed(2)+')';
+      for(let k=-5;k<=5;k++){ctx.fillRect(cx+k,cy+o+k,1,1);ctx.fillRect(cx+k,cy-o-k,1,1);}
+    }else if(f.kind===10){
+      /* a bit flip: the tile's frame inverts and jumps */
+      const u=f.t/f.life;
+      dotRect(cx,cy,4+Math.round(u*8),'rgba(255,179,71,'+(0.9*(1-u)).toFixed(2)+')',0);
+    }else if(f.kind===11){
+      /* a coupler popping: its dashes fly apart */
+      const u=f.t/f.life,r=Math.round(2+u*10);ctx.fillStyle='rgba(255,106,213,'+(0.9*(1-u)).toFixed(2)+')';
+      for(let k=0;k<6;k++){const a=k*TAU/6;ctx.fillRect(Math.round(cx+Math.cos(a)*r),Math.round(cy+Math.sin(a)*r),1,1);}
+    }else if(f.kind===12){
+      /* the simulator's bits: solid squares that fly out, land, and lie there before dissolving */
+      const land=Math.min(f.t,0.35),fade=f.t>0.8?1-(f.t-0.8)/0.3:1;
+      ctx.fillStyle='rgba(232,236,255,'+Math.max(0,fade).toFixed(2)+')';
+      for(const p of f.pts)ctx.fillRect(Math.round(p[0]+p[2]*land-camx),Math.round(p[1]+p[3]*land-camy),2,2);
+    }else if(f.kind===13){
+      /* the register closing: the frame goes white */
+      ctx.fillStyle='rgba(255,255,255,'+(0.85*(1-f.t/f.life)).toFixed(2)+')';ctx.fillRect(0,0,W,H);
+    }else if(f.kind===14){
+      /* the Hadamard sweep: an arc of dots racing out to the window's edge, in front of Grover and, levelled, behind */
+      const u=f.t/f.life,rr=f.r*(0.3+0.7*u),n=Math.max(8,Math.round(f.arc*rr*0.5));
+      ctx.fillStyle='rgba(232,251,255,'+(0.95*(1-u)).toFixed(2)+')';
+      const sides=f.both?[f.ang,f.ang+Math.PI]:[f.ang];
+      for(const base of sides)for(let k=0;k<=n;k++){const a=base-f.arc/2+f.arc*k/n;ctx.fillRect(Math.round(cx+Math.cos(a)*rr),Math.round(cy+Math.sin(a)*rr),1,1);if(k%3===0)ctx.fillRect(Math.round(cx+Math.cos(a)*rr*0.7),Math.round(cy+Math.sin(a)*rr*0.7),1,1);}
+    }
+  }
+
+  /* the Blink as a lid: the frame closes top and bottom, holds, and opens */
+  if(S.blink>0){
+    const b=S.blink,k=b>0.4?(0.5-b)/0.1:(b>0.2?1:b/0.2),h=Math.round(H/2*k);
+    if(h>0){ctx.fillStyle=PAL.bg;ctx.fillRect(0,0,W,h);ctx.fillRect(0,H-h,W,h);ctx.fillStyle='rgba(127,223,255,0.6)';ctx.fillRect(0,h-1,W,1);ctx.fillRect(0,H-h,W,1);}
+  }
+
+  /* Grover: the superposition orb. A query dot with six qubit arrows orbiting it: they wander while the computation is uncertain,
+     line up as P(success) climbs, and fall into the centre at readout. A trail of phosphor follows it when moving. */
+  if(S.moving){for(let k=1;k<=3;k++){ctx.fillStyle='rgba(127,223,255,'+(0.5-k*0.13).toFixed(2)+')';ctx.fillRect(Math.round(qcx-S.dirx*(3+k*3)),Math.round(qcy-S.diry*(3+k*3)),1,1);}}
+  const hurtNow=S.inv>0&&Math.floor(S.t*20)%2===0,headHue=S.pread>=CFG.readLoud?PAL.marked:PAL.phosHi;
+  for(const q of S.q){
+    const x=qcx+Math.cos(q.oa)*q.r,y=qcy+Math.sin(q.oa)*q.r,c=Math.cos(q.da),s=Math.sin(q.da);
+    ctx.fillStyle=hurtNow?PAL.red:'rgba(127,223,255,0.55)';ctx.fillRect(Math.round(x-c),Math.round(y-s),1,1);
+    ctx.fillStyle=hurtNow?PAL.red:PAL.phos;ctx.fillRect(Math.round(x),Math.round(y),1,1);
+    ctx.fillStyle=hurtNow?PAL.red:headHue;ctx.fillRect(Math.round(x+c),Math.round(y+s),1,1);
+  }
+  spr(SPR.orb,qcx-2,qcy-2,hurtNow?{'#':PAL.red,'o':PAL.red,'@':'#ffffff'}:{'#':PAL.phos,'o':S.reading?'#ffffff':PAL.phosHi,'@':'#ffffff'});
+  if(S.blink>0){ctx.fillStyle='#ffffff';ctx.fillRect(qcx-2,qcy,5,1);}
+
+  /* floating labels */
+  if(S.labels.length){
+    ctx.font='8px "Press Start 2P", monospace';ctx.textAlign='center';ctx.textBaseline='middle';
+    for(const l of S.labels){
+      ctx.globalAlpha=l.t<0.6?1:1-(l.t-0.6)/0.3;
+      ctx.fillStyle='#000';ctx.fillText(l.text,Math.round(l.x-camx),Math.round(l.y-camy-l.t*14)+1);
+      ctx.fillStyle=l.col;ctx.fillText(l.text,Math.round(l.x-camx),Math.round(l.y-camy-l.t*14));
+    }
+    ctx.globalAlpha=1;
+  }
+
+  /* touch stick */
+  if(joy.on){
+    ring(joy.ox,joy.oy,CFG.stickMax,20,'rgba(207,214,255,0.25)','rgba(207,214,255,0.45)',0);
+    const kx=Math.round(joy.x)-1,ky=Math.round(joy.y)-1;
+    ctx.fillStyle='rgba(127,223,255,0.9)';ctx.fillRect(kx,ky,3,3);
+  }
+
+  /* the noise coming due: recording static creeps in from the frame's edges as fidelity falls */
+  const coh=Math.max(0,S.hp/S.st.hpMax);
+  if(coh<0.5||S.dead){
+    const k=S.dead?1:(0.5-coh)/0.5,ff2=STATIC[(Math.floor(S.t*13)+2)%6];
+    ctx.save();
+    if(!S.dead){const band=Math.max(2,Math.round(k*Math.min(W,H)*0.3));ctx.beginPath();ctx.rect(0,0,W,H);ctx.rect(band,band,W-2*band,H-2*band);ctx.clip('evenodd');}
+    ctx.globalAlpha=0.25+0.65*k;
+    for(let x=0;x<W;x+=FT)for(let y=0;y<H;y+=FT)ctx.drawImage(ff2,x,y);
+    ctx.globalAlpha=1;ctx.restore();
+  }
+
+  /* readouts: quantised depth bar along the top, the Lens's health under it */
+  const need=xpNeed(S.lvl);
+  ctx.fillStyle='#101427';ctx.fillRect(0,0,W,3);
+  ctx.fillStyle=PAL.mint;ctx.fillRect(0,0,Math.round(W*Math.min(1,S.xp/need)),2);
+  if(need<=80){ctx.fillStyle=PAL.bg;for(let i=1;i<need;i++)ctx.fillRect(Math.round(W*i/need),0,1,2);}
+  if(S.ro.on){ctx.fillStyle='#101427';ctx.fillRect(0,3,W,3);ctx.fillStyle=PAL.red;ctx.fillRect(0,3,Math.round(W*Math.max(0,Math.min(1,S.ro.p))),2);ctx.fillStyle=PAL.mint;ctx.fillRect(0,5,Math.round(W*Math.min(1,S.ro.work/CFG.roWork)),1);}
+
+  /* fidelity as a trace under the stats: a clean sine that loses amplitude and gains noise as the computation decoheres */
+  const bw=Math.min(60,Math.round(W/3)),bx=8,by=Math.round(H*0.2)+8;
+  ctx.fillStyle='rgba(6,8,18,0.85)';ctx.fillRect(bx-2,by-2,bw+4,12);
+  ctx.fillStyle=PAL.gridMajor;ctx.fillRect(bx,by+4,bw,1);
+  ctx.fillStyle=coh>0.5?PAL.phos:(coh>0.25?PAL.amber:PAL.red);
+  if(S.dead){for(let x=0;x<bw;x++)ctx.fillRect(bx+x,by+4+Math.round((Math.random()-0.5)*7),1,1);}
+  else{const amp=3.5*coh,nz=(1-coh)*4;for(let x=0;x<bw;x++){const y=by+4+Math.sin(x*0.3+S.t*7)*amp+(Math.random()-0.5)*nz;ctx.fillRect(bx+x,Math.round(y),1,1);}}
+
+  /* amplitude histogram at the bottom: one bar per candidate in the window, gold for marked, violet for unmarked, a dashed line at the readout threshold */
+  const inWin=S.enemies.filter(function(e){return e.state===0&&!e.dead&&dist(e.x,e.y,S.px,S.py)<Reff;}).sort(function(a,b){return a.id-b.id;}).slice(0,16);
+  const hmax=16,hw=Math.max(12,inWin.length*4),hx0=Math.round(W/2-hw/2),base=H-6;
+  ctx.fillStyle='rgba(6,8,18,0.85)';ctx.fillRect(hx0-3,base-hmax-3,hw+6,hmax+7);
+  ctx.fillStyle=PAL.gridMajor;ctx.fillRect(hx0-2,base,hw+4,1);
+  ctx.fillStyle=PAL.dim;const thy=base-Math.round(CFG.readLoud*hmax);for(let x=hx0-2;x<hx0+hw+2;x+=2)ctx.fillRect(x,thy,1,1);
+  for(let i=0;i<inWin.length;i++){
+    const e=inWin[i],h=Math.max(1,Math.round(e.a*hmax));
+    ctx.fillStyle=e.marked?PAL.marked:PAL.unmarked;ctx.fillRect(hx0+i*4,base-h,3,h);
+    if(e.a>=CFG.readLoud){ctx.fillStyle='#ffffff';ctx.fillRect(hx0+i*4,base-h,3,1);}
+  }
+
+  /* P(success) dial, bottom left: a half-circle gauge with a needle, gold past the readout threshold */
+  const dcx=18,dcy=H-8,dr=11,P=S.pread;
+  ctx.fillStyle='rgba(6,8,18,0.85)';ctx.fillRect(dcx-dr-3,dcy-dr-4,dr*2+6,dr+8);
+  for(let k=0;k<=12;k++){const a=Math.PI+k/12*Math.PI;ctx.fillStyle=k%3===0?PAL.dim:PAL.gridMajor;ctx.fillRect(Math.round(dcx+Math.cos(a)*dr),Math.round(dcy+Math.sin(a)*dr),1,1);}
+  const na=Math.PI+P*Math.PI;ctx.fillStyle=P>=CFG.readLoud?PAL.marked:PAL.phos;
+  for(let r=2;r<dr-1;r++)ctx.fillRect(Math.round(dcx+Math.cos(na)*r),Math.round(dcy+Math.sin(na)*r),1,1);
+  ctx.fillStyle=PAL.phosHi;ctx.fillRect(dcx,dcy,1,1);
+
+  /* reads meter: five segments, lit by readouts per second */
+  const gl=Math.min(5,S.clicks.length);
+  for(let i=0;i<5;i++){ctx.fillStyle=i<gl?(i<3?PAL.phos:(i<4?PAL.amber:PAL.red)):PAL.gridMajor;ctx.fillRect(W-11,H-11-i*3,6,2);}
+
+  /* corner brackets of the instrument's frame */
+  ctx.fillStyle=PAL.dim;
+  ctx.fillRect(2,2,6,1);ctx.fillRect(2,2,1,6);ctx.fillRect(W-8,2,6,1);ctx.fillRect(W-3,2,1,6);
+  ctx.fillRect(2,H-3,6,1);ctx.fillRect(2,H-8,1,6);ctx.fillRect(W-8,H-3,6,1);ctx.fillRect(W-3,H-8,1,6);
+}
+
+/* ---------- HUD ---------- */
+function fmt(t){const m=Math.floor(t/60),s=Math.floor(t%60);return m+':'+(s<10?'0':'')+s;}
+function hud(){
+  let cands=0,errs=0;for(const e of S.enemies){if(e.state===0)cands++;else errs++;}
+  hl.textContent=fmt(S.t)+'  DEPTH '+S.lvl+'\nREADS '+S.correct+' OK  '+S.errors+' ERR\nANSWERS '+cands+'  ERRORS '+errs;
+  const gates=POW.filter(function(p){return p.type==='weapon'&&S.taken[p.id];}).map(function(p){return p.short+' '+S.taken[p.id];}).join('  ');
+  hr.textContent='WINDOW '+Math.round(S.R)+(S.blink>0?' RESET':(S.reading?' READING':(S.inverted?' INVERTED':'')))+'\nP(SUCCESS) '+S.pread.toFixed(2)+(S.ro.on?'\nREADOUT '+Math.round(Math.max(0,S.ro.p)*100)+'%  SATISFIED '+Math.round(Math.min(1,S.ro.work/CFG.roWork)*100)+'%':'')+'\n'+gates;
+  if(S.logDirty){
+    S.logDirty=false;logEl.innerHTML='';
+    for(const l of S.log){const sp=document.createElement('span');sp.style.color=l.col;sp.textContent='> '+l.text;logEl.appendChild(sp);}
+  }
+}
+
+/* ---------- the title: a uniform row of bars, the letters amplified out of it while the rest cancel ---------- */
+const titleCv=document.getElementById('titlecv');
+let TM=null;
+function buildTitle(){
+  const oc=document.createElement('canvas');oc.width=200;oc.height=28;const o=oc.getContext('2d');
+  o.font='16px "Press Start 2P", monospace';o.textBaseline='middle';o.textAlign='center';o.fillStyle='#fff';o.fillText('DECOHERENCE',100,14);
+  const d=o.getImageData(0,0,200,28).data,cols=[];
+  for(let x=0;x<200;x++){const ys=[];for(let y=0;y<28;y++)if(d[(y*200+x)*4+3]>128)ys.push(y);cols.push(ys);}
+  TM=cols;
+}
+buildTitle();
+if(document.fonts&&document.fonts.load)document.fonts.load('16px "Press Start 2P"').then(buildTitle,function(){});
+function drawTitle(now){
+  if(!TM||!titleCv)return;
+  const c=titleCv.getContext('2d');c.clearRect(0,0,200,28);
+  /* one cycle: a uniform neutral row (every column equal, like candidates before the oracle), then the letter
+     columns turn gold and grow into their shapes while the others turn violet and cancel; hold; collapse back */
+  const cyc=(now/1000)%7;
+  let u=cyc<0.9?0:(cyc<3.1?(cyc-0.9)/2.2:(cyc<6.4?1:1-(cyc-6.4)/0.6));u=u*u*(3-2*u);
+  const res=u<0.6?0:(u-0.6)/0.4;/* resolve: the grown bar gives way to the letter pixels */
+  for(let x=8;x<192;x++){
+    const ys=TM[x],letter=ys.length>0;
+    if(letter){
+      const top=ys[0],bot=ys[ys.length-1];
+      const t0=Math.round(11+(top-11)*u),b0=Math.round(17+(bot-17)*u);
+      c.fillStyle=u<0.25?PAL.neutral:PAL.marked;c.globalAlpha=(0.6+0.4*u)*(1-res);
+      if(b0>=t0)c.fillRect(x,t0,1,b0-t0+1);
+      if(res>0){c.globalAlpha=res;c.fillStyle=PAL.marked;for(const y of ys)c.fillRect(x,y,1,1);}
+    }else{
+      const h=Math.round(6*(1-u));
+      if(h>0){c.fillStyle=u<0.25?PAL.neutral:PAL.unmarked;c.globalAlpha=0.6*(1-u)+0.2;c.fillRect(x,14-Math.floor(h/2),1,h);}
+    }
+    if(u<1&&Math.random()<0.06*(1-u)){c.globalAlpha=0.6*(1-u);c.fillStyle=PAL.foam[Math.floor(Math.random()*6)];c.fillRect(x,Math.floor(Math.random()*28),1,1);}
+  }
+  c.globalAlpha=1;
+}
+
+/* ---------- loop ---------- */
+let last=performance.now();
+function loop(now){
+  let dt=(now-last)/1000;last=now;if(dt>0.05)dt=0.05;
+  frameDt=dt;
+  if(started)update(dt);
+  render();
+  if(!started)drawTitle(now);
+  if(S.frame%6===0||S.dead||S.paused||S.won||!started)hud();
+  requestAnimationFrame(loop);
+}
+(function(){
+  /* the algorithm's card on the start screen: the superposition orb with its six qubits, the name, what it does, its starting gate */
+  document.getElementById('algoname').textContent=CHAR.name;
+  document.getElementById('algotag').textContent=CHAR.tag;
+  document.getElementById('algogate').textContent='Starts with '+POWMAP[CHAR.weapon].name;
+  const ac=document.getElementById('algoart').getContext('2d');ac.clearRect(0,0,20,20);
+  for(let i=0;i<6;i++){
+    const a=-Math.PI/2+i*TAU/6,x=10+Math.cos(a)*7,y=10+Math.sin(a)*7,c=Math.cos(a),s=Math.sin(a);
+    ac.fillStyle='rgba(127,223,255,0.55)';ac.fillRect(Math.round(x-c),Math.round(y-s),1,1);
+    ac.fillStyle='#7fdfff';ac.fillRect(Math.round(x),Math.round(y),1,1);
+    ac.fillStyle=i===0?'#ffcc55':'#e8fbff';ac.fillRect(Math.round(x+c),Math.round(y+s),1,1);
+  }
+  const orb=SPR.orb,pal={'#':'#7fdfff','o':'#e8fbff','@':'#ffffff'};
+  for(let r=0;r<orb.length;r++)for(let k=0;k<orb[r].length;k++){const ch=orb[r][k];if(ch==='.')continue;ac.fillStyle=pal[ch];ac.fillRect(8+k,8+r,1,1);}
+})();
+fit();hud();
+window.__dec={get S(){return S;},K:K,CFG:CFG,CHAR:CHAR,CHARS:CHARS,POW:POWMAP,joy:joy,start:start,reset:reset,openLevelUp:openLevelUp,choose:choose,kill:kill,cardApply:cardApply,doBlink:doBlink,startReadout:startReadout,spawnCandidate:spawnCandidate,spawnNoise:spawnNoise,spawnBug:spawnBug,drawTitle:drawTitle,drawCircuit:drawCircuit,drawFlag:drawFlag,die:die,win:win,closeRegister:closeRegister,
+  step:function(sec){const n=Math.round(sec*60);for(let i=0;i<n;i++)update(1/60);frameDt=1/60;render();hud();}};
+const boot=()=>{requestAnimationFrame(loop);};
+if(window.claude&&window.claude.hot&&window.claude.hot.ready)window.claude.hot.ready(boot);else boot();
+})();
+</script>
+
+</body>
+</html>
