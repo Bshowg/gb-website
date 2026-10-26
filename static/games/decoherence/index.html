@@ -150,7 +150,7 @@ canvas:focus-visible{box-shadow:0 0 0 2px var(--cyan)}
           <dt>COMPILE</dt><dd>Each depth, pick a gate (<span class="v">eliminate</span>, <span class="g">amplify</span>, <span class="m">correct</span>) or a flag.</dd>
           <dt>ERRORS</dt><dd>Never bite. <span class="r">Noise</span> spoils reads, bugs flip answers, zones swap right and wrong, the simulator steals loud answers. Correct gates handle them.</dd>
           <dt>LENSES</dt><dd>Dropped by fallen errors. <span class="c">Cyan</span> widens your window, <span class="r">red</span> narrows it.</dd>
-          <dt>WIN</dt><dd>At 2:00 the <span class="r">Readout needle</span> sweeps. Good reads push it back, failed reads let it advance. Push it off the edge.</dd>
+          <dt>WIN</dt><dd>At 2:00 the <span class="r">Readout needle</span> sweeps, faster as you satisfy it. Each good read pushes it back and counts, failed reads let it advance. Fill SATISFIED before it reaches the far edge.</dd>
         </dl>
         <div class="btns">
           <button class="btn" id="btnback" type="button">BACK</button>
@@ -277,7 +277,7 @@ const CFG={
   stickMax:16,stickDead:3,
   stillDelay:0.3,readTime:0.3,
   oracleEvery:4.5,oracleShow:0.7,
-  roAt:120,roSpeed:1/45,roPush:0.05,roErr:0.08,roBand:10,roWork:1.2,roFloor:-0.1,
+  roAt:120,roSpeed:1/45,roPush:0.07,roErr:0.08,roBand:10,roWork:2.0,roFloor:-0.1,roAccel:1,roBig:0.25,roCap:2,
   xpBase:6,xpStep:5,maxGems:500,
   waveCd:3.0,waveSpd:110,waveBand:7,waveAmp:0.3,waveCancel:0.25,
   pairCd:1.4,pairSpd:200,pairLife:1.1,pairDmg:1.2,pairLink:4,pairShare:0.75,
@@ -631,8 +631,10 @@ function startReadout(){
   S.ro.on=true;S.ro.p=0;S.ro.work=0;S.ro.crossed=false;detectorSfx();
   label(S.px,S.py-12,'THE READOUT BEGINS','#ff3b5c');
 }
-/* a correct read pushes the needle back and counts toward satisfying it. The needle never banks credit beyond the left edge. */
-function roPushBack(){S.ro.p=Math.max(CFG.roFloor,S.ro.p-CFG.roPush);S.ro.work+=CFG.roPush;S.ro.flash=0.3;S.ro.recoil=0.12;}
+/* a correct read pushes the needle back and counts toward satisfying it: one push per read, harder for a read of several right
+   answers (up to roCap). The needle never banks credit beyond the left edge. It sweeps faster the nearer it is to satisfied. */
+function roPushBack(mult){mult=mult||1;S.ro.p=Math.max(CFG.roFloor,S.ro.p-CFG.roPush*mult);S.ro.work+=CFG.roPush*mult;S.ro.flash=0.3;S.ro.recoil=0.12;}
+function roSpeedNow(){return CFG.roSpeed*(1+CFG.roAccel*Math.min(1,S.ro.work/CFG.roWork));}
 /* the end screens are core dumps: what the machine knew when it halted */
 function dump(kind,result){
   const gates=POW.filter(function(p){return p.type==='weapon'&&S.taken[p.id];}).map(function(p){return p.short.toLowerCase()+' '+S.taken[p.id];}).join('  ')||'none';
@@ -754,7 +756,7 @@ function query(e,strength,verb){
 /* the Readout's beam reads a tile where it stands: a loud marked answer is correct, a loud unmarked one is an error,
    a quiet one is not measured and only collapses */
 function readOut(e){
-  if(e.dead)return;
+  if(e.dead||e.roFrame===S.frame)return;e.roFrame=S.frame;
   const loud=e.a>=CFG.readLoud;
   S.clicks.push(S.t);click();
   if(loud&&e.marked){
@@ -762,7 +764,6 @@ function readOut(e){
     S.correct++;gem(e.x,e.y,CFG.readSignal);S.hp=Math.min(S.st.hpMax,S.hp+CFG.readRefund*S.st.refund);
     label(e.x,e.y-8,'READ '+e.bits+' OK',PAL.mint);readOkSfx();
     S.fx.push({x:e.x,y:e.y,t:0,kind:0});
-    if(S.ro.on)roPushBack();
   }else if(loud){
     e.dead=true;
     S.errors++;S.hp-=Math.max(1,CFG.readErr-S.st.armor);S.shake=0.2;
@@ -791,7 +792,7 @@ function beginRead(Reff){
     let r=Math.random()*tot;for(const e of wrong){r-=e.a*e.a;if(r<=0){S.readBad=e;break;}}
     if(!S.readBad&&wrong.length)S.readBad=wrong[0];
   }
-  S.reading=true;S.readList=loud;S.read=0;S.readIdx=0;readStartSfx();
+  S.reading=true;S.readList=loud;S.read=0;S.readIdx=0;S.readGood=0;readStartSfx();
 }
 function readTile(e){
   if(e.dead)return;
@@ -799,14 +800,14 @@ function readTile(e){
   if(S.readOk){
     if(e.marked){
       e.dead=true;S.correct++;gem(e.x,e.y,CFG.readSignal);S.hp=Math.min(S.st.hpMax,S.hp+CFG.readRefund*S.st.refund);
-      label(e.x,e.y-8,'READ '+e.bits+' OK',PAL.mint);readOkSfx();S.fx.push({x:e.x,y:e.y,t:0,kind:0});
-      if(S.ro.on)roPushBack();
+      label(e.x,e.y-8,'READ '+e.bits+' OK',PAL.mint);readOkSfx();S.fx.push({x:e.x,y:e.y,t:0,kind:0});S.readGood++;
     }else{cancelled(e);}
   }else if(e===S.readBad){
     e.dead=true;label(e.x,e.y-8,'READ '+e.bits+' ERR',PAL.red);dissolveFx(e,PAL.red);
   }else collapse(e);
 }
 function endRead(Reff){
+  if(S.readOk&&S.readGood>0&&S.ro.on)roPushBack(Math.min(CFG.roCap,1+CFG.roBig*(S.readGood-1)));
   if(!S.readOk){
     S.errors++;S.hp-=Math.max(1,CFG.readErr*(1-S.st.mitigate)-S.st.armor);S.shake=0.25;
     label(S.px,S.py-14,'OUTPUT: NOISE  P='+Math.round(S.readP*100)+'%',PAL.red);readErrSfx();
@@ -938,10 +939,10 @@ function update(dt){
     else if(!S.ro.warned&&S.t>=CFG.roAt-5){S.ro.warned=true;label(S.px,S.py-12,'SOMETHING IS READING','#ff3b5c');tone('sine',90,60,0.6,0.2);}
   }
   if(S.ro.on){
-    S.ro.p+=CFG.roSpeed*dt;
+    S.ro.p+=roSpeedNow()*dt;
     S.ro.tick-=dt;if(S.ro.tick<=0){S.ro.tick=1;tone('square',1400,1400,0.03,0.05);}
-    /* satisfied: enough correct reads have pushed it, and it stands at the left edge */
-    if(S.ro.p<=0&&S.ro.work>=CFG.roWork){win();return;}
+    /* satisfied: enough of your reads have pushed it before it reached the far edge */
+    if(S.ro.work>=CFG.roWork){win();return;}
     if(S.ro.p>=1){closeRegister();return;}
   }
 
@@ -1493,7 +1494,7 @@ function render(){
     for(let k=0;k<4;k++){const sy=Math.round((S.t*140+k*H/4)%H);ctx.fillRect(nx,sy,CFG.roBand,1);}
     ctx.globalAlpha=1;ctx.restore();
     ctx.fillStyle='rgba(255,59,92,0.12)';ctx.fillRect(0,0,nx,H);
-    const gx=Math.round((S.ro.p+CFG.roSpeed)*W);
+    const gx=Math.round((S.ro.p+roSpeedNow())*W);
     ctx.fillStyle='rgba(255,59,92,0.3)';for(let y=0;y<H;y+=3)ctx.fillRect(gx,y,1,1);
     ctx.fillStyle=PAL.red;ctx.fillRect(nx,0,1,H);
     const lit=S.ro.flash>0?'#ffffff':PAL.red;
