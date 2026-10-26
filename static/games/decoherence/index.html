@@ -91,8 +91,9 @@ canvas:focus-visible{box-shadow:0 0 0 2px var(--cyan)}
 .menu .tag{color:var(--ink);max-width:46ch}
 .howto{gap:12px;max-width:48ch}
 .howto h2{font-size:12px;color:var(--mint);margin:0 0 4px;letter-spacing:1px}
-.howto p{text-align:left;max-width:48ch;line-height:1.9}
-.howto p .m{display:block;letter-spacing:1px;margin-bottom:2px}
+.howto dl{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:10px 12px;margin:0;text-align:left;max-width:48ch;line-height:1.9}
+.howto dt{color:var(--mint);letter-spacing:1px}
+.howto dd{margin:0;min-width:0}
 .btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:6px}
 .btn{font-family:inherit;font-size:10px;letter-spacing:1px;line-height:1;color:var(--cyan);background:#060812;border:2px solid var(--dim);padding:16px 22px;min-width:150px;cursor:pointer}
 .btn.primary{color:var(--gold);border-color:var(--gold)}
@@ -140,12 +141,17 @@ canvas:focus-visible{box-shadow:0 0 0 2px var(--cyan)}
       </div>
       <div id="howto" class="howto" hidden>
         <h2>HOW TO PLAY</h2>
-        <p><span class="m">ITERATE</span>  <span class="k">Drag anywhere</span> to move, or use <span class="k">WASD</span>. Candidates fill the register and converge on you. Most are <span class="v">wrong</span>, and wrong answers bite. Inside your <span class="c">window</span> every tile shows its colour and your gates fire at their own kind: eliminate gates cancel wrong answers a notch per hit, amplify gates raise <span class="g">right</span> answers a notch per hit. The oracle pulses every few seconds to show the whole screen. Outside the window everything is a warp in the matrix.</p>
-        <p><span class="m">READ OUT</span>  <span class="k">Lift your thumb</span> to read out the window. Only loud answers are measured, as one outcome rolled on the <span class="c">P(SUCCESS)</span> dial. Win the roll and loud right answers score and refund fidelity. Lose it and the register returns noise and costs fidelity. Either way the window collapses to uniform. Quiet answers survive. Past the peak a right answer goes quiet again, so watch the dial.</p>
-        <p><span class="m">FIDELITY</span>  Your fidelity drains all the time and wrong answers bite it. Only correct reads refund it. At zero the run halts.</p>
-        <p><span class="m">COMPILE</span>  Each depth you compile a <span class="k">gate</span> or a <span class="c">flag</span>. Every gate owns one verb: <span class="v">eliminate</span> wrong answers, <span class="g">amplify</span> right ones, or <span class="m">correct</span> errors. A gate aims at its own kind inside your window and holds fire when there is none. Flags tune the algorithm.</p>
-        <p><span class="m">ERRORS</span>  Errors never bite. <span class="r">Noise</span> heats wrong answers and spoils reads. <span class="k">Bugs</span> flip markings. <span class="v">Phase-flip zones</span> run your window backwards. Crosstalk makes two answers share a fate. The simulator reads your amplified answers for itself. Fallen errors leave <span class="c">lenses</span> that change the window.</p>
-        <p><span class="m">THE READOUT</span>  At two minutes a <span class="r">needle</span> sweeps the register and collapses what its beam passes. Correct reads push it back, errors let it advance. Push it off the edge and the answer is yours.</p>
+        <dl>
+          <dt>MOVE</dt><dd><span class="k">Drag anywhere.</span> WASD on a keyboard.</dd>
+          <dt>WINDOW</dt><dd>The ring around you. Inside it answers show their colour: <span class="g">gold is right</span>, <span class="v">violet is wrong</span>. Gates fire only inside it.</dd>
+          <dt>SHOOT</dt><dd>Automatic. Hits cancel wrong answers and amplify right ones. Wrong answers bite: cancel them first. Overshoot and a right answer goes quiet again.</dd>
+          <dt>READ</dt><dd><span class="k">Lift your thumb</span> when the <span class="c">P(SUCCESS)</span> dial is high. Win the roll: loud right answers score and refund fidelity. Lose: fidelity cost. The window resets either way.</dd>
+          <dt>FIDELITY</dt><dd>Drains all the time. Only good reads refill it. At zero the run halts.</dd>
+          <dt>COMPILE</dt><dd>Each depth, pick a gate (<span class="v">eliminate</span>, <span class="g">amplify</span>, <span class="m">correct</span>) or a flag.</dd>
+          <dt>ERRORS</dt><dd>Never bite. <span class="r">Noise</span> spoils reads, bugs flip answers, zones swap right and wrong, the simulator steals loud answers. Correct gates handle them.</dd>
+          <dt>LENSES</dt><dd>Dropped by fallen errors. <span class="c">Cyan</span> widens your window, <span class="r">red</span> narrows it.</dd>
+          <dt>WIN</dt><dd>At 2:00 the <span class="r">Readout needle</span> sweeps. Good reads push it back, failed reads let it advance. Push it off the edge.</dd>
+        </dl>
         <div class="btns">
           <button class="btn" id="btnback" type="button">BACK</button>
           <button class="btn primary" id="btnrun2" type="button">RUN</button>
