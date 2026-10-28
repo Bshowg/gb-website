@@ -1,0 +1,226 @@
+{ "frames": [
+   {
+    "filename": "grover#idle#0",
+    "frame": { "x": 0, "y": 0, "w": 11, "h": 11 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 11, "h": 11 },
+    "sourceSize": { "w": 11, "h": 11 },
+    "duration": 100
+   },
+   {
+    "filename": "grover#idle#1",
+    "frame": { "x": 11, "y": 0, "w": 11, "h": 11 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 11, "h": 11 },
+    "sourceSize": { "w": 11, "h": 11 },
+    "duration": 100
+   },
+   {
+    "filename": "grover#idle#2",
+    "frame": { "x": 22, "y": 0, "w": 11, "h": 11 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 11, "h": 11 },
+    "sourceSize": { "w": 11, "h": 11 },
+    "duration": 100
+   },
+   {
+    "filename": "grover#idle#3",
+    "frame": { "x": 11, "y": 0, "w": 11, "h": 11 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 11, "h": 11 },
+    "sourceSize": { "w": 11, "h": 11 },
+    "duration": 100
+   },
+   {
+    "filename": "grover#idle#4",
+    "frame": { "x": 0, "y": 0, "w": 11, "h": 11 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 11, "h": 11 },
+    "sourceSize": { "w": 11, "h": 11 },
+    "duration": 100
+   },
+   {
+    "filename": "grover#idle#5",
+    "frame": { "x": 33, "y": 0, "w": 11, "h": 11 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 11, "h": 11 },
+    "sourceSize": { "w": 11, "h": 11 },
+    "duration": 100
+   },
+   {
+    "filename": "grover#idle#6",
+    "frame": { "x": 44, "y": 0, "w": 11, "h": 11 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 11, "h": 11 },
+    "sourceSize": { "w": 11, "h": 11 },
+    "duration": 100
+   },
+   {
+    "filename": "grover#idle#7",
+    "frame": { "x": 33, "y": 0, "w": 11, "h": 11 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 11, "h": 11 },
+    "sourceSize": { "w": 11, "h": 11 },
+    "duration": 100
+   },
+   {
+    "filename": "grover#fire#8",
+    "frame": { "x": 0, "y": 11, "w": 11, "h": 11 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 11, "h": 11 },
+    "sourceSize": { "w": 11, "h": 11 },
+    "duration": 50
+   },
+   {
+    "filename": "grover#collapse#9",
+    "frame": { "x": 11, "y": 11, "w": 11, "h": 11 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 11, "h": 11 },
+    "sourceSize": { "w": 11, "h": 11 },
+    "duration": 50
+   },
+   {
+    "filename": "grover#collapse#10",
+    "frame": { "x": 22, "y": 11, "w": 11, "h": 11 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 11, "h": 11 },
+    "sourceSize": { "w": 11, "h": 11 },
+    "duration": 50
+   },
+   {
+    "filename": "grover#collapse#11",
+    "frame": { "x": 33, "y": 11, "w": 11, "h": 11 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 11, "h": 11 },
+    "sourceSize": { "w": 11, "h": 11 },
+    "duration": 50
+   },
+   {
+    "filename": "grover#collapse#12",
+    "frame": { "x": 44, "y": 11, "w": 11, "h": 11 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 11, "h": 11 },
+    "sourceSize": { "w": 11, "h": 11 },
+    "duration": 50
+   },
+   {
+    "filename": "grover#reading#13",
+    "frame": { "x": 44, "y": 11, "w": 11, "h": 11 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 11, "h": 11 },
+    "sourceSize": { "w": 11, "h": 11 },
+    "duration": 80
+   },
+   {
+    "filename": "grover#reading#14",
+    "frame": { "x": 0, "y": 22, "w": 11, "h": 11 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 11, "h": 11 },
+    "sourceSize": { "w": 11, "h": 11 },
+    "duration": 80
+   },
+   {
+    "filename": "grover#reading#15",
+    "frame": { "x": 11, "y": 22, "w": 11, "h": 11 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 11, "h": 11 },
+    "sourceSize": { "w": 11, "h": 11 },
+    "duration": 80
+   },
+   {
+    "filename": "grover#reading#16",
+    "frame": { "x": 0, "y": 22, "w": 11, "h": 11 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 11, "h": 11 },
+    "sourceSize": { "w": 11, "h": 11 },
+    "duration": 80
+   },
+   {
+    "filename": "grover#reset#17",
+    "frame": { "x": 22, "y": 22, "w": 11, "h": 11 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 11, "h": 11 },
+    "sourceSize": { "w": 11, "h": 11 },
+    "duration": 50
+   },
+   {
+    "filename": "grover#reset#18",
+    "frame": { "x": 33, "y": 22, "w": 11, "h": 11 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 11, "h": 11 },
+    "sourceSize": { "w": 11, "h": 11 },
+    "duration": 50
+   },
+   {
+    "filename": "grover#reset#19",
+    "frame": { "x": 44, "y": 22, "w": 11, "h": 11 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 11, "h": 11 },
+    "sourceSize": { "w": 11, "h": 11 },
+    "duration": 50
+   },
+   {
+    "filename": "grover#reset#20",
+    "frame": { "x": 0, "y": 33, "w": 11, "h": 11 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 11, "h": 11 },
+    "sourceSize": { "w": 11, "h": 11 },
+    "duration": 50
+   },
+   {
+    "filename": "grover#reset#21",
+    "frame": { "x": 11, "y": 33, "w": 11, "h": 11 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 11, "h": 11 },
+    "sourceSize": { "w": 11, "h": 11 },
+    "duration": 50
+   },
+   {
+    "filename": "grover#hurt#22",
+    "frame": { "x": 22, "y": 33, "w": 11, "h": 11 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 11, "h": 11 },
+    "sourceSize": { "w": 11, "h": 11 },
+    "duration": 50
+   }
+ ],
+ "meta": {
+  "app": "https://www.aseprite.org/",
+  "version": "1.3.18.1-x64",
+  "image": "grover.png",
+  "format": "RGBA8888",
+  "size": { "w": 55, "h": 44 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "idle", "from": 0, "to": 7, "direction": "forward", "color": "#000000ff" },
+   { "name": "fire", "from": 8, "to": 8, "direction": "forward", "color": "#000000ff" },
+   { "name": "collapse", "from": 9, "to": 12, "direction": "forward", "color": "#000000ff" },
+   { "name": "reading", "from": 13, "to": 16, "direction": "forward", "color": "#000000ff" },
+   { "name": "reset", "from": 17, "to": 21, "direction": "forward", "color": "#000000ff" },
+   { "name": "hurt", "from": 22, "to": 22, "direction": "forward", "color": "#000000ff" }
+  ]
+ }
+}
