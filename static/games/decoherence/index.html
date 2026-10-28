@@ -2097,7 +2097,10 @@ function buildTitle(){
 }
 buildTitle();
 if(document.fonts&&document.fonts.load)document.fonts.load('16px "Press Start 2P"').then(buildTitle,function(){});
+/* the title from its sheet (art/make_title.lua): superposition, the oracle, amplification, the resolved word, the read */
+const TITLE=loadSheet('title');
 function drawTitle(now){
+  if(TITLE.ready&&titleCv){const f=sheetFrame(TITLE,'idle',now),c=titleCv.getContext('2d');c.clearRect(0,0,200,28);c.imageSmoothingEnabled=false;c.drawImage(TITLE.img,f.x,f.y,f.w,f.h,0,0,200,28);return;}
   if(!TM||!titleCv)return;
   const c=titleCv.getContext('2d');c.clearRect(0,0,200,28);
   /* one cycle: a uniform neutral row (every column equal, like candidates before the oracle), then the letter
