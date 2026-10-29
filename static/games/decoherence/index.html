@@ -166,10 +166,10 @@ canvas:focus-visible{box-shadow:0 0 0 2px var(--cyan)}
           <dt>MOVE</dt><dd><span class="k">Drag anywhere.</span> WASD on a keyboard.</dd>
           <dt>WINDOW</dt><dd>The ring around you. Inside it answers show their colour: <span class="g">gold is right</span>, <span class="v">violet is wrong</span>. Gates fire only inside it. The <span class="c">AMPLITUDE</span> bars show its answers; the dashed line is the read level.</dd>
           <dt>SHOOT</dt><dd>Automatic. Every hit is one step: a right answer gets louder, a wrong one quieter, gone at zero. Wrong answers bite: shoot them first. Overshoot and a right answer goes quiet again.</dd>
-          <dt>READ</dt><dd><span class="k">Lift your thumb</span> when the qubits around Grover line up and their heads turn gold: the odds are good. Win the roll: loud right answers score and refund fidelity. Lose: fidelity cost, and the wrong answers stay. Either way your right answers reset.</dd>
+          <dt>READ</dt><dd><span class="k">Lift your thumb</span> when the qubits around Grover line up and their heads turn gold: the odds are good. Win the roll: loud right answers score and refund fidelity. Lose: fidelity cost, and the wrong answers stay. Either way your right answers reset, and every error in the window costs fidelity.</dd>
           <dt>FIDELITY</dt><dd>The scope bottom-left. Drains all the time. Only good reads refill it. At zero the run halts.</dd>
           <dt>COMPILE</dt><dd>Each depth, pick a gate (<span class="v">eliminate</span>, <span class="g">amplify</span>, <span class="m">correct</span>) or a flag.</dd>
-          <dt>ERRORS</dt><dd>Never bite. <span class="r">Noise</span> spoils reads, bugs flip answers, zones swap right and wrong, the simulator steals loud answers. Only a read hits them: stop with one in your window and it is corrected; the simulator takes three.</dd>
+          <dt>ERRORS</dt><dd>Never bite. <span class="r">Noise</span> spoils reads and bursts to heat wrong answers, bugs burst to flip every answer near them, zones swap right and wrong, the simulator steals loud answers. Only a read hits them: stop with one in your window and it is corrected; the simulator takes three.</dd>
           <dt>LENSES</dt><dd>Dropped by fallen errors. <span class="c">Cyan</span> widens your window, <span class="r">red</span> narrows it.</dd>
           <dt>WIN</dt><dd>Every ten answers found fix one bit of the <span class="c">SEARCH</span> register at the top. At a hundred the answer is complete and the <span class="r">Readout needle</span> comes for it. Throw it out: good reads push it back past the left edge, failed reads let it advance.</dd>
           <dt>HOLD</dt><dd>Tap <span class="c">||</span> top-right to pause. Your gates, flags and the log are there.</dd>
@@ -346,36 +346,38 @@ function animFrame(){
 /* ---------- tuning ---------- */
 const CFG={
   Rmin:24,Rmax:150,Rstep:10,
-  candSpeed:[44,60],hover:[10,28],a0:0.3,pMarked:0.3,ampRate:0.45,cancelRate:0.16,readLoud:0.6,readErr:10,readRefund:5,readSignal:3,
-  stepAmp:0.26,stepCancel:0.32,biteBase:3,biteAmp:6,heatRate:0.25,noiseSpoil:0.15,noiseFloor:0.35,warpMax:40,
+  candSpeed:[26,36],hover:[10,28],a0:0.3,pMarked:0.3,ampRate:0.25,cancelRate:0.04,readLoud:0.6,readErr:10,readRefund:5,readErrCost:8,readSignal:3,
+  stepAmp:0.26,stepCancel:0.11,biteBase:2,biteAmp:5,heatKick:0.3,heatR:18,noiseRange:110,noiseRetarget:0.5,noiseSpoil:0.15,noiseFloor:0.35,warpMax:40,
   /* errors keep their own clock, by depth: seconds between arrivals, indexed by depth (0 = none). A few named problems, never a flood. */
-  errDepth:3,noiseEvery:[0,0,0,8,6,5,4,3.5,3],noiseSpeed:[34,46],noiseHp:1,noiseLife:14, /* error hit points are reads */
-  bugAfter:20,bugEvery:[0,0,0,0,14,12,10,9,8],bugHp:1,bugSpeed:44,bugRange:90,flipCd:1.2,bugLife:20,
+  errDepth:3,noiseEvery:[0,0,0,16,12,10,8,7,6],noiseSpeed:[30,42],noiseHp:1,noiseLife:14, /* error hit points are reads */
+  bugAfter:45,bugEvery:[0,0,0,0,28,24,20,18,16],bugHp:1,bugSpeed:40,bugRange:90,flipR:16,bugLife:20,
   xtDepth:4,zoneDepth:5,bruteDepth:5,bruteEats:3,
-  pairDur:6,pairWound:2,orbitR:8,orbitTouch:4,orbitCd:0.6,
-  ladderCd:1.0,ladderSpd:240,ladderLife:0.9,ladderRungs:2,ladderJump:26,
-  fieldCd:7,fieldSize:36,fieldDur:4,fieldTick:0.5,
+  pairDur:6,pairWound:2,orbitR:8,orbitTouch:4,orbitCd:0.9,
+  ladderCd:1.5,ladderSpd:170,ladderLife:1.2,ladderRungs:2,ladderJump:26,
+  fieldCd:9,fieldSize:36,fieldDur:4,fieldTick:0.5,
   ffGain:0.08,ffCap:5,
   /* from this depth the register runs hot: a share of the wrong answers arrives loud */
+  /* packs: from this depth a clump of wrong answers enters together from one edge, now and then */
+  packDepth:3,packFirst:10,packEvery:28,packSize:[5,12],
   hotDepth:6,hotShare:0.1,hotStep:0.03,hotMax:0.25,hotAmp:[0.7,0.9],
-  sweepCd:0.8,sweepArc:1.4,
-  zoneAfter:45,zoneEvery:15,zoneLife:20,zoneR:30,zoneMax:1,
-  xtAfter:40,xtEvery:8,xtDur:8,xtRange:110,
+  sweepCd:1.3,sweepArc:1.4,
+  zoneAfter:100,zoneEvery:30,zoneLife:20,zoneR:30,zoneMax:1,
+  xtAfter:90,xtEvery:16,xtDur:8,xtRange:110,
   dmg:10,
-  boltCd:0.16,boltSpd:260,boltRange:130,boltLife:0.9,
-  burst:6,rate0:1.2,rateK:0.05,maxEnemies:260,
-  bruteFirst:45,bruteEvery:40,bruteHp:3,
+  boltCd:0.5,boltSpd:180,boltRange:130,boltLife:1.2,
+  burst:6,rate0:0.45,rateK:0.012,maxEnemies:260,
+  bruteFirst:100,bruteEvery:70,bruteHp:3,
   dropLife:25,magnet:24,pickup:5,dropPickup:6,gemDrift:14,pWide:0.08,pNarrow:0.05,pBlink:0.03,
   stickMax:16,stickDead:3,
   stillDelay:0.3,readTime:0.3,lvBuffer:0.6, /* a compile waits for a read to finish, then this long */
   oracleEvery:4.5,oracleShow:0.7,
-  roSpeed:1/45,roPush:0.08,roErr:0.08,roBeamErr:0.02, /* a wrong answer the beam finds moves the needle a quarter as far as a read of yours that fails */
+  roSpeed:1/45,roPush:0.1,roErr:0.08,roBeamErr:0.02, /* a wrong answer the beam finds moves the needle a quarter as far as a read of yours that fails */
   roBand:10,roAccel:1,roBig:0.25,roCap:2,
   /* superconducting: the Readout comes for a complete answer; it walks in to roStart, then sweeps, faster the further back it is pushed */
   arch:'superconducting',roFound:100,roWarn:5,roStart:0.3,roEnter:0.12,searchBits:10,
   xpBase:6,xpStep:5,maxGems:500,
-  waveCd:3.0,waveSpd:110,waveBand:7,waveAmp:0.3,waveCancel:0.25,
-  pairCd:1.4,pairSpd:200,pairLife:1.1,pairDmg:1.2,pairLink:4,pairShare:0.75,
+  waveCd:4.0,waveSpd:80,waveBand:7,waveAmp:0.3,waveCancel:0.25,
+  pairCd:2.0,pairSpd:150,pairLife:1.4,pairDmg:1.2,pairLink:4,pairShare:0.75,
   boxCd:7,boxSize:44,boxHold:3.5,boxDie:0.5,
   hawkCd:6,hawkPull:60,hawkHorizon:8,hawkDmg:2.0,hawkDur:3,hawkBurst:2.0,hawkRange:120
 };
@@ -387,9 +389,9 @@ const CHARS={
     name:'GROVER',tag:'Unstructured search. The baseline: every multiplier at one.',
     hpMax:100,      /* fidelity */
     regen:0,        /* fidelity per second */
-    drain:0.8,      /* fidelity lost per second: decoherence */
+    drain:0.5,      /* fidelity lost per second: decoherence */
     refund:1.0,     /* multiplies the fidelity refund per correct readout */
-    speed:72,       /* world px per second */
+    speed:50,       /* world px per second */
     radius:56,      /* starting window radius */
     damage:1.0,     /* multiplies every gate's damage */
     rate:1.0,       /* multiplies every gate's rate */
@@ -416,7 +418,7 @@ const CHARS={
 const CHAR=CHARS.grover;
 function statsFrom(c){
   return {hpMax:c.hpMax,regen:c.regen,drain:c.drain,refund:c.refund,speed:c.speed,damage:c.damage,rate:c.rate,amount:c.amount,pierce:c.pierce,area:c.area,projSpeed:c.projSpeed,
-    armor:c.armor,invul:c.invul,hitbox:c.hitbox,magnet:c.magnet,luck:c.luck,growth:c.growth,amp:c.amp,cancel:c.cancel,readSpeed:c.readSpeed,zeno:c.zeno,mitigate:c.mitigate,oracleRate:c.oracleRate,resist:c.resist,ffGain:0};
+    armor:c.armor,invul:c.invul,hitbox:c.hitbox,magnet:c.magnet,luck:c.luck,growth:c.growth,amp:c.amp,cancel:c.cancel,readSpeed:c.readSpeed,zeno:c.zeno,mitigate:c.mitigate,oracleRate:c.oracleRate,resist:c.resist,ffGain:0,still:1};
 }
 
 /* ---------- power-ups: gates have level tracks, compiler flags are passive stats ----------
@@ -471,10 +473,10 @@ const POW=[
   {id:'amplify',type:'ability',name:'AMPLITUDE GAIN',flavor:'Make the right answer louder, sooner.',desc:'Each hit on a right answer steps 25% further',flag:'--gain +25%',max:4,apply:function(){S.st.amp+=0.25;}},
   {id:'cancel',type:'ability',name:'DESTRUCTIVE INTERFERENCE',flavor:'Wrong answers cancel faster.',desc:'Each hit on a wrong answer steps 30% further',flag:'--cancel +30%',max:4,apply:function(){S.st.cancel+=0.3;}},
   {id:'feedforward',type:'ability',name:'FEEDFORWARD',flavor:'Let the last answer shape the next question.',desc:'Each winning read adds a stack: every hit steps 8% further per stack, up to five. A failed read clears them',flag:'--feedforward +8%',max:3,apply:function(){S.st.ffGain+=CFG.ffGain;}},
-  {id:'readfast',type:'ability',name:'FAST READOUT',flavor:'Look quickly, before the noise does.',desc:'Readout 30% faster',flag:'--readout +30%',max:3,apply:function(){S.st.readSpeed+=0.3;}},
-  {id:'mitigation',type:'ability',name:'ERROR MITIGATION',flavor:'Average away what you cannot correct.',desc:'A failed read costs half the fidelity and lets the Readout advance half as far',flag:'--mitigate 50%',max:1,apply:function(){S.st.mitigate=0.5;}},
-  {id:'coherence',type:'ability',name:'COHERENCE',flavor:'Longer before the noise wins.',desc:'Fidelity drains 15% slower, maximum +10, restore 20',flag:'--t2 +15% --max +10',max:4,apply:function(){S.st.drain*=0.85;S.st.hpMax+=10;S.hp=Math.min(S.st.hpMax,S.hp+20);}},
-  {id:'suppression',type:'ability',name:'ERROR SUPPRESSION',flavor:'The noise still comes. It does less.',desc:'Errors affect the register 20% less',flag:'--suppress +20%',max:4,apply:function(){S.st.resist=Math.min(0.8,S.st.resist+0.2);}},
+  {id:'readfast',type:'ability',name:'FAST READOUT',flavor:'Look quickly, before the noise does.',desc:'A read starts after 25% less stillness and measures 30% faster',flag:'--readout +30%',max:3,apply:function(){S.st.readSpeed+=0.3;S.st.still*=0.75;}},
+  {id:'mitigation',type:'ability',name:'ERROR MITIGATION',flavor:'Average away what you cannot correct.',desc:'A failed read costs half the fidelity and lets the Readout advance half as far; reading an error costs half',flag:'--mitigate 50%',max:1,apply:function(){S.st.mitigate=0.5;}},
+  {id:'coherence',type:'ability',name:'COHERENCE',flavor:'Longer before the noise wins.',desc:'Fidelity drains 20% slower, maximum +10, restore 20',flag:'--t2 +20% --max +10',max:4,apply:function(){S.st.drain*=0.8;S.st.hpMax+=10;S.hp=Math.min(S.st.hpMax,S.hp+20);}},
+  {id:'suppression',type:'ability',name:'ERROR SUPPRESSION',flavor:'The noise still comes. It does less.',desc:'Errors affect the register 20% less, and cost less to read',flag:'--suppress +20%',max:3,apply:function(){S.st.resist=Math.min(0.6,S.st.resist+0.2);}},
   {id:'zeno',type:'ability',name:'ZENO EFFECT',flavor:'A watched state never moves.',desc:'Everything hostile in your window 15% slower',flag:'--zeno 15%',max:4,apply:function(){S.st.zeno+=0.15;}},
   {id:'momentum',type:'ability',name:'MOMENTUM',flavor:'Know where you go, not where you are.',desc:'Move speed +10%',flag:'--speed +10%',max:3,apply:function(){S.st.speed+=CHAR.speed*0.1;}}
 ];
@@ -724,7 +726,7 @@ function inZone(x,y){for(const z of S.zones)if(dist(x,y,z.x,z.y)<z.r)return true
 /* the classical simulator: a block of solid bits that brute-forces across the register */
 function spawnBrute(){
   const a=Math.random()*TAU,d=spawnDist()+20;
-  S.enemies.push({id:S.nextId++,x:S.px+Math.cos(a)*d,y:S.py+Math.sin(a)*d,state:1,hp:CFG.bruteHp,spd:18,wa:rnd(0,TAU),ph:0,
+  S.enemies.push({id:S.nextId++,x:S.px+Math.cos(a)*d,y:S.py+Math.sin(a)*d,state:1,hp:CFG.bruteHp,spd:14,wa:rnd(0,TAU),ph:0,
     brute:true,noise:false,cnt:Math.floor(rnd(0,16)),cntT:0,bits:[Math.floor(Math.random()*4294967296),Math.floor(Math.random()*4294967296)],flash:0,dead:false,boxed:false,link:0,linkT:0,col:0});
 }
 /* the Readout: the classical world comes to read the register. A needle sweeps the view; its beam collapses what it passes. */
@@ -892,15 +894,19 @@ function blankRead(Reff){
   for(const e of S.enemies)if(e.state===0&&!e.dead&&!e.boxed&&e.marked&&dist(e.x,e.y,S.px,S.py)<Reff)collapse(e);
   S.fx.push({x:S.px,y:S.py,t:0,kind:2});
   S.readDone=true;S.readEndT=S.t;play('reset',true);
+  if(S.hp<=0)die();
 }
-/* every error standing in the window when a read ends takes one hit: noise and bugs fall to one, the simulator to three */
+/* every error standing in the window when a read ends takes one hit: noise and bugs fall to one, the simulator to three.
+   The hit is paid for: each error measured costs fidelity, whatever the roll, so a clean window reads for free */
 function readErrors(Reff){
+  let n=0;
   for(const e of S.enemies){
-    if(e.state!==1||e.dead||e.boxed||dist(e.x,e.y,S.px,S.py)>=Reff)continue;
-    hurt(e,1);
+    if(e.state!==1||e.dead||e.boxed||e.spent!==undefined||dist(e.x,e.y,S.px,S.py)>=Reff)continue;
+    n++;hurt(e,1);
     if(e.dead)label(e.x,e.y-8,'CORRECTED',PAL.mint);
     else{e.flash=0.3;label(e.x,e.y-10,'READ '+(CFG.bruteHp-e.hp)+'/'+CFG.bruteHp,PAL.mint);}
   }
+  if(n){const c=n*CFG.readErrCost*(1-S.st.resist)*(1-S.st.mitigate);S.hp-=c;label(S.px,S.py+14,'-'+Math.round(c)+' FIDELITY',PAL.red);S.shake=Math.max(S.shake,0.1*Math.min(3,n));}
 }
 function readTile(e){
   if(e.dead)return;
@@ -1146,7 +1152,7 @@ function update(dt){
   if(il>0.01){S.still=0;S.read=0;S.readIdx=0;S.readList=[];S.readDone=false;S.reading=false;if(S.anim.tag==='collapse'||S.anim.tag==='reading')play('idle');}
   else{
     S.still+=dt;
-    if(S.still>CFG.stillDelay&&!S.readDone){
+    if(S.still>CFG.stillDelay*S.st.still&&!S.readDone){
       if(!S.reading)beginRead(Reff);
       if(S.reading){
         S.read+=dt/CFG.readTime*S.st.readSpeed;
@@ -1165,6 +1171,18 @@ function update(dt){
   const di=Math.min(S.lvl,CFG.noiseEvery.length-1),ne=CFG.noiseEvery[di],be=CFG.bugEvery[di];
   if(ne>0){S.noiseAcc+=dt/ne;if(S.noiseAcc>=1){S.noiseAcc-=1;spawnNoise();}}
   if(be>0&&S.t>CFG.bugAfter){S.bugAcc+=dt/be;if(S.bugAcc>=1){S.bugAcc-=1;spawnBug();}}
+  /* a pack: wrong answers in a clump from one direction, more of them the deeper the run */
+  if(S.lvl>=CFG.packDepth){
+    if(S.packT===undefined)S.packT=CFG.packFirst;
+    S.packT-=dt;
+    if(S.packT<=0){S.packT=CFG.packEvery;
+      const n=Math.min(CFG.packSize[1],CFG.packSize[0]+Math.floor((S.lvl-CFG.packDepth)/2)),a=rnd(0,TAU),dd=spawnDist()+20;
+      for(let k=0;k<n&&S.enemies.length<CFG.maxEnemies;k++){
+        spawnCandidate();const e=S.enemies[S.enemies.length-1];
+        e.marked=false;e.x=S.px+Math.cos(a)*dd+rnd(-14,14);e.y=S.py+Math.sin(a)*dd+rnd(-14,14);
+      }
+    }
+  }
   if(S.lvl>=CFG.bruteDepth&&S.t>CFG.bruteFirst){S.bruteT-=dt;if(S.bruteT<=0){S.bruteT=CFG.bruteEvery;spawnBrute();}}
 
   /* phase-flip zones: patches of inverted lattice that drift across the register */
@@ -1224,8 +1242,8 @@ function update(dt){
           if(S.hp<=0){die();return;}
         }
       }
-      /* inside the window the operator runs slowly on its own: marked amplitudes rotate up, unmarked ones cancel.
-         The gates do the same work many times faster. Inside a phase-flip zone it runs backwards. */
+      /* inside the window the operator runs slowly on its own: marked amplitudes rotate up, and unmarked ones barely cancel,
+         so a wrong answer nobody shoots at reaches you. Inside a phase-flip zone it runs backwards. */
       if(inside){
         e.ampT+=dt;
         const amplify=e.marked!==inZone(e.x,e.y);
@@ -1236,39 +1254,64 @@ function update(dt){
           e.a-=CFG.cancelRate*S.st.cancel*dt;
           if(e.ampT>0.8){e.ampT=0;S.fx.push({x:e.x,y:e.y,t:0,kind:9,life:0.25});}
         }
-        pt+=e.a*e.a;if(e.marked)pm+=e.a*e.a;
+        /* the read's odds count the loud only: a quiet answer is never measured, so it cannot spoil the roll */
+        if(e.a>=CFG.readLoud){pt+=e.a*e.a;if(e.marked)pm+=e.a*e.a;}
       }
       e.da=e.a-aBefore;
       continue;
     }
     /* thermal noise and bugs are transient: they dissipate after a while, so a run without error gates is not a death spiral */
     if(e.life!==undefined){e.life-=dt;if(e.life<=0){e.dead=true;dissolveFx(e,e.bug?PAL.bug:'#9aa0b8');continue;}}
-    /* a bit-flip bug hunts the loudest nearby candidate, swaps its marking on touch, and moves on */
+    /* a fault that has done its work holds still a moment, then is gone */
+    if(e.spent!==undefined){e.spent-=dt;if(e.spent<=0){e.dead=true;dissolveFx(e,e.bug?PAL.bug:'#9aa0b8');}continue;}
+    /* a bit-flip bug hunts the loudest nearby candidate; on touch it fires once, swapping the marking of every answer in an
+       area around it, and is spent */
     if(e.bug){
-      if(e.flipCd>0)e.flipCd-=dt;
       let tg=null,td=CFG.bugRange;
       for(const c of E){if(c.dead||c.state!==0||c.a<0.45)continue;const dd=dist(c.x,c.y,e.x,e.y);if(dd<td){td=dd;tg=c;}}
       let tx=S.px,ty=S.py;if(tg){tx=tg.x;ty=tg.y;}
       const ddx=tx-e.x,ddy=ty-e.y,dl=Math.hypot(ddx,ddy)||1;
       e.x+=ddx/dl*e.spd*dt;e.y+=ddy/dl*e.spd*dt;
-      if(tg&&td<6&&e.flipCd<=0){
-        e.flipCd=CFG.flipCd;
-        if(S.st.resist>0&&Math.random()<S.st.resist){label(tg.x,tg.y-8,'SUPPRESSED',PAL.mint);e.frozen=0.2;}
-        else{
-          tg.marked=!tg.marked;tg.flipT=0.3;e.frozen=0.35;e.digit=tg.marked?1:0;
-          label(tg.x,tg.y-8,'FLIP',PAL.bug);flipSfx();S.fx.push({x:tg.x,y:tg.y,t:0,kind:10,life:0.3});
+      if(tg&&td<6){
+        let n=0,sup=0;
+        for(const c of E){
+          if(c.dead||c.state!==0||c.boxed||dist(c.x,c.y,e.x,e.y)>CFG.flipR)continue;
+          if(S.st.resist>0&&Math.random()<S.st.resist){sup++;continue;}
+          c.marked=!c.marked;c.flipT=0.3;n++;S.fx.push({x:c.x,y:c.y,t:0,kind:10,life:0.3});
         }
+        e.frozen=0.35;e.digit=tg.marked?1:0;e.spent=0.35;
+        S.fx.push({x:e.x,y:e.y,t:0,kind:18,life:0.35,r:CFG.flipR,col:'184,255,60'});
+        label(e.x,e.y-10,n?'FLIP x'+n:'SUPPRESSED',n?PAL.bug:PAL.mint);if(n)flipSfx();
       }
       continue;
     }
-    /* errors walk toward the algorithm but never bite. Noise heats the wrong answers it touches; the simulator reads the
-       amplified right answers it steps on for itself and feeds the Readout. */
+    /* errors never bite. Noise drifts toward the thickest crowd of answers near it and bursts on the first wrong answer it
+       touches; the simulator walks toward the algorithm, reads the amplified right answers it steps on and feeds the Readout. */
     const sp=e.spd*(inside&&S.st.zeno>0?Math.max(0.3,1-S.st.zeno):1);
-    if(d>(e.brute?8:5)){e.x+=ux*sp*dt;e.y+=uy*sp*dt;}
     if(e.noise){
-      for(const c of E){
-        if(c.dead||c.state!==0||c.marked||c.boxed)continue;
-        if(Math.abs(c.x-e.x)<7&&Math.abs(c.y-e.y)<7){c.a=Math.min(1,c.a+CFG.heatRate*(1-S.st.resist)*dt);c.th=Math.asin(c.a);if(Math.random()<dt*3)S.fx.push({x:c.x,y:c.y,t:0,kind:8,life:0.3});}
+      /* every half second: of the answers in range, the one with the most others within the heat radius */
+      e.seekT=(e.seekT||0)-dt;
+      if(e.seekT<=0){
+        e.seekT=CFG.noiseRetarget;e.tgt=0;let best=0;const near=[];
+        for(const c of E)if(!c.dead&&c.state===0&&!c.boxed&&dist(c.x,c.y,e.x,e.y)<CFG.noiseRange)near.push(c);
+        for(const c of near){let k=0;for(const o of near)if(Math.abs(o.x-c.x)<CFG.heatR&&Math.abs(o.y-c.y)<CFG.heatR)k++;if(k>best){best=k;e.tgt=c.id;}}
+      }
+      const t=e.tgt?findById(e.tgt):null;
+      if(t&&!t.dead&&t.state===0){const tx=t.x-e.x,ty=t.y-e.y,tl=Math.hypot(tx,ty)||1;e.x+=tx/tl*sp*dt;e.y+=ty/tl*sp*dt;}
+      else if(d>5){e.x+=ux*sp*dt;e.y+=uy*sp*dt;}
+    }else if(d>(e.brute?8:5)){e.x+=ux*sp*dt;e.y+=uy*sp*dt;}
+    if(e.noise){
+      /* on touching a wrong answer the noise releases its heat in one burst over an area, and is spent */
+      let hit=false;
+      for(const c of E){if(!c.dead&&c.state===0&&!c.marked&&!c.boxed&&Math.abs(c.x-e.x)<7&&Math.abs(c.y-e.y)<7){hit=true;break;}}
+      if(hit){
+        const k=CFG.heatKick*(1-S.st.resist);let n=0;
+        for(const c of E){
+          if(c.dead||c.state!==0||c.marked||c.boxed||dist(c.x,c.y,e.x,e.y)>CFG.heatR)continue;
+          c.a=Math.min(1,c.a+k);c.th=Math.asin(c.a);n++;S.fx.push({x:c.x,y:c.y,t:0,kind:8,life:0.3});
+        }
+        e.spent=0.3;S.fx.push({x:e.x,y:e.y,t:0,kind:18,life:0.35,r:CFG.heatR,col:'232,236,255'});
+        label(e.x,e.y-10,'HEAT x'+n,'#b8bcd0');
       }
     }else if(e.brute){
       for(const c of E){
@@ -1284,7 +1327,7 @@ function update(dt){
   }
   S.psucc=pt>0?pm/pt:0;
   /* the read odds: the dial's share, spoiled by every noise error inside the window, never below a floor */
-  let nz=0;for(const e of E)if(e.state===1&&e.noise&&!e.dead&&!e.boxed&&dist(e.x,e.y,S.px,S.py)<Reff)nz++;
+  let nz=0;for(const e of E)if(e.state===1&&e.noise&&!e.dead&&!e.boxed&&e.spent===undefined&&dist(e.x,e.y,S.px,S.py)<Reff)nz++;
   S.pread=S.psucc*Math.max(CFG.noiseFloor,Math.pow(1-CFG.noiseSpoil*(1-S.st.resist),nz));
   S.phT+=dt;if(S.phT>=0.1){S.phT-=0.1;S.phist.push(S.pread);if(S.phist.length>160)S.phist.shift();}
   /* crosstalk mirrors this frame's amplitude change onto the partner, then anything cancelled to nothing dissolves */
@@ -1943,6 +1986,11 @@ function render(){
       /* a pulse leaving Grover: a white burst */
       const u=f.t/f.life,r=Math.round(2+u*8);
       ring(cx,cy,r,Math.max(12,r*4),'rgba(255,255,255,'+(0.9*(1-u)).toFixed(2)+')','rgba(232,251,255,'+(0.9*(1-u)).toFixed(2)+')',0);
+    }else if(f.kind===18){
+      /* a fault firing: a ring that opens out to the edge of the area it acted on, a dotted copy just inside it */
+      const u=f.t/f.life,r=Math.round(3+(f.r-3)*Math.sqrt(u)),a=(0.95*(1-u)).toFixed(2);
+      ring(cx,cy,r,Math.max(16,r*4),'rgba('+f.col+','+a+')','rgba(255,255,255,'+a+')',0);
+      if(r>5)ring(cx,cy,r-3,Math.max(12,r*2),'rgba('+f.col+','+(a*0.5).toFixed(2)+')','rgba('+f.col+','+(a*0.5).toFixed(2)+')',1);
     }else if(f.kind===14){
       /* the Hadamard sweep: a thick bright leading arc with two fainter arcs behind it, in front of Grover and, levelled, behind */
       const u=f.t/f.life,rr=f.r*(0.3+0.7*u),n=Math.max(8,Math.round(f.arc*rr*0.6));
