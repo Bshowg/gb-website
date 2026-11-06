@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <rect width="400" height="400" fill="#14161b"/>
+  <!-- everyone has a word... -->
+  <g fill="#2a2e38">
+    <rect x="34" y="56" width="104" height="62" rx="14"/><path d="M78 116l12 20 10-20z"/>
+    <rect x="262" y="56" width="104" height="62" rx="14"/><path d="M300 116l10 20 12-20z"/>
+  </g>
+  <g fill="#6b7383">
+    <rect x="52" y="74" width="68" height="8" rx="4"/><rect x="52" y="92" width="44" height="8" rx="4"/>
+    <rect x="280" y="74" width="68" height="8" rx="4"/><rect x="280" y="92" width="50" height="8" rx="4"/>
+  </g>
+  <!-- ...except one: a blank card -->
+  <rect x="166" y="40" width="68" height="96" rx="9" fill="#f6f1e7" transform="rotate(-6 200 88)"/>
+  <!-- the others -->
+  <g fill="#3a3f4b">
+    <g transform="translate(10 240) scale(1.6)"><path d="M18 100C18 79 33 70 50 70s32 9 32 30z"/><circle cx="50" cy="48" r="17"/></g>
+    <g transform="translate(230 240) scale(1.6)"><path d="M18 100C18 79 33 70 50 70s32 9 32 30z"/><circle cx="50" cy="48" r="17"/></g>
+  </g>
+  <!-- Sig. Bianchi -->
+  <g transform="translate(100 200) scale(2)">
+    <g fill="#f6f1e7">
+      <path d="M18 100C18 79 33 70 50 70s32 9 32 30z"/><circle cx="50" cy="48" r="17"/>
+      <rect x="24" y="31" width="52" height="6" rx="3"/><path d="M33 32C33 13 67 13 67 32z"/>
+    </g>
+    <g fill="#14161b"><rect x="35.5" y="25" width="29" height="4"/><path d="M50 71l-4.5 5 4.5 17 4.5-17z"/></g>
+  </g>
+</svg>

@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#14161b">
+<title>Sig. Bianchi</title>
+<link rel="icon" href="../img/sigbianchi.svg">
+<style>
+:root{
+  --bg:#14161b; --panel:#1e2129; --line:#2f3440; --text:#f4f0e8; --muted:#9aa1ae;
+  --paper:#f6f1e7; --ink:#17181c; --paper-muted:#6b6558;
+  --red:#e5484d; --green:#7ddc9a; --civ:#7fb2ff; --inf:#f5a524;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);-webkit-text-size-adjust:100%}
+#app{max-width:480px;margin:0 auto;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;gap:14px;
+  padding:max(16px,env(safe-area-inset-top)) 20px max(20px,env(safe-area-inset-bottom))}
+h1,h2{font-family:var(--serif);font-weight:700;margin:0;letter-spacing:-.01em;text-wrap:balance;overflow-wrap:anywhere}
+h1{font-size:2.6rem;line-height:1.05}
+h2{font-size:1.75rem;line-height:1.15}
+p{margin:0;line-height:1.5}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none;padding:0;-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:2px solid var(--civ);outline-offset:2px}
+.muted{color:var(--muted)}
+.small{font-size:.88rem}
+.mt{margin-top:10px}
+.eyebrow{font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.grow{flex:1}
+.stack{display:flex;flex-direction:column;gap:12px}
+.center{text-align:center;align-items:center}
+.mid{justify-content:center}
+.c-civ{color:var(--civ)} .c-inf{color:var(--inf)} .c-bia{color:#fff}
+
+.btn{display:block;width:100%;padding:16px 20px;border-radius:14px;font-weight:700;font-size:1.05rem;text-align:center;
+  background:var(--paper);color:var(--ink);transition:transform .08s}
+.btn:active{transform:scale(.98)}
+.btn.ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
+.btn.danger{background:var(--red);color:#fff}
+.btn:disabled{opacity:.35;cursor:default}
+.link{color:var(--muted);font-size:.9rem;text-decoration:underline;text-underline-offset:3px;padding:8px;align-self:center}
+.topbar{display:flex;justify-content:space-between;align-items:center;min-height:36px}
+.topbar .link{padding:8px 0;align-self:auto}
+
+.emblem{width:72px;height:72px;fill:currentColor;flex:none}
+.emblem.big{width:132px;height:132px;color:var(--paper)}
+.emblem .cut{fill:var(--cut,var(--bg))}
+
+.plist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.prow{display:flex;align-items:center;gap:12px;width:100%;padding:14px 16px;text-align:left;font-size:1.05rem;
+  background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.prow .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.num{width:28px;height:28px;border-radius:50%;border:1px solid var(--line);background:var(--bg);display:grid;place-items:center;
+  font-size:.85rem;font-weight:700;color:var(--muted);flex:none}
+.tag{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.pick.on{border-color:var(--red);background:rgba(229,72,77,.14)}
+
+.nrow{display:flex;gap:8px}
+.field{flex:1;min-width:0;width:100%;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;
+  color:var(--text);font:inherit;font-size:16px}
+.field::placeholder{color:#6d7482}
+.x{width:48px;border-radius:12px;border:1px solid var(--line);color:var(--muted);font-size:1.4rem;line-height:1;flex:none}
+.srow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;min-height:62px;
+  background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.srow b{display:block}
+.srow small{color:var(--muted);font-size:.82rem}
+.step{display:flex;align-items:center;gap:6px}
+.step button{width:40px;height:40px;border-radius:10px;border:1px solid var(--line);font-size:1.3rem;line-height:1}
+.step button:disabled{opacity:.3;cursor:default}
+.count{min-width:40px;text-align:center;font-weight:700;font-size:1.15rem;font-variant-numeric:tabular-nums}
+.err{color:var(--red);font-size:.9rem;min-height:1.3em}
+
+.cardwrap{perspective:1200px;width:min(72vw,280px);aspect-ratio:5/7}
+.card{position:relative;display:block;width:100%;height:100%;transform-style:preserve-3d;
+  transition:transform .55s cubic-bezier(.2,.7,.2,1)}
+.card.flipped{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;border-radius:18px;-webkit-backface-visibility:hidden;backface-visibility:hidden;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:22px;text-align:center;
+  box-shadow:0 18px 40px rgba(0,0,0,.45)}
+.face.back{background:var(--panel);border:1px solid var(--line);color:var(--muted);--cut:var(--panel)}
+.face.back::before{content:"";position:absolute;inset:10px;border:1px solid var(--line);border-radius:11px}
+.face.front{background:var(--paper);color:var(--ink);transform:rotateY(180deg);--cut:var(--paper)}
+.face.front .eyebrow,.face.front .note{color:var(--paper-muted)}
+.note{font-size:.9rem;line-height:1.4}
+.word{font-family:var(--serif);font-weight:700;font-size:2.2rem;line-height:1.1;overflow-wrap:anywhere}
+.word.long{font-size:1.6rem}
+
+.verdict{font-family:var(--serif);font-size:2.4rem;font-weight:700;line-height:1.1}
+.verdict.civ{color:var(--civ)} .verdict.inf{color:var(--inf)} .verdict.bia{color:#fff}
+@keyframes pop{from{opacity:0;transform:translateY(10px) scale(.96)}to{opacity:1;transform:none}}
+.pop{animation:pop .45s .7s both}
+.pop2{animation:pop .45s 1.3s both}
+
+.words{display:flex;gap:10px}
+.words>div{flex:1;min-width:0;background:var(--paper);color:var(--ink);border-radius:12px;padding:12px 14px}
+.words .eyebrow{display:block;color:var(--paper-muted);margin-bottom:2px}
+.words b{font-family:var(--serif);font-size:1.25rem;overflow-wrap:anywhere}
+.chip{font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 8px;border-radius:999px;flex:none}
+.chip.civ{background:rgba(127,178,255,.16);color:var(--civ)}
+.chip.inf{background:rgba(245,165,36,.16);color:var(--inf)}
+.chip.bia{background:var(--paper);color:var(--ink)}
+.erow.out .nm{color:var(--muted);text-decoration:line-through}
+.gain{color:var(--green);font-weight:700;font-variant-numeric:tabular-nums}
+.tot{min-width:46px;text-align:right;color:var(--muted);font-variant-numeric:tabular-nums}
+.rules{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:12px;line-height:1.5}
+
+@media (prefers-reduced-motion:reduce){.pop,.pop2{animation:none}.card{transition:none}.btn{transition:none}}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<script>
+(function () {
+'use strict';
+
+/* Coppie di parole: una va ai Civili, l'altra agli Infiltrati (a caso). */
+const PAIRS = [
+  // cibo
+  'Pizza|Focaccia;Spaghetti|Tagliatelle;Lasagne|Cannelloni;Risotto|Paella;Gnocchi|Ravioli;Polenta|Purè;Gelato|Sorbetto',
+  'Cappuccino|Caffellatte;Cornetto|Bombolone;Tiramisù|Panna cotta;Panettone|Pandoro;Torta|Crostata;Biscotto|Cracker',
+  'Parmigiano|Pecorino;Mozzarella|Burrata;Prosciutto|Salame;Burro|Margarina;Miele|Marmellata;Vino|Birra;Spritz|Negroni',
+  'Tè|Camomilla;Mela|Pera;Arancia|Mandarino;Limone|Lime;Fragola|Lampone;Pesca|Albicocca;Anguria|Melone',
+  'Pomodoro|Peperone;Zucchina|Cetriolo;Carota|Patata;Aglio|Cipolla;Basilico|Prezzemolo;Sale|Zucchero',
+  'Hamburger|Hot dog;Patatine|Popcorn;Ketchup|Maionese;Cioccolato|Nutella',
+  // animali
+  'Cane|Lupo;Gatto|Tigre;Leone|Pantera;Cavallo|Asino;Mucca|Bufala;Pecora|Capra;Coniglio|Lepre;Topo|Criceto',
+  'Delfino|Squalo;Balena|Orca;Aquila|Falco;Gufo|Civetta;Piccione|Gabbiano;Rana|Rospo;Coccodrillo|Alligatore',
+  'Tartaruga|Lumaca;Ape|Vespa;Farfalla|Falena;Zanzara|Mosca;Ragno|Scorpione;Pinguino|Foca;Cammello|Dromedario',
+  'Scimmia|Gorilla;Gallina|Tacchino;Orso|Panda;Elefante|Rinoceronte;Giraffa|Zebra',
+  // luoghi
+  'Mare|Lago;Montagna|Collina;Spiaggia|Piscina;Fiume|Torrente;Bosco|Giungla;Deserto|Savana;Isola|Penisola',
+  'Roma|Milano;Venezia|Amsterdam;Napoli|Palermo;Firenze|Siena;Parigi|Londra;Sicilia|Sardegna;Vesuvio|Etna',
+  'Colosseo|Arena di Verona;Torre di Pisa|Torre Eiffel;Chiesa|Duomo;Castello|Palazzo;Museo|Galleria;Cinema|Teatro',
+  'Ristorante|Trattoria;Bar|Pub;Supermercato|Mercato;Ospedale|Farmacia;Scuola|Università;Biblioteca|Libreria',
+  'Stazione|Aeroporto;Hotel|Ostello;Campeggio|Rifugio;Stadio|Palestra;Ufficio|Fabbrica;Cucina|Cantina',
+  // oggetti
+  'Forchetta|Cucchiaio;Bicchiere|Tazza;Piatto|Ciotola;Pentola|Padella;Forno|Microonde;Frigorifero|Congelatore',
+  'Divano|Poltrona;Letto|Amaca;Cuscino|Coperta;Sedia|Sgabello;Lampada|Candela;Specchio|Finestra;Porta|Cancello',
+  'Chiave|Lucchetto;Orologio|Sveglia;Telefono|Tablet;Computer|Televisore;Libro|Rivista;Penna|Matita;Zaino|Valigia',
+  'Ombrello|Impermeabile;Occhiali|Binocolo;Cappello|Casco;Sciarpa|Cravatta;Guanti|Calzini;Scarpe|Ciabatte',
+  'Giacca|Cappotto;Anello|Braccialetto;Sapone|Shampoo;Spazzolino|Pettine;Asciugamano|Accappatoio',
+  'Scopa|Aspirapolvere;Martello|Cacciavite;Scala|Ascensore;Lavatrice|Lavastoviglie;Francobollo|Cartolina',
+  // trasporti
+  'Bicicletta|Monopattino;Moto|Scooter;Automobile|Taxi;Autobus|Tram;Treno|Metropolitana;Aereo|Elicottero',
+  'Nave|Traghetto;Barca a vela|Gondola;Camion|Furgone',
+  // sport e svago
+  'Calcio|Rugby;Tennis|Padel;Pallavolo|Pallacanestro;Sci|Snowboard;Nuoto|Tuffi;Maratona|Passeggiata;Yoga|Pilates',
+  'Scacchi|Dama;Briscola|Tressette;Tombola|Lotteria;Chitarra|Violino;Pianoforte|Fisarmonica;Batteria|Tamburo',
+  'Discoteca|Concerto;Karaoke|Coro;Monopoli|Risiko;Puzzle|Cruciverba',
+  // persone
+  'Medico|Infermiere;Dentista|Veterinario;Maestro|Professore;Cuoco|Cameriere;Pizzaiolo|Fornaio',
+  'Poliziotto|Carabiniere;Pompiere|Bagnino;Avvocato|Giudice;Pilota|Astronauta;Attore|Cantante;Pittore|Scultore',
+  'Re|Imperatore;Mago|Strega;Pirata|Vichingo;Vampiro|Zombie;Fantasma|Scheletro;Babbo Natale|Befana;Nonna|Zia',
+  'Sposa|Damigella;Idraulico|Elettricista;Contadino|Giardiniere',
+  // natura e tempo
+  'Sole|Luna;Stella|Pianeta;Pioggia|Neve;Nebbia|Fumo;Tuono|Fulmine;Vulcano|Terremoto;Estate|Primavera',
+  'Natale|Capodanno;Pasqua|Carnevale;Compleanno|Matrimonio;Alba|Tramonto;Rosa|Tulipano;Pino|Abete',
+  'Arcobaleno|Aurora boreale',
+  // cultura
+  'Leonardo|Michelangelo;Pinocchio|Peter Pan;Harry Potter|Il Signore degli Anelli;Batman|Superman;Topolino|Paperino',
+  'Sanremo|Eurovision;Ferrari|Lamborghini;Inter|Milan;Netflix|YouTube;Instagram|TikTok;WhatsApp|Telegram',
+  'Super Mario|Sonic;Dante|Petrarca;Gioconda|Ultima Cena;Olimpiadi|Mondiali'
+].join(';').split(';').map(function (s) { return s.split('|'); });
+
+const KEY = 'sigbianchi.v1';
+const MIN = 3, MAX = 16;
+const PTS = { civ: 2, inf: 10, bia: 6 };
+const ROLE = { civ: 'Civile', inf: 'Infiltrato', bia: 'Sig. Bianchi' };
+
+const $app = document.getElementById('app');
+const $ = function (id) { return document.getElementById(id); };
+const esc = function (s) {
+  return String(s).replace(/[&<>"']/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+  });
+};
+const rnd = function (n) { return Math.floor(Math.random() * n); };
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) { const j = rnd(i + 1); const t = a[i]; a[i] = a[j]; a[j] = t; }
+  return a;
+}
+
+/* ---------- stato (salvato sul telefono, così una partita sopravvive a un ricaricamento) ---------- */
+function blank() { return { names: ['', '', ''], nB: 1, nI: 0, custom: false, scores: {}, used: [], game: null }; }
+function load() {
+  let d = null;
+  try { d = JSON.parse(localStorage.getItem(KEY)); } catch (e) { /* niente di salvato */ }
+  if (!d || !Array.isArray(d.names)) return blank();
+  d = Object.assign(blank(), d);
+  d.names = d.names.slice(0, MAX).map(String);
+  while (d.names.length < MIN) d.names.push('');
+  if (!d.game || !Array.isArray(d.game.players)) d.game = null;
+  else if (d.game.phase === 'card') d.game.phase = 'pass';
+  return d;
+}
+function save() { try { localStorage.setItem(KEY, JSON.stringify(D)); } catch (e) { /* memoria non disponibile */ } }
+
+const D = load();
+let screen = 'home';
+let sel = -1;        // giocatore scelto nel voto
+let lastView = '';
+
+function maxImp() { return Math.floor((D.names.length - 1) / 2); }   // i Civili restano in maggioranza
+function rec(n) {
+  const nB = n >= 11 ? 2 : 1;
+  return { nB: nB, nI: n < 5 ? 0 : Math.floor((n - 3) / 2) - (nB - 1) };
+}
+function fix() {
+  if (!D.custom) { const r = rec(D.names.length); D.nB = r.nB; D.nI = r.nI; }
+  const m = maxImp();
+  while (D.nB + D.nI > m) { if (D.nI > 0) D.nI--; else D.nB--; }
+  if (D.nB + D.nI < 1) D.nB = 1;
+}
+
+/* ---------- partita ---------- */
+function startGame() {
+  const names = D.names.map(function (s, i) { return s.trim() || 'Giocatore ' + (i + 1); });
+  const seen = {};
+  for (let i = 0; i < names.length; i++) {
+    const k = names[i].toLowerCase();
+    if (seen[k]) { const e = $('err'); if (e) e.textContent = 'Due giocatori hanno lo stesso nome: ' + names[i] + '.'; return; }
+    seen[k] = true;
+  }
+  fix();
+  D.used = D.used.filter(function (i) { return i >= 0 && i < PAIRS.length; });
+  if (D.used.length >= PAIRS.length) D.used = [];
+  let idx;
+  do { idx = rnd(PAIRS.length); } while (D.used.indexOf(idx) >= 0);
+  D.used.push(idx);
+  const flip = rnd(2), n = names.length;
+  const roles = shuffle([].concat(
+    Array(D.nB).fill('bia'), Array(D.nI).fill('inf'), Array(n - D.nB - D.nI).fill('civ')));
+  D.game = {
+    players: names.map(function (name, i) { return { name: name, role: roles[i], alive: true }; }),
+    civ: PAIRS[idx][flip], inf: PAIRS[idx][1 - flip],
+    round: 1, phase: 'pass', deal: 0, peek: -1, start: 0, out: -1, guess: '', win: null
+  };
+  pickStart();
+  screen = 'game';
+  save(); render();
+}
+// Il Sig. Bianchi non parla mai per primo: senza indizi altrui non avrebbe scampo.
+function pickStart() {
+  const G = D.game, c = [];
+  G.players.forEach(function (p, i) { if (p.alive && p.role !== 'bia') c.push(i); });
+  G.start = c.length ? c[rnd(c.length)] : 0;
+}
+function order() {
+  const G = D.game, n = G.players.length, o = [];
+  for (let k = 0; k < n; k++) { const i = (G.start + k) % n; if (G.players[i].alive) o.push(i); }
+  return o;
+}
+function who() { const G = D.game; return G.peek >= 0 ? G.peek : G.deal; }
+function set(phase) { D.game.phase = phase; save(); render(); }
+function count(role) {
+  return D.game.players.filter(function (p) { return p.alive && p.role === role; }).length;
+}
+function afterElim() {
+  const G = D.game, imp = count('bia') + count('inf');
+  if (imp === 0) return finish('civ');
+  if (count('civ') <= 1) return finish('imp');
+  G.round++; pickStart(); set('round');
+}
+function finish(kind) {
+  const G = D.game, pts = {};
+  G.players.forEach(function (p, i) {
+    let v = 0;
+    if (kind === 'civ' && p.role === 'civ') v = PTS.civ;
+    if (kind === 'imp' && p.alive && p.role !== 'civ') v = PTS[p.role];
+    if (kind === 'guess' && i === G.out) v = PTS.bia;
+    if (v) { pts[i] = v; D.scores[p.name] = (D.scores[p.name] || 0) + v; }
+  });
+  G.win = { kind: kind, who: G.out, pts: pts };
+  set('end');
+}
+
+/* ---------- la risposta del Sig. Bianchi: tollera accenti, articoli e un refuso ---------- */
+function norm(s) {
+  return String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim()
+    .replace(/^(il|lo|la|i|gli|le|un|uno|una)\s+/, '').replace(/^l['’]\s*/, '').replace(/[^a-z0-9]/g, '');
+}
+function lev(a, b) {
+  let prev = [];
+  for (let j = 0; j <= b.length; j++) prev[j] = j;
+  for (let i = 1; i <= a.length; i++) {
+    const cur = [i];
+    for (let j = 1; j <= b.length; j++) {
+      cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+    }
+    prev = cur;
+  }
+  return prev[b.length];
+}
+function match(guess, word, other) {
+  const a = norm(guess), b = norm(word);
+  if (!a) return false;
+  if (a === b) return true;
+  if (a === norm(other)) return false;
+  return lev(a, b) <= (b.length >= 9 ? 2 : b.length >= 5 ? 1 : 0);
+}
+
+/* ---------- schermate ---------- */
+function emblem(cls) {
+  return '<svg class="emblem ' + (cls || '') + '" viewBox="0 0 100 100" aria-hidden="true">' +
+    '<path d="M18 100C18 79 33 70 50 70s32 9 32 30z"/><circle cx="50" cy="48" r="17"/>' +
+    '<rect x="24" y="31" width="52" height="6" rx="3"/><path d="M33 32C33 13 67 13 67 32z"/>' +
+    '<rect class="cut" x="35.5" y="25" width="29" height="4"/><path class="cut" d="M50 71l-4.5 5 4.5 17 4.5-17z"/></svg>';
+}
+function bar(label) {
+  return '<div class="topbar"><span class="eyebrow">' + label + '</span>' +
+    '<button class="link" data-a="home">Menu</button></div>';
+}
+function stepper(k, cls, label, sub, v) {
+  const tot = D.nB + D.nI;
+  return '<div class="srow"><div><b class="' + cls + '">' + label + '</b><small>' + sub + '</small></div><div class="step">' +
+    '<button data-a="dec" data-k="' + k + '" aria-label="Meno ' + label + '"' + (v <= 0 || tot <= 1 ? ' disabled' : '') + '>−</button>' +
+    '<span class="count">' + v + '</span>' +
+    '<button data-a="inc" data-k="' + k + '" aria-label="Più ' + label + '"' + (tot >= maxImp() ? ' disabled' : '') + '>+</button>' +
+    '</div></div>';
+}
+function hidden() {
+  const b = count('bia'), f = count('inf'), parts = [];
+  if (b) parts.push(b + ' Sig. Bianchi');
+  if (f) parts.push(f + (f === 1 ? ' Infiltrato' : ' Infiltrati'));
+  return 'Ancora da scoprire: ' + parts.join(' e ') + '.';
+}
+function cardFront(p, G) {
+  if (p.role === 'bia') {
+    return emblem() + '<span class="word long">Sig. Bianchi</span>' +
+      '<span class="note">Carta bianca: non hai nessuna parola. Ascolta gli altri e bluffa.</span>';
+  }
+  const w = p.role === 'civ' ? G.civ : G.inf;
+  return '<span class="eyebrow">La tua parola</span>' +
+    '<span class="word' + (w.length > 11 ? ' long' : '') + '">' + esc(w) + '</span>' +
+    '<span class="note">Tienila segreta.</span>';
+}
+
+const VIEW = {
+  home: function () {
+    const live = D.game && D.game.phase !== 'end';
+    return '<div class="grow stack center mid">' + emblem('big') +
+      '<h1>Sig. Bianchi</h1><p class="muted">Tutti hanno una parola. Tranne uno.</p></div>' +
+      '<div class="stack">' +
+      (live ? '<button class="btn" data-a="resume">Riprendi la partita</button>' : '') +
+      '<button class="btn' + (live ? ' ghost' : '') + '" data-a="setup">Nuova partita</button>' +
+      '<button class="btn ghost" data-a="rules">Come si gioca</button>' +
+      '<a class="link" href="../index.html">← Ludoteca</a></div>';
+  },
+
+  rules: function () {
+    return '<div class="topbar"><button class="link" data-a="home">← Indietro</button></div>' +
+      '<h2>Come si gioca</h2><ol class="rules">' +
+      '<li><b>Le carte.</b> Il telefono passa di mano in mano e ognuno legge in segreto la propria parola. ' +
+      'I <b class="c-civ">Civili</b> hanno tutti la stessa. Gli <b class="c-inf">Infiltrati</b> ne hanno una simile, ' +
+      'e non sanno di essere infiltrati. Il <b class="c-bia">Sig. Bianchi</b> ha carta bianca: nessuna parola.</li>' +
+      '<li><b>Gli indizi.</b> A turno, ognuno dice una sola parola legata alla propria. Abbastanza chiara da farsi ' +
+      'riconoscere dai compagni, abbastanza vaga da non aiutare il Sig. Bianchi, che intanto ascolta e improvvisa.</li>' +
+      '<li><b>Il voto.</b> Finito il giro si discute e si vota: chi prende più voti è eliminato e la sua carta viene svelata.</li>' +
+      '<li><b>L’ultima parola.</b> Se viene eliminato, il Sig. Bianchi può ancora vincere indovinando la parola dei Civili.</li>' +
+      '<li><b>Chi vince.</b> I Civili vincono quando hanno eliminato tutti gli impostori. ' +
+      'Gli impostori vincono se resta in gioco un solo Civile.</li></ol>' +
+      '<p class="muted small">Punti a chi vince: ' + PTS.civ + ' a ogni Civile, ' + PTS.bia + ' al Sig. Bianchi, ' +
+      PTS.inf + ' a ogni Infiltrato.</p>' +
+      '<div class="grow"></div><button class="btn" data-a="setup">Nuova partita</button>';
+  },
+
+  setup: function () {
+    const n = D.names.length;
+    return '<div class="topbar"><button class="link" data-a="home">← Indietro</button></div>' +
+      '<h2>Chi gioca?</h2><p class="muted">Da ' + MIN + ' a ' + MAX + ' giocatori, in ordine di posto.</p>' +
+      '<ul class="plist">' + D.names.map(function (s, i) {
+        return '<li class="nrow"><input class="field name" data-i="' + i + '" value="' + esc(s) + '" placeholder="Giocatore ' + (i + 1) +
+          '" aria-label="Nome del giocatore ' + (i + 1) + '" maxlength="16" autocomplete="off" autocapitalize="words" enterkeyhint="next">' +
+          (n > MIN ? '<button class="x" data-a="del" data-i="' + i + '" aria-label="Rimuovi il giocatore ' + (i + 1) + '">×</button>' : '') +
+          '</li>';
+      }).join('') + '</ul>' +
+      (n < MAX ? '<button class="btn ghost" data-a="add">+ Aggiungi giocatore</button>' : '') +
+      '<h2 class="mt">I ruoli</h2>' +
+      stepper('bia', 'c-bia', 'Sig. Bianchi', 'Nessuna parola', D.nB) +
+      stepper('inf', 'c-inf', 'Infiltrati', 'Una parola simile', D.nI) +
+      '<div class="srow"><div><b class="c-civ">Civili</b><small>La stessa parola</small></div>' +
+      '<span class="count">' + (n - D.nB - D.nI) + '</span></div>' +
+      '<p class="err" id="err" role="alert"></p><div class="grow"></div>' +
+      '<button class="btn" data-a="start">Distribuisci le carte</button>';
+  },
+
+  pass: function () {
+    const G = D.game, p = G.players[who()], peek = G.peek >= 0;
+    return bar(peek ? 'Giro ' + G.round : 'Carta ' + (G.deal + 1) + ' di ' + G.players.length) +
+      '<div class="grow stack center mid"><p class="eyebrow">Passa il telefono a</p><h1>' + esc(p.name) + '</h1>' +
+      '<p class="muted">Nessun altro deve vedere lo schermo.</p></div>' +
+      '<button class="btn" data-a="show">Sono ' + esc(p.name) + ', mostra la carta</button>' +
+      (peek ? '<button class="link" data-a="toround">Annulla</button>' : '');
+  },
+
+  card: function () {
+    const p = D.game.players[who()];
+    return bar(esc(p.name)) +
+      '<div class="grow stack center mid"><div class="cardwrap">' +
+      '<button class="card" data-a="flip" aria-label="Gira la carta">' +
+      '<span class="face back">' + emblem() + '<span class="tag">Tocca per girare</span></span>' +
+      '<span class="face front" id="front"></span></button></div></div>' +
+      '<button class="btn" id="hide" data-a="hide" disabled>Ho visto, nascondi</button>';
+  },
+
+  round: function () {
+    const G = D.game;
+    return bar('Giro ' + G.round) +
+      '<h2>Un indizio a testa</h2>' +
+      '<p class="muted">A turno, dite ad alta voce una sola parola legata alla vostra parola segreta.</p>' +
+      '<ol class="plist">' + order().map(function (i, k) {
+        return '<li class="prow"><span class="num">' + (k + 1) + '</span><span class="nm">' + esc(G.players[i].name) + '</span>' +
+          (k === 0 ? '<span class="tag">inizia</span>' : '') + '</li>';
+      }).join('') + '</ol>' +
+      '<p class="muted small">' + hidden() + '</p><div class="grow"></div>' +
+      '<button class="btn" data-a="tovote">Passa al voto</button>' +
+      '<button class="link" data-a="peek">Qualcuno ha dimenticato la parola?</button>';
+  },
+
+  peek: function () {
+    const G = D.game;
+    return bar('Giro ' + G.round) +
+      '<h2>Chi vuole rivedere la carta?</h2>' +
+      '<ul class="plist">' + G.players.map(function (p, i) {
+        return p.alive ? '<li><button class="prow" data-a="pick" data-i="' + i + '"><span class="nm">' + esc(p.name) + '</span></button></li>' : '';
+      }).join('') + '</ul><div class="grow"></div>' +
+      '<button class="link" data-a="toround">← Torna agli indizi</button>';
+  },
+
+  vote: function () {
+    const G = D.game;
+    return bar('Giro ' + G.round + ' · Voto') +
+      '<h2>Chi eliminate?</h2>' +
+      '<p class="muted">Discutete, poi votate tutti insieme. Chi prende più voti esce dal gioco.</p>' +
+      '<ul class="plist">' + G.players.map(function (p, i) {
+        return p.alive ? '<li><button class="prow pick' + (sel === i ? ' on' : '') + '" data-a="sel" data-i="' + i +
+          '" aria-pressed="' + (sel === i) + '"><span class="nm">' + esc(p.name) + '</span></button></li>' : '';
+      }).join('') + '</ul><div class="grow"></div>' +
+      '<button class="btn danger" data-a="elim"' + (sel < 0 ? ' disabled' : '') + '>' +
+      (sel < 0 ? 'Scegliete un giocatore' : 'Elimina ' + esc(G.players[sel].name)) + '</button>' +
+      '<button class="link" data-a="toround">← Torna agli indizi</button>';
+  },
+
+  reveal: function () {
+    const G = D.game, p = G.players[G.out], civ = p.role === 'civ';
+    return bar('Giro ' + G.round) +
+      '<div class="grow stack center mid"><p class="eyebrow">Eliminato</p><h2>' + esc(p.name) + ' era…</h2>' +
+      '<div class="verdict ' + p.role + ' pop">' + (civ ? 'un Civile' : 'un Infiltrato') + '</div>' +
+      '<p class="muted pop2">' + (civ ? 'Aveva la parola giusta.' : 'Aveva una parola simile, ma non la stessa.') + '</p></div>' +
+      '<button class="btn pop2" data-a="next">Continua</button>';
+  },
+
+  guess: function () {
+    const G = D.game, p = G.players[G.out];
+    return bar('Giro ' + G.round) +
+      '<div class="stack center mt"><p class="eyebrow">Eliminato</p><h2>' + esc(p.name) + ' era…</h2>' +
+      '<div class="verdict bia pop">il Sig. Bianchi</div></div>' +
+      '<div class="stack pop2 mt"><p>Ha un’ultima possibilità: se indovina la parola dei Civili, vince da solo.</p>' +
+      '<input class="field" id="guess" placeholder="La parola dei Civili" aria-label="La parola dei Civili" maxlength="40" ' +
+      'autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="done"></div>' +
+      '<div class="grow"></div><button class="btn" data-a="guess">Conferma la risposta</button>' +
+      '<button class="link" data-a="giveup">Non ne ho idea</button>';
+  },
+
+  missed: function () {
+    const G = D.game, p = G.players[G.out];
+    return bar('Giro ' + G.round) +
+      '<div class="grow stack center mid"><p class="eyebrow">Sig. Bianchi</p><h2>Niente da fare</h2>' +
+      '<p class="muted">' + (G.guess ? '«' + esc(G.guess) + '» non è la parola dei Civili.'
+        : esc(p.name) + ' non ha tentato la risposta.') + '</p></div>' +
+      '<button class="btn" data-a="next">Continua</button>';
+  },
+
+  end: function () {
+    const G = D.game, W = G.win;
+    let title, sub;
+    if (W.kind === 'civ') { title = 'Vincono i Civili'; sub = 'Tutti gli impostori sono stati scoperti.'; }
+    else if (W.kind === 'guess') {
+      title = 'Vince il Sig. Bianchi';
+      sub = esc(G.players[W.who].name) + ' ha indovinato la parola dei Civili.';
+    } else {
+      const b = count('bia'), f = count('inf');
+      title = !f ? (b === 1 ? 'Vince il Sig. Bianchi' : 'Vincono i Sig. Bianchi')
+        : !b ? (f === 1 ? 'Vince l’Infiltrato' : 'Vincono gli Infiltrati') : 'Vincono gli impostori';
+      sub = 'È rimasto in gioco un solo Civile.';
+    }
+    const hasInf = G.players.some(function (p) { return p.role === 'inf'; });
+    const rows = G.players.map(function (p, i) { return i; }).sort(function (a, b) {
+      return (D.scores[G.players[b].name] || 0) - (D.scores[G.players[a].name] || 0) || a - b;
+    });
+    return '<div class="stack center mt"><p class="eyebrow">Fine della manche</p><h1>' + title + '</h1>' +
+      '<p class="muted">' + sub + '</p></div>' +
+      '<div class="words"><div><span class="eyebrow">Civili</span><b>' + esc(G.civ) + '</b></div>' +
+      (hasInf ? '<div><span class="eyebrow">Infiltrati</span><b>' + esc(G.inf) + '</b></div>' : '') + '</div>' +
+      '<ul class="plist">' + rows.map(function (i) {
+        const p = G.players[i];
+        return '<li class="prow erow' + (p.alive ? '' : ' out') + '"><span class="nm">' + esc(p.name) + '</span>' +
+          '<span class="chip ' + p.role + '">' + ROLE[p.role] + '</span>' +
+          (W.pts[i] ? '<span class="gain">+' + W.pts[i] + '</span>' : '') +
+          '<span class="tot">' + (D.scores[p.name] || 0) + ' pt</span></li>';
+      }).join('') + '</ul><div class="grow"></div>' +
+      '<button class="btn" data-a="again">Un’altra manche</button>' +
+      '<button class="btn ghost" data-a="setup">Cambia giocatori</button>' +
+      '<button class="link" data-a="reset">Azzera i punteggi</button>';
+  }
+};
+
+function render() {
+  const key = screen === 'game' ? D.game.phase : screen;
+  $app.innerHTML = VIEW[key]();
+  if (key !== lastView) { window.scrollTo(0, 0); lastView = key; }
+}
+
+/* ---------- azioni ---------- */
+const ACT = {
+  home: function () { screen = 'home'; render(); },
+  rules: function () { screen = 'rules'; render(); },
+  setup: function () { screen = 'setup'; fix(); render(); },
+  resume: function () { screen = 'game'; render(); },
+  add: function () {
+    if (D.names.length >= MAX) return;
+    D.names.push(''); fix(); save(); render();
+    const a = $app.querySelectorAll('.name'); a[a.length - 1].focus();
+  },
+  del: function (t) {
+    if (D.names.length <= MIN) return;
+    D.names.splice(+t.dataset.i, 1); fix(); save(); render();
+  },
+  inc: function (t) {
+    if (D.nB + D.nI >= maxImp()) return;
+    D[t.dataset.k === 'bia' ? 'nB' : 'nI']++; D.custom = true; save(); render();
+  },
+  dec: function (t) {
+    const k = t.dataset.k === 'bia' ? 'nB' : 'nI';
+    if (D[k] <= 0 || D.nB + D.nI <= 1) return;
+    D[k]--; D.custom = true; save(); render();
+  },
+  start: startGame,
+  again: startGame,
+  show: function () { set('card'); },
+  flip: function (t) {
+    if (t.classList.contains('flipped')) return;
+    $('front').innerHTML = cardFront(D.game.players[who()], D.game);
+    t.classList.add('flipped');
+    setTimeout(function () { const b = $('hide'); if (b) b.disabled = false; }, 500);
+  },
+  hide: function () {
+    const G = D.game;
+    if (G.peek >= 0) { G.peek = -1; return set('round'); }
+    G.deal++;
+    set(G.deal >= G.players.length ? 'round' : 'pass');
+  },
+  tovote: function () { sel = -1; set('vote'); },
+  toround: function () { D.game.peek = -1; set('round'); },
+  peek: function () { set('peek'); },
+  pick: function (t) { D.game.peek = +t.dataset.i; set('pass'); },
+  sel: function (t) { sel = +t.dataset.i; render(); },
+  elim: function () {
+    const G = D.game;
+    if (sel < 0 || !G.players[sel] || !G.players[sel].alive) return;
+    G.players[sel].alive = false; G.out = sel; G.guess = ''; sel = -1;
+    set(G.players[G.out].role === 'bia' ? 'guess' : 'reveal');
+  },
+  next: afterElim,
+  guess: function () {
+    const G = D.game, el = $('guess'), v = el.value.trim();
+    if (!v) { el.focus(); return; }
+    G.guess = v;
+    if (match(v, G.civ, G.inf)) finish('guess'); else set('missed');
+  },
+  giveup: function () { D.game.guess = ''; set('missed'); },
+  reset: function () { D.scores = {}; save(); render(); }
+};
+
+$app.addEventListener('click', function (e) {
+  const t = e.target.closest('[data-a]');
+  if (t && !t.disabled && ACT[t.dataset.a]) ACT[t.dataset.a](t);
+});
+$app.addEventListener('input', function (e) {
+  if (!e.target.classList.contains('name')) return;
+  D.names[+e.target.dataset.i] = e.target.value;
+  const err = $('err'); if (err) err.textContent = '';
+  save();
+});
+$app.addEventListener('keydown', function (e) {
+  if (e.key !== 'Enter') return;
+  if (e.target.id === 'guess') { e.preventDefault(); ACT.guess(); }
+  else if (e.target.classList.contains('name')) {
+    e.preventDefault();
+    const a = $app.querySelectorAll('.name'), nx = a[+e.target.dataset.i + 1];
+    if (nx) nx.focus(); else e.target.blur();
+  }
+});
+
+fix();
+render();
+})();
+</script>
+</body>
+</html>
