@@ -1,0 +1,532 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>try { globalThis.KIT_EXIT = { href: sessionStorage.getItem('simulone-home') || '../index.html', label: 'menu' }; } catch (e) { globalThis.KIT_EXIT = { href: '../index.html', label: 'menu' }; }</script>
+<meta name="build" content="ant-colony · engine 0.3.0 · kit 0.3.1 · modules 0.4.0 · built 2026-11-24">
+<title>The Colony</title>
+<style>
+  /* One look, the earth's: the kit's colours set for this game, the same by day and by night. (`html:root` so these win over the kit's own, which are added to the page later.) */
+  html:root, html:root[data-theme="dark"], html:root[data-theme="light"] { --k-bg: #1c140e; --k-panel: #261b12; --k-ink: #ece0c8; --k-dim: #a8957a; --k-line: #4a3a2a; --k-warn: #f08a4a; --k-on-ink: #1c140e; color-scheme: dark; }
+  @media (prefers-color-scheme: dark) { html:root:not([data-theme="light"]) { --k-bg: #1c140e; --k-panel: #261b12; --k-ink: #ece0c8; --k-dim: #a8957a; --k-line: #4a3a2a; --k-warn: #f08a4a; --k-on-ink: #1c140e; } }
+</style>
+<script type="module">
+import { createGame } from './shared/engine/index.js';
+import { createScreen, meter } from './shared/kit/kit.js';
+import { createSave } from './shared/modules/save.js';
+import { createSlots } from './shared/modules/slots.js';
+import { createLoader } from './shared/modules/loader.js';
+import { loadArt, noAgentSprites } from './art.js';
+import { colonyView } from './view.js';
+import { createPainter } from './painter.js';
+import * as nest from './nest.js';
+
+// The numbers are in nest.js and the colony's rules in rules.js. The screen's layout is the shared kit. This page
+// draws what the engine does not know about (marks, rooms, scent, piles, loads in jaws) on a layer of its own over the map.
+const ui = createScreen(document.body);
+// The page stays covered until the drawings are in and the nest is dug (a new colony reloads the page, so it is covered too).
+const loader = createLoader({ title: 'The Colony', text: 'breaking ground' });
+const [w0, h0] = ui.size();
+ui.canvas.width = w0; ui.canvas.height = h0;
+// A colony is kept on the device, and so is the seed its world was made from. A new colony gets a new world.
+const saves = createSave({ key: 'ant-colony-save', version: 1 });
+// Saved games by hand, and save codes: copies of everything this game keeps on the device (modules/slots.js).
+const slots = createSlots({ game: 'ant-colony', keys: ['ant-colony-save', 'ant-colony-seed', 'ant-colony-profile'], flush: () => keep(),
+  describe: () => `${sim.count} ants, ${nest.ground.dug} cells dug, ${nest.items.stored[1]} crumbs in store` });
+// Started from the menu's "showcase": a busy colony made ready beforehand is put in place, and the page starts again.
+if (await slots.takeShowcase('./showcase.txt')) await new Promise(() => {});
+const stored = k => { try { return localStorage.getItem(k); } catch { return null; } };
+const saved = saves.read();
+nest.MAP.seed = saved?.extra?.seed ?? (+stored('ant-colony-seed') || nest.MAP.seed);
+// The drawn art, if there is any: the ground is then painted by this game's own view and the ants by its painter.
+const art = await loader.track(loader.fetch(new URL('./art.png', import.meta.url).href, 'fetching the drawings').then(url => loadArt(url)), 'unpacking the drawings');
+const game = createGame(nest.makeConfig({ canvas: ui.canvas, onFrame: frame,
+  ...(art ? { view: nest.ART_VIEW, renderer: colonyView(art, nest.ART_GROUND), sprites: noAgentSprites() } : {}) }));
+const { sim, world } = game, { items, ground, zones, scent, claims, weather, water, foes, tasks, colony, progress } = nest, W = world.w, TS = game.renderer.ts;
+const resumed = !!saved && saves.restore(sim, saved);
+if (!resumed) nest.populate(sim);
+window.game = game; window.nest = nest;                         // poke at it from the console
+const over = ui.layer();
+over.width = w0; over.height = h0;
+ui.onResize = (w, h) => { game.resize(w, h); over.width = ui.canvas.width; over.height = ui.canvas.height; };
+
+// The camera is kept to the ground the colony holds, and a rim of what lies beside it.
+function limitView() {
+  const b = claims.bounds(), rim = nest.CLAIM.rim;
+  game.renderer.setBounds({ x0: Math.max(0, b.x0 - rim) * TS, y0: Math.max(0, b.y0 - rim) * TS, x1: Math.min(W, b.x1 + 1 + rim) * TS, y1: Math.min(world.h, b.y1 + 1 + rim) * TS });
+}
+limitView();
+const plotName = p => 'ABCDEFGHIJ'[p.col] + (p.row + 1);
+// Start close enough to see ants, looking at the first chamber and the shaft above it.
+game.camera.zoom = Math.max(game.renderer.minZoom, Math.min(2.5, w0 / (22 * TS)));
+game.camera.x = (nest.SHAFT_X + 0.5) * TS; game.camera.y = (nest.CHAMBER.y - 3) * TS;
+if (resumed && saved.extra?.camera) { Object.assign(game.camera, saved.extra.camera); game.speed = saved.extra.speed || 1; }
+limitView();
+let leaving = false;                                            // set when this colony is being abandoned: it must not be saved again on the way out
+const keep = () => !leaving && !slots.leaving && saves.write(sim, { seed: nest.MAP.seed, camera: { ...game.camera }, speed: pausedAt ?? game.speed });
+ui.onExit = keep;                                               // leaving for the menu (when opened from one): keep the colony first
+setInterval(keep, 20000);
+document.addEventListener('visibilitychange', () => { if (document.hidden) keep(); });
+// A new colony: the score and achievements stay, the nest and its world go.
+function newColony() {
+  leaving = true;
+  saves.clear();
+  try { localStorage.setItem('ant-colony-seed', String(1 + Math.floor(Math.random() * 1e6))); } catch { /* the same world again */ }
+  location.reload();
+}
+
+// How much time keeping routes up to date takes, since the ground changes all the time.
+let routeMs = 0, routeShown = 0, routeSince = performance.now();
+{ const work = world.work.bind(world); world.work = b => { if (!world.fieldsDirty) return false; const t = performance.now(), r = work(b); routeMs += performance.now() - t; return r; }; }
+
+// ── time
+const SPEEDS = [1, 2, 4, 8];
+let pausedAt = null;
+const showSpeed = () => { pauseBtn.textContent = pausedAt === null ? 'pause' : 'go'; pauseBtn.className = pausedAt === null ? '' : 'on'; speedBtn.textContent = (pausedAt ?? game.speed) + '×'; };
+const pauseBtn = ui.control('pause', () => { if (pausedAt === null) { pausedAt = game.speed; game.speed = 0; } else { game.speed = pausedAt; pausedAt = null; } showSpeed(); });
+const speedBtn = ui.control('1×', () => { const now = pausedAt ?? game.speed, next = SPEEDS[(SPEEDS.indexOf(now) + 1) % SPEEDS.length]; if (pausedAt !== null) pausedAt = next; else game.speed = next; showSpeed(); });
+const PHASES = ['morning', 'midday', 'afternoon', 'night'];
+const clock = () => `day ${weather.dayNo}, ${weather.isNight ? 'night' : PHASES[Math.min(2, Math.floor(weather.hour / (1 - nest.WEATHER.night) * 3))]} · ${weather.now}`;
+const secs = t => Math.max(0, Math.round(t / nest.TICKS_PER_SECOND));
+const COMING = { rain: 'rain is coming: water comes in by every way out and fills the nest from its lowest place up. Deepen the pit, keep stores and brood above it, or plug the entrance',
+                 heat: 'heat is coming: less food will turn up, and what lies on the surface will dry away', calm: 'the weather is settling' };
+weather.onEvent = (kind, what) => {
+  if (kind === 'warn') ui.toast(COMING[what], 8000);
+  else if (kind === 'begin') ui.toast(what === 'rain' ? '<b>rain</b>: nobody goes out, and every trail on the surface is washed away' : what === 'heat' ? '<b>heat</b>' : 'calm again');
+  else if (kind === 'dusk') ui.toast('night: the foragers stay in');
+};
+
+// ── news
+colony.onEvent = (kind, a, b) => {
+  if (kind === 'found') ui.toast(`an ant has found food: <b>${b} crumbs</b>`);
+  else if (kind === 'died' && b !== 'old age' && b !== 'a fight') ui.toast(`an ant died of ${b}`);
+  else if (kind === 'raid coming') ui.toast(`<b>raiders</b> are coming over the surface from the ${a.side < 0 ? 'west' : 'east'}: ${a.size} of them. Plug the entrance, or have majors ready`, 9000);
+  else if (kind === 'raid') ui.toast(`the raiders are here, from the ${a.side < 0 ? 'west' : 'east'}`);
+  else if (kind === 'rival dead') ui.toast(`<b>the rival queen is dead</b>: her nest and its store are the colony's${colony.rivals ? `; ${colony.rivals} rival nests remain` : ', and no more raids will come'}`, 9000);
+  else if (kind === 'bought') { if (b === true) { ui.toast(`<b>${plotName(a)}</b> is the colony's: ${nest.CHUNKS[a.info.kind].text}${a.info.hides ? ', and something in it' : ''}`); limitView(); } else ui.toast(`could not claim ${plotName(a)}: ${b}`); }
+  else if (kind === 'after rain') ui.toast('the rain is over: worms and drowned insects lie about on the surface', 6000);
+  else if (kind === 'cave-in') ui.toast('<b>a roof has fallen in</b>: sand does not hold a wide room');
+  else if (kind === 'lost') ui.toast(`${b} brood lost to ${water.wet[a] ? 'the water' : 'a cave-in'}`);
+  else if (kind === 'dug up') ui.toast(`the ants have dug up <b>${nest.HIDDEN[a.kind].text}</b>`, 7000);
+  else if (kind === 'flight') ui.toast(`<b>the flight</b>: ${a} princess${a === 1 ? '' : 'es'} set out`, 6000);
+  else if (kind === 'daughter') ui.toast(`a princess has founded a colony: <b>${progress.get('daughters')}</b> daughter colonies`, 7000);
+  else if (kind === 'heir') ui.toast('<b>the queen is dead</b>. A princess has taken her place', 9000);
+  else if (kind === 'ended') { keep(); ui.full({ title: 'The queen is dead', html: `<p>She died of ${a}, and there was no princess in the nest to take her place. No more eggs will be laid; the colony lasts as long as its last ants.</p>
+    <p>It lived ${weather.dayNo} days, raised ${colony.stats.hatched} ants, held ${claims.plots.filter(p => p.held).length} chunks and founded ${colony.stats.daughters} colonies. Over all your colonies: <b>${progress.get('daughters')} daughter colonies</b>.</p>
+    <p>You can found a new colony from the Nest sheet. What you have earned stays.</p>`, button: 'watch the end' }); }
+  else if (kind === 'hatched' && colony.stats.hatched === 1) ui.toast('the first new ant has hatched: the young stay with the brood');
+};
+progress.onEvent = (kind, it) => {
+  if (kind === 'goal') ui.toast(`done: <b>${it.title}</b>`, 6000);
+  else if (kind === 'achieved') ui.toast(`earned: <b>${it.title}</b>`, 7000);
+};
+let firstDug = false, sure = false;
+
+// ── digging: the player marks earth, the ants do the rest
+const TOOLS = [
+  { id: 'tunnel', label: 'tunnel', text: 'one cell wide', brush: 0 },
+  { id: 'room', label: 'room', text: 'three cells wide', brush: 1 },
+  { id: 'erase', label: 'unmark', text: 'take marks away', brush: 1, erase: true },
+  { id: 'plug', label: 'plug', text: 'shut a tunnel with soil', brush: 0, plug: true },
+  { id: 'move', label: 'move view', text: 'drag pans again' },
+];
+let tool = 'tunnel', last = null, digNote = 'drag over the earth to mark it';
+function setTool() {
+  const t = TOOLS.find(x => x.id === tool);
+  if (ui.open !== 'dig' || !t || t.brush === undefined) { game.tool = null; return; }
+  game.tool = (x, y, phase) => {
+    if (phase === 'cancel' || phase === 'up') { last = null; return; }
+    const from = phase === 'down' || !last ? [x, y] : last;
+    let n = 0, hard = 0, far = 0, busy = 0;
+    for (const [cx, cy] of world.lineCells(from[0], from[1], x, y))
+      for (let j = -t.brush; j <= t.brush; j++) for (let i = -t.brush; i <= t.brush; i++) {
+        const px = cx + i, py = cy + j;
+        if (t.plug) {                                              // pack soil into an open cell: a way shut, dug open again like any earth
+          if (world.inside(px, py) && py > nest.SURFACE && nest.holds(px, py) && world.get(px, py) === world.id('tunnel')) {
+            if (sim.crowd[py * W + px]) busy++; else { zones.set(px, py, null); world.set(px, py, 'plug'); n++; }
+          }
+        }
+        else if (t.erase) { if (ground.unmark(px, py)) n++; }
+        else if (!nest.holds(px, py)) { if (i === 0 && j === 0) far++; }
+        else if (ground.mark(px, py)) n++;
+        else if (world.inside(px, py) && world.solid[world.get(px, py)] && !ground.loadsAt(px, py) && py > nest.SURFACE) hard++;
+      }
+    last = [x, y];
+    if (n) digNote = t.plug ? 'plugged: mark it to have it dug open again' : t.erase ? 'marks taken away' : `${ground.count} cells marked`;
+    else if (busy) digNote = 'ants are standing there: try again in a moment';
+    else if (far) digNote = 'that ground is not the colony\'s yet: claim it first';
+    else if (hard) digNote = 'stone cannot be dug: go around it';
+    ui.refresh();
+  };
+}
+// ── rooms: the player gives open ground a purpose
+let roomKind = 'brood', roomNote = 'drag over dug-out ground to name it', strokeFree = true;
+function setRoomTool() {
+  if (ui.open !== 'rooms' || roomKind === 'move') { game.tool = null; return; }
+  game.tool = (x, y, phase) => {
+    if (phase === 'cancel' || phase === 'up') { last = null; return; }
+    const from = phase === 'down' || !last ? [x, y] : last;
+    if (phase === 'down') strokeFree = zones.count('queen') === 0;   // a kind there is only one of: named in one stroke, while there is none
+    let n = 0, shut = 0, locked = 0, taken = 0;
+    for (const [cx, cy] of world.lineCells(from[0], from[1], x, y))
+      for (let j = -1; j <= 1; j++) for (let i = -1; i <= 1; i++) {
+        const px = cx + i, py = cy + j;
+        if (py <= nest.SURFACE || !nest.holds(px, py)) continue;   // the surface is nobody's room, and nor is ground not yet claimed
+        if (roomKind !== 'none' && nest.ROOMS[roomKind].needs && !colony.unlocked[nest.ROOMS[roomKind].needs]) { locked++; continue; }
+        if (nest.ROOMS[roomKind]?.one && !strokeFree) { if (zones.at(py * W + px) !== roomKind) taken++; continue; }
+        if (zones.set(px, py, roomKind === 'none' ? null : roomKind)) n++;
+        else if (i === 0 && j === 0 && !zones.open(px, py)) shut++;
+      }
+    last = [x, y];
+    if (n) roomNote = roomKind === 'none' ? 'purpose taken away' : `${zones.count(roomKind)} cells of ${roomKind} room`;
+    else if (taken) roomNote = `there is already a ${roomKind} room: take its purpose away first (no purpose), then name the new one in one stroke`;
+    else if (locked) roomNote = 'the colony has not found fungus yet: it lies somewhere in the earth';
+    else if (shut) roomNote = 'that is solid earth: dig it out first';
+    ui.refresh();
+  };
+}
+function roomSheet(body) {
+  const chip = (id, label, text) => `<button data-room="${id}" class="${id === roomKind ? 'on' : ''}">${label} <small>${text}</small></button>`;
+  ui.html(body, `<div class="k-chips">${Object.entries(nest.ROOMS).map(([k, r]) => chip(k, swatch(r.color) + k, r.needs && !colony.unlocked[r.needs] ? `find ${r.needs} first` : Object.entries(r.holds).map(([i, n]) => `${n} ${i}`).join(', ') + (Object.keys(r.holds).length ? ' a cell' : 'no store'))).join('')}${chip('none', 'no purpose', 'clear')}${chip('move', 'move view', '')}</div>
+    <p style="margin-top:8px">${roomNote}. ${nest.ROOMS[roomKind]?.text ?? ''}</p>
+    <p>${zones.rooms().map(r => `<span style="white-space:nowrap;margin-right:12px">${swatch(nest.ROOMS[r.kind].color)}${r.kind} <small>${r.cells.length} cells</small></span>`).join('') || '<span class="k-dim">no rooms yet</span>'}</p>`);
+  body.onclick = e => { const b = e.target.closest('button[data-room]'); if (b) { roomKind = b.dataset.room; setRoomTool(); ui.refresh(); } };
+}
+
+// ── scent: the player lays the same scents the ants do
+const MARKS = [
+  { id: 'trail', label: 'trail', layer: 'trail', amount: nest.TRAIL.painted },
+  { id: 'gather', label: 'gather', layer: 'gather', amount: nest.TRAIL.mark },
+  { id: 'keepout', label: 'keep out', layer: 'keepout', amount: nest.TRAIL.mark },
+  { id: 'alarm', label: 'alarm', layer: 'alarm', amount: nest.SCENT.alarm.max },
+];
+let markKind = 'trail', scentNote = 'drag along open ground to lay it', showTraffic = false;
+function setScentTool() {
+  const m = MARKS.find(x => x.id === markKind);
+  if (ui.open !== 'scent' || (!m && markKind !== 'wipe')) { game.tool = null; return; }
+  game.tool = (x, y, phase) => {
+    if (phase === 'cancel' || phase === 'up') { last = null; return; }
+    const from = phase === 'down' || !last ? [x, y] : last;
+    let n = 0;
+    for (const [cx, cy] of world.lineCells(from[0], from[1], x, y)) {
+      if (!world.inside(cx, cy) || world.solid[world.get(cx, cy)] || !nest.holds(cx, cy)) continue;
+      const c = cy * W + cx;
+      if (m) scent.set(m.layer, c, m.amount); else for (const k of MARKS) scent.set(k.layer, c, 0);
+      n++;
+    }
+    last = [x, y];
+    if (n) scentNote = m ? `${m.label} laid; it fades in a few minutes unless laid again` : 'scent wiped'; else scentNote = 'scent only lies on open ground';
+    ui.refresh();
+  };
+}
+function scentSheet(body) {
+  const chip = (id, label, text) => `<button data-mark="${id}" class="${id === markKind ? 'on' : ''}">${label} <small>${text}</small></button>`;
+  ui.html(body, `<div class="k-chips">${MARKS.map(m => chip(m.id, swatch(nest.SCENT[m.layer].color) + m.label, '')).join('')}${chip('wipe', 'wipe', 'clear marks')}${chip('move', 'move view', '')}</div>
+    <p style="margin-top:8px">${scentNote}. ${nest.SCENT[MARKS.find(m => m.id === markKind)?.layer]?.text ?? ''}</p>
+    <p>The colony knows of ${colony.knownCrumbs} crumbs lying about and has not found ${colony.unknownCrumbs} more. Ants carrying food home lay the trail themselves.</p>
+    <div class="k-chips"><button data-show="traffic" class="${showTraffic ? 'on' : ''}">show traffic <small>where ants walk, and jams</small></button></div>`);
+  body.onclick = e => {
+    const b = e.target.closest('button');
+    if (b?.dataset.mark) { markKind = b.dataset.mark; setScentTool(); ui.refresh(); }
+    else if (b?.dataset.show) { showTraffic = !showTraffic; ui.refresh(); }
+  };
+}
+
+// ── claiming: the map grows a chunk at a time
+const needText = p => claims.why(p);
+function wantPlot(p) {
+  const why = claims.why(p), price = claims.priceOf(p);
+  if (why) return ui.toast(`${plotName(p)} cannot be claimed: ${why}`);
+  if (items.space[1] < price + colony.kept()) return ui.toast(`${plotName(p)} costs ${price} crumbs, ${colony.kept()} more must stay for the ants, and the food rooms hold ${items.space[1]} at most: name a bigger food room`, 8000);
+  colony.target = p;                                             // bought as soon as the store can pay
+  if (!colony.canPay(price)) ui.toast(`saving ${price} crumbs for ${plotName(p)}: fewer larvae are fed until then`, 6000);
+  ui.refresh();
+}
+function claimSheet(body) {
+  const t = colony.target, list = claims.claimable().sort((a, b) => claims.priceOf(a) - claims.priceOf(b) || a.col - b.col);
+  const row = p => { const why = needText(p), price = claims.priceOf(p);
+    return `<tr><td><b>${plotName(p)}</b> ${p.row === 0 ? 'surface' : 'depth ' + p.row}</td><td style="text-align:left">${nest.CHUNKS[p.info.kind].text}${p.info.hides ? `; <b>${nest.HIDDEN[p.info.hides.kind].sign}</b>` : ''}</td><td>${price}</td>` +
+      `<td>${t === p ? '<button data-plot="cancel">saving: stop</button>' : why ? `<small>${why}</small>` : `<button data-plot="${p.col},${p.row}">${colony.canPay(price) ? 'claim' : 'save for it'}</button>`}</td></tr>`; };
+  ui.html(body, `<p>The colony holds ${claims.plots.filter(p => p.held).length} of ${claims.plots.length} chunks and has ${items.inStores('crumb')} crumbs in store${t ? `; it is saving ${claims.priceOf(t)} for <b>${plotName(t)}</b>` : ''}. A chunk is paid for in crumbs from the food rooms, and ${colony.kept()} always stay for the ants. Surface chunks bring more finds; the others may hide something.</p>
+    <div class="k-scroll"><table><tr><th>chunk</th><th style="text-align:left">ground</th><th>crumbs</th><th></th></tr>${list.map(row).join('')}</table></div>`);
+  body.onclick = e => {
+    const b = e.target.closest('button[data-plot]');
+    if (!b) return;
+    if (b.dataset.plot === 'cancel') { colony.target = null; ui.refresh(); return; }
+    const [c, r] = b.dataset.plot.split(',').map(Number);
+    wantPlot(claims.plot(c, r));
+  };
+}
+
+const swatch = c => `<span style="display:inline-block;width:10px;height:10px;background:${c};border:1px solid var(--k-ink);vertical-align:-1px;margin-right:4px"></span>`;
+function digSheet(body) {
+  ui.html(body, `<div class="k-chips">${TOOLS.map(t => `<button data-tool="${t.id}" class="${t.id === tool ? 'on' : ''}">${t.label} <small>${t.text}</small></button>`).join('')}</div>
+    <p style="margin-top:8px">${digNote}. The ants bite marked earth out a load at a time and carry the soil up to the mound.</p>
+    <p>${Object.entries(nest.GROUND).map(([n, g]) => `<span style="white-space:nowrap;margin-right:12px">${swatch(g.color)}${n} <small>${g.loads ? g.loads + ' loads' : 'cannot be dug'}</small></span>`).join('')}</p>`);
+  body.onclick = e => { const b = e.target.closest('button[data-tool]'); if (b) { tool = b.dataset.tool; setTool(); ui.refresh(); } };
+}
+
+// ── the nest in numbers
+function nestSheet(body) {
+  const doing = {};
+  for (let i = 0; i < sim.count; i++) { const n = sim.actions[sim.action[i]].name; (doing[n] ??= [0, 0])[sim.using[i] ? 1 : 0]++; }
+  const rows = sim.actions.map(a => a.name).filter(n => doing[n]).map(n => `<tr><td>${n}</td><td>${doing[n][0] || ''}</td><td>${doing[n][1] || ''}</td></tr>`).join('');
+  const ages = {}; for (let i = 0; i < sim.count; i++) { const n = sim.types[sim.type[i]].name; ages[n] = (ages[n] ?? 0) + 1; }
+  const br = colony.brood(), died = Object.entries(colony.stats.died).map(([c, n]) => `${n} of ${c}`).join(', ');
+  ui.html(body, `<p>${nest.AGES.map(a => `${ages[a.type] ?? 0} ${a.type}`).join(' · ')} · ${colony.majors()} majors (the guard rooms call for ${colony.majorsWanted()}) · ${colony.princesses()} princesses (the flight rooms call for ${colony.princessesWanted()}) · ${colony.queen() >= 0 ? 'the queen' : '<b class="warn">no queen</b>'}</p>
+    <h3>Enemies</h3><p>${colony.rivals} rival nests in the earth · ${colony.stats.raids} raids so far${colony.raid ? `, <b class="warn">one coming in ${secs(colony.raid.at - sim.tick)} s</b>` : ''} · ${foes.killed.rivals} of them killed, ${foes.killed.colony} of the colony · ${colony.stats.stolen} crumbs stolen</p>
+    <h3>Brood</h3><p>eggs ${br.eggs} (${items.loose('egg')} waiting for a brood room) · larvae waiting to be fed ${br.larvae}${br.larvae && !colony.mayFeedBrood() ? ' <b class="warn">the store is too low to feed them</b>' : ''} · pupae ${br.pupae}</p>
+    <p>the queen's hunger${meter(colony.queenHunger())} · ${colony.stats.laid} eggs laid · ${colony.stats.hatched} ants hatched · died: ${died || 'none'}</p>
+    <h3>Work</h3><div class="k-scroll"><table><tr><th>ants</th><th>on the way</th><th>at it</th></tr>${rows}</table></div>
+    <h3>Weather</h3><p>${clock()}; ${weather.next} next, in ${secs(weather.left())} s · ${water.count} cells under water · ${colony.stats.lost} brood lost to water and cave-ins · ${colony.stats.caved} cave-ins</p>
+    <h3>Earth</h3><p>${ground.dug} cells dug out · ${ground.count} marked, ${ground.faces()} of them within reach · the mound holds ${items.stored[0]} loads and may stand ${colony.moundHeight} high</p>
+    <h3>Food</h3><p>${items.stored[1]} crumbs in the store (room for ${Math.max(0, items.room('crumb'))} more) · ${colony.knownCrumbs} lying about that the colony knows of, ${colony.unknownCrumbs} it has not found · ${colony.stats.eaten} eaten · ${colony.stats.finds} finds so far · ${colony.stats.grown} grown in ${zones.count('garden')} garden cells</p>
+    <h3>Over all your colonies</h3><p><b>${progress.get('daughters')}</b> daughter colonies · ${progress.get('colonies')} colonies founded · most ants ${progress.get('ants.max')}</p>
+    <ul>${progress.achievements().map(a => `<li${a.done ? '' : ' class="k-dim"'}>${a.done ? '■' : '□'} ${a.title} <small>${a.text}</small></li>`).join('')}</ul>
+    <p style="margin-top:8px">This colony is kept on this device and carries on where you left it. <button data-saves>saved games</button> <button data-new>${sure ? 'yes, abandon this one' : 'found a new colony'}</button>${sure ? ' <button data-keep>no, keep it</button>' : ''}</p>
+    <h3>This device</h3><p>${Math.round(game.stats.fps)} frames a second · simulation ${game.stats.simMs.toFixed(2)} ms and drawing ${game.stats.renderMs.toFixed(2)} ms a frame · keeping routes up to date ${routeShown.toFixed(1)} ms a second</p>`);
+}
+function nestClicks(e) {
+  if (e.target.closest('[data-saves]')) {                       // the clock stands still while the saved games are open
+    const sp = pausedAt ?? game.speed; game.speed = 0;
+    ui.full({ ...slots.panel(), onClose: () => { if (pausedAt === null) game.speed = sp || 1; } }); slots.wire();
+  }
+  else if (e.target.closest('[data-keep]')) { sure = false; ui.refresh(); }
+  else if (e.target.closest('[data-new]')) { if (sure) newColony(); else { sure = true; ui.refresh(); } }
+}
+function helpSheet(body) {
+  const s = t => `${+(t / nest.TICKS_PER_SECOND).toFixed(1)} s`;
+  const m = t => `${+(t / nest.TICKS_PER_SECOND / 60).toFixed(1)} min`;
+  ui.html(body, `<p>The Colony, all seven steps: <b>dig and haul</b>, <b>rooms and brood</b>, <b>scent</b>, <b>the growing map</b>, <b>water and weather</b>, <b>enemies</b>, <b>the long game</b>. Nothing is placed ready-made. You mark earth and the ants dig it; you name rooms and the ants use them; you lay scent and the ants follow it.</p>
+    <ul><li>Open <b>Dig</b> and drag from an open tunnel into the earth. A mark must touch open ground before ants can reach it.</li>
+    <li>Nobody has a job. Every ant takes the work that calls loudest: a bite of marked earth, a load to deliver, a crumb to fetch.</li>
+    <li>A bite takes ${s(nest.WORK.bite)}; a cell of loam is ${nest.GROUND.loam.loads} bites, sand ${nest.GROUND.sand.loads}, clay ${nest.GROUND.clay.loads}. Stone stays.</li>
+    <li>Every load is carried up and dropped by the way out. The mound grows as you dig.</li>
+    <li>Food turns up on the surface about every ${s(nest.FINDS.every)}, but the colony does not know of it until an ant comes within ${nest.TRAIL.sniff} cells. A few scouts wander the surface looking.</li>
+    <li>An ant carrying food home lays a blue <b>trail</b>. A pile is fetched for as long as its spot smells of trail, and forgotten when the trail fades.</li>
+    <li>In <b>Scent</b> you lay the same scents: a trail to a pile makes it known at once, <b>gather</b> collects idle ants, <b>keep out</b> sends ants another way round. Your marks fade too.</li>
+    <li>A cell holds ${nest.CROWD.room} ants at full speed; more slow each other down. A busy tunnel one cell wide jams: widen it, or dig a second way. Turn on <b>show traffic</b> in Scent to see where.</li>
+    <li>Open <b>Rooms</b> and paint dug-out ground: <b>food</b> stores crumbs, <b>brood</b> is where eggs are raised, <b>rest</b> is where ants rest fastest.</li>
+    <li>The queen sits in the <b>queen</b> room and lays only there. The colony has one: to move her, take the purpose off the old room in Rooms and name a new one.</li>
+    <li>The queen lays while she is fed. Eggs lie by her until there is a brood room; there an egg becomes a larva in about ${s(nest.BROOD.eggAfter)}, a larva fed one crumb becomes a pupa, and a pupa becomes an ant in about ${s(nest.BROOD.pupaAfter)}.</li>
+    <li>Larvae are fed only from what the store holds beyond ${nest.BROOD.reserve} crumbs an ant. A bigger food room is how the colony grows.</li>
+    <li>An ant's age decides its work: the young (to ${nest.shownDays(nest.AGES[0].until)} days) tend brood, the grown (to ${nest.shownDays(nest.AGES[1].until)} days) dig and haul, the old go outside for food. They live about ${nest.shownDays(nest.LIFESPAN)} days.</li>
+    <li>The colony holds ${nest.WORLD.held.length} chunks of a world of ${nest.WORLD.cols * nest.WORLD.rows}. In <b>Claim</b>, or by tapping dark ground, take a chunk that touches yours, paid in crumbs from the food rooms. If the store cannot pay yet the colony saves for it, feeding fewer larvae meanwhile.</li>
+    <li>Surface chunks widen the ground where food turns up. The others may hide a food cache, an old nest's rooms, or fungus: dig to the <b>?</b>. Once fungus is found you can name <b>garden</b> rooms, which give crumbs when tended.</li>
+    <li>A day lasts ${m(nest.WEATHER.day)} and its last quarter is <b>night</b>, when the foragers stay in. The weather is calm, rain or heat, and what is coming is announced ${s(nest.WEATHER.warn)} ahead. The first ${m(nest.WEATHER.quiet)} are always calm.</li>
+    <li>In <b>rain</b> nobody goes out and every trail on the surface is washed away; when it stops, food lies about up there. Water comes in by every open way out and fills the nest <b>from its lowest place up</b>, as one level: a pit below your rooms takes it first, and a wide room takes long to fill. What is under the level is shut to the ants; brood there is lost, food only out of reach. The level falls as the water soaks away (fast into sand, slowly into loam, never into clay). Build rooms above the pit, deepen the pit, or <b>plug</b> the entrance in Dig; mark the plug to have it dug open again.</li>
+    <li>A room dug wider than ${nest.GROUND.sand.span} cells under <b>sand</b> loses cells to its roof, sooner in rain. Loam and clay hold.</li>
+    <li>There are ${nest.HIDDEN.rival.chunks} <b>rival nests</b> in the outer chunks ("${nest.HIDDEN.rival.sign}"). While one lies in the earth and the colony has ${nest.RAIDS.fromAnts} ants, <b>raiders</b> come over the surface every few minutes, announced ${s(nest.RAIDS.warn)} ahead. They go for the food and fight whatever they meet. Nothing is steered: enemies in reach of each other fight where they stand.</li>
+    <li>Name a <b>guard</b> room and the colony raises <b>majors</b>, one for every ${nest.GUARD.perMajor} cells. A major does no work, eats more, and is worth about five workers in a fight. Majors go where there is <b>alarm</b>: ants raise it when they see an enemy, and you can lay it in Scent. A plugged entrance keeps raiders out, and foragers in.</li>
+    <li>Dig into a rival nest and its queen and her guard wake. Kill the queen and the nest and its store are yours, and one source of raids is gone.</li>
+    <li>Once the colony has ${nest.FLIGHT.fromAnts} ants, name a <b>flight</b> room: a princess is raised for every ${nest.FLIGHT.perPrincess} cells. On a calm morning with no enemy about, the grown ones fly, and each has an even chance of founding a colony. <b>Daughter colonies are the score</b>, kept over all your colonies.</li>
+    <li>The queen can die: of hunger if she goes unfed for ${m(nest.QUEEN_STARVES)}, or in water with no dry ground near. Raiders pass her by. A princess in the nest takes her place. With none, the colony is at its end, and you found a new one in a new world from the Nest sheet.</li>
+    <li>The colony is kept on this device and carries on where you left it.</li>
+    <li>Tap an ant or a cell to see what it is.</li></ul>
+    <p class="k-dim">Still to come: balance, then art and sound.</p>`);
+}
+ui.bar([
+  { id: 'dig', label: 'Dig', render: digSheet, onOpen: setTool, onClose: () => { game.tool = null; last = null; } },
+  { id: 'rooms', label: 'Rooms', render: roomSheet, onOpen: setRoomTool, onClose: () => { game.tool = null; last = null; } },
+  { id: 'scent', label: 'Scent', render: scentSheet, onOpen: setScentTool, onClose: () => { game.tool = null; last = null; } },
+  { id: 'claim', label: 'Claim', render: claimSheet },
+  { id: 'nest', label: 'Nest', render: body => { nestSheet(body); body.onclick = nestClicks; }, onClose: () => { sure = false; } },
+  { id: 'help', label: 'Help', title: 'How it works', render: helpSheet },
+]);
+ui.hint('dig');
+
+// ── tap to inspect
+let picked = null;                                               // { ant: i } or { cell: c }
+game.onTap = hit => {
+  const [x, y] = hit.cell, plot = world.inside(x, y) ? claims.at(x, y) : null;
+  picked = plot && !plot.held ? { plot } : hit.person !== undefined ? { ant: hit.person } : world.inside(x, y) ? { cell: y * W + x } : null;
+  card();
+};
+ui.onCard = e => {
+  if (e.target.closest('.x')) { picked = null; card(); }
+  else if (e.target.closest('[data-want]') && picked?.plot) { wantPlot(picked.plot); picked = null; card(); }
+};
+const need = (i, k) => `<span class="k-need">${sim.needs[k].name}${meter(sim.needsOf[i * sim.K + k])}</span>`;
+function card() {
+  if (!picked) return ui.card(null);
+  const x = '<button class="x">close</button>';
+  if (picked.plot) {
+    const p = picked.plot, why = claims.why(p), price = claims.priceOf(p);
+    if (p.held) { picked = null; return ui.card(null); }
+    return ui.card(`${x}<b>chunk ${plotName(p)}</b> ${p.row === 0 ? 'on the surface' : 'at depth ' + p.row}: ${nest.CHUNKS[p.info.kind].text}${p.info.hides ? `, and ${nest.HIDDEN[p.info.hides.kind].sign}` : ''}<br>` +
+      (why ? `cannot be claimed yet: ${why}` : `${price} crumbs (${items.inStores('crumb')} in store) <button data-want>${colony.target === p ? 'saving for it' : colony.canPay(price) ? 'claim' : 'save for it'}</button>`));
+  }
+  if (picked.ant !== undefined) {
+    const i = picked.ant;
+    if (i >= sim.count) { picked = null; return ui.card(null); }
+    const a = sim.actions[sim.action[i]].name, load = items.carrying(i);
+    const life = colony.lifeOf(i), who = sim.types[sim.type[i]].name;
+    const full = nest.FIGHT.fighters[who]?.health;
+    if (!colony.ours(i)) return ui.card(`${x}<b>${who === 'raider' ? 'a raider from a rival nest' : 'a rival queen'}</b> ${foes.engaged[i] ? 'fighting' : who === 'raider' ? (items.carrying(i) ? 'making off with a crumb' : 'after the food') : ''}<br><span class="k-need">health${meter(foes.health[i] / full)}</span>`);
+    return ui.card(`${x}<b>${who === 'queen' ? 'the queen' : who === 'major' ? 'a major' : who + ' ant'}</b> <small>${life.span ? `${nest.shownDays(life.age)} of about ${nest.shownDays(life.span)} days old` : ''}</small>${full ? ` <span class="k-need">health${meter(foes.health[i] / full)}</span>` : ''}${foes.engaged[i] ? ' <b class="warn">fighting</b>' : ''}<br>${sim.using[i] ? a : a === 'wander' ? 'with nothing to do' : 'on the way to ' + a}${load ? `, carrying ${load === 'soil' ? 'a load of soil' : 'a crumb'}` : ''}<br>${need(i, 0)}${need(i, 1)}`);
+  }
+  const c = picked.cell, name = world.defs[world.tiles[c]].name, here = Object.entries(items.on(c)).map(([k, n]) => `${n} ${k}`).join(', ');
+  const loads = ground.loadsAt(c % W, (c / W) | 0);
+  ui.card(`${x}<b>${name === 'tunnel' ? 'dug out' : name === 'air' ? 'the surface' : name === 'flooded' ? 'under water' : name === 'plug' ? 'a plug of soil' : name}</b> ` +
+    (ground.marked[c] ? `marked: ${ground.left[c]} of ${loads} loads left` : loads ? `${loads} loads to dig out` : world.solid[world.tiles[c]] && name !== 'sky' ? 'cannot be dug' : '') +
+    (zones.at(c) ? `<br>${zones.at(c)} room: ${nest.ROOMS[zones.at(c)].text}` : '') + (here ? `<br>lying here: ${here}` : '') + (items.limit('soil', c) ? `<br>the mound: up to ${items.limit('soil', c)} loads here` : ''));
+}
+
+// ── the layer over the map: marks, piles, loads
+const g = over.getContext('2d');
+const SOIL = nest.ITEMS.soil.color, CRUMB = nest.ITEMS.crumb.color;
+const BROOD = [['egg', 2], ['larva', 3], ['pupa', 4]];             // each kind of brood and the size of its dot
+const P = art ? createPainter(g, art, { nest, sim, world, roomsOpen: () => ui.open === 'rooms' }) : null;
+window.painter = P;                                            // poke at it from the console
+if (P) { const was = sim.onGone; sim.onGone = (i, cause, s) => { P.gone(i, cause); if (was) was(i, cause, s); }; }   // the dead are seen lying a moment
+function drawLayer() {
+  const cam = game.camera, z = cam.zoom, cw = over.width, ch = over.height;
+  const TRAILS = scent.data('trail'), GATHERS = scent.data('gather'), KEEPS = scent.data('keepout'), TRAFFICS = scent.data('traffic'), ALARMS = scent.data('alarm');
+  g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, cw, ch);
+  g.setTransform(z, 0, 0, z, cw / 2 - cam.x * z, ch / 2 - cam.y * z);
+  const x0 = Math.max(1, Math.floor((cam.x - cw / 2 / z) / TS)), x1 = Math.min(W - 2, Math.ceil((cam.x + cw / 2 / z) / TS));
+  const y0 = Math.max(1, Math.floor((cam.y - ch / 2 / z) / TS)), y1 = Math.min(world.h - 2, Math.ceil((cam.y + ch / 2 / z) / TS));
+  if (P) { P.begin(); P.sky(x0, x1); }
+  for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) {
+    const c = y * W + x;
+    if (ground.marked[c] && !P) {                                      // marked earth: paler the more of it is gone, with a broken edge
+      const p = ground.progress(c);
+      g.fillStyle = `rgba(255,246,222,${0.3 + p * 0.45})`; g.fillRect(x * TS, y * TS, TS, TS);
+      g.fillStyle = 'rgba(40,25,12,.55)';
+      for (let k = 1; k < TS; k += 4) { g.fillRect(x * TS + k, y * TS, 2, 1); g.fillRect(x * TS + k, y * TS + TS - 1, 2, 1); g.fillRect(x * TS, y * TS + k, 1, 2); g.fillRect(x * TS + TS - 1, y * TS + k, 1, 2); }
+    }
+    if (!world.solid[world.tiles[c]]) {                           // scent: each layer in its colour, stronger where it is stronger
+      const tr = TRAILS[c], ga = GATHERS[c], ko = KEEPS[c];
+      const seen = !P || ui.open === 'scent';                    // with the drawn art, scent is shown only while the player is laying it
+      if (seen && tr > 0.03) { g.fillStyle = `rgba(47,111,208,${Math.min(0.6, 0.12 + tr * 0.25)})`; g.fillRect(x * TS + 4, y * TS + 4, TS - 8, TS - 8); }
+      if (seen && ga > 0.03) { g.strokeStyle = `rgba(208,138,47,${0.3 + ga * 0.6})`; g.lineWidth = 2; g.strokeRect(x * TS + 2, y * TS + 2, TS - 4, TS - 4); }
+      if (seen && ko > 0.03) { g.fillStyle = `rgba(200,56,44,${0.25 + ko * 0.45})`; for (let k = -TS; k < TS; k += 5) for (let q = 0; q < TS; q++) { const xx = k + q; if (xx >= 0 && xx < TS) g.fillRect(x * TS + xx, y * TS + q, 1.5, 1); } }
+      if (ALARMS[c] > 0.05) { g.strokeStyle = `rgba(224,38,26,${Math.min(0.9, 0.3 + ALARMS[c] * 0.3)})`; g.lineWidth = 2; g.beginPath(); g.arc(x * TS + TS / 2, y * TS + TS / 2, 3 + (sim.tick >> 2) % 5, 0, 6.3); g.stroke(); }
+      if (showTraffic) {
+        const tf = TRAFFICS[c];
+        if (tf > 0.03) { g.fillStyle = `rgba(122,63,176,${Math.min(0.7, tf * 0.7)})`; g.fillRect(x * TS, y * TS, TS, TS); }
+        if (sim.crowd[c] > nest.CROWD.room) { g.strokeStyle = '#e0261a'; g.lineWidth = 2; g.strokeRect(x * TS + 1, y * TS + 1, TS - 2, TS - 2); }
+      }
+    }
+    if (P) { P.cell(x, y, c); continue; }
+    const zone = zones.at(c);
+    if (zone) {                                                  // a room: its colour over the floor, stronger along its edges
+      const col = nest.ROOMS[zone].color;
+      g.globalAlpha = 0.38; g.fillStyle = col; g.fillRect(x * TS, y * TS, TS, TS); g.globalAlpha = 1;
+      g.fillStyle = col;
+      if (zones.at(c - 1) !== zone) g.fillRect(x * TS, y * TS, 1, TS);
+      if (zones.at(c + 1) !== zone) g.fillRect(x * TS + TS - 1, y * TS, 1, TS);
+      if (zones.at(c - W) !== zone) g.fillRect(x * TS, y * TS, TS, 1);
+      if (zones.at(c + W) !== zone) g.fillRect(x * TS, y * TS + TS - 1, TS, 1);
+    }
+    let slot = 0;                                                // brood: a row of dots from the top of the cell
+    for (const [kind, size] of BROOD) {
+      const n = items.at(kind, c);
+      if (!n) continue;
+      g.fillStyle = nest.ITEMS[kind].color;
+      for (let k = 0; k < Math.min(n, 6); k++, slot++) { g.fillRect(x * TS + 1 + (slot % 3) * 5, y * TS + 2 + ((slot / 3) | 0) * 5, size, size - (kind === 'pupa' ? 1 : 0)); }
+      g.fillStyle = 'rgba(40,25,12,.5)';
+      for (let k = 0, s2 = slot - Math.min(n, 6); k < Math.min(n, 6); k++, s2++) g.fillRect(x * TS + 1 + (s2 % 3) * 5, y * TS + 2 + ((s2 / 3) | 0) * 5 + size - (kind === 'pupa' ? 1 : 0), size, 1);
+    }
+    const soil = items.at('soil', c), crumbs = items.at('crumb', c);
+    if (soil) {
+      g.fillStyle = SOIL;
+      if (y === nest.SURFACE) { const h = Math.min(soil * 2, (nest.SURFACE - 1) * TS); g.fillRect(x * TS, (y + 1) * TS - h, TS, h); }   // the mound: a heap standing on the ground
+      else for (let k = 0; k < Math.min(soil, 9); k++) g.fillRect(x * TS + 2 + (k % 3) * 4, y * TS + TS - 5 - ((k / 3) | 0) * 4, 3, 3);
+    }
+    if (crumbs) {                                                // crumbs: one dot each, stacked from the floor up
+      g.fillStyle = CRUMB;
+      for (let k = 0; k < Math.min(crumbs, 16); k++) g.fillRect(x * TS + 1 + (k % 4) * 4, y * TS + TS - 4 - ((k / 4) | 0) * 4, 3, 3);
+      if (crumbs > 16) { g.fillStyle = '#1c130c'; g.font = '7px sans-serif'; g.fillText('+' + (crumbs - 16), x * TS + 1, y * TS - 1); }
+    }
+  }
+  if (P) { P.ants(); P.rain(x0, x1); }
+  else for (let i = 0; i < sim.count; i++) {                     // what each ant has in its jaws, held out in front of it
+    if (foes.engaged[i]) { g.fillStyle = '#e0261a'; g.fillRect(sim.px[i] * TS - 4, sim.py[i] * TS - 1, 8, 2); g.fillRect(sim.px[i] * TS - 1, sim.py[i] * TS - 4, 2, 8); }   // in a fight
+    const load = items.carrying(i);
+    if (!load) continue;
+    const vx = sim.vx[i], vy = sim.vy[i], l = Math.hypot(vx, vy) || 1;
+    g.fillStyle = nest.ITEMS[load].color;
+    g.fillRect(sim.px[i] * TS + vx / l * 7 - 2, sim.py[i] * TS + vy / l * 7 - 2, 4, 4);
+  }
+  const top = colony.surface();
+  if (!P && top.length && y0 <= nest.SURFACE) {                  // the sky over the colony's surface: rain, or the glare of heat
+    const sx = top[0] * TS, sw = (top[top.length - 1] - top[0] + 1) * TS, sh = (nest.SURFACE + 1) * TS;
+    if (weather.now === 'heat') { g.fillStyle = 'rgba(255,170,60,.22)'; g.fillRect(sx, TS, sw, sh - TS); }
+    if (weather.now === 'rain') {
+      g.fillStyle = 'rgba(70,85,110,.35)'; g.fillRect(sx, TS, sw, sh - TS);
+      g.strokeStyle = 'rgba(225,238,255,.8)'; g.lineWidth = 1; g.beginPath();
+      for (let k = 0; k < sw / 5; k++) { const rx = sx + ((k * 37 + sim.tick * 3) % sw), ry = TS + ((k * 53 + sim.tick * 9) % (sh - TS - 6)); g.moveTo(rx, ry); g.lineTo(rx - 2, ry + 6); }
+      g.stroke();
+    }
+  }
+  if (weather.isNight) { g.fillStyle = 'rgba(12,18,48,.3)'; g.fillRect(x0 * TS, y0 * TS, (x1 - x0 + 1) * TS, (y1 - y0 + 1) * TS); }
+  for (const p of claims.plots) {                               // ground the colony does not hold is dark; what it could claim next is outlined
+    if (p.x1 < x0 - 1 || p.x0 > x1 + 1 || p.y1 < y0 - 1 || p.y0 > y1 + 1) continue;
+    const px = p.x0 * TS, py = p.y0 * TS, sz = claims.size * TS, s2 = claims.size * TS;
+    if (!p.held) {
+      const can = claims.touches(p);
+      g.fillStyle = can ? 'rgba(30,22,15,.8)' : 'rgba(22,16,11,.95)'; g.fillRect(px, py, sz, s2);
+      if (can) {
+        const sel = colony.target === p || picked?.plot === p;
+        g.strokeStyle = sel ? '#ffe9a8' : 'rgba(255,240,210,.55)'; g.lineWidth = sel ? 2.5 : 1.5; g.setLineDash([6, 5]); g.strokeRect(px + 3, py + 3, sz - 6, s2 - 6); g.setLineDash([]);
+        g.fillStyle = '#fff3d6'; g.textAlign = 'center';
+        g.font = 'bold 22px ui-monospace, Consolas, monospace'; g.fillText(plotName(p), px + sz / 2, py + s2 / 2 - 34);
+        g.font = '13px ui-monospace, Consolas, monospace';
+        g.fillText(p.info.kind, px + sz / 2, py + s2 / 2 - 10);
+        if (p.info.hides) g.fillText(nest.HIDDEN[p.info.hides.kind].sign, px + sz / 2, py + s2 / 2 + 10);
+        const why = claims.why(p);
+        g.fillText(why ? why.replace('the colony must have ', 'needs ') : `${claims.priceOf(p)} crumbs${colony.target === p ? ' (saving)' : ''}`, px + sz / 2, py + s2 / 2 + 32);
+        g.textAlign = 'left';
+      }
+    } else if (p.info.hides && !p.info.hides.found) {            // something is in here, not yet reached: the ants can smell where
+      const h = p.info.hides, hx = (h.rect ? (h.rect[0] + h.rect[2] + 1) / 2 : h.x + 0.5) * TS, hy = (h.rect ? (h.rect[1] + h.rect[3] + 1) / 2 : h.y + 0.5) * TS;
+      g.fillStyle = 'rgba(255,243,214,.9)'; g.textAlign = 'center'; g.font = 'bold 20px ui-monospace, Consolas, monospace'; g.fillText('?', hx, hy + 7); g.textAlign = 'left';
+    }
+  }
+  if (picked?.ant !== undefined && picked.ant < sim.count) { g.strokeStyle = '#fff'; g.lineWidth = 1.5; g.beginPath(); g.arc(sim.px[picked.ant] * TS, sim.py[picked.ant] * TS, 10, 0, 6.3); g.stroke(); }
+  else if (picked?.cell !== undefined) { g.strokeStyle = '#fff'; g.lineWidth = 1.5; g.strokeRect((picked.cell % W) * TS + 0.5, ((picked.cell / W) | 0) * TS + 0.5, TS - 1, TS - 1); }
+}
+
+// ── every frame
+let frames = 0;
+function frame() {
+  drawLayer();
+  if (frames++ % 10) return;
+  const t = performance.now();
+  if (t - routeSince >= 1000) { routeShown = routeMs / (t - routeSince) * 1000; routeMs = 0; routeSince = t; }
+  ui.when(clock());
+  ui.sub(weather.warned() ? `${weather.next} in ${secs(weather.left())} s` : water.volume > 0.5 ? `water ${water.count ? water.count + ' cells deep-flooded' : 'on the lowest floor'}${weather.now === 'rain' ? ', rising' : ', soaking away'}` : '');
+  ui.numbers([
+    { label: 'ants', value: colony.population() },
+    ...(colony.enemies() ? [{ label: 'enemies', value: colony.enemies(), warn: true }] : []),
+    { label: 'food', value: items.stored[1], warn: items.stored[1] < 10 },
+    { label: 'brood', value: (b => b.eggs + b.larvae + b.pupae)(colony.brood()) },
+    { label: 'to dig', value: ground.count },
+  ]);
+  if (!firstDug && ground.dug > 0) { firstDug = true; ui.toast('the first cell is out: watch the soil go up to the mound'); }
+  const reach = ground.faces();
+  const G = progress.goal();
+  ui.goal(colony.ended ? '<b class="warn">the queen is dead</b>: found a new colony from the Nest sheet'
+    : colony.raid ? `<b class="warn">raiders in ${secs(colony.raid.at - sim.tick)} s</b>, from the ${colony.raid.side < 0 ? 'west' : 'east'}: plug the entrance, or have majors ready`
+    : colony.enemies() ? `<b class="warn">${colony.enemies()} enemies</b> in or about the nest${colony.majors() ? '' : ': name a <b>guard</b> room to raise majors'}`
+    : weather.warned() && weather.next === 'rain' ? `<b class="warn">rain in ${secs(weather.left())} s</b>: dig a pit below the shaft, or <b>plug</b> the entrance (Dig); water fills the lowest place first`
+    : colony.queen() >= 0 && colony.seat < 0 ? (zones.count('queen') ? '<b class="warn">the queen room has no dry floor</b>: she lays nothing until it has' : '<b class="warn">the queen has no room</b>: name a <b>queen</b> room in Rooms, or she lays nothing')
+    : ground.dug === 0 && ground.count === 0 ? 'Draw a tunnel into the earth: open <b>Dig</b>'
+    : ground.count > 0 && reach === 0 ? '<b class="warn">no mark can be reached</b>: marks must touch open ground'
+    : ground.count > 0 ? `digging: ${ground.count} cells to go, ${tasks.heading[0]} ants on it`
+    : zones.count('brood') === 0 ? `${items.loose('egg')} eggs lie by the queen: dig a room, then name it <b>brood</b> in Rooms`
+    : colony.unknownCrumbs > 20 && colony.knownCrumbs === 0 && items.room('crumb') > 8 ? `${colony.unknownCrumbs} crumbs lie on the surface unfound: lay a <b>trail</b> to them in Scent`
+    : items.room('crumb') < 4 && items.loose('crumb') > 10 ? `the food store is full and ${items.loose('crumb')} crumbs lie outside: name a bigger <b>food</b> room`
+    : colony.brood().larvae > 0 && !colony.mayFeedBrood() ? 'larvae are waiting: the food store is too small or too empty to spare crumbs'
+    : colony.target ? `saving for chunk ${plotName(colony.target)}: ${items.inStores('crumb')} of ${claims.priceOf(colony.target)} crumbs`
+    : claims.plots.some(p => p.held && p.info.hides && !p.info.hides.found) ? 'something lies in the earth you hold: dig to the <b>?</b>'
+    : colony.unlocked.fungus && zones.count('garden') === 0 ? 'the colony has fungus: name a <b>garden</b> room in Rooms'
+    : G ? `goal ${G.n}/${G.of}: <b>${G.title}</b> ${meter(G.progress.ratio)}<small>${G.text ?? ''}</small>`
+    : `${colony.population()} ants, ${progress.get('daughters')} daughter colonies. Every goal is met`,
+    () => ui.show(colony.target || (zones.count('brood') > 0 && items.room('crumb') >= 4 && ground.count === 0 && !colony.unlocked.fungus) ? 'claim' : ground.dug > 0 && ground.count === 0 && (zones.count('brood') === 0 || items.room('crumb') < 4) ? 'rooms' : 'dig'));
+  if (picked) card();
+  ui.refresh();
+}
+showSpeed();
+loader.ready('digging the first chamber');
+</script>

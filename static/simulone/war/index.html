@@ -1,0 +1,561 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>try { globalThis.KIT_EXIT = { href: sessionStorage.getItem('simulone-home') || '../index.html', label: 'menu' }; } catch (e) { globalThis.KIT_EXIT = { href: '../index.html', label: 'menu' }; }</script>
+<meta name="build" content="war · engine 0.3.0 · kit 0.3.1 · modules 0.4.0 · built 2026-11-24">
+<title>WAR</title>
+<style>
+  /* One look, a field's at dusk: the kit's colours set for this game, the same by day and by night. (`html:root` so these win over the kit's own.) */
+  html:root, html:root[data-theme="dark"], html:root[data-theme="light"] { --k-bg: #1d1c17; --k-panel: #2b2a22; --k-ink: #ece5d2; --k-dim: #a59d86; --k-line: #4a463a; --k-warn: #e8724a; --k-on-ink: #1d1c17; color-scheme: dark; }
+  @media (prefers-color-scheme: dark) { html:root:not([data-theme="light"]) { --k-bg: #1d1c17; --k-panel: #2b2a22; --k-ink: #ece5d2; --k-dim: #a59d86; --k-line: #4a463a; --k-warn: #e8724a; --k-on-ink: #1d1c17; } }
+  .w-sw { display: inline-block; width: 10px; height: 10px; border: 1px solid var(--k-ink); vertical-align: -1px; margin-right: 4px; }
+  .w-row td { padding: 2px 6px 2px 0; white-space: nowrap; }
+  .w-row button { padding: 2px 6px; }
+</style>
+<script type="module">
+import { createGame } from './shared/engine/index.js';
+import { createScreen, meter } from './shared/kit/kit.js';
+import { createSlots } from './shared/modules/slots.js';
+import { createLoader } from './shared/modules/loader.js';
+import { makeArt, loadSheet, sheetSprites } from './art.js';
+import * as War from './war.js';
+
+// The numbers are in war.js, the battle's rules in rules.js and the war's in modules/campaign.js. The screen's layout is
+// the shared kit. Two views share the one canvas: the campaign map, drawn by this page on a layer over the map, and the
+// battlefield, drawn by the engine (the fallen too, lying under the living), with regiments' standards, arrows and
+// blows landing on that layer.
+const ui = createScreen(document.body);
+const loader = createLoader({ title: 'WAR', text: 'mustering the armies' });
+const SAVE = 'war-save', PROFILE = 'war-profile';
+const stored = k => { try { return localStorage.getItem(k); } catch { return null; } };
+const camp = War.campaign;
+let mode = 'map', field = null, leaving = false, lastSave = '', pausedAt = null, ready = false;
+// Saved games by hand, and save codes: copies of everything this game keeps on the device (modules/slots.js).
+const slots = createSlots({ game: 'war', keys: [SAVE, PROFILE], flush: () => keep(),
+  describe: () => `day ${camp.state?.day ?? 1}${mode === 'battle' && field ? `, the battle of ${field.name}` : ''}` });
+// Started from the menu's "showcase": a battle under way, made ready beforehand, is put in place and the page starts again.
+if (await slots.takeShowcase('./showcase.txt')) await new Promise(() => {});
+
+// The map is drawn at the screen's own resolution, up to two device pixels to a page pixel.
+const DPR = Math.min(2, Math.max(1, window.devicePixelRatio || 1));
+const [w0, h0] = ui.size();
+ui.canvas.width = w0 * DPR; ui.canvas.height = h0 * DPR;
+// The drawn sheet (art.png, made in Aseprite); if it cannot be loaded, simpler figures drawn by code.
+const sheet = await loader.track(loader.fetch(new URL('./art.png', import.meta.url).href, 'fetching the drawings').then(loadSheet), 'unpacking the drawings');
+const art = sheet ? sheetSprites(sheet, War.AGENT_TYPES) : makeArt(War.AGENT_TYPES, War.SIDES);
+const game = createGame(War.makeConfig({ canvas: ui.canvas, onFrame: frame, sprites: art }));
+const { sim, world } = game, R = War.regiments, C = War.combat, B = War.battle, view = game.renderer;
+const over = ui.layer();
+over.width = ui.canvas.width; over.height = ui.canvas.height;
+ui.onResize = (w, h) => { game.resize(w * DPR, h * DPR); over.width = ui.canvas.width; over.height = ui.canvas.height; if (mode === 'map' && PORT !== (over.height > over.width)) fitMap(); };
+window.game = game; window.War = War;                            // poke at it from the console
+const ME = 0, THEM = 1, SIDE = War.SIDES, T = War.TICKS_PER_SECOND;
+
+// ── what is kept on the device: the war, and a battle under way
+let profile = { wars: 0, won: 0, lost: 0, battles: 0, victories: 0, biggest: 0 };
+try { profile = { ...profile, ...JSON.parse(stored(PROFILE) ?? '{}') }; } catch { /* a fresh one */ }
+let saved = null;
+try { saved = JSON.parse(stored(SAVE) ?? 'null'); } catch { saved = null; }
+camp.player = ME;
+if (saved?.v === 1 && saved.campaign) camp.load(saved.campaign); else { camp.newWar(); profile.wars++; }
+if (saved?.battle && camp.pending()) { War.loadBattle(sim, saved.battle); field = saved.battle.field; mode = 'battle'; }
+B.player = ME;
+function keep() {
+  if (!ready || leaving || slots.leaving) return;                // not started yet, a saved game being loaded, or the war given up: keep off
+  const data = { v: 1, campaign: camp.state, battle: mode === 'battle' && field ? War.saveBattle(sim, { seed: field.seed, country: field.country, field }) : null,
+    camera: { ...game.camera }, speed: pausedAt ?? game.speed };
+  try { localStorage.setItem(SAVE, JSON.stringify(data)); localStorage.setItem(PROFILE, JSON.stringify(profile)); lastSave = `saved on this device on day ${camp.state.day}`; }
+  catch { lastSave = 'this device does not let the page keep a save'; }
+}
+ui.onExit = keep;
+setInterval(keep, 20000);
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') keep(); });
+addEventListener('pagehide', keep);
+function newWar() { leaving = true; try { localStorage.removeItem(SAVE); localStorage.setItem(PROFILE, JSON.stringify(profile)); } catch { /* nothing kept */ } location.reload(); }
+
+// ── time: pause and speed in battle, the next day on the map
+const SPEEDS = [1, 2, 4];
+const pauseBtn = ui.control('pause', () => { if (pausedAt === null) { pausedAt = game.speed; game.speed = 0; } else { game.speed = pausedAt; pausedAt = null; } showSpeed(); });
+const speedBtn = ui.control('1×', () => { const now = pausedAt ?? game.speed, next = SPEEDS[(SPEEDS.indexOf(now) + 1) % SPEEDS.length]; if (pausedAt !== null) pausedAt = next; else game.speed = next; showSpeed(); });
+const dayBtn = ui.control('next day', () => nextDay());
+function showSpeed() {
+  const battle = mode === 'battle';
+  pauseBtn.hidden = speedBtn.hidden = !battle || !field?.begun; dayBtn.hidden = battle;
+  pauseBtn.textContent = pausedAt === null ? 'pause' : 'go'; pauseBtn.className = pausedAt === null ? '' : 'on';
+  speedBtn.textContent = (pausedAt ?? (game.speed || 1)) + '×';
+}
+
+// ── the campaign map, drawn in the same view space as the battlefield so the engine's pan and pinch move it too
+// The map stands upright on a tall screen (the March at the top) and lies wide on a wide one.
+let MW = 2000, MH = 1100, PORT = false;
+function shapeMap() { PORT = over.height > over.width; MW = PORT ? 1100 : 2000; MH = PORT ? 2000 : 1100; }
+const at01 = p => { const u = PORT ? p.y : p.x, v = PORT ? p.x : p.y; return [0.05 + u * 0.9, 0.07 + v * 0.86]; };   // a margin all round
+let selArmy = null, picked = null, sure = null;
+const P = id => camp.province(id);
+const toScreen = (vx, vy) => { const c = game.camera, z = c.zoom; return [(vx - c.x) * z + over.width / 2, (vy - c.y) * z + over.height / 2]; };
+const provXY = p => { const [u, v] = at01(p); return toScreen(u * MW, v * MH); };
+const ownerColor = s => (s === 0 ? '#9fb3cc' : s === 1 ? '#d9a48a' : '#d6ccb0');
+let terrain = null, terrainKey = '';
+// The provinces as a low picture: every point takes the colour of whoever holds the nearest province, with borders.
+function territory() {
+  const key = camp.provinces().map(p => camp.owner(p.id)).join('') + PORT;
+  if (terrain && key === terrainKey) return terrain;
+  terrainKey = key;
+  const TW = 240, TH = Math.round(TW * MH / MW), c = terrain ?? document.createElement('canvas');
+  c.width = TW; c.height = TH;
+  const g = c.getContext('2d'), img = g.createImageData(TW, TH), near = new Int16Array(TW * TH), list = camp.provinces();
+  for (let y = 0; y < TH; y++) for (let x = 0; x < TW; x++) {
+    let best = 0, bd = Infinity;
+    list.forEach((p, k) => { const [u, v] = at01(p), dx = x / TW - u, dy = (y / TH - v) * MH / MW; const dd = dx * dx + dy * dy; if (dd < bd) { bd = dd; best = k; } });
+    near[y * TW + x] = best;
+  }
+  const rgb = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+  for (let y = 0; y < TH; y++) for (let x = 0; x < TW; x++) {
+    const k = near[y * TW + x], edge = (x > 0 && near[y * TW + x - 1] !== k) || (y > 0 && near[(y - 1) * TW + x] !== k);
+    const [r, g2, b] = rgb(ownerColor(camp.owner(list[k].id))), o = (y * TW + x) * 4, n = ((x * 7 + y * 13) % 5) * 2;
+    img.data[o] = edge ? r * 0.55 : r - n; img.data[o + 1] = edge ? g2 * 0.55 : g2 - n; img.data[o + 2] = edge ? b * 0.55 : b - n; img.data[o + 3] = 255;
+  }
+  g.putImageData(img, 0, 0);
+  return terrain = c;
+}
+function drawMap() {
+  const g = over.getContext('2d'), W = over.width, H = over.height, z = game.camera.zoom, s = DPR;
+  g.setTransform(1, 0, 0, 1, 0, 0);
+  g.fillStyle = '#2b2a22'; g.fillRect(0, 0, W, H);
+  const [x0, y0] = toScreen(0, 0), [x1, y1] = toScreen(MW, MH);
+  g.imageSmoothingEnabled = true; g.drawImage(territory(), x0, y0, x1 - x0, y1 - y0);
+  g.strokeStyle = '#3a372c'; g.lineWidth = 2 * s; g.strokeRect(x0, y0, x1 - x0, y1 - y0);
+  // roads, with a tick for each day of marching
+  g.lineCap = 'round';
+  for (const p of camp.provinces()) for (const r of camp.roads(p.id)) {
+    if (r.to < p.id) continue;
+    const [ax, ay] = provXY(p), [bx, by] = provXY(P(r.to));
+    g.strokeStyle = 'rgba(80,62,40,.75)'; g.lineWidth = 3 * s; g.beginPath(); g.moveTo(ax, ay); g.lineTo(bx, by); g.stroke();
+    g.fillStyle = 'rgba(80,62,40,.9)';
+    for (let k = 1; k < r.days; k++) { const t = k / r.days; g.beginPath(); g.arc(ax + (bx - ax) * t, ay + (by - ay) * t, 3 * s, 0, 6.3); g.fill(); }
+  }
+  // provinces: a town is a little keep, a capital a bigger one
+  g.textAlign = 'center';
+  for (const p of camp.provinces()) {
+    const [x, y] = provXY(p), own = camp.owner(p.id), sz = (p.capital !== undefined ? 9 : p.town ? 6 : 3) * s;
+    g.fillStyle = own >= 0 ? SIDE[own].dark : '#6a6048';
+    if (p.town) { g.fillRect(x - sz, y - sz, sz * 2, sz * 1.6); for (let k = -1; k <= 1; k++) g.fillRect(x + k * sz * 0.8 - sz * 0.25, y - sz * 1.45, sz * 0.5, sz * 0.5); }
+    else { g.beginPath(); g.arc(x, y, sz, 0, 6.3); g.fill(); }
+    g.font = `${(p.capital !== undefined ? 13 : 11) * s}px ui-monospace, Consolas, monospace`;
+    g.fillStyle = '#1f1d17'; g.fillText(p.name, x, y + sz + 13 * s);
+    const gar = (camp.state.garrison[p.id] ?? []).length;
+    if (gar && own >= 0) { g.font = `${9 * s}px ui-monospace, Consolas, monospace`; g.fillText(`garrison ${gar}`, x, y + sz + 24 * s); }
+  }
+  // a battle to be fought
+  const pe = camp.pending();
+  if (pe) { const [x, y] = provXY(P(pe.at)); g.strokeStyle = '#e8724a'; g.lineWidth = 3 * s; g.beginPath(); g.arc(x, y, 22 * s, 0, 6.3); g.stroke(); swords(g, x, y - 30 * s, s); }
+  // armies: a banner each, with its men; marching ones on the road, with where they are going
+  for (const a of camp.armies()) {
+    const [x, y] = armyXY(a);
+    if (a.path.length) {
+      g.strokeStyle = a.side === ME ? 'rgba(30,45,70,.8)' : 'rgba(90,30,20,.6)'; g.setLineDash([6 * s, 5 * s]); g.lineWidth = 2 * s;
+      g.beginPath(); g.moveTo(x, y); for (const id of a.path) { const [px, py] = provXY(P(id)); g.lineTo(px, py); } g.stroke(); g.setLineDash([]);
+    }
+    banner(g, x, y, a.side, `${Math.round(camp.men(a) / 100) / 10}k`, a === selArmy, s);
+  }
+  // the map's own scale: fit it to the screen when it is first shown
+  void z;
+}
+function armyXY(a) {
+  let [x, y] = provXY(P(a.at));
+  if (a.path.length) { const [bx, by] = provXY(P(a.path[0])), road = camp.roads(a.at).find(r => r.to === a.path[0]), t = Math.min(0.9, (a.walked + 0.5) / (road?.days ?? 1)); x += (bx - x) * t; y += (by - y) * t; }
+  const same = camp.armies().filter(b => b.at === a.at && !b.path.length === !a.path.length), k = same.indexOf(a);
+  return [x + (k - (same.length - 1) / 2) * 30 * DPR, y - 18 * DPR];
+}
+function banner(g, x, y, side, label, selected, s) {
+  g.fillStyle = '#2a2117'; g.fillRect(x - 1 * s, y - 30 * s, 2 * s, 32 * s);
+  g.fillStyle = SIDE[side].color; g.fillRect(x + 1 * s, y - 30 * s, 26 * s, 15 * s);
+  g.fillStyle = SIDE[side].trim; g.fillRect(x + 1 * s, y - 17 * s, 26 * s, 2 * s);
+  g.fillStyle = '#fff'; g.font = `bold ${10 * s}px ui-monospace, Consolas, monospace`; g.textAlign = 'center'; g.fillText(label, x + 14 * s, y - 19 * s);
+  if (selected) { g.strokeStyle = '#fff6d8'; g.lineWidth = 2 * s; g.strokeRect(x - 3 * s, y - 33 * s, 33 * s, 38 * s); }
+}
+function swords(g, x, y, s) {
+  g.strokeStyle = '#e8724a'; g.lineWidth = 3 * s; g.beginPath(); g.moveTo(x - 9 * s, y - 9 * s); g.lineTo(x + 9 * s, y + 9 * s); g.moveTo(x + 9 * s, y - 9 * s); g.lineTo(x - 9 * s, y + 9 * s); g.stroke();
+}
+function fitMap() {
+  shapeMap();
+  game.renderer.setBounds({ x0: 0, y0: 0, x1: MW, y1: MH });
+  const c = game.camera; c.zoom = Math.max(view.minZoom, Math.min(over.width / MW, over.height / MH) * 0.98); c.x = MW / 2; c.y = MH / 2;
+}
+
+// Tapping the map: your army to pick it, a province to send it there, an enemy army or a town to look at it.
+function tapMap(sx, sy) {
+  const near = (x, y, r) => Math.hypot(x - sx, y - sy) < r * DPR;
+  const army = camp.armies().find(a => { const [x, y] = armyXY(a); return near(x + 13 * DPR, y - 20 * DPR, 24); });
+  if (army) { if (army.side === ME) { selArmy = army === selArmy ? null : army; picked = null; } else picked = { army }; card(); return; }
+  const prov = camp.provinces().find(p => { const [x, y] = provXY(p); return near(x, y, 30); });
+  if (prov && selArmy && !camp.pending()) {
+    if (!camp.march(selArmy, prov.id)) ui.toast('no road leads there');
+    else if (prov.id === selArmy.at) ui.toast('the army stays where it is');
+    else ui.toast(`to ${prov.name}: ${camp.daysTo(selArmy, prov.id)} days. Press <b>next day</b> to march`);
+    keep(); card(); return;
+  }
+  picked = prov ? { prov } : null; card();
+}
+
+// The next day: the enemy moves, armies march, towns pay. A battle stops the day.
+function nextDay() {
+  if (camp.state.over) return ui.toast('the war is over: start a new one under More');
+  if (camp.pending()) return askBattle();
+  camp.endDay();
+  keep();
+  if (camp.pending()) askBattle();
+  ui.refresh();
+}
+camp.onEvent = (kind, a, b) => {
+  if (kind === 'taken') ui.toast(`${a.name} is taken by ${SIDE[b].name}`, 6000);
+  else if (kind === 'fell back') ui.toast(`${a.side === ME ? 'your army' : 'the enemy'} fell back to ${b.name}`);
+  else if (kind === 'surrendered') ui.toast(`${a.side === ME ? '<b class="warn">your army</b> had nowhere to go and gave itself up' : 'an enemy army had nowhere to go and gave itself up'}`, 7000);
+  else if (kind === 'over') endOfWar(a);
+};
+function endOfWar(o) {
+  if (o.winner === ME) profile.won++; else profile.lost++;
+  keep();
+  ui.full({ title: o.winner === ME ? 'The war is won' : 'The war is lost', html: `<p>${o.why}. It took ${camp.state.day} days and ${camp.state.battles[0] + camp.state.battles[1]} battles; you won ${camp.state.battles[ME]} of them.</p><p>Over all your wars: ${profile.won} won, ${profile.lost} lost, ${profile.victories} battles won. Start a new war from More.</p>`, button: 'look at the map' });
+}
+function askBattle() {
+  const pe = camp.pending(), p = P(pe.at), sides = camp.battleSides(), men = l => l.reduce((n, r) => n + r.men, 0);
+  ui.ask({ id: 'battle' + pe.at + camp.state.day, html: `<b>Battle at ${p.name}</b>${pe.garrison ? (pe.defender === ME ? ': the enemy is at the walls' : ': the garrison comes out to meet you') : ''}. Your ${men(sides[ME])} men against ${men(sides[THEM])}, on ${p.country === 'river' ? 'ground cut by a stream' : p.country === 'woods' ? 'wooded ground' : p.country === 'hills' ? 'hilly ground' : 'open ground'}.`,
+    choices: [{ id: 'fight', label: 'take the field' }], onChoose: () => { ui.ask(null); toBattle(); } });
+}
+
+// ── the battlefield
+let selReg = null, drawing = null, playerGeneral = false;
+function toBattle() {
+  const pe = camp.pending(), p = P(pe.at);
+  field = { at: pe.at, name: p.name, country: p.country, seed: (camp.state.day * 7919 + p.name.length * 31) % 100000, begun: false };
+  War.startBattle(sim, { seed: field.seed, country: field.country, sides: camp.battleSides() });
+  War.generals[ME].on = playerGeneral; War.generals[THEM].on = true;
+  mode = 'battle'; selReg = null; picked = null; pausedAt = null; game.speed = 0;
+  setBar(); lookAtArmy(); keep();
+  ui.toast('your army is drawn up at the bottom of the field. Tap a standard to give it orders, then <b>begin</b>', 8000);
+}
+function lookAtArmy() {
+  game.renderer.setBounds(null);
+  const mine = R.all(ME); if (!mine.length) return;
+  const x = mine.reduce((s, r) => s + r.x, 0) / mine.length, y = mine.reduce((s, r) => s + r.y, 0) / mine.length - 14;
+  const c = game.camera; c.x = (x - y) * view.hw + view.originX; c.y = (x + y) * view.hh; c.zoom = Math.max(view.minZoom, Math.min(3.2, over.width / (16 * view.tw)));
+}
+function begin() { field.begun = true; game.speed = 1; pausedAt = null; showSpeed(); ui.toast('the armies advance'); }
+B.onEvent = (kind, res) => {
+  if (kind !== 'over') return;
+  const won = res.winner === ME, losses = War.battleLosses(sim);
+  const sum = (s, k) => Object.values(losses).filter(l => l.side === s).reduce((n, l) => n + l[k], 0);
+  profile.battles++; if (won) profile.victories++;
+  profile.biggest = Math.max(profile.biggest, R.list.reduce((n, r) => n + (r ? r.start : 0), 0));
+  const sp = game.speed; game.speed = Math.min(sp, 1);
+  ui.full({ title: won ? `Victory at ${field.name}` : `Defeat at ${field.name}`, html: `<p>${won ? 'The enemy' : 'Your army'}: ${res.why}.</p>
+    <p>You lost ${sum(ME, 'killed')} killed and ${sum(ME, 'wounded')} wounded; the enemy ${sum(THEM, 'killed')} killed and ${sum(THEM, 'wounded')} wounded. Men who ran come back to their regiments. The wounded heal in a town of your own.</p>
+    <p>${won ? 'The field is yours.' : 'Your army falls back.'} Every regiment that fought has more experience.</p>`, button: 'back to the map',
+    onClose: () => { camp.afterBattle(res.winner, losses); field = null; toMap(); keep(); } });
+};
+function toMap() { mode = 'map'; game.speed = 0; pausedAt = null; sim.setCount(0); selReg = null; picked = null; ui.close(); setBar(); fitMap(); showSpeed(); if (camp.pending()) askBattle(); }
+
+// Orders. A regiment you picked goes where you tap, attacks an enemy you tap, or takes a line you draw.
+const order = (r, o, dest, target) => { R.order(r, o, dest); r.target = target ? target.id : -1; };
+function faceFrom(x, y, r) {
+  let best = null, bd = Infinity;
+  for (const e of R.all(THEM)) { const k = Math.hypot(e.x - x, e.y - y); if (k < bd) { bd = k; best = e; } }
+  return best ? Math.atan2(best.y - y, best.x - x) : r.face;
+}
+function regimentAt(cx, cy, sx, sy) {
+  let best = null, bd = Infinity;
+  for (const r of R.all()) {
+    const [fx, fy] = flagXY(r), ds = Math.hypot(fx - sx, fy - sy) / DPR;            // its flag on the screen
+    const dc = Math.hypot(r.x - cx, r.y - cy) / Math.max(3, R.size(r)[0] / 2);      // or its body on the ground
+    const d = Math.min(ds / 30, dc);
+    if (d < 1 && d < bd) { bd = d; best = r; }
+  }
+  return best;
+}
+function tapField(sx, sy) {
+  const [cx, cy] = view.screenToGrid(sx, sy), r = regimentAt(cx, cy, sx, sy);
+  if (r && r.side === ME) { selReg = r === selReg ? null : r; picked = null; card(); return; }
+  if (r && selReg) { order(selReg, selReg.kind === 'rider' ? 'charge' : 'attack', null, r); ui.toast(`the ${selReg.name} ${War.KINDS[selReg.kind].label} go for the ${r.name} ${War.KINDS[r.kind].label}`); card(); return; }
+  if (r) { picked = { reg: r }; card(); return; }
+  if (selReg && world.inside(cx | 0, cy | 0)) { order(selReg, 'advance', { x: cx, y: cy, face: faceFrom(cx, cy, selReg) }, null); card(); return; }
+  picked = null; card();
+}
+function drawTool() {
+  game.tool = (x, y, phase) => {
+    if (phase === 'down') { drawing = { x0: x + 0.5, y0: y + 0.5, x1: x + 0.5, y1: y + 0.5 }; return; }
+    if (phase === 'drag' && drawing) { drawing.x1 = x + 0.5; drawing.y1 = y + 0.5; return; }
+    if ((phase === 'up' || phase === 'tap') && drawing && selReg) {
+      const dx = drawing.x1 - drawing.x0, dy = drawing.y1 - drawing.y0, len = Math.hypot(dx, dy), r = selReg;
+      if (len >= 3) {
+        const mx = (drawing.x0 + drawing.x1) / 2, my = (drawing.y0 + drawing.y1) / 2;
+        let face = Math.atan2(dx, -dy);                                              // square to the line…
+        if (Math.cos(face - faceFrom(mx, my, r)) < 0) face += Math.PI;               // …towards the enemy
+        R.setFormation(r, r.formation === 'column' || r.formation === 'square' || r.formation === 'wedge' ? 'line' : r.formation, len / War.FORMATIONS[r.formation === 'loose' ? 'loose' : 'line'].spacing);
+        order(r, 'advance', { x: mx, y: my, face }, null);
+      }
+    }
+    if (phase !== 'drag') { drawing = null; game.tool = null; card(); }
+  };
+}
+
+// Where blows land: close up, a spark at the height of a man's chest for a blow, a puff of red where a man goes down;
+// far out, dust over the melee. Each fades over the few ticks combat keeps it, and is never smaller than a few pixels.
+function drawHits(g, W, H, z, s) {
+  const now = sim.tick, close = z >= 0.6;
+  for (const h of C.hits) {
+    const life = h.kind === 'down' ? 12 : 5, p = (now - h.t) / life;     // a spark is a flicker; a man going down stays a moment
+    if (p >= 1) continue;
+    const [x, y] = cellXY(h.x, h.y);
+    if (x < -20 || y < -40 || x > W + 20 || y > H + 20) continue;
+    if (!close) {                                                // dust
+      g.fillStyle = h.kind === 'down' ? `rgba(150,60,40,${0.35 * (1 - p)})` : `rgba(214,196,150,${0.3 * (1 - p)})`;
+      const r = Math.max(2 * s, 6 * z) * (0.6 + p);
+      g.beginPath(); g.arc(x, y - 4 * z, r, 0, 6.3); g.fill();
+      continue;
+    }
+    if (h.kind === 'down') {
+      g.fillStyle = `rgba(170,30,20,${0.7 * (1 - p)})`;
+      const r = Math.max(3 * s, 5 * z) * (0.5 + p);
+      g.beginPath(); g.ellipse(x, y - 2 * z, r * 1.4, r * 0.7, 0, 0, 6.3); g.fill();
+      continue;
+    }
+    const r = Math.max(2 * s, 2.6 * z) * (0.5 + p * 0.6), cy = y - (h.kind === 'arrow' ? 8 : 10) * z;
+    g.strokeStyle = h.kind === 'arrow' ? `rgba(240,240,230,${0.7 * (1 - p)})` : `rgba(255,236,160,${0.75 * (1 - p)})`;
+    g.lineWidth = Math.max(1, 0.7 * z);
+    g.beginPath();
+    for (let k = 0; k < 4; k++) { const a = k * 1.5708 + 0.785 + h.t; g.moveTo(x + Math.cos(a) * r * 0.35, cy + Math.sin(a) * r * 0.35); g.lineTo(x + Math.cos(a) * r, cy + Math.sin(a) * r); }
+    g.stroke();
+  }
+}
+
+// The battlefield layer: arrows in the air, blows landing, each regiment's standard, the one you picked.
+const cellXY = (x, y) => toScreen((x - y) * view.hw + view.originX, (x + y) * view.hh);
+function flagXY(r) { const [x, y] = cellXY(r.x, r.y); return [x, y - 26 * DPR]; }
+const LETTER = { levy: 'L', spear: 'S', sword: 'W', archer: 'A', rider: 'H' };
+function drawField() {
+  const g = over.getContext('2d'), W = over.width, H = over.height, z = game.camera.zoom, s = DPR;
+  g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, W, H);
+  g.imageSmoothingEnabled = false;
+  g.strokeStyle = 'rgba(240,235,215,.85)'; g.lineWidth = Math.max(1, z * 0.8); g.beginPath();
+  for (const ar of C.arrows) {                                   // arrows: along their arc, the height of the arc on screen
+    const t = ar.t / ar.T, x = ar.x0 + (ar.x1 - ar.x0) * t, y = ar.y0 + (ar.y1 - ar.y0) * t, d = Math.hypot(ar.x1 - ar.x0, ar.y1 - ar.y0);
+    const lift = Math.sin(Math.PI * t) * d * 0.25 * view.th * z, [sx, sy] = cellXY(x, y);
+    const t2 = Math.min(1, t + 0.05), [ex, ey] = cellXY(ar.x0 + (ar.x1 - ar.x0) * t2, ar.y0 + (ar.y1 - ar.y0) * t2), lift2 = Math.sin(Math.PI * t2) * d * 0.25 * view.th * z;
+    const dx = ex - sx, dy = ey - lift2 - sy + lift, len = Math.hypot(dx, dy) || 1, k = Math.min(len * 2, Math.max(4 * DPR, 7 * z)) / len;   // a shaft, not a streak
+    g.moveTo(sx, sy - lift - 8 * z); g.lineTo(sx + dx * k, sy - lift - 8 * z + dy * k);
+  }
+  g.stroke();
+  drawHits(g, W, H, z, s);
+  if (selReg && selReg.men > 0) {                                 // the regiment you picked: its ground, and where it is going
+    const r = selReg, [w, d] = R.size(r), fx = r.cos, fy = r.sin, rx = -fy, ry = fx;
+    const corner = (u, v) => cellXY(r.x + v * fx + u * rx, r.y + v * fy + u * ry);
+    g.strokeStyle = '#fff6d8'; g.lineWidth = 2 * s; g.beginPath();
+    [[-w / 2, d / 2], [w / 2, d / 2], [w / 2, -d / 2], [-w / 2, -d / 2]].forEach(([u, v], k) => { const [x, y] = corner(u, v); if (k) g.lineTo(x, y); else g.moveTo(x, y); });
+    g.closePath(); g.stroke();
+    const [ax, ay] = corner(0, d / 2), [bx, by] = corner(0, d / 2 + 4);
+    g.beginPath(); g.moveTo(ax, ay); g.lineTo(bx, by); g.stroke();
+    const t = r.dest ?? (r.target >= 0 ? R.get(r.target) : null);
+    if (t) { const [x0, y0] = cellXY(r.x, r.y), [x1, y1] = cellXY(t.x, t.y); g.setLineDash([6 * s, 5 * s]); g.strokeStyle = r.order === 'attack' || r.order === 'charge' ? '#e8724a' : '#fff6d8'; g.beginPath(); g.moveTo(x0, y0); g.lineTo(x1, y1); g.stroke(); g.setLineDash([]); }
+  }
+  if (drawing) { const [x0, y0] = cellXY(drawing.x0, drawing.y0), [x1, y1] = cellXY(drawing.x1, drawing.y1); g.strokeStyle = '#fff6d8'; g.lineWidth = 3 * s; g.beginPath(); g.moveTo(x0, y0); g.lineTo(x1, y1); g.stroke(); }
+  for (const r of R.list) {                                      // standards
+    if (!r || r.men <= 0) continue;
+    const [x, y] = cellXY(r.x, r.y);
+    if (x < -40 || y < -60 || x > W + 40 || y > H + 40) continue;
+    const top = y - 30 * s, broken = r.broken, col = broken ? '#8a8578' : SIDE[r.side].color;
+    g.fillStyle = '#2a2117'; g.fillRect(x - 1 * s, top, 2 * s, 30 * s);
+    g.fillStyle = col; g.fillRect(x + 1 * s, top + (broken ? 8 * s : 0), 16 * s, 11 * s);
+    g.fillStyle = SIDE[r.side].trim; g.font = `bold ${9 * s}px ui-monospace, Consolas, monospace`; g.textAlign = 'center';
+    g.fillText(LETTER[r.kind], x + 9 * s, top + (broken ? 8 * s : 0) + 9 * s);
+    const share = r.start ? r.active / r.start : 0;               // men standing, of those it brought
+    g.fillStyle = 'rgba(20,18,14,.8)'; g.fillRect(x + 1 * s, top + 12 * s, 16 * s, 3 * s);
+    g.fillStyle = r.fear > 0.5 ? '#e8724a' : '#e9e2c8'; g.fillRect(x + 1 * s, top + 12 * s, 16 * s * share, 3 * s);
+    if (r === selReg || r === picked?.reg) { g.strokeStyle = '#fff6d8'; g.lineWidth = 1.5 * s; g.strokeRect(x - 2 * s, top - 2 * s, 21 * s, 19 * s); }
+  }
+}
+
+// ── the card: what you picked
+const need = (label, v) => `<span class="k-need">${label}${meter(v)}</span>`;
+ui.onCard = e => {
+  const b = e.target.closest('button');
+  if (!b) return;
+  if (b.classList.contains('x')) { selReg = null; selArmy = null; picked = null; card(); return; }
+  const r = selReg;
+  if (b.dataset.order && r) {
+    const o = b.dataset.order;
+    if (o === 'hold') order(r, 'hold', null, null);
+    else if (o === 'attack' || o === 'charge') order(r, o, null, null);
+    else if (o === 'fall back') order(r, 'fall back', { x: r.x - r.cos * 20, y: r.y - r.sin * 20, face: r.face }, null);
+    card();
+  } else if (b.dataset.form && r) { R.setFormation(r, b.dataset.form); card(); }
+  else if (b.dataset.files && r) { R.setFormation(r, r.formation, r.files + +b.dataset.files); card(); }
+  else if (b.dataset.draw && r) { drawTool(); ui.toast('drag along the ground where the line should stand', 5000); card(); }
+  else if (b.dataset.army && selArmy) {
+    const a = selArmy;
+    if (b.dataset.army === 'train') { const ok = camp.canTrain(a); if (ok === true) a.train = !a.train; else ui.toast('cannot train: ' + ok); }
+    else if (b.dataset.army === 'stop') camp.march(a, a.at), a.path = [];
+    else if (b.dataset.army === 'sheet') ui.show('army');
+    keep(); card();
+  }
+};
+function card() {
+  const x = '<button class="x">close</button>';
+  if (mode === 'battle') {
+    if (selReg && selReg.men <= 0) selReg = null;
+    if (selReg) {
+      const r = selReg, k = War.KINDS[r.kind], btn = (attr, v, label, on) => `<button data-${attr}="${v}" class="${on ? 'on' : ''}">${label}</button>`;
+      return ui.card(`${x}<b>${r.name} ${k.label}</b> ${r.active} standing of ${r.start}${r.broken ? ' <b class="warn">broken</b>' : ''}${r.exp >= 0.5 ? ` · experience ${r.exp.toFixed(1)}` : ''}<br>
+        ${need('fear', r.fear)}${need('fatigue', r.fatigue)}${need('in rank', r.cohesion)}${k.bow ? need('arrows', 1 - (r.ammo ?? 0)) : ''}<br>
+        ${['hold', 'attack', ...(k.role === 'horse' || k.role === 'foot' ? ['charge'] : []), 'fall back'].map(o => btn('order', o, o, r.order === o)).join('')}<br>
+        ${Object.keys(War.FORMATIONS).map(f => btn('form', f, f, r.formation === f)).join('')} ${btn('files', -4, 'narrower')}${btn('files', 4, 'wider')} ${btn('draw', 1, 'draw its line', !!game.tool)}<br>
+        <small>${War.ORDERS[r.order]}. Tap the ground to send it there, an enemy standard to attack it.</small>`);
+    }
+    if (picked?.reg) { const r = picked.reg; if (r.men <= 0) { picked = null; return ui.card(null); } return ui.card(`${x}<b>the enemy's ${r.name} ${War.KINDS[r.kind].label}</b> ${r.active} standing${r.broken ? ', broken' : ''}<br>${need('fear', r.fear)}${need('fatigue', r.fatigue)}`); }
+    return ui.card(null);
+  }
+  if (selArmy && !camp.army(selArmy.id)) selArmy = null;
+  if (selArmy) {
+    const a = selArmy, where = P(a.at), going = a.path.length ? ` · marching to ${P(a.path[a.path.length - 1]).name}, ${camp.daysTo(a, a.path[a.path.length - 1])} days` : '';
+    return ui.card(`${x}<b>your army</b> at ${where.name}${going}<br>${a.regiments.length} regiments, ${camp.men(a)} men${camp.wounded(a) ? `, ${camp.wounded(a)} wounded` : ''}${a.train ? ' · <b>training</b>' : ''}<br>
+      <button data-army="sheet">regiments</button><button data-army="train" class="${a.train ? 'on' : ''}">train</button>${a.path.length ? '<button data-army="stop">stop</button>' : ''}<br><small>Tap a province to march there.</small>`);
+  }
+  if (picked?.army) { const a = picked.army; return ui.card(`${x}<b>an enemy army</b> at ${P(a.at).name}: ${a.regiments.length} regiments, about ${Math.round(camp.men(a) / 100) * 100} men`); }
+  if (picked?.prov) { const p = picked.prov, o = camp.owner(p.id); return ui.card(`${x}<b>${p.name}</b> ${o >= 0 ? `held by ${SIDE[o].name}` : 'held by nobody'}${p.town ? ` · the town of ${p.town}: ${p.income} gold a day, ${Math.floor(camp.state.pool[p.id])} men to raise` : ` · ${p.income} gold a day`}${(camp.state.garrison[p.id] ?? []).length ? ` · a garrison of ${camp.state.garrison[p.id].length} regiments` : ''}<br><small>${p.country} country</small>`); }
+  ui.card(null);
+}
+
+// ── the sheets
+const kindName = k => War.KINDS[k].label;
+function armySheet(body) {
+  const a = selArmy ?? camp.armies(ME)[0];
+  if (!a) { ui.html(body, '<p>You have no army. Raise one in a town of yours: there is nothing else to do but start a new war under More.</p>'); return; }
+  selArmy = a;
+  const rows = a.regiments.map(r => { const c = camp.fillCost(a, r); return `<tr class="w-row"><td>${r.name}</td><td>${kindName(r.kind)}</td><td>${r.men}</td><td>${r.wounded || ''}</td><td>${r.exp.toFixed(1)}</td><td>${typeof c === 'string' ? `<small>${c}</small>` : `<button data-fill="${r.id}">fill ${c.men} · ${c.gold}g</button>`}</td></tr>`; }).join('');
+  ui.html(body, `<p>Your army at ${P(a.at).name}: ${a.regiments.length} of ${War.MAX_REGIMENTS} regiments, ${camp.men(a)} men, ${camp.wounded(a)} wounded. Gold: <b>${Math.floor(camp.state.gold[ME])}</b>.</p>
+    <div class="k-scroll"><table><tr><th>regiment</th><th>kind</th><th>men</th><th>wounded</th><th>exp</th><th></th></tr>${rows}</table></div>
+    <h3>Raise a regiment</h3><div class="k-chips">${War.KIND_NAMES.map(k => { const ok = camp.canRaise(a, k); return `<button data-raise="${k}" ${ok === true ? '' : 'disabled'}>${kindName(k)} <small>${War.KINDS[k].cost}g · ${War.KINDS[k].text}</small></button>`; }).join('')}</div>
+    <p><small>${camp.canRaise(a, 'levy') === true ? `${P(a.at).town} has ${Math.floor(camp.state.pool[a.at])} men to raise.` : camp.canRaise(a, 'levy')}</small></p>
+    <h3>Training</h3><p><button data-train class="${a.train ? 'on' : ''}">${a.train ? 'training' : 'train'}</button> In a town of your own the army drills: ${War.CAMPAIGN_RULES.train} experience a day, up to ${War.CAMPAIGN_RULES.trainTo}, for ${War.CAMPAIGN_RULES.trainCost} gold a regiment a day. Battles give more, up to 5.</p>
+    <p>The wounded come back to their regiments: ${Math.round(War.CAMPAIGN_RULES.heal * 100)}% a day in a town of your own, ${Math.round(War.CAMPAIGN_RULES.healAway * 100)}% elsewhere, and ${Math.round(War.CAMPAIGN_RULES.die * 100)}% a day die.</p>`);
+  body.onclick = e => {
+    const b = e.target.closest('button'); if (!b) return;
+    if (b.dataset.fill) { const r = a.regiments.find(x => x.id === +b.dataset.fill); if (!camp.fill(a, r)) ui.toast('not enough gold'); }
+    else if (b.dataset.raise) { const r = camp.raise(a, b.dataset.raise); if (r) ui.toast(`the ${r.name} ${kindName(r.kind)} are raised`); }
+    else if ('train' in b.dataset) { const ok = camp.canTrain(a); if (ok === true) a.train = !a.train; else ui.toast(ok); }
+    keep(); ui.refresh();
+  };
+}
+function realmSheet(body) {
+  const S = camp.state, held = s => camp.provinces().filter(p => camp.owner(p.id) === s);
+  ui.html(body, `<p>Day ${S.day}. Gold <b>${Math.floor(S.gold[ME])}</b>: ${camp.income(ME)} a day from your provinces, ${Math.round(camp.upkeep(ME))} a day to keep your regiments.${S.gold[ME] < 0 ? ' <b class="warn">Unpaid men are going home.</b>' : ''}</p>
+    ${[ME, THEM].map(s => `<h3><span class="w-sw" style="background:${SIDE[s].color}"></span>${SIDE[s].name}</h3><p>${held(s).map(p => p.name + (p.capital === s ? ' (capital)' : '')).join(', ') || 'nothing'}<br>${camp.armies(s).length} armies, ${camp.armies(s).reduce((n, a) => n + camp.men(a), 0)} men${s === THEM ? ' that you know of' : ''} · ${S.battles[s]} battles won</p>`).join('')}
+    <h3>Nobody's</h3><p>${held(-1).map(p => p.name).join(', ') || 'nothing'}</p>
+    <p><small>Take the enemy's capital, ${camp.provinces().find(p => p.capital === THEM).name}, to win the war. Lose ${camp.provinces().find(p => p.capital === ME).name} and it is lost.</small></p>`);
+}
+function battleOrders(body) {
+  const mine = R.all(ME);
+  ui.html(body, `<p>Orders to the whole army. Or tap one standard to give that regiment its own.</p>
+    <div class="k-chips"><button data-all="advance">advance <small>15 cells on</small></button><button data-all="attack">attack <small>every regiment</small></button><button data-all="hold">hold</button><button data-all="fall back">fall back</button></div>
+    <p><button data-general class="${playerGeneral ? 'on' : ''}">${playerGeneral ? 'your general commands' : 'let your general command'}</button> <small>he gives the orders the enemy's general would</small></p>
+    <h3>Regiments</h3><div class="k-scroll"><table>${mine.map(r => `<tr class="w-row"><td><button data-pick="${r.id}" class="${r === selReg ? 'on' : ''}">${r.name} ${kindName(r.kind)}</button></td><td>${r.active}/${r.start}</td><td>${r.broken ? '<b class="warn">broken</b>' : r.order}</td><td>${meter(r.fear)}</td></tr>`).join('')}</table></div>
+    <p style="margin-top:8px"><button data-retreat>${sure === 'retreat' ? 'yes, leave the field' : 'call the retreat'}</button>${sure === 'retreat' ? ' <button data-keep>no, fight on</button>' : ''}</p>`);
+  body.onclick = e => {
+    const b = e.target.closest('button'); if (!b) return;
+    if (b.dataset.all) for (const r of mine) {
+      if (r.broken) continue;
+      const o = b.dataset.all;
+      if (o === 'advance') order(r, 'advance', { x: r.x + r.cos * 15, y: r.y + r.sin * 15, face: r.face }, null);
+      else if (o === 'fall back') order(r, 'fall back', { x: r.x - r.cos * 20, y: r.y - r.sin * 20, face: r.face }, null);
+      else order(r, o, o === 'hold' ? null : undefined, null);
+    }
+    else if ('general' in b.dataset) { playerGeneral = !playerGeneral; War.generals[ME].on = playerGeneral; }
+    else if (b.dataset.pick) { selReg = R.get(+b.dataset.pick); const c = game.camera; c.x = (selReg.x - selReg.y) * view.hw + view.originX; c.y = (selReg.x + selReg.y) * view.hh; card(); }
+    else if ('retreat' in b.dataset) { if (sure === 'retreat') { sure = null; B.retreat(); } else sure = 'retreat'; }
+    else if ('keep' in b.dataset) sure = null;
+    if (b.dataset.all && !field.begun) ui.toast('orders given: press <b>begin</b> when ready');
+    ui.refresh();
+  };
+}
+function moreSheet(body) {
+  ui.html(body, `<p>${lastSave || 'This war is kept on this device and carries on where you left it.'}</p>
+    <p><button data-saves>saved games</button> <button data-new>${sure === 'new' ? 'yes, give up this war' : 'start a new war'}</button>${sure === 'new' ? ' <button data-keep>no, keep it</button>' : ''}</p>
+    <h3>Over all your wars</h3><p>${profile.wars} wars begun, ${profile.won} won, ${profile.lost} lost · ${profile.victories} of ${profile.battles} battles won · the biggest battle: ${profile.biggest} men</p>
+    <h3>This device</h3><p>${Math.round(game.stats.fps)} frames a second · simulation ${game.stats.simMs.toFixed(1)} ms and drawing ${game.stats.renderMs.toFixed(1)} ms a frame${mode === 'battle' ? ` · ${R.all().reduce((n, r) => n + r.men, 0)} men and ${B.bodies()} fallen on the field` : ''}</p>`);
+  body.onclick = e => {
+    if (e.target.closest('[data-saves]')) { const sp = pausedAt ?? game.speed; game.speed = 0; ui.full({ ...slots.panel(), onClose: () => { if (mode === 'battle' && field?.begun && pausedAt === null) game.speed = sp || 1; } }); slots.wire(); }
+    else if (e.target.closest('[data-keep]')) { sure = null; ui.refresh(); }
+    else if (e.target.closest('[data-new]')) { if (sure === 'new') newWar(); else { sure = 'new'; ui.refresh(); } }
+  };
+}
+function helpSheet(body) {
+  const K = War.KINDS, row = k => `<li><b>${K[k].label}</b> ${K[k].text}. ${K[k].cost} gold.</li>`;
+  ui.html(body, `<p><b>WAR</b>: the Ashen March (you, in blue) against the Fennish Crown (in red). The war is fought on the map a day at a time; when two armies meet, the battle is fought out on the field by every man in it.</p>
+    <h3>The map</h3><ul><li>Tap your army's banner, then a province: the army marches there by road (each dot on a road is a day). Press <b>next day</b> to move time on.</li>
+    <li>Provinces you hold pay gold every day; towns pay more and give men. Your regiments cost gold to keep. With no gold, men go home.</li>
+    <li>In a town of your own: <b>raise</b> regiments, <b>fill</b> thin ones, <b>train</b>. The wounded heal faster there.</li>
+    <li>An army standing in a province that is not yours takes it, once its garrison is beaten. Take ${camp.provinces().find(p => p.capital === THEM).name} to win.</li></ul>
+    <h3>The battle</h3><ul><li>Each regiment is a standard and up to ${War.REGIMENT_MEN} men in a formation. Nobody is moved by hand: every man decides for himself, many times a second, whether to keep his rank, close with an enemy, step back, or run. Your order changes how he weighs it.</li>
+    <li>Tap a standard to pick a regiment. Tap the ground to send it there; tap an enemy standard to attack it; or <b>draw its line</b> by dragging where it should stand. Orders: <b>hold</b>, <b>attack</b>, <b>charge</b> (break ranks and run at them), <b>fall back</b>.</li>
+    <li>Formations: <b>line</b> puts the most men in the fight, <b>column</b> marches fast, <b>wedge</b> is for a charge, <b>square</b> stops horse, <b>loose</b> lets arrows through.</li>
+    <li>Fear is what wins. It rises with blows, with friends falling, with being outnumbered or struck from behind, and with others running. It falls among friends, in the ranks, near the standard. Experience steadies men. A fresh man holds whatever happens; once the fight has worn him down (about a minute in it), a man whose fear is high enough runs, and running spreads.</li>
+    <li>A side has lost when fewer than ${Math.round(War.END_BELOW * 100)}% of its men still stand, or every regiment has broken. Men who ran come back afterwards; the wounded heal in time.</li></ul>
+    <h3>Soldiers</h3><ul>${War.KIND_NAMES.map(row).join('')}</ul>
+    <p class="k-dim">The war is kept on this device and carries on where you left it.</p>`);
+}
+function setBar() {
+  ui.close();
+  if (mode === 'battle') ui.bar([
+    { id: 'orders', label: 'Orders', render: battleOrders, onClose: () => { sure = null; } },
+    { id: 'more', label: 'More', render: moreSheet, onClose: () => { sure = null; } },
+    { id: 'help', label: 'Help', title: 'How it works', render: helpSheet },
+  ]);
+  else ui.bar([
+    { id: 'army', label: 'Army', render: armySheet },
+    { id: 'realm', label: 'Realm', render: realmSheet },
+    { id: 'more', label: 'More', render: moreSheet, onClose: () => { sure = null; } },
+    { id: 'help', label: 'Help', title: 'How it works', render: helpSheet },
+  ]);
+  showSpeed();
+}
+game.onTap = (what, sx, sy) => (mode === 'map' ? tapMap(sx, sy) : tapField(sx, sy));
+
+// ── every frame
+let frames = 0;
+const clock = t => `${Math.floor(t / T / 60)}:${String(Math.floor(t / T) % 60).padStart(2, '0')}`;
+function frame() {
+  if (mode === 'map') drawMap(); else drawField();
+  if (frames++ % 10) return;
+  if (mode === 'battle' && field) {
+    const standing = s => R.all(s).reduce((n, r) => n + r.active, 0), running = s => R.all(s).reduce((n, r) => n + r.men - r.active, 0);
+    ui.when(`the battle of ${field.name} · ${clock(B.elapsed)}`);
+    ui.numbers([{ label: 'yours', value: standing(ME) }, { label: 'running', value: running(ME), warn: running(ME) > 200 }, { label: 'theirs', value: standing(THEM) }, { label: 'running', value: running(THEM) }]);
+    ui.sub('');
+    ui.goal(!field.begun ? '<b>begin the battle</b> <small>tap a standard first to give it orders; Orders for the whole army</small>'
+      : B.result ? 'the battle is over' : selReg ? `the ${selReg.name} ${kindName(selReg.kind)}: ${selReg.order}` : 'tap a standard to give orders',
+      () => { if (!field.begun) begin(); else ui.show('orders'); });
+  } else {
+    const S = camp.state;
+    ui.when(`day ${S.day} · ${SIDE[ME].name}`);
+    ui.numbers([{ label: 'gold', value: `${Math.floor(S.gold[ME])} (${camp.income(ME) - Math.round(camp.upkeep(ME)) >= 0 ? '+' : ''}${camp.income(ME) - Math.round(camp.upkeep(ME))})`, warn: S.gold[ME] < 0 },
+      { label: 'men', value: camp.armies(ME).reduce((n, a) => n + camp.men(a), 0) }, { label: 'provinces', value: camp.provinces().filter(p => camp.owner(p.id) === ME).length }]);
+    ui.sub(camp.pending() ? '<b class="warn">a battle waits</b>' : '');
+    const mine = camp.armies(ME);
+    ui.goal(S.over ? (S.over.winner === ME ? 'the war is won' : 'the war is lost') + ': start a new one under More'
+      : camp.pending() ? '<b class="warn">a battle</b>: take the field' : !selArmy && mine.length ? 'tap your army\'s banner' : selArmy && !selArmy.path.length ? 'tap a province to march there, or Army to raise and train' : 'press <b>next day</b>',
+      () => { if (camp.pending()) askBattle(); else if (!selArmy && mine.length) { selArmy = mine[0]; card(); } else ui.show('army'); });
+  }
+  card();
+  ui.refresh();
+}
+
+setBar();
+if (mode === 'battle') {
+  War.generals[ME].on = false;
+  if (saved?.camera) Object.assign(game.camera, saved.camera); else lookAtArmy();
+  game.speed = field.begun ? 1 : 0;
+} else { fitMap(); game.speed = 0; if (camp.pending()) askBattle(); }
+ready = true;
+showSpeed();
+loader.ready(mode === 'battle' ? 'to the field' : 'unrolling the map');
+</script>
