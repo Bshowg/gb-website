@@ -1,0 +1,109 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simulone</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --bg: #f3efe6; --card: #fffdf8; --ink: #22201c; --dim: #6c665b; --line: #dcd4c4; --accent: #c2572b; --accent-ink: #fff8f0; --shot: #e7e0d2;
+    --display: 'Space Grotesk', 'Segoe UI', system-ui, sans-serif; --text: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #16150f; --card: #211f18; --ink: #efe9dc; --dim: #a59e8e; --line: #3a362b; --accent: #e57a4a; --accent-ink: #1a120b; --shot: #2b281f; color-scheme: dark } }
+  :root[data-theme="dark"] { --bg: #16150f; --card: #211f18; --ink: #efe9dc; --dim: #a59e8e; --line: #3a362b; --accent: #e57a4a; --accent-ink: #1a120b; --shot: #2b281f; color-scheme: dark }
+  body { background: var(--bg); color: var(--ink); font: 15px/1.5 var(--text); margin: 0; }
+  main { max-width: 1040px; margin: 0 auto; padding-block: 28px 40px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  header { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px 24px; flex-wrap: wrap; margin-bottom: 22px; }
+  h1 { font: 700 clamp(34px, 7vw, 52px)/1 var(--display); letter-spacing: -0.02em; margin: 0; text-wrap: balance; }
+  h1 span { color: var(--accent); }
+  .lede { max-width: 46ch; color: var(--dim); margin: 8px 0 0; }
+  .engine { font: 500 12px/1.4 var(--display); letter-spacing: .08em; text-transform: uppercase; color: var(--dim); border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; white-space: nowrap; text-decoration: none; }
+  a.engine:hover, a.engine:focus-visible { color: var(--accent); border-color: var(--accent); }
+  .games { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 18px; }
+  .game { position: relative; display: flex; flex-direction: column; text-decoration: none; color: inherit; background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; transition: transform .15s ease, box-shadow .15s ease; min-width: 0; }
+  .game:hover, .game:focus-within { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(0, 0, 0, .12); }
+  .game a { text-decoration: none; }
+  .game a:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .game a.go::after { content: ""; position: absolute; inset: 0; border-radius: 16px; }   /* the whole card plays */
+  .shot { aspect-ratio: 4 / 3; max-width: 100%; background: var(--shot) center / cover no-repeat; image-rendering: pixelated; border-bottom: 1px solid var(--line); }
+  .body { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+  .kind { font: 500 11px/1 var(--display); letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
+  h2 { font: 700 22px/1.15 var(--display); margin: 0; }
+  .body p { margin: 0; color: var(--dim); }
+  .facts { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12.5px; color: var(--dim); margin-top: 2px; font-variant-numeric: tabular-nums; }
+  .play { margin-top: auto; padding-top: 10px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .play .btns { display: flex; gap: 8px; flex-wrap: wrap; }
+  .play a { font: 600 14px/1 var(--text); padding: 10px 18px; border-radius: 999px; border: 1.5px solid var(--accent); }
+  .play a.go { background: var(--accent); color: var(--accent-ink); }
+  .play a.show { position: relative; z-index: 1; color: var(--accent); background: var(--card); }   /* above the card's own link */
+  .play a.show:hover { background: var(--accent); color: var(--accent-ink); }
+  .play { flex-wrap: wrap; }
+  .play small { font-size: 11px; color: var(--dim); flex: 1 1 100%; min-width: 0; }
+  footer { margin-top: 28px; color: var(--dim); font-size: 13px; max-width: 70ch; }
+  footer p { margin: 0 0 6px; }
+  @media (prefers-reduced-motion: reduce) { .game { transition: none; } }
+</style>
+
+<main>
+  <header>
+    <div>
+      <h1>Simul<span>one</span></h1>
+      <p class="lede">Simulate moltitudes with generic autonomous agent simulation.</p>
+    </div>
+    <a class="engine" href="features.html">engine 0.3.0 · what it can do →</a>
+  </header>
+
+  <section class="games" aria-label="Games">
+    <article class="game">
+      <div class="shot" style="background-image:url(previews/lords-will.jpg)" role="img" aria-label="A village in autumn: cottages round a well, granaries on stilts, a windmill and a chapel, with ripe fields and woods beyond"></div>
+      <div class="body">
+        <span class="kind">Medieval settlement</span>
+        <h2>The Lord's Will</h2>
+        <p>Grow a hamlet of sixteen souls into a chartered town: fields and harvests, hard winters, the lord's levy, and new lands to settle.</p>
+        <div class="facts"><span>300 × 300 cells</span><span>4 seasons</span><span>families and names</span></div>
+        <div class="play"><div class="btns"><a class="go" href="lords-will/index.html">Play</a><a class="show" href="lords-will/index.html#showcase">Showcase</a></div><small>engine 0.3.0 · kit 0.3.1 · modules 0.4.0</small></div>
+      </div>
+    </article>
+    <article class="game">
+      <div class="shot" style="background-image:url(previews/mall.jpg)" role="img" aria-label="A busy mall floor in the afternoon: a food court, cafés, pharmacies, a gym and an electronics shop, with crowds of shoppers in the corridors"></div>
+      <div class="body">
+        <span class="kind">Shopping mall</span>
+        <h2>Atrium</h2>
+        <p>Turn an empty hall into a five-floor landmark: shops, staff and stock, prices and opening hours, and what visitors missed.</p>
+        <div class="facts"><span>a day's trading at a time</span><span>up to 5 floors</span></div>
+        <div class="play"><div class="btns"><a class="go" href="mall/index.html">Play</a><a class="show" href="mall/index.html#showcase">Showcase</a></div><small>engine 0.3.0 · kit 0.3.1 · modules 0.4.0</small></div>
+      </div>
+    </article>
+    <article class="game">
+      <div class="shot" style="background-image:url(previews/ant-colony.jpg)" role="img" aria-label="A cut through the earth: a shaft down to a central room, with tunnels to a food store, the queen's room, a brood room and a resting room, all busy with ants"></div>
+      <div class="body">
+        <span class="kind">Ant colony</span>
+        <h2>The Colony</h2>
+        <p>Mark the earth and the ants dig it. Raise brood, lay scent trails to food, survive rain and raiders, and send princesses to found new colonies.</p>
+        <div class="facts"><span>seen in a cut</span><span>rain, heat and raids</span></div>
+        <div class="play"><div class="btns"><a class="go" href="ant-colony/index.html">Play</a><a class="show" href="ant-colony/index.html#showcase">Showcase</a></div><small>engine 0.3.0 · kit 0.3.1 · modules 0.4.0</small></div>
+      </div>
+    </article>
+    <article class="game">
+      <div class="shot" style="background-image:url(previews/war.jpg)" role="img" aria-label="Two armies locked in battle across a stream: blue and red regiments under their standards, a line of archers waiting behind"></div>
+      <div class="body">
+        <span class="kind">Battles of thousands</span>
+        <h2>WAR</h2>
+        <p>March armies across a land of provinces, raise and train regiments, then fight it out: 4,000 men a side, every one deciding whether to hold, close in or run.</p>
+        <div class="facts"><span>up to 8,000 on one field</span><span>formations and orders</span><span>16 provinces</span></div>
+        <div class="play"><div class="btns"><a class="go" href="war/index.html">Play</a><a class="show" href="war/index.html#showcase">Showcase</a></div><small>engine 0.3.0 · kit 0.3.1 · modules 0.4.0</small></div>
+      </div>
+    </article>
+  </section>
+
+  <footer>
+    <p>Each game is kept on this device and carries on where you left it. Inside a game, <b>menu</b> at the top brings you back here, and <b>saved games</b> (under More, or Nest) keeps copies of a game by hand, or as a code to take to another device.</p>
+    <p><b>Showcase</b> opens a game already well under way, to see how it looks and plays. Your own game is not lost: it is kept under saved games, as <b>undo</b>.</p>
+    <p>Built 2026-11-24 · engine 0.3.0 · kit 0.3.1 · modules 0.4.0</p>
+  </footer>
+</main>
+<script>
+  // The games come back to this page through their menu button: remember where it is.
+  try { sessionStorage.setItem('simulone-home', location.href); } catch (e) { /* the games fall back to ../index.html */ }
+</script>

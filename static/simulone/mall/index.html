@@ -1,0 +1,626 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>try { globalThis.KIT_EXIT = { href: sessionStorage.getItem('simulone-home') || '../index.html', label: 'menu' }; } catch (e) { globalThis.KIT_EXIT = { href: '../index.html', label: 'menu' }; }</script>
+<meta name="build" content="mall · engine 0.3.0 · kit 0.3.1 · modules 0.4.0 · built 2026-11-24">
+<title>Atrium</title>
+<script type="module">
+import { createGame } from './shared/engine/index.js';
+import * as M from './mall.js';
+import { createSave } from './shared/modules/save.js';
+import { createSlots } from './shared/modules/slots.js';
+import { createScreen, meter } from './shared/kit/kit.js';
+import { createLoader } from './shared/modules/loader.js';
+import { makeSprites, makeIcons, WALL_HEIGHT, clock as artClock } from './art.js';
+
+// The numbers are in mall.js and this game's own rules in rules.js. The screen's layout is the shared kit
+// (kit/kit.js). This page says what goes where and turns what the modules report into words.
+const ui = createScreen(document.body);
+// The look: the shared kit restyled for this game (its colours are tokens; the shapes are overridden here), in a light and
+// a dark set that follow the viewer's theme. The pictures and signs come from the art (art.js).
+document.head.append(Object.assign(document.createElement('link'), { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap' }));
+document.head.append(Object.assign(document.createElement('style'), { textContent: `
+:root { --k-bg: #f7f5ee; --k-panel: #ecebe3; --k-ink: #1f2740; --k-dim: #687089; --k-line: #d9d6c9; --k-warn: #c43d2c; --k-on-ink: #ffffff;
+        --k-font: 'Rubik', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        --m-accent: #e8a323; --m-accent-ink: #2a1c02; --m-teal: #1c7f79; --m-top: #1f2740; --m-top-ink: #f6f3e8; --m-top-dim: #b4bace; --m-card: #ffffff;
+        --m-shadow: 0 1px 0 rgba(31, 39, 64, .06), 0 6px 18px rgba(31, 39, 64, .12); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --k-bg: #141826; --k-panel: #1c2233; --k-ink: #eef0f7; --k-dim: #9aa3ba; --k-line: #30384f; --k-warn: #ff8a6b; --k-on-ink: #141826;
+        --m-accent: #f0b23a; --m-accent-ink: #2a1c02; --m-teal: #57c9c0; --m-top: #0d111c; --m-top-ink: #f6f3e8; --m-top-dim: #9aa3ba; --m-card: #222a3e;
+        --m-shadow: 0 1px 0 rgba(0, 0, 0, .3), 0 6px 18px rgba(0, 0, 0, .45); color-scheme: dark } }
+:root[data-theme="dark"] { --k-bg: #141826; --k-panel: #1c2233; --k-ink: #eef0f7; --k-dim: #9aa3ba; --k-line: #30384f; --k-warn: #ff8a6b; --k-on-ink: #141826;
+        --m-accent: #f0b23a; --m-accent-ink: #2a1c02; --m-teal: #57c9c0; --m-top: #0d111c; --m-top-ink: #f6f3e8; --m-top-dim: #9aa3ba; --m-card: #222a3e;
+        --m-shadow: 0 1px 0 rgba(0, 0, 0, .3), 0 6px 18px rgba(0, 0, 0, .45); color-scheme: dark }
+[hidden] { display: none !important; }
+body { font: 14px/1.45 var(--k-font); }
+.k-app button { border: 1px solid var(--k-line); border-radius: 10px; background: var(--m-card); padding: 7px 12px; font-weight: 500; }
+.k-app button.on { background: var(--m-accent); color: var(--m-accent-ink); border-color: transparent; }
+.k-app button:focus-visible { outline: 2px solid var(--m-teal); outline-offset: 2px; }
+.k-app b { background: var(--m-accent); color: var(--m-accent-ink); border-radius: 6px; padding: 0 6px; font-weight: 600; }
+.k-app b.warn, .k-warn { background: var(--k-warn); color: #fff; border-radius: 6px; padding: 0 6px; }
+.k-app strong { font-weight: 600; }
+.ico { width: 17px; height: 17px; vertical-align: -3.5px; flex: none; }
+.pic { height: 26px; max-width: 44px; object-fit: contain; vertical-align: middle; margin-right: 7px; }
+.sw { display: inline-block; width: 10px; height: 10px; margin-right: 6px; border-radius: 3px; vertical-align: baseline; }
+/* the top strip: the mall's sign */
+.k-top { background: var(--m-top); color: var(--m-top-ink); border-bottom: 0; padding-block: 8px 7px; gap: 6px 8px; }
+.k-when { font-size: 15px; font-weight: 500; }
+.k-top .k-ctl button { background: rgba(255, 255, 255, .1); color: var(--m-top-ink); border-color: rgba(255, 255, 255, .22); padding: 5px 10px; }
+.k-top .k-ctl button.on { background: var(--m-accent); color: var(--m-accent-ink); border-color: transparent; }
+.k-nums { gap: 5px 6px; }
+.k-nums span { display: inline-flex; align-items: center; gap: 5px; background: rgba(255, 255, 255, .1); border-radius: 999px; padding: 2px 10px 2px 5px; font-weight: 500; }
+.k-nums small { color: var(--m-top-dim); font-weight: 400; }
+.k-sub { color: var(--m-top-dim); font-size: 13px; }
+/* over the map */
+.k-toast { background: var(--m-top); color: var(--m-top-ink); border-radius: 14px; padding: 7px 14px; box-shadow: var(--m-shadow); }
+.k-toast b { background: var(--m-accent); color: var(--m-accent-ink); }
+.k-corner button { border-radius: 999px; box-shadow: var(--m-shadow); padding: 5px 11px; font-weight: 600; }
+.k-card { background: var(--m-card); border: 0; border-radius: 14px; box-shadow: var(--m-shadow); padding: 10px 12px; line-height: 1.6; }
+.k-card button { padding: 3px 9px; margin: 2px 3px 2px 0; border-radius: 8px; }
+.k-card .cardpic { float: left; width: 76px; height: 58px; object-fit: contain; margin: 0 10px 4px 0; background: var(--k-panel); border-radius: 10px; padding: 3px; box-sizing: border-box; }
+.k-card .name { font-size: 15px; font-weight: 600; text-transform: capitalize; }
+.k-ask { background: var(--m-top); color: var(--m-top-ink); border-radius: 14px; box-shadow: var(--m-shadow); padding: 12px 14px; }
+.k-app .k-ask button { background: rgba(255, 255, 255, .1); border-color: rgba(255, 255, 255, .28); color: var(--m-top-ink); }
+.k-app .k-ask button:first-of-type { background: var(--m-accent); color: var(--m-accent-ink); border-color: transparent; }
+/* sheets */
+.k-sheet { border-top: 0; border-radius: 18px 18px 0 0; box-shadow: 0 -8px 24px rgba(31, 39, 64, .16); position: relative; z-index: 2; margin-top: -14px; }
+.k-sheet-head { padding-block: 9px 7px; }
+.k-sheet-head span { color: var(--k-ink); font-weight: 600; font-size: 13px; letter-spacing: .06em; }
+.k-sheet-head button { padding: 3px 10px; border-radius: 999px; }
+.k-sheet-body { padding-block: 10px 12px; }
+.k-sheet-body h3 { color: var(--m-teal); font-weight: 600; font-size: 12px; margin: 14px 0 6px; }
+.k-sheet-body td, .k-sheet-body th, .k-full td, .k-full th { padding: 5px 12px 5px 0; }
+.k-sheet-body td, .k-full td { border-bottom: 1px solid var(--k-line); }
+.k-sheet-body th, .k-full th { font-size: 12px; }
+.k-sheet-body td:first-child, .k-full td:first-child { text-transform: capitalize; }
+.k-sheet-body li { padding: 3px 0; }
+.k-chips { gap: 6px; }
+.k-meter { width: 72px; height: 7px; border: 0; border-radius: 999px; background: var(--k-line); overflow: hidden; }
+.k-meter i { background: var(--m-teal); border-radius: 999px; }
+.k-goal { background: var(--m-card); border-top: 1px solid var(--k-line) !important; padding-block: 8px !important; font-weight: 500; position: relative; z-index: 3; }
+/* the bar */
+.k-bar { background: var(--m-card); border-top: 1px solid var(--k-line); position: relative; z-index: 3; }
+.k-bar button, .k-bar.many button { border: 0; border-radius: 0; background: transparent; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 7px 0 6px; font-size: 11px; font-weight: 500; color: var(--k-dim); }
+.k-bar button .ico { width: 21px; height: 21px; }
+.k-bar button.on { background: transparent; color: var(--k-ink); box-shadow: inset 0 3px 0 var(--m-accent); }
+.k-bar button.hint { animation: m-hint 1.2s ease-in-out infinite; }
+@keyframes m-hint { 0%, 100% { box-shadow: inset 0 0 0 var(--m-accent); } 50% { box-shadow: inset 0 3px 0 var(--m-accent); background: color-mix(in srgb, var(--m-accent) 16%, transparent); } }
+/* the build menu: a card for each thing, with its picture */
+.tools { display: flex; gap: 6px; flex-wrap: wrap; }
+.tools button { display: inline-flex; align-items: center; gap: 6px; }
+.bank { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; font-size: 16px; }
+.items { display: grid; grid-template-columns: repeat(auto-fill, minmax(152px, 1fr)); gap: 8px; }
+.k-app button.item { display: flex; align-items: center; gap: 9px; text-align: left; padding: 7px; min-width: 0; box-shadow: 0 1px 0 rgba(31, 39, 64, .05); }
+.item .frame { flex: none; width: 66px; height: 54px; display: flex; align-items: center; justify-content: center; background: var(--k-panel); border-radius: 8px; }
+.item .frame img { max-width: 62px; max-height: 50px; }
+.item .what { min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.item strong { text-transform: capitalize; line-height: 1.2; }
+.item small { line-height: 1.25; font-size: 11.5px; color: var(--k-dim); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.item .cost { display: inline-flex; align-items: center; gap: 4px; font-weight: 600; font-size: 13px; }
+.k-app button.item.on { background: color-mix(in srgb, var(--m-accent) 22%, var(--m-card)); color: var(--k-ink); border-color: var(--m-accent); box-shadow: inset 0 0 0 1px var(--m-accent); }
+.k-app button.item:disabled { opacity: 1; background: transparent; box-shadow: none; }
+.k-app button.item:disabled .frame img { filter: grayscale(1) opacity(.45); }
+.k-app button.item:disabled strong { color: var(--k-dim); }
+/* the full-screen moments */
+.k-full h1 { font-size: 24px; font-weight: 700; line-height: 1.2; }
+.k-full table { border-collapse: collapse; font: inherit; font-variant-numeric: tabular-nums; margin: 0 0 10px; }
+.k-full td, .k-full th { text-align: right; font-weight: normal; white-space: nowrap; }
+.k-full th { color: var(--k-dim); border-bottom: 1px solid var(--k-line); }
+.k-full td:first-child, .k-full th:first-child { text-align: left; }
+.k-full ul { margin: 0 0 8px; padding-left: 18px; }
+.k-app .k-full button { background: var(--m-accent); color: var(--m-accent-ink); border-color: transparent; border-radius: 12px; padding: 11px 20px; font-weight: 600; font-size: 15px; }
+.who { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: flex-end; margin-bottom: 6px; }
+.who span { display: inline-flex; align-items: flex-end; gap: 4px; }
+.who img { height: 34px; image-rendering: pixelated; }` }));
+// The page stays covered while the mall is built and its art drawn (on opening, and for a new mall).
+const loader = createLoader({ title: 'Atrium', text: 'opening the doors' });
+const ICON = makeIcons();
+const ico = name => `<img class="ico" src="${ICON[name]}" alt="">`;
+let THUMB = {};                                                  // small pictures of every unit and floor thing, made with the art
+const pic = (name, cls = 'pic') => (THUMB[name] ? `<img class="${cls}" src="${THUMB[name]}" alt="">` : unitOf[name] ? sw(unitOf[name].color) : '');
+const coin = n => `<span class="cost">${ico('money')}${Math.round(n).toLocaleString('en')}</span>`;
+let game, sim, world, calendar, economy, visitors, trade, staff, policies, reputation, progress, floors, upkeep, happenings, rules;
+// The map is drawn at the screen's own resolution (a phone has two or three device pixels to a page pixel).
+const DPR = Math.min(3, Math.max(1, window.devicePixelRatio || 1));
+ui.onResize = (w, h) => { if (game) { game.resize(w * DPR, h * DPR); showFloor(floors.shown, false); } };
+window.M = M; window.ui = ui;                                    // poke at it from the console
+
+const money = n => M.MONEY.sign + Math.round(n).toLocaleString('en');
+const stars = v => '★' + v.toFixed(1);
+const signed = n => (n < 0 ? `<b class="warn">−${money(-n)}</b>` : money(n));
+const cap = s => s[0].toUpperCase() + s.slice(1);
+const plural = (k, n) => (n === 1 ? k : k === 'family' ? 'families' : k + 's');
+const span = t => (t < M.HOUR ? Math.max(1, Math.round(t / M.HOUR * 60)) + ' min' : (t / M.HOUR).toFixed(1) + ' h');
+const clockOf = h => `${String(Math.floor(h)).padStart(2, '0')}:${String(Math.round((h % 1) * 60)).padStart(2, '0')}`;
+const DAYS = { Mon: 'Monday', Tue: 'Tuesday', Wed: 'Wednesday', Thu: 'Thursday', Fri: 'Friday', Sat: 'Saturday', Sun: 'Sunday' };
+const unitOf = Object.fromEntries(M.UNITS.map(u => [u.name, u])), tileOf = Object.fromEntries(M.TILES.map(t => [t.name, t]));
+const wordsOf = Object.fromEntries(M.NEEDS.map(n => [n.name, n.words]));
+const sw = c => `<i class="sw" style="background:${c}"></i>`;
+
+// ── the game. One mall, kept on this device: saved every game hour, after building, when a day closes, and when the page
+// is put away.
+const saves = createSave({ key: 'atrium-save', version: M.SAVE_VERSION });
+let resumed = false, lastSave = '', unreadable = false;
+// Saved games by hand, and save codes: copies of everything this game keeps on the device (modules/slots.js).
+const slots = createSlots({ game: 'atrium', keys: ['atrium-save', 'atrium-progress'], flush: () => save(),
+  describe: () => `${M.STAGE_NAMES[progress.level] ?? 'mall'}, day ${rules.day}, ${world.buildings.filter(b => b && b.prefab.serves).length} units` });
+// Started from the menu's "showcase": a busy mall made ready beforehand is put in place, and the page starts again.
+if (await slots.takeShowcase('./showcase.txt')) await new Promise(() => {});
+ui.onExit = () => save();                                       // leaving for the menu (when opened from one): save first
+function save() {
+  if (!game || slots.leaving) return;                            // a saved game is being loaded: keep off what it wrote
+  const ok = saves.write(sim, { camera: { ...game.camera }, tile: game.renderer.tw, speed: pausedAt ?? game.speed });
+  lastSave = ok ? `saved on this device on day ${rules.day} at ${calendar.clock()}` : 'this device does not let the page keep a save';
+}
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') save(); });
+addEventListener('pagehide', save);
+/** Make the game: the saved mall if there is one (and `fresh` is not asked for), else a new one. Returns true if a save was loaded. */
+function start(fresh = false) {
+  if (game) game.destroy();
+  const [w, h] = ui.size();
+  ui.canvas.width = w * DPR; ui.canvas.height = h * DPR;
+  const cfg = M.makeConfig({ canvas: ui.canvas, onFrame: updateUI });
+  game = createGame(cfg);
+  ({ sim, world } = game); ({ calendar, economy, visitors, trade, staff, policies, reputation, progress, floors, upkeep, events: happenings, rules } = cfg.mall);
+  happenings.onNews = news;
+  progress.onEvent = earned;
+  window.game = game; window.mall = cfg.mall;
+  // the art: units drawn as cut-away rooms. Where the device cannot take the sheet, the engine's plain boxes stay.
+  try { const art = makeSprites({ world, sim, units: unitOf, seated: M.SEATED_ACTIONS(), pace: () => (game.buildMode ? 0 : game.ticksPerSecond * game.speed), maxSize: game.renderer.batch.maxTextureSize }); if (art) { game.setSprites(art); THUMB = art.thumbs; } } catch (e) { console.error(e); }
+  rules.onEvent = (kind, detail) => {
+    if (kind === 'opened') ui.toast(`<b>${DAYS[rules.weekday().name]}</b>: the doors are open`);
+    else if (kind === 'closing') ui.toast('closing time: visitors are leaving');
+    else if (kind === 'report') showReport(detail);
+    else if (kind === 'loan') { loanAsked = true; askLoan(); }
+    else if (kind === 'inspected') note(detail.pass ? '<b>the inspector commends the mall</b>: its rating rises' : `<b class="warn">the inspector fines the mall ${money(detail.fine)}</b>: ${detail.toilets ? 'the toilets are out of order' : detail.dirty + ' cells of floor are dirty'}, and its rating falls`, true);
+    else if (kind === 'stolen') note(`<b class="warn">shoplifters took ${money(detail)}</b>: a guard would have seen them off`, true);
+    else if (kind === 'morning' && detail.shut.length) ui.toast(`<b class="warn">kept shut today, with ${money(detail.owed)} owed:</b> ${detail.shut.join(', ')}`, 9000);
+  };
+  game.onTap = tapped;
+  calendar.on('hour', save);
+  sel = null; ui.card(null); ui.ask(null); log.length = 0;
+  let extra = null;
+  resumed = false; unreadable = false;
+  if (fresh) saves.clear();
+  else {
+    const data = saves.read();
+    if (data) {
+      let ok = false;
+      try { ok = saves.restore(sim, data); } catch (e) { console.error(e); }
+      if (ok) { resumed = true; extra = data.extra ?? {}; } else unreadable = true;   // a save from an older version of the game
+    }
+  }
+  if (unreadable) { saves.clear(); ui.close(); start(true); unreadable = true; return false; }   // a restore that failed half-way leaves nothing to trust: begin again
+  showFloor(resumed ? floors.shown : 0, true);
+  if (extra?.camera && extra.tile === game.renderer.tw) { Object.assign(game.camera, extra.camera); game.renderer.zoomAt(0, 0, 1); }   // where the player was looking (a save from before the art was drawn smaller)
+  game.speed = extra?.speed || 1; pausedAt = null; showSpeed();
+  if (resumed && rules.phase === 'closed' && rules.lastReport) showReport(rules.lastReport);   // put away while the report was up
+  return resumed;
+}
+
+// ── what happens: a line over the map, and kept under More
+const log = [];
+function note(text, loud = false) { log.unshift([`day ${rules.day} ${calendar.clock()}`, text]); if (log.length > 30) log.pop(); if (loud) ui.toast(text, 7000); }
+function news(kind, e, choice) {
+  if (e.quiet && kind !== 'chosen') return;
+  if (kind === 'announced') note(`<b>${e.title}</b>: ${e.text}`, true);
+  else if (kind === 'asking') note(`<b>${e.title}</b>: ${e.text}`);
+  else if (kind === 'chosen') note(`${e.title}: you chose to ${choice.label}`);
+  else if (kind === 'started' && (e.mods || e.loud)) note(`<b>${e.title}</b>: ${e.text}`, true);
+  else if (kind === 'ended' && (e.mods || e.loud)) note(`${e.title}: over`, true);
+}
+
+// ── stages, goals, achievements
+const rewardText = r => (r?.grant?.money ? ` (+${money(r.grant.money)})` : '');
+const NEW_AT = { 2: 'The first staff room, store room and cleaner\'s cupboard can be built, and so can bins.',
+                 3: 'A mall may have a <b>floor above</b> the ground floor, joined to it by escalators, stairs and lifts (all under Build).', 4: 'A third floor may be built, and a way in for cars.', 5: 'The building may rise to five floors.' };
+function earned(kind, it) {
+  if (kind === 'level') {
+    const fresh = M.UNITS.filter(u => u.stage === it.level && u.serves).map(u => u.name);
+    hold({ title: `This is now ${/^[aeiou]/.test(it.title) ? 'an' : 'a'} ${it.title}`, button: 'carry on',
+      html: `<p>${it.level === 2 ? 'People have noticed the place.' : it.level === 5 ? 'People come from other towns to see it.' : 'The town talks about it.'} About ${M.FOOTFALL[it.level]} visitors a day now come to a mall of this standing, where ${M.FOOTFALL[it.level - 1]} did.</p>` +
+            (fresh.length ? `<p><b>New units:</b> ${fresh.join(', ')}.</p>` : '') + `<p>${NEW_AT[it.level] ?? ''}</p>` +
+            (it.reward?.grant?.money ? `<p>The town council sends ${money(it.reward.grant.money)} towards the works.</p>` : '') });
+  }
+  else if (kind === 'achieved') ui.toast(`achievement: <b>${it.title}</b>`, 7000);
+  else if (kind === 'goal') { const next = progress.goal(); ui.toast(`done: ${it.title}${rewardText(it.reward)}` + (next ? ` · next: ${next.title}` : ''), 7000); }
+}
+
+// ── the camera looks at one floor
+function showFloor(k, centre) {
+  const r = game.renderer, was = floors.shown;
+  k = floors.show(k, r, 110);
+  const [x0, y0, x1, y1] = M.floorRect(k), across = (k - was) * M.FLOOR.pitch;
+  if (!centre && across) { game.camera.x += across * r.hw; game.camera.y += across * r.hh; r.pan(0, 0); }   // the same spot, one floor up or down
+  if (centre) { lookAt(x0 + M.FLOOR.w / 2, y1 - 6); game.camera.zoom = Math.max(r.minZoom, Math.min(3, ui.canvas.width / (8.5 * r.tw))); r.pan(0, 0); }   // eight or nine cells across the screen
+}
+function lookAt(x, y) { const r = game.renderer; game.camera.x = (x - y) * r.hw + r.originX; game.camera.y = (x + y) * r.hh; r.pan(0, 0); }
+// the floor selector: a button for each floor that is built, with how many people are on it
+const FLOOR_TAGS = ['G', '1', '2', '3', '4'];
+const floorName = k => (k === 0 ? 'the ground floor' : M.FLOOR_NAMES[k]);
+const floorBtns = M.FLOOR_NAMES.map((name, k) => { const b = ui.corner(FLOOR_TAGS[k], () => (floors.shown === k ? showFloor(k, true) : showFloor(k, false))); b.title = name; b.hidden = k > 0; return b; });
+function showFloorButtons() {
+  const crowd = floors.crowd();
+  floorBtns.forEach((b, k) => { b.hidden = k >= floors.built || floors.built < 2 && k > 0; b.className = k === floors.shown ? 'on' : ''; ui.html(b, floors.built < 2 ? 'ground floor' : `${FLOOR_TAGS[k]} <small>${crowd[k] ?? 0}</small>`); });
+}
+
+// ── time: pause, and a speed that cycles
+const SPEEDS = [1, 2, 4, 8];
+let pausedAt = null;                                             // the speed to go back to, while paused
+const pauseBtn = ui.control('pause', () => { if (pausedAt === null) { pausedAt = game.speed; game.speed = 0; } else { game.speed = pausedAt; pausedAt = null; } showSpeed(); });
+const speedBtn = ui.control('1×', () => { const now = pausedAt ?? game.speed, next = SPEEDS[(SPEEDS.indexOf(now) + 1) % SPEEDS.length]; if (pausedAt !== null) pausedAt = next; else game.speed = next; showSpeed(); });
+function showSpeed() { pauseBtn.textContent = pausedAt === null ? 'pause' : 'go on'; pauseBtn.className = pausedAt === null ? '' : 'on'; speedBtn.textContent = (pausedAt ?? game.speed) + '×'; }
+/** Stop the clock for a full-screen moment and start it again after. */
+let held = null;
+function hold(f) {
+  if (held === null) { held = pausedAt === null ? game.speed : 0; game.speed = 0; }
+  ui.full({ ...f, onClose: () => { if (f.onClose) f.onClose(); if (pausedAt === null) game.speed = held || 1; held = null; showSpeed(); } });
+}
+
+// ── the day's report, the one full-screen moment. Closing it passes the night.
+function reportHtml(r) {
+  const met = Object.entries(r.met).sort((a, b) => b[1] - a[1]).map(([n, k]) => `${k} ${wordsOf[n]}`).join(', ');
+  const missedN = Object.values(r.missed).reduce((n, o) => n + Object.values(o).reduce((a, b) => a + b, 0), 0);
+  const metN = Object.values(r.met).reduce((a, b) => a + b, 0);
+  return `<p>${r.arrived} visitor${r.arrived === 1 ? '' : 's'} came${r.byKind && Object.keys(r.byKind).length > 1 ? ' (' + Object.entries(r.byKind).sort((a, b) => b[1] - a[1]).map(([k, n]) => `${n} ${plural(k, n)}`).join(', ') + ')' : ''}. ` +
+    `They rated the visit <b>${stars(r.rating)}</b> of 5${r.ratingAfter !== undefined ? `, which moves the mall's rating from ${stars(r.ratingBefore)} to <b>${stars(r.ratingAfter)}</b>` : ''}.</p>` +
+    (r.units.length ? `<div class="k-scroll"><table><tr><th>unit</th><th>visits</th><th>takings</th><th>costs</th><th>result</th></tr>` +
+      r.units.map(u => `<tr><td>${pic(u.name)}${u.name}</td><td>${u.sales}</td><td>${money(u.takings)}</td><td>${money(u.goods + u.wages + u.upkeep)}</td><td>${signed(u.result)}</td></tr>`).join('') + `</table></div>` : '<p>There is nothing here to visit yet.</p>') +
+    `<p>Takings ${money(r.takings)}. Paid at closing: goods sold ${money(r.goods)}, wages ${money(r.wages)}, upkeep ${money(r.upkeep)}${r.loan ? ', the bank ' + money(r.loan) : ''}.${r.other ? ' Paid during the day: ' + money(r.other) + '.' : ''}<br>` +
+    `${r.profit >= 0 ? `<b>Profit ${money(r.profit)}</b>` : `<b class="warn">Loss ${money(-r.profit)}</b>`} · in the bank ${money(r.cash)}</p>` +
+    (r.notes?.length ? `<p class="k-dim">What went wrong:</p><ul>${r.notes.map(n => `<li>${n}</li>`).join('')}</ul>` : '') +
+    (metN + missedN ? `<p>${metN} wish${metN === 1 ? '' : 'es'} met${met ? ' (' + met + ')' : ''}; ${missedN} missed.</p>` : '') +
+    (r.worst.length ? `<p class="k-dim">What visitors complained of most:</p><ul>${r.worst.map(g => `<li>${g.text}</li>`).join('')}</ul>` : r.arrived ? '<p>Nobody complained of anything.</p>' : '');
+}
+function showReport(r) {
+  ui.close();
+  hold({ title: `Day ${r.day}, ${DAYS[r.weekday]}: the mall is closed`, button: 'on to the next morning', html: reportHtml(r), onClose: passNight });
+}
+// The bank's offer waits over the map until it is answered.
+let loanAsked = false;
+function askLoan() {
+  const L = M.LOAN;
+  ui.ask(loanAsked && !rules.loan.taken ? { id: 'loan', html: `<b>The bank offers a loan.</b> ${money(L.amount)} now, repaid at ${money(L.daily)} a day for ${L.days} days. It is offered once.`,
+    choices: [{ id: 'take', label: 'take the loan' }, { id: 'no', label: 'no, thank you' }],
+    onChoose: c => { if (c === 'take' && rules.takeLoan()) ui.toast(`${money(L.amount)} from the bank is in the account`); loanAsked = false; ui.ask(null); save(); } } : askEvent());
+}
+function askEvent() {
+  const a = ui.open === 'build' ? null : happenings.current().find(c => c.status === 'asking');
+  return a ? { id: a.event.id + a.event.title, html: `<b>${a.event.title}.</b> ${cap(a.event.text)}.`, choices: a.event.choices, onChoose: c => { happenings.choose(a.event.id, c); save(); },
+    note: `${cap(a.event.choices.filter(c => c.text).map(c => c.label + ': ' + c.text).join('. '))}. An answer is wanted within ${span(a.startsIn)}.` } : null;
+}
+function passNight() { for (let n = 0; rules.phase === 'closed' && n < 2 * M.DAY; n++) game.step(1); save(); }
+function welcome() {
+  hold({ title: 'Atrium', button: 'begin',
+    html: `<p>This empty hall is yours, with ${money(M.MONEY.start)} in the bank and a door on the street.</p>
+           <p>Every day people come in with a few things they want, some money and not much time. Give them shops to find it in, and they spend. <b>Build</b> opens the tools; time stands still while you build.</p>
+           <p>The doors open at ${clockOf(M.DAYTIME.open)} and close at ${clockOf(M.DAYTIME.close)}. Each unit hires its own staff and fills its own shelves; wages, goods and upkeep are paid at closing, and a report says what was earned, what it cost, and what visitors missed.</p>
+           <p class="k-dim">Drag to move the map, pinch to zoom, tap a person or a unit to see more.</p>` });
+}
+
+// ── who is that? Tap a person or a unit.
+let sel = null;                                                 // { vid } a visitor by their lasting number, or { bid } a building
+function tapped(pick) {
+  if (ui.open === 'build') return;
+  sel = pick.person !== undefined && visitors.is(pick.person) ? { vid: visitors.idOf(pick.person) } : pick.building ? { bid: pick.building.id } : null;
+  showCard();
+}
+ui.onCard = e => {
+  const btn = e.target.closest('button'), b = sel?.bid !== undefined ? world.buildings[sel.bid] : null;
+  if (!btn) return;
+  if (btn.dataset.hire && b) staff.hire(b, staff.hired(b) + +btn.dataset.hire);
+  else if (btn.dataset.price && b) policies.set('price:' + b.name, +btn.dataset.price);
+  else sel = null;
+  showCard(); save();
+};
+const doingOf = i => { const a = sim.actions[sim.action[i]].name; return a === 'wander' ? 'looking around' : a === 'leave' || a === 'drive home' ? (sim.using[i] ? 'leaving' : 'on the way out') : sim.wait[i] > 0 ? 'queueing to ' + a : sim.using[i] ? 'now: ' + a : 'on the way to ' + a; };
+const WHY = { none: 'nowhere open has it', price: 'too dear', stock: 'sold out', queue: 'the queue was too long', time: 'no time left', patience: 'no patience left', closing: 'the mall closed', 'shown out': 'the mall closed', urgent: 'had to go' };
+const LEFT = { done: 'got everything', nothing: 'found nothing they came for', time: 'out of time', patience: 'tired of queueing', closing: 'closing time', 'shown out': 'shown out at closing', urgent: 'needed a toilet' };
+function visitorCard(i) {
+  const v = visitors.info(i), n = i * sim.K;
+  const wish = w => `${w.state === 'met' ? '■' : w.state === 'wanted' ? '□' : '×'} ${wordsOf[w.need]}${w.state === 'missed' ? ` <small>(${WHY[w.why] ?? w.why})</small>` : ''}`;
+  const lasting = M.NEEDS.filter(d => d.lasting).map(d => `<span class="k-need">${d.name}${meter(sim.needsOf[n + sim.needIndex(d.name)])}</span>`).join('');
+  const at = floors.of(sim.px[i] | 0, sim.py[i] | 0);
+  return `<button class="x">close</button>${pic('person:' + v.kind.name, 'cardpic')}<span class="name">${v.kind.name}</span>${at >= 0 && at !== floors.shown ? ` <small>on ${floorName(at)}</small>` : ''} ${money(v.purse)} left of ${money(v.purse + v.spent)} · ${v.going ? 'leaving' : 'stays ' + span(Math.max(0, v.leavesIn)) + ' more'}<br>` +
+    `${doingOf(i)}${v.queued > 0 ? ` · has queued ${span(v.queued)}` : ''}<br>${v.wishes.map(wish).join(' · ') || 'came for nothing in particular'}<br>${lasting}`;
+}
+function unitCard(b) {
+  const u = unitOf[b.name], books = trade.books(b).day, hired = staff.hired(b), room = trade.room(b), priced = u.serves?.some(s => s.price), level = policies.get('price:' + b.name);
+  let queue = 0; for (let i = 0; i < sim.count; i++) if (sim.wait[i] > 0 && sim.queueAt[i] === b.id) queue++;
+  const lines = [
+    u.text ? cap(u.text) : '',
+    ...(u.serves ?? []).map(s => `${cap(s.action)}: ${s.price ? money(rules.priceOf(s.action, b)) : 'free'}, about ${span(s.takes)}`),
+    priced ? `Prices: ${M.PRICE_LEVELS.map((l, k) => `<button data-price="${k}" class="${level === k ? 'on' : ''}">${l.name}</button>`).join('')} <small>for every ${b.name}</small>` : '',
+    u.capacity && !u.gate ? `${b.customers} of ${b.cap} inside${queue ? `, <b class="warn">${queue} queueing</b>` : ''}` : '',
+    u.posts ? `${ico('staff')} ${hired} of ${u.posts} hired <button data-hire="-1"${hired <= 0 ? ' disabled' : ''}>fewer</button><button data-hire="1"${hired >= u.posts ? ' disabled' : ''}>more</button>` +
+      ` <small>${money(rules.dayWage())} a day each${staff.onDuty() && staff.today(b) < hired ? `; ${hired - staff.today(b)} did not come in today` : ''}</small>` : '',
+    room ? `${ico('stock')} ${meter(trade.stockOf(b) / room)} ${money(trade.stockOf(b))} of ${money(room)}, filled every morning` : '',
+    u.serves ? `Today: ${books.sales} visit${books.sales === 1 ? '' : 's'}, ${money(books.takings)} taken${books.turned ? `, ${books.turned} turned away by the price` : ''}${books.short ? `, ${books.short} by empty shelves` : ''}` : '',
+    `Upkeep ${money(u.upkeep)} a day`,
+    b.broken ? `<b class="warn">broken down</b>: ${b.mendAt !== undefined ? 'the engineer will have it working in ' + span(Math.max(0, b.mendAt - sim.tick)) : 'the contractor comes overnight'}` : b.blockedBy?.power ? '<b class="warn">shut: the power is off</b>' :
+    b.blockedBy?.unpaid ? '<b class="warn">kept shut today: it lost money yesterday and there are debts</b>' : b.blockedBy?.staff ? `<b class="warn">shut: ${hired ? 'its staff are not in' : 'nobody is hired'}</b>` : b.blockedBy?.stock ? '<b class="warn">shut: sold out until tomorrow</b>' : b.blocked ? '<b class="warn">closed</b>' : '',
+  ].filter(Boolean);
+  return `<button class="x">close</button>${pic(b.name, 'cardpic')}<span class="name">${b.name}</span><br>${lines.join('<br>')}`;
+}
+function showCard() {
+  let html = null;
+  const i = sel?.vid !== undefined ? visitors.slotOf(sel.vid) : -1;
+  if (i >= 0) html = visitorCard(i);
+  else if (sel?.bid !== undefined && world.buildings[sel.bid]) html = unitCard(world.buildings[sel.bid]);
+  else sel = null;
+  ui.card(html);
+}
+
+// ── building
+let toolChoice = null, dragStart = null, lastCell = null, rotation = 'auto', buildSay = '';
+const say = t => { buildSay = t; ui.refresh(); };
+const REMOVABLE = M.TILES.filter(t => t.cost !== undefined).map(t => t.name);
+const WHY_NOT = r => (/^it costs (\d+)$/.test(r) ? 'it costs ' + money(+r.slice(9)) : r);
+const SIDE = ['north', 'east', 'south', 'west'], SIDE_OF = { N: 0, E: 1, S: 2, W: 3 };
+const doorWords = () => { if (rotation === 'auto') return 'door: to the walkway'; const u = unitOf[toolChoice]; return 'door: ' + SIDE[((SIDE_OF[u?.door ?? 'S']) + rotation) % 4]; };
+const cornerOf = (name, x, y) => { const p = world.prefab(name), turned = rotation !== 'auto' && (rotation & 1); return [x - ((turned ? p.h : p.w) >> 1), y - ((turned ? p.w : p.h) >> 1)]; };
+// A unit or a way up is only taken out once the player says so in the strip: what was touched is outlined until then.
+let removing = null;
+function askRemove(r) {
+  removing = r;
+  game.preview = [];
+  if (r.unit) { const b = r.unit; for (let j = b.y; j < b.y + b.h; j++) for (let i = b.x; i < b.x + b.w; i++) game.preview.push([i, j]); }
+  else for (let c = 0; c < world.cells; c++) { const x = c % world.w, y = (c / world.w) | 0; if (floors.at(x, y) === r.way) game.preview.push([x, y]); }
+  buildSay = ''; buildTray();
+}
+function stopRemoving() { if (removing) { removing = null; game.preview = []; } }
+const stillThere = r => r && (r.unit ? world.buildings[r.id] === r.unit : floors.list.includes(r.way));
+function applyTool() {
+  const v = toolChoice;
+  if (game.offered) game.withdraw();
+  removing = null;
+  game.preview = [];
+  if (ui.open !== 'build' || v === null) game.tool = null;       // outside build mode a drag always pans
+  else if (v === '!') game.tool = (x, y, phase) => {             // take a unit away, pull up a tile
+    if (phase !== 'down' && phase !== 'drag' || !world.inside(x, y)) return;
+    const id = world.bldAt[y * world.w + x];
+    if (id >= 0) { if (phase === 'down') { const why = rules.canRemove(world.buildings[id]); if (why !== true) say(cap(why) + '.'); else askRemove({ unit: world.buildings[id], id }); } }
+    else if (REMOVABLE.includes(world.defs[world.get(x, y)].name)) game.demolish(x, y);
+    else if (phase === 'down') { const n = floors.at(x, y); if (n) askRemove({ way: n, x, y }); }
+  };
+  else if (M.CONNECTORS[v]) game.tool = (x, y, phase) => {      // a way up: it takes the same cells on this floor and the one above
+    if (phase === 'cancel') { game.preview = []; return; }
+    if (phase !== 'up') { game.preview = rules.connectCells(v, x, y); return; }
+    game.preview = [];
+    const r = rules.connect(v, x, y);
+    say(r === true ? `Built the ${v} for ${money(M.CONNECTORS[v].cost)}: it joins ${floorName(floors.shown)} and ${floorName(floors.shown + 1)}.` : cap(WHY_NOT(String(r))) + '.');
+  };
+  else if (v === 'walkway') game.tool = (x, y, phase) => {       // straight line from where the finger lands to where it lifts
+    if (phase === 'down') dragStart = [x, y];
+    if (phase === 'cancel' || !dragStart) { dragStart = null; game.preview = []; return; }
+    const cells = world.lineCells(dragStart[0], dragStart[1], x, y).filter(([i, j]) => world.inside(i, j) && world.get(i, j) === world.fill);
+    if (phase === 'up') {
+      const from = dragStart;
+      dragStart = null; game.preview = [];
+      if (cells.length > rules.affordable(v)) say(`That is ${cells.length} cells: ${money(cells.length * rules.tileCost(v))}, more than is in the bank.`);
+      else { const n = game.line(v, from[0], from[1], x, y); say(n ? `Laid ${n} cells of walkway for ${money(n * rules.tileCost(v))}.` : 'Walkway goes on free ground.'); }
+    } else { game.preview = cells; say(`${cells.length} cells: ${money(cells.length * rules.tileCost(v))}`); }
+  };
+  else if (tileOf[v]) game.tool = (x, y, phase) => {             // one cell at a time, wherever the finger goes
+    if (phase === 'up' || phase === 'cancel') { lastCell = null; return; }
+    if (lastCell && lastCell[0] === x && lastCell[1] === y) return;
+    lastCell = [x, y];
+    const r = rules.layTile(v, x, y);
+    say(r === true ? `A ${v}, ${money(rules.tileCost(v))}.` : cap(WHY_NOT(String(r))) + '.');
+  };
+  else game.offer(v, {                                           // held over the map until the player says "build" (see buildTray)
+    rot: rotation,
+    check: (name, cx, cy, rot) => { const r = rules.canPlaceAt(name, cx, cy, rot); return r === true ? true : cap(r) + '.'; },
+    onChange: g => { rotation = g.rot; if (builtAt !== `${g.x},${g.y}`) { builtAt = ''; buildSay = ''; } buildTray(); },
+  });
+}
+// While a tool is in hand the sheet folds down to this strip, and the map has the screen.
+const toolHelp = v => v === '!' ? 'Touch a unit or a tile to take it away.' : v === 'walkway' ? 'Drag across the map from one end of the walkway to the other.'
+  : M.CONNECTORS[v] ? 'Drag it into place and lift to build. It goes up to the floor above, and needs the same cells free there.' : 'Touch or drag over the cells to lay it.';
+let builtAt = '';                                                // where the last one was just built: the ghost still stands on it
+function buildTray() {
+  const v = toolChoice, g = game.offered;
+  if (ui.open !== 'build' || v === null) { ui.tray(null); return; }
+  if (v === '!' && removing && !stillThere(removing)) stopRemoving();   // gone meanwhile (a new mall)
+  if (v === '!' && removing) {
+    const r = removing, what = r.unit ? r.unit.name : r.way.kind;
+    ui.tray({ html: `<strong>Remove the ${what}?</strong><br>${r.unit ? 'It is taken out for good, and nothing is paid back.' : 'It comes out on both floors, and nothing is paid back.'}`,
+      buttons: [{ id: 'yes', label: 'remove', strong: true }, { id: 'no', label: 'keep' }],
+      onTap(id) {
+        stopRemoving();
+        buildSay = '';
+        if (id === 'yes' && stillThere(r)) {
+          if (r.unit) { game.demolish(r.unit.x, r.unit.y); buildSay = `Removed the ${what}.`; }
+          else if (rules.disconnect(r.x, r.y)) buildSay = `Removed the ${what}, on both floors.`;
+        }
+        buildTray(); ui.refresh();
+      } });
+    return;
+  }
+  const name = v === '!' ? 'remove' : v, u = unitOf[v];
+  const head = `<span style="float:right" class="bank">${ico('money')}${Math.round(economy.town.money).toLocaleString('en')}</span><strong>${cap(name)}</strong>` +
+    (g && u ? ` <small>${money(u.cost)} · ${doorWords()}</small>` : '') + '<br>';
+  const line = !g ? buildSay || toolHelp(v)
+    : g.ok || builtAt ? buildSay || 'Drag it into place, or tap the map where it should stand. Then build.'
+    : `<b class="warn">${g.why === 'build' ? `Cannot build the ${v}: ${typeof g.reason === 'string' && g.reason.startsWith('it takes') ? 'it costs ' + money(u.cost) : typeof g.reason === 'string' ? g.reason.replace(/^locked: /, 'it comes ') : 'not allowed'}.`
+        : g.why === 'space' ? `The ${v} needs free ground, and a free cell at its door.` : g.why}</b>`;
+  ui.tray({ html: head + line,
+    buttons: g ? [{ id: 'turn', label: 'turn' }, { id: 'build', label: 'build', strong: true, disabled: !g.ok }, { id: 'change', label: 'other' }, { id: 'done', label: 'done' }]
+               : [{ id: 'change', label: 'other' }, { id: 'done', label: 'done' }],
+    onTap(id) {
+      if (id === 'turn') game.turn();
+      else if (id === 'build') { const at = `${g.x},${g.y}`, b = game.accept(); if (b) { builtAt = at; buildSay = `Built the ${v} for ${money(u.cost)}. Move it on to build another.`; } buildTray(); }
+      else if (id === 'change') { toolChoice = null; buildSay = ''; applyTool(); ui.tray(null); ui.refresh(); }
+      else ui.close();
+    } });
+}
+const whatIs = u => u.text ?? (u.serves ? u.serves.map(s => wordsOf[s.need]).filter((w, k, a) => a.indexOf(w) === k).join(', ') : '');
+const ROTS = ['auto', 0, 1, 2, 3];
+function buildSheet(body) {
+  const stage = rules.stage(), an = n => (/^[aeiou]/.test(M.STAGE_NAMES[n]) ? 'an ' : 'a ') + M.STAGE_NAMES[n];
+  const tool = (value, sign, text) => `<button data-tool="${value}" class="${String(toolChoice) === String(value) ? 'on' : ''}">${ico(sign)}${text}</button>`;
+  // one card: its picture, its name, what it is for, what it costs (or what standing it waits for)
+  const card = (attr, name, picture, text, cost, locked, on) => `<button class="item${on ? ' on' : ''}" ${attr}${locked ? ' disabled' : ''}><span class="frame">${pic(picture, '')}</span>` +
+    `<span class="what"><strong>${name}</strong><small>${text}</small>${locked ? `<span class="cost">${ico('lock')}<small>${locked}</small></span>` : cost}</span></button>`;
+  const item = (d, isTile) => card(`data-tool="${d.name}"`, d.name, d.name, isTile ? d.text : whatIs(d), isTile ? `<span class="cost">${ico('money')}${d.cost} <small>a cell</small></span>` : coin(d.cost),
+    d.stage > stage ? 'for ' + an(d.stage) : '', toolChoice === d.name);
+  const way = ([name, c]) => card(`data-tool="${name}"`, name, name, c.text, coin(c.cost), rules.locked(name) ? 'for a mall' : '', toolChoice === name);
+  const canFloor = rules.canBuyFloor(), nextFloor = M.FLOOR_NAMES[floors.built];   // 'level 1' is the floor above the ground floor
+  const floorItem = stage >= 2 && nextFloor ? card('data-floor="1"', nextFloor, 'floor', 'a whole new floor, the same size', coin(rules.floorCost()), canFloor === true || /^it costs/.test(canFloor) ? '' : canFloor, false) : '';
+  const tilesNow = M.TILES.filter(t => t.cost !== undefined && t.stage <= stage + 1), unitsNow = M.UNITS.filter(u => u.stage <= stage + 1);
+  const shops = unitsNow.filter(u => u.serves && !u.gate), others = unitsNow.filter(u => !u.serves || u.gate);
+  ui.html(body, `<p style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px"><span class="bank">${ico('money')}${Math.round(economy.town.money).toLocaleString('en')}</span>` +
+    `<span class="k-dim" style="text-align:right;font-size:13px">${buildSay || 'Time stands still while you build.'}</span></p>` +
+    `<div class="tools">${tool('!', 'remove', 'remove a unit or a tile')}</div>` +
+    `<h3>Floors and comforts</h3><div class="items">${tilesNow.map(t => item(t, true)).join('')}</div>` +
+    (stage >= 2 ? `<h3>More floors, and the ways between them</h3><div class="items">${floorItem}${Object.entries(M.CONNECTORS).map(way).join('')}</div>` : '') +
+    `<h3>Shops and places to go</h3><div class="items">${shops.map(u => item(u, false)).join('')}</div>` +
+    `<h3>Behind the scenes</h3><div class="items">${others.map(u => item(u, false)).join('')}</div>`);
+  body.onclick = e => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    if (b.dataset.floor) { const r = rules.buyFloor(); if (r === true) { showFloor(floors.built - 1, true); buildSay = `${cap(M.FLOOR_NAMES[floors.built - 1])} is built, and on screen (the buttons at the corner of the map change floor). It needs a way up: an escalator, stairs or a lift, placed on the floor below.`; } else buildSay = cap(WHY_NOT(String(r))) + '.'; }
+    else { toolChoice = b.dataset.tool; buildSay = ''; rotation = 'auto'; applyTool(); buildTray(); return; }
+    buildSheet(body);
+  };
+  if (toolChoice !== null) buildTray();                          // keeps the strip's words current (say() comes through here)
+}
+
+// ── the other sheets
+function unitsSheet(body) {
+  const rows = world.buildings.filter(b => b && !unitOf[b.name].gate).map(b => { const d = trade.books(b).day;
+    const u = unitOf[b.name], room = trade.room(b), state = b.blocked ? '<b class="warn">shut</b>' : u.capacity ? b.customers + '/' + b.cap : '';
+    return `<tr data-bid="${b.id}"><td>${pic(b.name)}${b.name}</td><td>${state}</td><td>${u.serves ? d.sales : ''}</td><td>${u.serves ? money(d.takings) : ''}</td><td>${u.posts ? staff.today(b) + '/' + u.posts : ''}</td><td>${room ? Math.round(trade.stockOf(b) / room * 100) + '%' : ''}</td></tr>`; });
+  ui.html(body, rows.length ? `<div class="k-scroll"><table><tr><th>unit</th><th>inside</th><th>visits</th><th>${ico('money')}</th><th>${ico('staff')}</th><th>${ico('stock')}</th></tr>${rows.join('')}</table></div>` +
+    `<p class="k-dim" style="margin-top:8px">Today so far. Tap a row to find the unit.</p>` : '<p class="k-dim">Nothing is built yet. Build opens the tools.</p>');
+  body.onclick = e => { const tr = e.target.closest('tr[data-bid]'); if (!tr) return; const b = world.buildings[+tr.dataset.bid]; if (!b) return; sel = { bid: b.id }; showFloor(floors.of(b.x, b.y), false); lookAt(b.cx, b.cy); ui.close(); showCard(); };
+}
+function visitorsSheet(body) {
+  const kinds = Object.entries(visitors.byKind()).sort((a, b) => b[1] - a[1]).map(([k, n]) => `<span>${pic('person:' + k, '')}${n} ${plural(k, n)}</span>`).join(''), t = visitors.tally;
+  const wants = {};
+  for (let i = 0; i < sim.count; i++) if (visitors.is(i)) for (const w of visitors.info(i).wishes) if (w.state === 'wanted') wants[w.need] = (wants[w.need] ?? 0) + 1;
+  const wanted = Object.entries(wants).sort((a, b) => b[1] - a[1]).map(([n, k]) => `${k} ${wordsOf[n]}`).join(', ');
+  const rows = visitors.recent.slice(0, 16).map(r => `<li>${stars(r.score)} ${r.kind}, ${LEFT[r.reason] ?? r.reason}, spent ${money(r.spent)}` +
+    (r.missed.length ? ` <small>missed ${r.missed.map(m => `${wordsOf[m[0]]} (${WHY[m[1]] ?? m[1]})`).join(', ')}</small>` : '') + `</li>`);
+  ui.html(body, (kinds ? `<div class="who">${kinds}</div>` : '') + `<p>${ico('people')} ${visitors.count} inside. Today ${t.arrived} came and ${t.gone} have left${t.gone ? ', rating the visit ' + stars(t.scoreSum / t.gone) : ''}.</p>` +
+    (wanted ? `<p><span class="k-dim">Looking for:</span> ${wanted}</p>` : '') +
+    `<p class="k-dim">${rules.phase === 'open' ? `About ${Math.round(rules.expected())} are expected today as things stand.` : 'The doors are shut.'} The mall is rated ${stars(reputation.rating)}, which brings ${Math.round(reputation.factor() * 100)}% of the visitors a mall of its standing would have; its ${rules.varietyCount()} kind${rules.varietyCount() === 1 ? '' : 's'} of unit bring ${Math.round(rules.varietyFactor() * 100)}%.</p>` +
+    `<h3>Who left, and why</h3><ul>${rows.join('') || '<li class="k-dim">nobody yet</li>'}</ul>`);
+  body.onclick = null;
+}
+function moneySheet(body) {
+  const takings = trade.takings(), d = rules.due(), L = rules.loan;
+  ui.html(body, `<p><span class="bank">${ico('money')}${Math.round(economy.town.money).toLocaleString('en')}</span> <span class="k-dim">in the bank</span></p>` +
+    `<p>Today so far: takings ${money(takings)}.<br>Due at closing: goods sold ${money(d.goods)}, wages ${money(d.wages)}, upkeep ${money(d.upkeep)}${d.loan ? ', the bank ' + money(d.loan) : ''}${d.owed ? `, <b class="warn">owed from before ${money(d.owed)}</b>` : ''}: ${money(d.total)} in all.</p>` +
+    (L.taken ? `<p class="k-dim">${L.left ? `The bank's loan: ${L.left} more day${L.left === 1 ? '' : 's'} of ${money(M.LOAN.daily)}.` : 'The bank\'s loan is repaid.'}</p>` : '') +
+    (rules.history.length ? `<h3>The last days</h3><div class="k-scroll"><table><tr><th>day</th><th>visitors</th><th>rating</th><th>takings</th><th>profit</th></tr>` +
+      rules.history.map(d => `<tr><td>${d.day} ${d.weekday}</td><td>${d.arrived}</td><td>${stars(d.rating)}</td><td>${money(d.takings)}</td><td>${signed(d.profit)}</td></tr>`).join('') + `</table></div>` : '<p class="k-dim">The first day is still running.</p>'));
+  body.onclick = null;
+}
+function goalsSheet(body) {
+  const L = progress.levelInfo(), g = progress.goal();
+  const val = p => (p.label.includes('profit') ? money(Math.min(p.target, Math.max(0, p.value))) + ' / ' + money(p.target) : Math.min(p.target, Math.floor(p.value)) + ' / ' + p.target);
+  const part = p => `<li>${p.done ? '■' : '□'} ${p.label} <span class="k-dim">${p.flag ? '' : val(p)}</span></li>`;
+  ui.html(body, (g ? `<p><b>goal ${g.n} of ${g.of}</b> ${g.title}${meter(g.progress.ratio)}</p><p>${cap(g.text)}${rewardText(g.reward)}.</p>` : '<p>Every goal is met.</p>') +
+    `<h3>${cap(M.STAGE_NAMES[progress.level])}${L.next ? ', to become ' + (/^[aeiou]/.test(L.next.title) ? 'an ' : 'a ') + L.next.title : ''}</h3>` + (L.next ? `<ul>${L.next.progress.parts.map(part).join('')}</ul>` : '<p class="k-dim">There is no higher standing.</p>') +
+    `<p style="margin-top:6px">The mall is rated ${stars(reputation.rating)}. Each day it moves a third of the way to what that day's visitors thought.</p>` +
+    `<h3>Achievements</h3><ul>${progress.achievements().map(a => `<li${a.done ? '' : ' class="k-dim"'}>${a.done ? '■' : '□'} ${a.title}</li>`).join('')}</ul>`);
+  body.onclick = null;
+}
+function policySheet(body) {
+  const words = id => (id === 'open' || id === 'close' ? ['earlier', 'later'] : id === 'wages' ? ['lower', 'higher'] : ['cheaper', 'dearer']);
+  const rows = policies.list().map(p => `<p><b>${p.title}</b> ${p.words}<br><span class="k-dim">${cap(p.text)}.</span><br>` +
+    `<button data-id="${p.id}" data-by="-1"${p.value <= p.min ? ' disabled' : ''}>${words(p.id)[0]}</button> <button data-id="${p.id}" data-by="1"${p.value >= p.max ? ' disabled' : ''}>${words(p.id)[1]}</button></p>`).join('');
+  ui.html(body, rows + `<p class="k-dim">New hours hold from the next change of the day: opening hours from tomorrow morning, closing from today.</p>`);
+  body.onclick = e => { const b = e.target.closest('button'); if (!b) return; policies.nudge(b.dataset.id, +b.dataset.by); policySheet(body); save(); };
+}
+let sure = -1e9;
+function moreSheet(body) {
+  const g = game, again = performance.now() - sure < 4000, r = rules.lastReport;
+  ui.html(body, (r ? `<h3>Day ${r.day}, ${DAYS[r.weekday]}</h3>${reportHtml(r)}` : '<p class="k-dim">The first day is still running: its report comes at closing.</p>') +
+    `<h3>What happened</h3><ul>${log.slice(0, 12).map(([t, e]) => `<li><span class="k-dim">${t}</span> ${e}</li>`).join('') || '<li class="k-dim">nothing out of the ordinary yet</li>'}</ul>` +
+    `<h3>This mall</h3><p>${cap(lastSave || (resumed ? 'picked up from the save on this device' : 'a new mall; it is saved every hour of its day'))}.</p><div class="k-chips"><button data-do="saves">saved games</button><button data-do="new">${again ? 'tap again to give up this mall' : 'new mall'}</button></div>` +
+    `<h3>How it runs on this device</h3><p class="k-dim">${Math.round(g.stats.fps)} frames a second · simulation ${g.stats.simMs.toFixed(2)} ms and drawing ${g.stats.renderMs.toFixed(2)} ms a frame · ${sim.count} people · map shown at ${ui.canvas.width} × ${ui.canvas.height}</p>`);
+  body.onclick = e => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    if (b.dataset.do === 'saves') { hold(slots.panel()); slots.wire(); return; }
+    if (performance.now() - sure < 4000) { sure = -1e9; ui.close(); loader.run('a new mall', () => { start(true); welcome(); }); return; }
+    sure = performance.now(); moreSheet(body);
+  };
+}
+ui.bar([
+  { id: 'build', label: ico('build') + '<span>Build</span>', title: 'Build', render: buildSheet,
+    onOpen: () => { game.beginBuild(); sel = null; ui.card(null); buildSay = ''; toolChoice = null; applyTool(); },
+    onClose: () => { game.withdraw(); game.tool = null; toolChoice = null; game.endBuild(); save(); } },
+  { id: 'units', label: ico('units') + '<span>Units</span>', title: 'Units today', render: unitsSheet },
+  { id: 'visitors', label: ico('people') + '<span>People</span>', title: 'Visitors', render: visitorsSheet },
+  { id: 'money', label: ico('money') + '<span>Money</span>', title: 'Money', render: moneySheet },
+  { id: 'policy', label: ico('policy') + '<span>Policy</span>', title: 'Policy', render: policySheet },
+  { id: 'goals', label: ico('goals') + '<span>Goals</span>', title: 'Goals', render: goalsSheet },
+  { id: 'more', label: ico('more') + '<span>More</span>', title: 'Report and more', render: moreSheet },
+]);
+
+// ── over the map: litter on the floor, and a mark on a unit that is shut. The engine draws tiles, units and people;
+// this is the page's own layer on top (it takes no touches).
+const over = ui.layer(), og = over.getContext('2d');
+function drawOver() {
+  const c = ui.canvas, r = game.renderer, cam = game.camera;
+  if (over.width !== c.width || over.height !== c.height) { over.width = c.width; over.height = c.height; }
+  og.clearRect(0, 0, over.width, over.height);
+  const sx = (x, y) => ((x - y) * r.hw + r.originX - cam.x) * cam.zoom + c.width / 2, sy = (x, y) => ((x + y) * r.hh - cam.y) * cam.zoom + c.height / 2;
+  const z = cam.zoom, rect = M.floorRect(floors.shown);
+  og.fillStyle = '#4a4034';
+  for (const [x, y] of upkeep.cells(rect)) for (let k = 0; k < 3; k++) {       // three specks a dirty cell, always in the same places
+    const n = Math.imul(x * 31 + y * 17 + k * 7, 0x9e3779b1) >>> 0, fx = 0.25 + (n % 1000) / 2000, fy = 0.25 + ((n >>> 10) % 1000) / 2000;
+    og.fillRect(Math.round(sx(x + fx, y + fy)), Math.round(sy(x + fx, y + fy)), Math.max(1, Math.round(z)), Math.max(1, Math.round(z)));
+  }
+  const warn = getComputedStyle(document.documentElement).getPropertyValue('--k-warn').trim() || '#a8321c';
+  og.font = `bold ${Math.round(9 * z)}px sans-serif`; og.textAlign = 'center'; og.textBaseline = 'middle';
+  for (const b of world.buildings) {
+    if (!b || !b.blocked || floors.of(b.x, b.y) !== floors.shown || rules.phase === 'closed') continue;
+    const x = sx(b.x, b.y), y = sy(b.x, b.y) - (WALL_HEIGHT + 8) * z;                    // over the corner where the two walls meet
+    og.fillStyle = warn; og.beginPath(); og.arc(x, y, 5.5 * z, 0, 6.2832); og.fill();
+    og.fillStyle = '#fff'; og.fillText(b.broken ? '!' : '×', x, y + 0.5 * z);
+  }
+}
+
+// ── every frame, and a few times a second
+let frames = 0;
+let lastFrame = performance.now();
+function updateUI(g) {
+  // What moves inside the rooms goes by real time, whatever the game's speed, and stands still while the game does.
+  const nowMs = performance.now();
+  if (g.speed > 0 && !g.buildMode) artClock.ms += Math.min(100, nowMs - lastFrame);
+  lastFrame = nowMs; g.renderer.clockMs = artClock.ms;
+  drawOver();
+  if (ui.open !== 'build') {                                    // a marker under whoever, or whatever, is picked
+    const i = sel?.vid !== undefined ? visitors.slotOf(sel.vid) : -1, b = sel?.bid !== undefined ? world.buildings[sel.bid] : null;
+    const here = (x, y) => floors.of(x, y) === floors.shown;      // nothing is marked on a floor that is not on screen
+    g.preview = i >= 0 && sim.inside[i] < 0 && here(sim.px[i] | 0, sim.py[i] | 0) ? [[Math.floor(sim.px[i]), Math.floor(sim.py[i])]] : b && here(b.ex, b.ey) ? [[b.ex, b.ey]] : [];
+  }
+  if (frames++ % 12) return;
+  const t = visitors.tally, D = rules.hours(), phase = rules.phase;
+  ui.when(`<b>${rules.weekday().name}</b> day ${rules.day} · ${ico('clock')} ${calendar.clock()}`);
+  ui.numbers([
+    { label: ico('money'), value: Math.round(economy.town.money).toLocaleString('en'), warn: rules.owed > 0 || economy.town.money < rules.due().total },
+    { label: ico('star'), value: reputation.rating.toFixed(1) + (t.gone ? ` <small>today ${(t.scoreSum / t.gone).toFixed(1)}</small>` : '') },
+    { label: ico('people'), value: visitors.count },
+    { label: ico('till'), value: Math.round(trade.takings()).toLocaleString('en') + ' <small>today</small>' },
+  ]);
+  askLoan();
+  showFloorButtons();
+  const omens = happenings.current().filter(c => c.status !== 'asking' && !(c.event.quiet && c.status === 'announced'));
+  ui.sub(omens.length ? omens.map(c => `<b>${c.event.title}</b> ${c.status === 'announced' ? 'in ' + span(c.startsIn) : c.endsIn > M.DAY ? 'for ' + Math.ceil(c.endsIn / M.DAY) + ' more days' : 'today'}`).join(' · ')
+    : phase === 'prep' ? `the doors open at ${clockOf(D.open)}: staff are coming in` : phase === 'open' ? `open until ${clockOf(D.close)} · about ${Math.round(rules.expected())} visitors expected today`
+    : phase === 'closing' ? `closing: ${visitors.count} still inside` : 'closed for the night');
+  const goal = progress.goal();
+  ui.goal(goal ? `${ico('goals')} <span class="k-dim">${goal.n}/${goal.of}</span> ${goal.title}${meter(goal.progress.ratio)}` : '<span class="k-dim">every goal is met</span>', () => ui.show('goals'));
+  ui.hint(goal && goal.n <= 2 && !ui.fullOpen ? 'build' : null);
+  showCard();
+  ui.refresh();
+}
+loader.run('opening the doors', () => {
+  if (!start()) welcome();
+  if (unreadable) ui.toast('the mall saved here was made by an older version of the game and could not be opened', 8000);
+});
+</script>

@@ -1,0 +1,220 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Simulone Features</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap">
+<style>
+  :root {
+    --bg: #f3efe6; --card: #fffdf8; --ink: #22201c; --dim: #6c665b; --line: #dcd4c4; --accent: #c2572b; --accent-ink: #fff8f0; --soft: #efe7d8;
+    --lw: #8a6a3a; --mall: #3d6fa8; --ant: #7a5230; --war: #a33a2c;
+    --display: 'Space Grotesk', 'Segoe UI', system-ui, sans-serif; --text: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, Consolas, monospace;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #16150f; --card: #211f18; --ink: #efe9dc; --dim: #a59e8e; --line: #3a362b; --accent: #e57a4a; --accent-ink: #1a120b; --soft: #2a271e; --lw: #d0ad73; --mall: #85b2e6; --ant: #c79a6c; --war: #e4806f; color-scheme: dark } }
+  :root[data-theme="dark"] { --bg: #16150f; --card: #211f18; --ink: #efe9dc; --dim: #a59e8e; --line: #3a362b; --accent: #e57a4a; --accent-ink: #1a120b; --soft: #2a271e; --lw: #d0ad73; --mall: #85b2e6; --ant: #c79a6c; --war: #e4806f; color-scheme: dark }
+  html { padding-block: env(safe-area-inset-top, 0px) env(safe-area-inset-bottom, 0px); }
+  body { background: var(--bg); color: var(--ink); font: 15px/1.55 var(--text); margin: 0; }
+  main { max-width: 1040px; margin: 0 auto; padding-block: 22px 48px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  a { color: var(--accent); }
+  .back { display: inline-block; font: 500 13px/1 var(--display); letter-spacing: .04em; text-decoration: none; padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px; color: var(--ink); }
+  .back:hover { border-color: var(--accent); }
+  header { margin: 22px 0 26px; }
+  h1 { font: 700 clamp(32px, 6.5vw, 48px)/1.05 var(--display); letter-spacing: -0.02em; margin: 0 0 10px; text-wrap: balance; }
+  h1 span { color: var(--accent); }
+  .lede { max-width: 62ch; color: var(--dim); margin: 0; font-size: 16px; }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr)); gap: 10px; margin-top: 20px; }
+  .stat { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; min-width: 0; }
+  .stat b { display: block; font: 700 22px/1.1 var(--display); font-variant-numeric: tabular-nums; }
+  .stat small { color: var(--dim); font-size: 12.5px; }
+  h2 { font: 700 24px/1.2 var(--display); margin: 40px 0 6px; text-wrap: balance; }
+  h2 + p { color: var(--dim); margin: 0 0 16px; max-width: 66ch; }
+  .flow { display: flex; align-items: stretch; gap: 0; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px; }
+  .flow .step { flex: 1 1 0; min-width: 0; background: var(--soft); border-radius: 10px; padding: 10px 12px; display: flex; flex-direction: column; gap: 3px; font-size: 13.5px; color: var(--dim); }
+  .flow .step b { color: var(--ink); font: 600 14px/1.3 var(--display); margin-bottom: 2px; }
+  .flow .step.win { background: var(--accent); color: var(--accent-ink); }
+  .flow .step.win b { color: var(--accent-ink); }
+  .flow .arrow { flex: 0 0 26px; display: flex; align-items: center; justify-content: center; }
+  .flow .arrow::before { content: "→"; color: var(--dim); font-size: 18px; }
+  @media (max-width: 640px) { .flow { flex-direction: column; } .flow .arrow { flex-basis: 24px; } .flow .arrow::before { content: "↓"; } }  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 310px), 1fr)); gap: 14px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px 16px 14px; min-width: 0; display: flex; flex-direction: column; }
+  .card h3 { font: 700 17px/1.2 var(--display); margin: 0 0 8px; }
+  .card ul { margin: 0; padding-left: 18px; }
+  .card li { margin: 0 0 6px; }
+  .card li::marker { color: var(--accent); }
+  .card .src { margin-top: auto; padding-top: 10px; font-size: 12px; color: var(--dim); }
+  code { font: 12.5px/1 var(--mono); background: var(--soft); padding: 1px 5px; border-radius: 4px; overflow-wrap: anywhere; }
+  .tags { display: inline-flex; gap: 4px; flex-wrap: wrap; vertical-align: 1px; }
+  .tag { font: 600 10.5px/1 var(--display); letter-spacing: .06em; text-transform: uppercase; padding: 3px 6px; border-radius: 4px; border: 1px solid currentColor; }
+  .lw { color: var(--lw); } .mall { color: var(--mall); } .ant { color: var(--ant); } .war { color: var(--war); }
+  .scroll { overflow-x: auto; background: var(--card); border: 1px solid var(--line); border-radius: 14px; }
+  table { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 14px; }
+  th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font: 600 12px/1.2 var(--display); letter-spacing: .06em; text-transform: uppercase; color: var(--dim); }
+  tr:last-child td { border-bottom: 0; }
+  .games { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); gap: 14px; }
+  .game h3 { display: flex; align-items: center; gap: 8px; }
+  .game h3 i { width: 10px; height: 10px; border-radius: 3px; background: currentColor; flex: none; }
+  .game p { margin: 0 0 8px; color: var(--dim); font-size: 14px; }
+  .limits li { margin-bottom: 6px; max-width: 72ch; }
+  footer { margin-top: 40px; color: var(--dim); font-size: 13px; border-top: 1px solid var(--line); padding-top: 14px; }
+</style>
+
+<main>
+  <a class="back" href="index.html" id="back">← Simulone</a>
+
+  <header>
+    <h1>What Simul<span>one</span> can do</h1>
+    <p class="lede">Simulone is the engine under every game here: thousands of simple agents, each choosing what to do next from its own needs, on a grid world the player shapes. It is plain JavaScript with no dependencies and no build step, made for phones first. Everything that makes one game different lives in that game's own files.</p>
+    <div class="stats">
+      <div class="stat"><b>4</b><small>games built on it</small></div>
+      <div class="stat"><b>20,000</b><small>agents a game holds by default</small></div>
+      <div class="stat"><b>8,000</b><small>soldiers in one WAR battle, about 3–4 ms a tick on a desktop</small></div>
+      <div class="stat"><b>115–120</b><small>frames a second for WAR on an Android phone</small></div>
+      <div class="stat"><b>1</b><small>WebGL draw call for every sprite on screen</small></div>
+    </div>
+  </header>
+
+  <h2>How an agent decides</h2>
+  <p>Every few ticks each agent scores every action it may take and does the best one. The score is its situation multiplied by its type's matrix of weights, so behaviour is data, not code.</p>
+  <div class="flow" role="img" aria-label="Each need squared, the distance to each place, the game's own inputs and a constant bias are the agent's features; multiplied by its type's matrix they give one score per action; the best score is the action taken.">
+    <div class="step"><b>Features of the agent</b><span>hunger² · thirst² · fear² …</span><span>distance to each place</span><span>the game's own inputs (an order, being poor)</span><span>bias = 1</span></div>
+    <div class="arrow" aria-hidden="true"></div>
+    <div class="step"><b>× the matrix of its type</b><span>blended by age</span><span>changed by the world (crowding, night)</span></div>
+    <div class="arrow" aria-hidden="true"></div>
+    <div class="step"><b>A score for each action</b><span>eat 0.42 · work 0.31</span><span>sleep 0.12 · wander 0.12</span></div>
+    <div class="arrow" aria-hidden="true"></div>
+    <div class="step win"><b>The best one wins</b><span>eat</span></div>
+  </div>
+
+  <h2>The engine</h2>
+  <p>What any game gets from <code>engine/</code>. Tags show which games use a feature most.</p>
+  <div class="grid">
+    <section class="card">
+      <h3>Agents and their needs</h3>
+      <ul>
+        <li><b>Needs</b> rise every tick; the squared value makes urgent ones dominate. A need can be capped so it is a want, never an emergency.</li>
+        <li><b>Actions</b> answer needs at a building, at home, at work, at a tile, at a point, or on the spot. They end when the need is met or after a set time.</li>
+        <li><b>Types</b> with their own speeds, need rates and weights; every agent also varies a little from the rest.</li>
+        <li><b>Ages</b> blend the matrix smoothly from child to elder. <span class="tags"><span class="tag lw">Lord's Will</span><span class="tag ant">Colony</span></span></li>
+        <li><b>Interruptible</b> actions: a sleeper wakes for a desperate need; needs build slowly while asleep.</li>
+      </ul>
+      <div class="src">engine README: Needs, Actions, Types, Age</div>
+    </section>
+    <section class="card">
+      <h3>Buildings and places</h3>
+      <ul>
+        <li>Solid footprints with a <b>door</b> and an optional separate <b>exit</b>, turned to face a street.</li>
+        <li><b>Capacity and queues</b>: a full place makes people wait outside, then give up for a while.</li>
+        <li><b>Homes and jobs</b> handed out automatically, nearest first, within a commute; a place with no worker stays shut.</li>
+        <li><b>Dragged buildings</b> such as fields, sized by the player, with work in proportion. <span class="tags"><span class="tag lw">Lord's Will</span></span></li>
+        <li><b>Door linger</b> and <b>staying in for the next thing</b>: short visits never blink in and out of sight.</li>
+        <li>Closing a place for a game's own reasons (fire, debt), with each reason kept apart.</li>
+      </ul>
+      <div class="src">engine README: Prefabs, Homes and jobs, Views</div>
+    </section>
+    <section class="card">
+      <h3>Maps and movement</h3>
+      <ul>
+        <li><b>Free movement</b> in any direction along distance fields, with crowds pushing apart.</li>
+        <li><b>Streets</b> that are cheaper and faster, so people prefer them; idle people stroll along them.</li>
+        <li><b>Dug-out maps</b> that start solid and are carved open. <span class="tags"><span class="tag ant">Colony</span></span></li>
+        <li><b>Links</b> between distant cells: stairs, lifts, escalators. <span class="tags"><span class="tag mall">Atrium</span></span></li>
+        <li><b>A game's own routes</b> ("the nearest cell to dig"), cells to avoid, and crowded cells that slow everyone.</li>
+        <li><b>Points</b> that move every tick: a soldier keeps his slot in a marching line. <span class="tags"><span class="tag war">WAR</span></span></li>
+        <li>Routes recomputed in the background after every edit, without stopping play.</li>
+      </ul>
+      <div class="src">engine README: Tiles, Dug-out maps, Routes, Points</div>
+    </section>
+    <section class="card">
+      <h3>Drawing</h3>
+      <ul>
+        <li><b>WebGL2</b>, every sprite in one draw call, sorted by a depth buffer.</li>
+        <li><b>Isometric</b> and <b>flat</b> views built in, or a view of the game's own. <span class="tags"><span class="tag ant">Colony</span></span></li>
+        <li><b>Smooth motion</b> between ticks at any frame rate; time runs at any speed or pauses.</li>
+        <li>Building images chosen by <b>how full</b> they are; <b>rooms seen inside</b> with furniture people pass behind. <span class="tags"><span class="tag mall">Atrium</span></span></li>
+        <li>Varied <b>looks</b> per person, walking and doing poses, building <b>states</b> (on fire), <b>night tint</b> with lit windows that glow.</li>
+        <li>Ground textures, one part of the map at a time (a floor of a building).</li>
+      </ul>
+      <div class="src">engine README: Views, Sprites</div>
+    </section>
+    <section class="card">
+      <h3>The player's hands</h3>
+      <ul>
+        <li><b>Build mode</b> freezes time while the map is edited.</li>
+        <li><b>Placing in two steps</b>: a ghost to drag, turn and check before it is built, sized for a finger.</li>
+        <li>Tap to <b>pick</b> a person, a building or a cell; lay lines of tiles; demolish.</li>
+        <li>A game may refuse a building, with a reason to show (not unlocked, cannot pay).</li>
+      </ul>
+      <div class="src">engine README: Build mode, Placing in two steps, Game object</div>
+    </section>
+    <section class="card">
+      <h3>Room for a game's own rules</h3>
+      <ul>
+        <li><b>Modules</b> that hook into spawning, every tick, starting and finishing actions, leaving, building and more.</li>
+        <li><b>Per-person values</b> of the game's own (money, fear, health), added and removed during play.</li>
+        <li><b>Inputs to the matrix</b> of the game's own: an order, being poor.</li>
+        <li><b>Headless</b>: the simulation runs in Node with no browser, for tests and balance runs.</li>
+      </ul>
+      <div class="src">engine README: Your own rules, Headless</div>
+    </section>
+  </div>
+
+  <h2>Shared modules</h2>
+  <p>Generic pieces in <code>modules/</code>, used by more than one game. Each takes its numbers from the game.</p>
+  <div class="scroll">
+    <table>
+      <tr><th>Module</th><th>What it does</th><th>Used by</th></tr>
+      <tr><td><code>slots</code></td><td>Saved games by hand: three slots, an undo, save codes to copy between devices, and the menu's Showcase.</td><td><span class="tags"><span class="tag lw">Lord's Will</span><span class="tag mall">Atrium</span><span class="tag ant">Colony</span><span class="tag war">WAR</span></span></td></tr>
+      <tr><td><code>loader</code></td><td>The cover shown while art and the map are made, with progress.</td><td><span class="tags"><span class="tag lw">Lord's Will</span><span class="tag mall">Atrium</span><span class="tag ant">Colony</span><span class="tag war">WAR</span></span></td></tr>
+      <tr><td><code>save</code></td><td>A whole game as plain data, and back: the map, everyone in it, and each module's part.</td><td><span class="tags"><span class="tag lw">Lord's Will</span><span class="tag mall">Atrium</span><span class="tag ant">Colony</span></span></td></tr>
+      <tr><td><code>progress</code></td><td>Stages, unlocks, goals one at a time, achievements, and stats to measure them.</td><td><span class="tags"><span class="tag lw">Lord's Will</span><span class="tag mall">Atrium</span><span class="tag ant">Colony</span></span></td></tr>
+      <tr><td><code>mapgen</code></td><td>Land generated from a seed, so the same seed gives the same map.</td><td><span class="tags"><span class="tag lw">Lord's Will</span><span class="tag ant">Colony</span><span class="tag war">WAR</span></span></td></tr>
+      <tr><td><code>calendar</code></td><td>Hours, days, seasons and years, with events on each.</td><td><span class="tags"><span class="tag lw">Lord's Will</span><span class="tag mall">Atrium</span></span></td></tr>
+      <tr><td><code>economy</code></td><td>Goods and money: a common store, households' purses, flows made and used by actions, store limits.</td><td><span class="tags"><span class="tag lw">Lord's Will</span><span class="tag mall">Atrium</span></span></td></tr>
+      <tr><td><code>events</code></td><td>Things that happen, with warnings and choices for the player.</td><td><span class="tags"><span class="tag lw">Lord's Will</span><span class="tag mall">Atrium</span></span></td></tr>
+      <tr><td><code>policies</code></td><td>Settings the player turns up and down (rations, prices, wages), read by the rules.</td><td><span class="tags"><span class="tag lw">Lord's Will</span><span class="tag mall">Atrium</span></span></td></tr>
+      <tr><td><code>lives</code></td><td>Health, mood, births, deaths, families and names, moving house, leaving.</td><td><span class="tags"><span class="tag lw">Lord's Will</span></span></td></tr>
+    </table>
+  </div>
+
+  <h2>Each game's own modules</h2>
+  <p>Written generically too, but kept with their game until a second game needs one. Then it moves to the shared modules.</p>
+  <div class="games">
+    <section class="card game lw"><h3><i></i>The Lord's Will</h3><p>A medieval hamlet grown into a chartered town.</p>
+      <ul><li><code>region</code>: several maps under one game, with time passing on all of them</li><li><code>ambience</code>: a soundscape made in the browser, by season, hour and view</li></ul></section>
+    <section class="card game mall"><h3><i></i>Atrium</h3><p>A shopping mall of up to five floors.</p>
+      <ul><li><code>floors</code>: levels side by side, joined by stairs, lifts and escalators</li><li><code>visitors</code>, <code>staff</code>: people who come and go, and shifts</li><li><code>trade</code>, <code>reputation</code>, <code>upkeep</code>: sales, a slow rating, wear and repairs</li></ul></section>
+    <section class="card game ant"><h3><i></i>The Colony</h3><p>An ant nest seen in a cut through the earth.</p>
+      <ul><li><code>ground</code>, <code>tasks</code>, <code>items</code>: digging, posted work, carrying</li><li><code>zones</code>, <code>claims</code>: rooms painted by the player, land claimed</li><li><code>scent</code>, <code>water</code>, <code>weather</code>, <code>foes</code>: trails, floods, rain and raids</li></ul></section>
+    <section class="card game war"><h3><i></i>WAR</h3><p>A campaign of provinces and battles of thousands.</p>
+      <ul><li><code>regiments</code>: formations and orders</li><li><code>combat</code>, <code>morale</code>: blows, arrows, fear, rout</li><li><code>general</code>, <code>campaign</code>: an enemy commander, and the war map</li></ul></section>
+  </div>
+
+  <h2>Around the engine</h2>
+  <div class="grid">
+    <section class="card"><h3>The screen</h3><ul><li>The shared <b>kit</b> gives every game its top strip, bottom bar, sheets, tray, cards, toasts and full-screen moments, laid out for a phone's safe areas, in light and dark.</li><li>A game restyles it by redefining its colours.</li></ul><div class="src">kit README</div></section>
+    <section class="card"><h3>Tools</h3><ul><li><code>build-artifact</code> and <code>build-simulone</code>: each game packed with exactly the files it uses, and the menu.</li><li><code>test-all</code>: every game built and played headless in under a minute.</li><li>Aseprite scripts that draw all the art, one style guide per game.</li></ul><div class="src">project README, tools/tests README</div></section>
+    <section class="card"><h3>Versions</h3><ul><li>Shared code carries a version, and every game records the versions it was built with, so games can move at their own pace.</li><li>This build: engine 0.3.0, kit 0.3.1, modules 0.4.0.</li></ul><div class="src">project README</div></section>
+  </div>
+
+  <h2>Known limits</h2>
+  <div class="card">
+    <ul class="limits">
+      <li>A place stays open while its workers are away eating or sleeping: staffing is by who is assigned, not who is there.</li>
+      <li>A queue is a loose group at the door, not an ordered line.</li>
+      <li>Jobs further than a commute from home are not taken, so a map can show vacancies and jobless people at once.</li>
+      <li>The map's size is fixed when a game starts; very large maps paint their ground at reduced detail.</li>
+      <li>Sprites are hard-edged: no partial transparency.</li>
+    </ul>
+    <div class="src">engine README: Known limits</div>
+  </div>
+
+  <footer>The full manuals are in the project: <code>engine/README.md</code>, <code>modules/README.md</code>, <code>kit/README.md</code>, and each game's <code>modules/README.md</code>. Built 2026-11-24.</footer>
+</main>
+<script>
+  // Back to the menu wherever it was opened from (the games use the same remembered address).
+  try { const home = sessionStorage.getItem('simulone-home'); if (home) document.getElementById('back').href = home; } catch (e) { /* index.html is next door */ }
+</script>

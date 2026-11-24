@@ -1,0 +1,623 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>try { globalThis.KIT_EXIT = { href: sessionStorage.getItem('simulone-home') || '../index.html', label: 'menu' }; } catch (e) { globalThis.KIT_EXIT = { href: '../index.html', label: 'menu' }; }</script>
+<meta name="build" content="lords-will · engine 0.3.0 · kit 0.3.1 · modules 0.4.0 · built 2026-11-24">
+<title>The Lord's Will</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=IM+Fell+English+SC&display=swap">
+<style>
+/* The page is the same sheet of paper as the map: ink on parchment, in every theme. The kit's tokens are redefined. */
+:root:root:root { --k-bg: #efe6d0; --k-panel: #eadfc6; --k-ink: #4a382c; --k-dim: #8a7660; --k-line: #d5c7a8; --k-warn: #a4463a; --k-on-ink: #f6eedb;
+  --k-font: 'EB Garamond', 'Iowan Old Style', Georgia, 'Times New Roman', serif; color-scheme: light; }
+:root body { font-size: 16px; line-height: 1.3; }
+:root .k-app b { font-weight: 600; background: none; color: var(--k-ink); padding: 0; }
+:root .k-app b.warn, :root .k-warn { background: none; color: var(--k-warn); padding: 0; font-weight: 600; }
+:root .k-toast b, :root .k-ask b { background: none; color: var(--k-on-ink); }
+:root .k-app button { border-color: var(--k-dim); border-radius: 2px; }
+:root .k-sheet-head span, :root .k-sheet-body h3 { font-family: 'IM Fell English SC', 'EB Garamond', Georgia, serif; text-transform: none; letter-spacing: .03em; font-size: 15px; color: var(--k-ink); }
+:root .k-bar button { font-family: 'IM Fell English SC', 'EB Garamond', Georgia, serif; }
+:root .k-bar.many button { font-size: 14px; }
+:root .k-top { font-variant-numeric: lining-nums tabular-nums; }
+</style>
+<script type="module">
+import { createGame } from './shared/engine/index.js';
+import * as H from './hamlet.js';
+import { createSave } from './shared/modules/save.js';
+import { createSlots } from './shared/modules/slots.js';
+import { createScreen, meter } from './shared/kit/kit.js';
+import { createLoader } from './shared/modules/loader.js';
+import { loadArt, makeSprites, usable, icon, thumb, ART_CSS, sky, tintOf } from './art.js';
+import { createSound } from './sound.js';
+
+// The numbers are in hamlet.js and this game's own rules in rules.js. The screen's layout is the shared kit
+// (kit/kit.js). This page says what goes where and turns what the modules report into words.
+const ui = createScreen(document.body);
+// The page stays covered until the drawings are in and the land is laid out (and again on going to another land).
+const loader = createLoader({ title: "The Lord's Will", text: 'unrolling the map' });
+const region = H.region;
+const saves = createSave({ version: 2 });                        // one settlement as data; the region keeps one for every land
+// Saved games by hand, and save codes: copies of everything this game keeps on the device (modules/slots.js).
+const slots = createSlots({ game: 'lords-will', keys: ['lords-will-region', 'lords-will-progress', 'lords-will-save'], flush: () => save(),
+  describe: () => `${H.current.name}, a ${progress.levelInfo().title ?? 'hamlet'} of ${sim.count}, year ${calendar.year} ${calendar.seasonName}` });
+// Started from the menu's "showcase": a busy settlement made ready beforehand is put in place, and the page starts again.
+if (await slots.takeShowcase('./showcase.txt')) await new Promise(() => {});
+// The game being played. It is made anew every time the steward goes to another land (see open()).
+let game, sim, world, calendar, economy, lives, progress, rules, happenings, policies;
+ui.onResize = (w, h) => { if (game) game.resize(w, h); };
+window.H = H; window.ui = ui;                                    // poke at it from the console
+
+// The same in plain words, for the chronicle (it is kept in the save, where a drawing's place on the sheet may change).
+const words = o => Object.entries(o).filter(([, n]) => n >= 0.5).map(([k, n]) => `${Math.round(n)} ${k}`).join(', ');
+// Amounts of things, as text: a resource shows as its icon where the art has one.
+const list = o => Object.entries(o).filter(([, n]) => n >= 0.5).map(([k, n]) => `${Math.round(n)} ${icon(k) || k}`).join(', ');
+document.head.append(Object.assign(document.createElement('style'), { textContent: ART_CSS + `
+.k-chips button.pic { display: flex; align-items: center; gap: 7px; flex: 1 1 150px; min-width: 0; text-align: left; padding: 4px 6px; }
+.k-chips button.pic small { display: block; }
+.k-chips button.pic[disabled] .art { opacity: 0.35; }
+.k-chips .frame { flex: none; width: 60px; height: 46px; display: flex; align-items: center; justify-content: center; }` }));
+const span = t => (t / calendar.DAY < 1 ? Math.max(1, Math.round(t / calendar.HOUR)) + ' hours' : (t / calendar.DAY).toFixed(1) + ' days');
+const stamp = () => `y${calendar.year} ${calendar.seasonName} ${calendar.dayOfSeason}`;
+const log = [];
+let lastReport = '';
+/** Write a line in the chronicle; `loud` also shows it over the map for a few seconds. */
+function note(text, loud = false) { log.unshift([stamp(), text]); if (log.length > 40) log.pop(); if (loud) ui.toast(text); }
+
+// ── going to a land. Every land is a game of its own on the same canvas; the region keeps the others.
+let resumed = false, lastSave = '', stopForReport = true, pausedAt = null;   // pausedAt: the speed to go back to, while paused
+function open(id) {
+  const speedWas = game ? pausedAt ?? game.speed : 1;
+  if (game) game.destroy();
+  const land = H.LANDS.find(l => l.id === id), st = region.enter(id), [w, h] = ui.size();
+  ui.canvas.width = w; ui.canvas.height = h;
+  game = createGame(H.makeConfig({ canvas: ui.canvas, onFrame: updateUI }, land));
+  ({ sim, world } = game); ({ calendar, economy, lives, progress, rules, events: happenings, policies } = H);
+  window.game = game; artSeason = null;                          // a new view: it has no art yet
+  H.populate(sim);
+  let extra = null;
+  if (st.snapshot) {                                             // been here before: the settlement as it was left…
+    let ok = false;
+    try { ok = saves.restore(sim, st.snapshot); } catch (e) { console.error(e); }
+    if (ok) H.relook(sim);
+    if (ok) { extra = st.snapshot.extra ?? {}; H.setStores(st.stores); }   // …with its stores as the region has kept them since
+    else st.snapshot = null;
+  }
+  if (!st.snapshot && Object.keys(st.stores).length) H.startWith(st.stores);   // a new settlement: only what its party carried
+  if (region.state.tick > sim.tick) H.catchUp(sim, region.state.tick);        // time has passed elsewhere
+  wire();
+  sel = null; ui.card(null); ui.ask(null);
+  goHome();
+  if (extra?.camera) {                                           // where the player was looking; a save from before the art was drawn at half the size
+    const { tile = 16, ...cam } = extra.camera, f = game.renderer.tw / tile;
+    Object.assign(game.camera, { x: cam.x * f, y: cam.y * f, zoom: cam.zoom / f });
+    game.renderer.zoomAt(0, 0, 1);
+  }
+  if (extra?.stopForReport !== undefined) stopForReport = extra.stopForReport;
+  game.speed = extra?.speed || speedWas || 1; pausedAt = null; showSpeed();
+  cornerBtn.textContent = region.held().length > 1 ? land.name : 'hamlet';
+  dress();                                                       // the drawings, before the first frame
+  return !!extra;
+}
+// Everything is kept on this device: saved at the start of every day, after building, on leaving a land,
+// and when the page is put away.
+ui.onExit = () => save();                                       // leaving for the menu (when opened from one): save first
+function save() {
+  if (!game || slots.leaving) return;                            // a saved game is being loaded: keep off what it wrote
+  region.keep(H.current.id, {
+    snapshot: saves.snapshot(sim, { camera: { ...game.camera, tile: game.renderer.tw }, speed: pausedAt ?? game.speed, stopForReport }),
+    stores: economy.town, caps: Object.fromEntries(Object.keys(economy.town).map(r => [r, economy.capOf(r)]).filter(([, c]) => c < Infinity)),
+    people: sim.count, info: { stage: progress.level, title: progress.levelInfo().title ?? 'hamlet' }, tick: sim.tick });
+  lastSave = region.write() ? `saved on this device at year ${calendar.year}, ${calendar.seasonName} day ${calendar.dayOfSeason}, ${calendar.clock()}` : 'this device does not let the page keep a save';
+}
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') save(); sound.sleep(document.visibilityState === 'hidden'); });
+// ── sound: the place itself, by season, hour and what is in view (sound.js). A browser lets it start only at a touch.
+const sound = createSound(() => ({ game, calendar, rules }));
+addEventListener('pointerdown', () => sound.wake(), { capture: true });
+addEventListener('pagehide', save);
+function travel(id) {
+  save(); ui.close();
+  const from = H.current.name, to = H.LANDS.find(l => l.id === id)?.name ?? 'another land';
+  loader.run(`on the road to ${to}`, () => {
+    open(id);
+    note(`arrived at ${H.current.name} from ${from}`, true);
+  });
+}
+function startOver() {
+  region.reset(); region.clear();
+  try { localStorage.removeItem('lords-will-save'); } catch { /* nothing to forget */ }
+  log.length = 0; lastReport = ''; resumed = false; lastSave = ''; ui.close();
+  loader.run('a new hamlet', () => { open('home'); welcome(); });
+}
+function boot() {
+  let had = region.read();
+  if (!had) {                                                    // a hamlet saved before there was a region becomes its first land
+    try { const old = JSON.parse(localStorage.getItem('lords-will-save') ?? 'null'); if (old?.people) { region.keep('home', { snapshot: old, stores: old.modules?.economy?.town ?? {}, tick: old.people.tick ?? 0 }); had = true; } } catch { /* no old save */ }
+  }
+  resumed = open(region.active) && had;
+  if (!resumed) welcome();
+  loader.ready('laying out the land');
+}
+
+// ── the camera starts on the hamlet, close enough to see people
+function lookAt(x, y) { const r = game.renderer; game.camera.x = (x - y) * r.hw + r.originX; game.camera.y = (x + y) * r.hh; }
+function goHome() { lookAt(...H.CENTRE); game.camera.zoom = 1.5; }
+
+// ── the art: one sheet, with the trees and the ground of the season. The loader keeps the page covered until it is in;
+// only if it cannot be had at all do the engine's generated placeholders stand in.
+let artImage = null, artSeason = null;
+function dress() {
+  if (!game || !artImage || !usable() || artSeason === calendar.seasonName) return;
+  artSeason = calendar.seasonName;
+  game.setSprites(makeSprites(artImage, sim, artSeason));
+}
+loader.track(loader.fetch('./art.png', 'fetching the drawings').then(url => loadArt(url)).then(img => { artImage = img; dress(); }), 'unpacking the drawings');
+const cornerBtn = ui.corner('hamlet', goHome);
+
+// ── time: pause, and a speed that cycles
+const SPEEDS = [1, 2, 4, 8];
+const pauseBtn = ui.control('pause', () => { if (pausedAt === null) { pausedAt = game.speed; game.speed = 0; } else { game.speed = pausedAt; pausedAt = null; } showSpeed(); });
+const speedBtn = ui.control('1×', () => { const now = pausedAt ?? game.speed, next = SPEEDS[(SPEEDS.indexOf(now) + 1) % SPEEDS.length]; if (pausedAt !== null) pausedAt = next; else game.speed = next; showSpeed(); });
+function showSpeed() { pauseBtn.textContent = pausedAt === null ? 'pause' : 'go on'; pauseBtn.className = pausedAt === null ? '' : 'on'; speedBtn.textContent = (pausedAt ?? game.speed) + '×'; }
+/** Stop the clock for a full-screen moment and start it again after. */
+let held = null;                                                // the speed to return to when the full-screen moment is closed
+function hold(f) {
+  if (held === null) { held = pausedAt === null ? game.speed : 0; game.speed = 0; }
+  ui.full({ ...f, onClose: () => { if (pausedAt === null) game.speed = held || 1; held = null; showSpeed(); } });
+}
+
+// ── what the modules report
+const rewardText = r => r?.grant ? ' (+' + list(r.grant) + ')' : '';
+function wire() {
+progress.onEvent = (kind, it) => {
+  if (kind === 'level') {
+    if (it.level === 2) hold({ title: 'The hamlet is now a village', button: 'so be it',
+      html: `<p>Thirty souls, a granary and two kind winters: the lord has taken notice.</p>
+             <p><b>Trades.</b> A carpenter, a mill and a bakery can be built, and cottages for larger households. Planks are what they are made of, so the carpenter comes first.</p>
+             <p><b>Faith.</b> A village wants a chapel. Without one spirits sink, and newcomers stay away.</p>
+             <p><b>The levy.</b> When each autumn ends the lord's reeve takes a tenth of the year's harvest. What you cannot pay is owed the next year, and costs the lord's regard.</p>` });
+    else if (it.level === 3) hold({ title: 'The lord grants a market charter', button: 'so be it',
+      html: `<p>Eighty souls, a chapel, and the levy paid in full three years running. The village is now a <b>market town</b>.</p>
+             <p><b>Coin.</b> The charter comes with ${H.COIN.charter} coin for the treasury and ${H.COIN.toEachPerson} for every person. From now on the treasury pays a wage for every finished shift, and takes rent for every night under a roof and the price of every loaf.</p>
+             <p><b>Policy.</b> Wages, rent and the price of bread are yours to set. Pay too much and the treasury runs dry and wages go unpaid; take too much and households grow poor, and the poor are unhappy.</p>
+             <p><b>New buildings.</b> A market brings merchants who buy what the store can spare. A brewery and a tavern turn grain into company, for coin. Timber burns: a watch house and wells nearby save what catches fire.</p>` });
+    else if (it.level === 4) hold({ title: 'The lord grants the full charter', button: 'so be it',
+      html: `<p>Two hundred souls, a watch, a full treasury and a second village: the market town is now a <b>chartered town</b>.</p>
+             <p><b>Guilds.</b> With a guildhall the carpenters, millers, bakers and brewers make half as much again, and are paid a coin more a shift.</p>
+             <p><b>The fair.</b> Lay out a fairground and a fair is held on the second day of every summer: a coin a head for the treasury, and lifted spirits.</p>
+             <p><b>Land.</b> The lord will now sell land: see Region.</p>
+             <p><b>Troubles.</b> Plague comes some springs, and a hospital halves what it does. A rival town may court your merchants. The lord may go to war and ask for men or coin; refusing costs his regard, and under ${H.DISFAVOUR.below} he takes a larger levy.</p>` });
+    else note(`<b>the town is now a ${it.title}</b>`, true);
+  }
+  else if (kind === 'achieved') note(`achievement: ${it.title}`, true);
+  else if (kind === 'goal') { const next = progress.goal(); note(`done: ${it.title}${rewardText(it.reward)}` + (next ? ` · next: ${next.title}` : ''), true); }
+};
+// Why someone walked away, from how they stood when they went.
+const whyLeft = i => { const k = sim.needs.findIndex((n, k) => sim.needsOf[i * sim.K + k] >= 0.9); return k >= 0 ? `${sim.needs[k].name} went unanswered` : sim.home[i] < 0 ? 'no roof' : 'no spirit left for the place'; };
+lives.onEvent = (kind, i, detail) => {
+  const r = lives.person(i), who = r ? lives.nameOf(r) : 'someone';
+  if (kind === 'born') note(`${who} is born`);
+  else if (kind === 'gone') { if (detail !== 'war') note(detail === 'left' ? `${who} has left: ${whyLeft(i)}` : `${who} has died of ${detail}`, detail !== 'old age'); }
+};
+rules.onEvent = (kind, r) => {
+  if (kind === 'arrived') note(`${r} newcomers have walked in`, true);
+  else if (kind === 'field') note(r.crop === 'sown' ? 'a field is fully sown' : 'a field is fully reaped');
+  else if (kind === 'levy') note(r.owed ? `<b>the lord's reeve took ${r.paid} grain${r.coin ? ' and ' + r.coin + ' coin' : ''} of the ${r.due} due: ${r.owed} is owed next year, and the lord is displeased</b>` : `the lord's reeve took his levy of ${r.paid} grain${r.coin ? ' and ' + r.coin + ' coin' : ''}, paid in full`, true);
+  else if (kind === 'fire') { if (r.what === 'caught') sound.alarm(); note(r.what === 'caught' ? `<b class="warn">fire: a ${r.building.name} has caught</b>` : r.what === 'saved' ? `the fire at the ${r.building.name} is out: it was saved` : `<b class="warn">the ${r.building.name} has burnt down</b>`, true); }
+  else if (kind === 'sold') note(`sold ${r.sold} ${r.resource} to the merchant for ${r.coin} coin`, true);
+  else if (kind === 'relief') note(`the lord has sent ${r.grain} grain`, true);
+  else if (kind === 'bought') note(`bought ${r.amount} ${r.resource} from the merchant for ${r.coin} coin`, true);
+  else if (kind === 'fair') note(`the fair brought the treasury ${r.coin} coin`, true);
+  else if (kind === 'war') note(`${r.men} men have gone to the lord's war`, true);
+  else if (kind === 'regard') note(r.delta < 0 ? `<b class="warn">the lord's regard has fallen to ${r.standing}</b>` : `the lord's regard has risen to ${r.standing}`, true);
+  else if (kind === 'season') seasonReport(r);
+};
+happenings.onNews = (kind, e, choice) => {
+  if (kind === 'announced') note(`<b>${e.title}</b> is coming: ${e.text}`, true);
+  else if (kind === 'asking') note(`<b>${e.title}</b>: ${e.text}`);
+  else if (kind === 'chosen') note(`${e.title}: you chose to ${choice.label}`);
+  else if (kind === 'started' && (e.mods || e.loud)) note(`<b>${e.title}</b> has begun: ${e.text}`, true);
+  else if (kind === 'ended' && (e.mods || e.loud)) note(`${e.title} is over`, true);
+};
+region.onNews = (kind, x) => {
+  const nameOf = id => region.def(id).name;
+  if (kind === 'granted') hold({ title: 'The lord grants more land', button: 'so be it',
+    html: `<p>With the charter comes ${x.name}: ${H.KINDS[x.kind].text}, ${x.size[0]} by ${x.size[1]} cells.</p>
+           <p>Under <b>Region</b> you can send a party to settle it. They carry ${list(H.SETTLING.carry)} from this store, and ${x.people} people answer the call.</p>
+           <p>Only the land you are on is lived day by day. The others carry on as they did when you last saw them, season by season, and carts carry goods between them.</p>` });
+  if (kind !== 'season') return;
+  for (const a of x.arrived) if (Object.keys(a.goods).length) note(a.to === H.current.id ? `a cart from ${nameOf(a.from)} brought ${words(a.goods)}` : `a cart reached ${nameOf(a.to)} with ${words(a.goods)}`, a.to === H.current.id);
+  for (const m of x.short) note(`<b class="warn">${nameOf(m.land)} could only send ${m.sent} of ${m.wanted} ${m.resource}</b>`, true);
+  for (const m of x.lean) note(`<b class="warn">${nameOf(m.land)} has run out of ${m.resource}</b>`, true);
+};
+game.onTap = tapped;
+calendar.on('day', save);
+  sound.follow(calendar);
+timeRepaints();
+}
+
+// What the coming season will ask for, as things stand.
+function ahead() {
+  const next = calendar.seasons[(calendar.season + 1) % calendar.seasons.length].name, left = calendar.until(next), land = rules.farmland(), people = sim.count;
+  const text = { summer: land.area ? `${land.sown} of ${land.area} cells sown; what is bare when summer comes stays bare` : 'no fields are marked out: nothing will be sown',
+                 autumn: `${land.sown} cells growing, about ${Math.round(land.sown * H.FARMING.yieldPerCell)} grain at harvest; the store has room for ${Math.max(0, Math.round(economy.capOf('grain') - economy.town.grain))}`,
+                 winter: `${Math.round(land.sown - land.reaped)} cells still to reap; a winter burns about ${people * 8} firewood` + (progress.level >= 2 ? `; the levy stands at ${rules.levyDue()} grain` : ''),
+                 spring: `the hearths will burn about ${Math.round(people * 8 * Math.min(1, left / calendar.DAY / 3))} more firewood before spring` }[next];
+  return { next, left, text };
+}
+const cap = s => s[0].toUpperCase() + s.slice(1);
+// The one full-screen moment: what the season that just ended came to, and what the next one needs.
+function seasonReport(r) {
+  const deaths = list(r.deaths), a = ahead(), moved = [r.born && `${r.born} born`, r.arrived && `${r.arrived} arrived`, r.left && `${r.left} left`].filter(Boolean).join(', ');
+  const lines = [
+    `Made ${list(r.made) || 'nothing'}. Used ${list(r.used) || 'nothing'}.`,
+    list(r.wasted) && `<b class="warn">No room in the store for ${list(r.wasted)}: it was lost.</b>`,
+    r.sown && `${r.sown} cells were sown.`,
+    r.lost && `<b class="warn">${r.lost} grain was still standing when winter came, and is lost.</b>`,
+    r.levy && (r.levy.owed ? `<b class="warn">The lord's reeve took ${r.levy.paid} grain${r.levy.coin ? ' and ' + r.levy.coin + ' coin' : ''} of the ${r.levy.due} due. ${r.levy.owed} is owed next year.</b>` : `The lord's reeve took his levy of ${r.levy.paid} grain${r.levy.coin ? ' and ' + r.levy.coin + ' coin' : ''}, paid in full.`),
+    moved && cap(moved) + '.',
+    deaths && `<b class="warn">Died: ${deaths}.</b>`,
+    `${r.people} people live here.`,
+  ].filter(Boolean);
+  lastReport = `<b>${r.season}, year ${r.year}</b> ` + lines.join(' ');
+  note(`${r.season} is over; ${calendar.seasonName} begins`);
+  if (!stopForReport || sim.count === 0) return;
+  hold({ title: `${cap(r.season)} of year ${r.year} is over`, button: `on to ${calendar.seasonName}`,
+    html: lines.map(l => `<p>${l}</p>`).join('') + `<p class="k-dim">${cap(calendar.seasonName)} lasts ${calendar.seasons[calendar.season].days} days. Then ${a.next}: ${a.text}.</p>` });
+}
+function welcome() {
+  hold({ title: 'The Lord\'s Will', button: 'begin',
+    html: `<p>The lord has granted you this land to keep for him: five families, a well, and grain enough to reach the first harvest.</p>
+           <p>The people look after themselves. You decide what is built and where. <b>Build</b> opens the tools; time stands still while you build.</p>
+           <p>Sow in spring, reap in autumn, and have firewood laid in before winter. The line above the buttons is always the next thing worth doing.</p>
+           <p class="k-dim">Drag to move the map, pinch to zoom, tap a person or a building to see who they are.</p>` });
+}
+
+// ── who is that? Tap a person or a building.
+let sel = null;                                                 // { pid } a person by their lasting id, or { bid } a building
+const TRADES = { field: 'farmhand', lodge: 'woodcutter', carpenter: 'carpenter', mill: 'miller', bakery: 'baker', chapel: 'priest', brewery: 'brewer', tavern: 'innkeeper', market: 'market keeper', 'watch house': 'watchman',
+                 guildhall: 'guild clerk', fairground: 'fair warden', 'great church': 'priest', hospital: 'nurse' };
+const DOING = { drink: 'drink', gather: 'meet people on the green', pray: 'pray', eat: 'eat', 'eat bread': 'eat bread', 'eat rough': 'eat in the open',
+                'warm up': 'sit by the fire', huddle: 'huddle against the cold, with no fire', 'drink at home': 'drink', 'eat pottage': 'eat pottage', 'drink ale': 'drink at the tavern', 'hear mass': 'hear mass', sleep: 'sleep', 'sleep rough': 'sleep in the open', work: 'work' };
+const yearsOf = ticks => Math.max(0, Math.floor(ticks / calendar.YEAR * H.SHOWN_YEARS_PER_YEAR));   // a person's age as shown
+const dated = tick => { const c = calendar.at(tick); return `${c.seasonName} of year ${c.year}`; };
+const link = r => (r ? `<button data-pid="${r.id}">${lives.nameOf(r)}${r.died !== null ? ' †' : ''}</button>` : '');
+const stageOf = i => sim.types[sim.type[i]].name.replace(/ \d+$/, '');
+const tradeOf = i => { const job = sim.job[i] >= 0 ? world.buildings[sim.job[i]] : null; return job ? TRADES[job.name] ?? 'worker' : sim.types[sim.type[i]].works ? 'no work' : stageOf(i) === 'child' ? 'too young to work' : 'too old to work'; };
+const doingOf = i => { const a = sim.actions[sim.action[i]].name, job = sim.job[i] >= 0 ? world.buildings[sim.job[i]] : null, verb = a === 'work' && job ? `work at the ${job.name}` : DOING[a]; return verb ? (sim.using[i] ? 'now: ' + verb : 'on the way to ' + verb) : 'idle'; };
+function tapped(pick) {
+  if (ui.open === 'build') return;
+  sel = pick.person !== undefined ? { pid: lives.pid[pick.person] } : pick.building ? { bid: pick.building.id } : null;
+  showCard();
+}
+ui.onCard = e => {
+  const b = e.target.closest('button');
+  if (!b) return;
+  if (b.dataset.pid !== undefined) { sel = { pid: +b.dataset.pid }; const i = lives.slotOf(sel.pid); if (i >= 0) lookAt(sim.px[i], sim.py[i]); }
+  else if (b.dataset.bid !== undefined) { sel = { bid: +b.dataset.bid }; const t = world.buildings[sel.bid]; if (t) lookAt(t.cx, t.cy); }
+  else sel = null;
+  showCard();
+};
+function personCard(r) {
+  const i = lives.slotOf(r.id), kin = lives.kin(r);
+  const family = [kin.partner && 'partner ' + link(kin.partner), kin.parents.length && 'parents ' + kin.parents.map(link).join(''),
+                  kin.children.length && 'children ' + kin.children.map(link).join(''), kin.siblings.length && 'brothers and sisters ' + kin.siblings.map(link).join('')].filter(Boolean).join('<br>');
+  let body;
+  if (i < 0) body = r.cause === 'left' ? `left in ${dated(r.died)}, aged ${yearsOf(r.died - r.born)}` : r.cause === 'war' ? `went to the lord's war in ${dated(r.died)}, aged ${yearsOf(r.died - r.born)}` : `died of ${r.cause} in ${dated(r.died)}, aged ${yearsOf(r.died - r.born)}`;
+  else {
+    const home = sim.home[i] >= 0 ? world.buildings[sim.home[i]] : null, job = sim.job[i] >= 0 ? world.buildings[sim.job[i]] : null;
+    body = `${stageOf(i)}, ${yearsOf(sim.age[i])} years old · ${tradeOf(i)}${job ? ` <button data-bid="${job.id}">${job.name}</button>` : ''}` +
+      ` · ${home ? `lives in a <button data-bid="${home.id}">${home.name}</button>` : '<b class="warn">no home</b>'}<br>` +
+      `${doingOf(i)} · health ${Math.round(lives.health[i] * 100)}% · spirits ${Math.round(lives.mood[i] * 100)}%` +
+      (rules.chartered ? ` · ${Math.floor(economy.balance(i, 'coin'))} coin in the household` : '') + '<br>' +
+      sim.needs.map((n, k) => `<span class="k-need">${n.name}${meter(sim.needsOf[i * sim.K + k])}</span>`).join('');
+  }
+  return `<button class="x">close</button><b>${lives.nameOf(r)}</b><br>${body}${family ? '<br>' + family : ''}`;
+}
+function buildingCard(b) {
+  const names = col => { const out = []; for (let i = 0; i < sim.count; i++) if (col[i] === b.id) out.push(link(lives.person(i))); return out.join(''); };
+  const cut = sim.field[sim.actionIndex('drink')][b.ey * world.w + b.ex] === 65535, full = b.maxJobs ?? b.prefab.jobs;
+  const lines = [
+    b.beds ? `home of ${b.residents} of ${b.beds}${b.family ? ', the ' + b.family + ' house' : ''}: ${names(sim.home) || 'nobody'}` : '',
+    b.beds ? (b.water ? `water in the house, from a well ${Math.round(rules.nearestWell(b))} cells away` : `<b class="warn">no water in the house</b>: the nearest well is ${Math.round(rules.nearestWell(b))} cells away, and a well serves houses within ${H.WATER.reach}`) : '',
+    b.name === 'well' ? `gives water to ${world.buildings.filter(o => o && o.beds && Math.hypot(o.cx - b.cx, o.cy - b.cy) <= H.WATER.reach).length} houses within ${H.WATER.reach} cells` : '',
+    full && rules.nearestHouse(b) > H.COMMUTE ? `<b class="warn">nobody will work here</b>: the nearest house is ${Math.round(rules.nearestHouse(b))} cells away, and nobody takes work more than ${H.COMMUTE} cells from their door` : '',
+    full ? `work for ${b.jobs}${b.jobs < full ? ` (of ${full}: ${b.name === 'field' ? 'nothing to do on it now' : 'the rest are in the fields'})` : ''}: ${names(sim.job) || 'nobody'}` : '',
+    b.name === 'field' ? `${b.area} cells, ${b.crop}; ${b.sown} sown, ${b.reaped} reaped` : '',
+    b.yield !== undefined ? `trees in reach give ${Math.round(b.yield * 100)}% of a full yield` : '',
+    b.prefab.job?.seasons ? seasonText(b.prefab) : '',
+    b.prefab.job?.uses ? `a shift turns ${list(b.prefab.job.uses)} into ${list(b.prefab.job.makes)}${b.blocked ? ': <b class="warn">stopped</b>, short of materials or of room for what it makes' : ''}` : '',
+    b.prefab.capacity ? `${b.customers} of ${b.cap} inside` : '',
+    roomText(b.prefab) ? `adds room for ${roomText(b.prefab)}` : '',
+    b.fire !== undefined ? `<b class="warn">on fire</b>: out of use until it is saved or lost, in ${span(Math.max(0, b.fire - sim.tick))}` : '',
+    b.prefab.serves?.price ? `a visit costs ${list(b.prefab.serves.price)}${b.prefab.serves.uses ? ' and uses ' + list(b.prefab.serves.uses) : ''}` : '',
+    cut ? '<b class="warn">cut off: nobody can walk from here to a well. Clear a way to its door.</b>' : '',
+  ].filter(Boolean);
+  return `<button class="x">close</button><b>${b.name}</b><br>${lines.join('<br>')}`;
+}
+function showCard() {
+  let html = null;
+  if (sel?.pid !== undefined && lives.records[sel.pid]) html = personCard(lives.records[sel.pid]);
+  else if (sel?.bid !== undefined && world.buildings[sel.bid]) html = buildingCard(world.buildings[sel.bid]);
+  else sel = null;
+  ui.card(html);
+}
+
+// ── building
+let toolChoice = null, dragStart = null, rotation = 'auto', buildSay = '';
+const costText = name => list(economy.costOf(name));
+const say = t => { buildSay = t; ui.refresh(); };
+// A field is dragged from one corner to the other. Past its largest size it stops growing, anchored where the drag began.
+function fieldRect(x, y) {
+  const max = world.prefab('field').resize.max;
+  const w = Math.min(Math.abs(x - dragStart[0]) + 1, max[0]), h = Math.min(Math.abs(y - dragStart[1]) + 1, max[1]);
+  return { x: x < dragStart[0] ? dragStart[0] - w + 1 : dragStart[0], y: y < dragStart[1] ? dragStart[1] - h + 1 : dragStart[1], w, h, size: world.sizeFor('field', w, h) };
+}
+const REMOVABLE = ['road', 'forest'];
+// A building is only taken down once the player says so in the strip: the one touched is outlined until then.
+let removing = null;
+function askRemove(id) {
+  const b = world.buildings[id];
+  removing = { id, b };
+  game.preview = [];
+  for (let j = b.y; j < b.y + b.h; j++) for (let i = b.x; i < b.x + b.w; i++) game.preview.push([i, j]);
+  buildSay = ''; buildTray();
+}
+function stopRemoving() { if (removing) { removing = null; game.preview = []; } }
+function applyTool() {
+  const v = toolChoice;
+  if (game.offered) game.withdraw();
+  removing = null;
+  game.preview = [];
+  if (ui.open !== 'build' || v === null) game.tool = null;       // outside build mode a drag always pans
+  else if (v === '!') game.tool = (x, y, phase) => {             // pull up a road, clear trees; a building is asked about first
+    if (phase !== 'down' && phase !== 'drag' || !world.inside(x, y)) return;
+    const id = world.bldAt[y * world.w + x];
+    if (id >= 0) { if (phase === 'down') askRemove(id); }
+    else if (REMOVABLE.includes(world.defs[world.get(x, y)].name)) game.demolish(x, y);
+  };
+  else if (v === 'road') game.tool = (x, y, phase) => {          // straight line from where the finger lands to where it lifts
+    if (phase === 'down') dragStart = [x, y];
+    if (phase === 'cancel' || !dragStart) { dragStart = null; game.preview = []; return; }
+    if (phase === 'up') { game.line('road', dragStart[0], dragStart[1], x, y); dragStart = null; game.preview = []; }
+    else game.preview = world.lineCells(dragStart[0], dragStart[1], x, y).filter(([i, j]) => world.inside(i, j) && world.get(i, j) === world.fill);
+  };
+  else if (v === 'field') game.tool = (x, y, phase) => {         // drag out its size
+    if (phase === 'down') dragStart = [x, y];
+    if (phase === 'cancel' || !dragStart) { dragStart = null; game.preview = []; return; }
+    const r = fieldRect(x, y);
+    if (phase === 'up') {
+      dragStart = null; game.preview = [];
+      if (!r.size) say('a field is at least 3 by 3 cells');
+      else { const b = game.place('field', r.x, r.y, rotation, r.size); say(b ? `a field of ${b.area} cells, work for ${b.maxJobs}${calendar.seasonName === 'spring' ? '' : ': it will be sown next spring'}` : 'a field needs open ground, with a free cell beside it'); }
+    } else {
+      game.preview = r.size ? game.footprint('field', r.x, r.y, rotation, r.size) : [];
+      say(r.size ? `${r.w} by ${r.h}: ${r.w * r.h} cells, work for ${Math.max(1, Math.round(r.w * r.h / 14))}` : 'keep dragging: at least 3 by 3');
+    }
+  };
+  else game.offer(v, { onChange: g => {                          // held over the map until the player says "build" (see buildTray)
+    if (builtAt !== `${g.x},${g.y}`) { builtAt = ''; buildSay = v === 'lodge' && g.ok ? `Trees in reach here: ${Math.round(rules.woodYield(g.x + 0.5, g.y + 0.5) * 100)}% of a full yield.` : ''; }
+    buildTray();
+  } });
+}
+// While a tool is in hand the sheet folds down to this strip, and the map has the screen.
+const TOOL_HELP = { road: 'Drag along the map: a road is laid from where your finger lands to where it lifts.',
+                    field: 'Drag across the map from one corner of the field to the other.',
+                    '!': 'Touch a building, a road or trees to take them away.' };
+let builtAt = '';                                                // where the last one was just built: the ghost still stands on it
+function buildTray() {
+  const v = toolChoice, g = game.offered;
+  if (ui.open !== 'build' || v === null) { ui.tray(null); return; }
+  if (v === '!' && removing && world.buildings[removing.id] !== removing.b) stopRemoving();   // gone meanwhile (burnt, a new game)
+  if (v === '!' && removing) {
+    const b = removing.b;
+    ui.tray({ html: `${thumb(b.name) ? `<span style="float:left;margin-right:8px">${thumb(b.name)}</span>` : ''}<b>Remove the ${b.name}?</b><br>It is taken down for good, and nothing is given back.`,
+      buttons: [{ id: 'yes', label: 'remove', strong: true }, { id: 'no', label: 'keep' }],
+      onTap(id) {
+        const r = removing; stopRemoving();
+        if (id === 'yes' && r && world.buildings[r.id] === r.b) { game.demolish(r.b.x, r.b.y); buildSay = `Took down the ${r.b.name}.`; }
+        else buildSay = '';
+        buildTray(); ui.refresh();
+      } });
+    return;
+  }
+  const name = v === '!' ? 'remove' : v, p = g ? world.prefab(v) : null;
+  const head = `${thumb(name) ? `<span style="float:left;margin-right:8px">${thumb(name)}</span>` : ''}<b>${cap(name)}</b>${p ? ` <small>${what(p)} · ${costText(v) || 'free'} · ${ROT_NAMES[g.rot]}</small>` : ''}<br>`;
+  const line = !g ? buildSay || TOOL_HELP[v]
+    : g.ok || builtAt ? buildSay || 'Drag it into place, or tap the map where it should stand. Then build.'
+    : `<b class="warn">${g.why === 'build' ? `Cannot build a ${v}: ${g.reason || 'not allowed'}.` : g.why === 'space' ? `A ${v} needs open ground, with a free cell at its door.` : g.why}</b>`;
+  ui.tray({ html: head + line,
+    buttons: g ? [{ id: 'turn', label: 'turn' }, { id: 'build', label: 'build', strong: true, disabled: !g.ok }, { id: 'change', label: 'other' }, { id: 'done', label: 'done' }]
+               : [{ id: 'change', label: 'other' }, { id: 'done', label: 'done' }],
+    onTap(id) {
+      if (id === 'turn') game.turn();
+      else if (id === 'build') { const at = `${g.x},${g.y}`, b = game.accept(); if (b) builtAt = at; buildSay = b ? `Built a ${v} for ${costText(v) || 'nothing'}` + (b.yield !== undefined ? `; trees in reach give ${Math.round(b.yield * 100)}% of a full yield.` : '. Move it on to build another.') : buildSay; buildTray(); }
+      else if (id === 'change') { toolChoice = null; buildSay = ''; applyTool(); ui.tray(null); ui.refresh(); }
+      else ui.close();
+    } });
+}
+// How much a place makes in each season (gardens, foragers, hens), with this season marked.
+const seasonText = p => 'by season: ' + Object.entries(p.job.seasons).map(([s, k]) => `${s === calendar.seasonName ? '<b>' : ''}${s} ${k ? Math.round(k * 100) + '%' : 'shut'}${s === calendar.seasonName ? '</b>' : ''}`).join(' · ');
+const what = p => p.name === 'well' ? `water for houses within ${H.WATER.reach} cells` : p.resize ? 'drag out its size' : p.beds ? `sleeps ${p.beds}` : p.job?.uses ? `${list(p.job.uses)} → ${list(p.job.makes)}` : p.job?.seasons ? `${list(p.job.makes)} a shift, most in ${Object.entries(p.job.seasons).sort((a, b) => b[1] - a[1])[0][0]}` + (p.job.reach ? ', near trees' : '') : p.capacity ? `holds ${p.capacity}` : p.jobs ? `work for ${p.jobs}` : roomText(p, 3) ? `adds room for ${roomText(p, 3)}` : '';
+// What a store building adds room for, from the limits in RESOURCES, the most first: "600 grain", or "240 vegetables,
+// 150 forage, 90 eggs and more" (at most `most` of them named).
+function roomText(p, most = Infinity) {
+  const all = Object.entries(H.RESOURCES).filter(([, d]) => d.cap?.per?.[p.name]).sort((a, b) => b[1].cap.per[p.name] - a[1].cap.per[p.name]).map(([r, d]) => `${d.cap.per[p.name]} ${r}`);
+  return all.slice(0, most).join(', ') + (all.length > most ? ' and more' : '');
+}
+const ROTS = ['auto', 0, 1, 2, 3], ROT_NAMES = { auto: 'door: to the road', 0: 'door: south', 1: 'door: west', 2: 'door: north', 3: 'door: east' };
+function buildSheet(body) {
+  const tool = (value, text, locked) => `<button data-tool="${value}"${locked ? ' disabled' : ''} class="${String(toolChoice) === String(value) ? 'on' : ''}">${text}</button>`;
+  // A thing to build shows its drawing beside its name; without the art, a swatch of its colour.
+  const sw = c => `<i style="display:inline-block;width:9px;height:9px;margin-right:4px;border:1px solid var(--k-ink);background:${c}"></i>`;
+  const item = (value, name, color, text, locked) => { const t = thumb(name);
+    return t ? `<button data-tool="${value}"${locked ? ' disabled' : ''} class="pic${String(toolChoice) === String(value) ? ' on' : ''}"><span class="frame">${t}</span><span>${name}<small>${text}</small></span></button>`
+             : tool(value, `${sw(color)}${name} <small>${text}</small>`, locked); };
+  // What there is to build with: every material some building that can be built now costs, and how much the store holds.
+  const mats = [...new Set(world.prefabs.filter(p => progress.isUnlocked(p.name)).flatMap(p => Object.keys(economy.costOf(p.name))))];
+  const store = mats.map(r => `<span style="white-space:nowrap;margin-right:12px">${icon(r) || r} <b>${Math.floor(economy.town[r] ?? 0)}</b></span>`).join('');
+  ui.html(body, `<p style="margin-bottom:4px"><span class="k-dim">In the store</span> ${store || 'nothing is needed'}</p>` +
+    `<p class="k-dim">Time stands still while you build. Pick what to build: the list folds away and the map is yours.</p><div class="k-chips">` +
+    tool('!', 'remove a building, a road or trees') + `</div><div class="k-chips" style="margin-top:6px">` +
+    item('road', 'road', '#e8dcc0', 'free') +
+    world.prefabs.map(p => { const open = progress.isUnlocked(p.name); return item(p.name, p.name, p.color, open ? what(p) + ' · ' + (costText(p.name) || 'free') : progress.unlocks().find(u => u.id === p.name)?.text ?? 'locked', !open); }).join('') +
+    `</div>`);
+  body.onclick = e => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    toolChoice = b.dataset.tool; buildSay = ''; applyTool(); buildTray();
+  };
+  if (toolChoice !== null) buildTray();                          // keeps the strip's words current (say() comes through here)
+}
+
+// ── the other sheets
+function peopleSheet(body) {
+  const people = sim.count, st = lives.stats;
+  let mood = 0; for (let i = 0; i < people; i++) mood += lives.mood[i];
+  const rows = [];
+  for (let i = 0; i < people; i++) { const r = lives.person(i); rows.push(`<button data-pid="${r.id}">${lives.nameOf(r)} <small>${stageOf(i)} ${yearsOf(sim.age[i])} · ${tradeOf(i)} · ${doingOf(i)}</small></button>`); }
+  ui.html(body, `<p>${people} people · beds ${sim.housed}/${sim.beds} · working ${sim.employed} of ${sim.workforce} able · spirits ${people ? Math.round(mood / people * 100) : 0}%</p>` +
+    `<p class="k-dim">${st.births} born, ${st.left} left, died: ${list(st.deaths) || 'none'}</p><div class="k-rows">${rows.join('')}</div>`);
+  body.onclick = e => { const b = e.target.closest('button'); if (!b) return; sel = { pid: +b.dataset.pid }; const i = lives.slotOf(sel.pid); if (i >= 0) lookAt(sim.px[i], sim.py[i]); ui.close(); showCard(); };
+}
+function storesSheet(body) {
+  const a = ahead(), kinds = new Map();
+  for (const b of world.buildings) if (b) {
+    const k = kinds.get(b.name) ?? { n: 0, workers: 0, jobs: 0, note: '' };
+    k.n++; k.workers += b.workers; k.jobs += b.jobs; kinds.set(b.name, k);
+  }
+  if (kinds.has('field')) kinds.get('field').note = Object.entries(rules.fields().reduce((o, f) => (o[f.crop] = (o[f.crop] ?? 0) + 1, o), {})).map(([c, n]) => `${n} ${c}`).join(', ');
+  if (kinds.has('lodge')) kinds.get('lodge').note = world.buildings.filter(b => b && b.name === 'lodge').map(b => Math.round((b.yield ?? 0) * 100) + '%').join(', ') + ' yield';
+  ui.html(body, `<div class="k-scroll"><table><tr><th>in the store</th><th>now</th><th>room for</th></tr>` +
+    Object.keys(economy.town).filter(r => (H.RESOURCES[r].low || economy.town[r] > 0 || progress.level >= 2) && (progress.level >= 3 || (r !== 'coin' && r !== 'ale'))).map(r => { const room = economy.capOf(r); return `<tr><td>${icon(r)} ${r === 'coin' ? 'coin (the treasury)' : r}</td><td>${Math.floor(economy.town[r])}</td><td>${room < Infinity ? room : ''}</td></tr>`; }).join('') +
+    (rules.chartered ? `<tr><td>${icon('coin')} coin in households</td><td>${Math.floor(economy.held('coin'))}</td><td></td></tr>` : '') + `</table></div>` +
+    (rules.seedReserve() ? `<p style="margin-top:8px">${rules.seedReserve()} grain is kept back as seed for the fields and will not be eaten.</p>` : '') +
+    `<p style="margin-top:8px"><span class="k-dim">${a.next} in ${span(a.left)}:</span> ${a.text}</p>` +
+    `<h3>Buildings</h3><div class="k-scroll"><table><tr><th>building</th><th>count</th><th>working</th><th></th></tr>` +
+    [...kinds].map(([name, k]) => `<tr><td>${name}</td><td>${k.n}</td><td>${k.jobs ? k.workers + '/' + k.jobs : ''}</td><td style="text-align:left" class="k-dim">${k.note}</td></tr>`).join('') + `</table></div>`);
+  body.onclick = null;
+}
+function policySheet(body) {
+  const rows = policies.list().map(p => `<p><b>${p.title}</b> ${p.words}<br><span class="k-dim">${cap(p.text)}.</span><br>` +
+    `<button data-id="${p.id}" data-by="-1"${p.value <= p.min ? ' disabled' : ''}>less</button> <button data-id="${p.id}" data-by="1"${p.value >= p.max ? ' disabled' : ''}>more</button></p>`).join('');
+  const poor = rules.chartered && sim.count ? Array.from({ length: sim.count }, (_, i) => sim.features.poor[i]).filter(v => v > 0.6).length : 0;
+  ui.html(body, rows + (rules.chartered ? `<p>The treasury holds ${Math.floor(economy.town.coin)} coin; households hold ${Math.floor(economy.held('coin'))}. ${poor} of ${sim.count} people are poor.</p>`
+    : '<p class="k-dim">Wages, rent and prices come with the market charter, when there is coin.</p>'));
+  body.onclick = e => { const b = e.target.closest('button'); if (!b) return; policies.nudge(b.dataset.id, +b.dataset.by); policySheet(body); };
+}
+const CARTLOAD = 50, CARRIED = ['grain', 'firewood', 'timber', 'planks', 'bread'];
+function regionSheet(body) {
+  const held = region.held(), here = H.current, others = held.filter(h => !h.active && h.state.settled), orders = region.state.orders, offers = H.offers();
+  const goods = id => CARRIED.filter(r => economy.town[r] !== undefined).map(r => `<button data-send="${id}|${r}"${economy.town[r] < CARTLOAD ? ' disabled' : ''}>${CARTLOAD} ${r}</button>`).join(' ');
+  const rows = held.map(({ def, state, active }) => {
+    const head = `<p><b>${cap(def.name)}</b> ${def.kind}, ${def.size[0]} by ${def.size[1]} · `;
+    if (active) return head + `you are here</p>`;
+    if (!state.settled) { const ok = H.canSettle(def.id); return head + `not settled<br><span class="k-dim">${cap(H.KINDS[def.kind].text)}.</span><br>` +
+      `<button data-settle="${def.id}"${ok === true ? '' : ' disabled'}>send a party</button> <span class="k-dim">${ok === true ? 'they carry ' + list(H.SETTLING.carry) : ok}</span></p>`; }
+    const coming = region.coming(def.id).map(c => `${list(c.goods)} in ${c.seasons} season${c.seasons > 1 ? 's' : ''}`).join('; ');
+    return head + `${state.info.title ?? 'hamlet'}, ${state.people} people<br><span class="k-dim">In its store: ${list(state.stores) || 'nothing'}.${coming ? ' On the road there: ' + coming + '.' : ''}</span><br>` +
+      `<button data-go="${def.id}">go there</button></p><p>Send a cart from here: ${goods(def.id)}<br>` +
+      `<span class="k-dim">It sets out when this season ends and arrives a season later.</span></p>` +
+      `<p>The same every season: ${CARRIED.filter(r => economy.town[r] !== undefined).map(r => `<button data-order="${def.id}|${r}">${CARTLOAD} ${r}</button>`).join(' ')}</p>`;
+  }).join('');
+  ui.html(body, rows +
+    (orders.length ? `<h3>Standing orders</h3>` + orders.map(o => `<p>${list(o.goods)} every season, from ${region.def(o.from).name} to ${region.def(o.to).name} <button data-cancel="${o.id}">stop</button></p>`).join('') : '') +
+    (offers.length ? `<h3>Land the lord will sell</h3>` + offers.map(o => `<p><b>${cap(o.land.name)}</b> ${o.land.kind}, ${o.land.size[0]} by ${o.land.size[1]}<br><span class="k-dim">${cap(H.KINDS[o.land.kind].text)}.</span><br><button data-buy="${o.land.id}"${o.affordable ? '' : ' disabled'}>buy for ${list(o.price)}</button></p>`).join('') : '') +
+    (held.length === 1 && !offers.length ? `<p class="k-dim">The lord grants a second piece of land when this settlement becomes a market town.</p>` : '') +
+    (others.length ? '' : held.length > 1 ? `<p class="k-dim">Carts run between settled lands.</p>` : ''));
+  body.onclick = e => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    const d = b.dataset;
+    if (d.go) { travel(d.go); return; }
+    if (d.settle) { if (H.settleLand(d.settle)) note(`a party has set out to settle ${region.def(d.settle).name}: go there under Region`, true); }
+    else if (d.send) { const [to, r] = d.send.split('|'), sent = H.sendGoods(to, { [r]: CARTLOAD }); note(`a cart is loaded with ${words(sent)} for ${region.def(to).name}`, true); }
+    else if (d.order) { const [to, r] = d.order.split('|'); note(region.order(here.id, to, { [r]: CARTLOAD }) ? `every season, ${CARTLOAD} ${r} will go to ${region.def(to).name}` : 'this settlement already sends as many carts as it can', true); }
+    else if (d.cancel) region.cancel(+d.cancel);
+    else if (d.buy) { if (H.buyLand(d.buy)) note(`${cap(region.def(d.buy).name)} is yours`, true); }
+    regionSheet(body);
+  };
+}
+function goalsSheet(body) {
+  const L = progress.levelInfo(), g = progress.goal();
+  const part = p => `<li>${p.done ? '■' : '□'} ${p.label} ${p.flag ? '' : Math.min(p.target, Math.floor(p.value)) + '/' + p.target}</li>`;
+  ui.html(body, (g ? `<p><b>goal ${g.n} of ${g.of}</b> ${g.title}${meter(g.progress.ratio)}</p><p>${cap(g.text)}${rewardText(g.reward)}.</p>` : '<p>Every goal is met.</p>') +
+    `<h3>${L.title ?? 'hamlet'}${L.next ? ', to become a ' + L.next.title : ''}</h3>` + (L.next ? `<ul>${L.next.progress.parts.map(part).join('')}</ul>` : '') +
+    (progress.level >= 2 ? `<p style="margin-top:6px">The lord's regard: ${rules.standing} of 100${rules.debt ? `. <b class="warn">${rules.debt} grain owed</b>` : ''}. Levies paid in full: ${rules.leviesPaid}.</p>` : '') +
+    `<h3>Achievements</h3><ul>${progress.achievements().map(a => `<li${a.done ? '' : ' class="k-dim"'}>${a.done ? '■' : '□'} ${a.title} <small>${a.text}</small></li>`).join('')}</ul>`);
+  body.onclick = null;
+}
+let repaintMs = 0, sure = -1e9;
+function timeRepaints() { // how long a repaint of the ground takes on this device (it happens on every edit)
+  const r = game.renderer, paint = r._rebuildStatic.bind(r);
+  r._rebuildStatic = () => { const t = performance.now(); paint(); repaintMs = performance.now() - t; };
+}
+function moreSheet(body) {
+  const g = game, again = performance.now() - sure < 4000;
+  ui.html(body, (lastReport ? `<p>${lastReport}</p>` : '<p class="k-dim">The first season is still running.</p>') + `<h3>Chronicle</h3><ul>` +
+    (log.slice(0, 14).map(([t, e]) => `<li><span class="k-dim">${t}</span> ${e}</li>`).join('') || '<li class="k-dim">nothing yet</li>') + `</ul><h3>This hamlet</h3><p>${cap(lastSave || (resumed ? 'picked up from the save on this device' : 'a new hamlet; it is saved at the start of every day'))}.</p>` +
+    `<div class="k-chips"><button data-do="saves">saved games</button><button data-do="report" class="${stopForReport ? 'on' : ''}">stop for each season's report</button><button data-do="sound" class="${sound.wanted ? 'on' : ''}">sound</button><button data-do="new">${again ? 'tap again to abandon this hamlet' : 'new hamlet'}</button></div>` +
+    `<h3>How it runs on this device</h3><p class="k-dim">${world.w} × ${world.h} cells · ${Math.round(g.stats.fps)} frames a second · simulation ${g.stats.simMs.toFixed(2)} ms and drawing ${g.stats.renderMs.toFixed(2)} ms a frame · ` +
+    `last repaint of the ground ${repaintMs.toFixed(0)} ms (drawn at ${Math.round(g.renderer.groundScale * 100)}% detail) · map shown at ${ui.canvas.width} × ${ui.canvas.height}</p>`);
+  body.onclick = e => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    if (b.dataset.do === 'saves') { hold(slots.panel()); slots.wire(); return; }
+    if (b.dataset.do === 'report') stopForReport = !stopForReport;
+    else if (b.dataset.do === 'sound') sound.set(!sound.wanted);
+    else if (performance.now() - sure < 4000) { sure = -1e9; startOver(); return; } else sure = performance.now();
+    moreSheet(body);
+  };
+}
+ui.bar([
+  { id: 'build', label: 'Build', render: buildSheet,
+    onOpen: () => { game.beginBuild(); sel = null; ui.card(null); buildSay = ''; toolChoice = null; applyTool(); },
+    onClose: () => { game.withdraw(); game.tool = null; toolChoice = null; game.endBuild(); save(); } },
+  { id: 'people', label: 'People', render: peopleSheet },
+  { id: 'stores', label: 'Stores', render: storesSheet },
+  { id: 'policy', label: 'Policy', render: policySheet },
+  { id: 'goals', label: 'Goals', render: goalsSheet },
+  { id: 'region', label: 'Region', render: regionSheet },
+  { id: 'more', label: 'More', title: 'Chronicle and more', render: moreSheet },
+]);
+
+// ── every frame, and a few times a second
+let frames = 0;
+function updateUI(g) {
+  sound.update();
+  sky.night = calendar.night ?? 0; g.renderer.tint = tintOf(sky.night);   // the light of the hour
+  for (const b of rules.fires()) b.state = 'fire';                        // a burning building shows its flames
+  dress();                                                       // the season may have turned
+  if (ui.open !== 'build') {                                    // a marker under whoever, or whatever, is picked
+    const i = sel?.pid !== undefined ? lives.slotOf(sel.pid) : -1, b = sel?.bid !== undefined ? world.buildings[sel.bid] : null;
+    g.preview = i >= 0 && sim.inside[i] < 0 ? [[Math.floor(sim.px[i]), Math.floor(sim.py[i])]] : b ? [[b.ex, b.ey]] : [];
+  }
+  if (frames++ % 12) return;
+  const people = sim.count, village = progress.level >= 2, a = ahead();
+  ui.when(`<b>${calendar.seasonName}</b> day ${calendar.dayOfSeason} · y${calendar.year} · ${calendar.clock()}`);
+  const foodDays = people ? rules.foodDays() : 0;
+  const grain = Math.floor(economy.town.grain), wood = Math.floor(economy.town.firewood);
+  if (ui.open === 'build') {
+    const mats = [...new Set(world.prefabs.filter(p => progress.isUnlocked(p.name)).flatMap(p => Object.keys(economy.costOf(p.name))))];
+    ui.numbers(mats.map(r => ({ label: icon(r) || r, value: Math.floor(economy.town[r] ?? 0) })));
+  } else ui.numbers([
+    village ? { label: icon('food') || 'food', value: foodDays.toFixed(1) + ' days', warn: foodDays < 3 } : { label: icon('grain') || 'grain', value: `${grain}<small>/${economy.capOf('grain')}</small>`, warn: grain < H.RESOURCES.grain.low },
+    { label: icon('firewood') || 'firewood', value: wood, warn: wood < H.RESOURCES.firewood.low },
+    { label: icon('people') || 'people', value: people },
+    ...(rules.chartered ? [{ label: icon('coin') || 'coin', value: Math.floor(economy.town.coin), warn: economy.town.coin < 20 }] : village ? [{ label: icon('regard') || 'regard', value: rules.standing, warn: rules.debt > 0 }] : []),
+  ]);
+  const now = happenings.current(), asking = now.find(c => c.status === 'asking'), omens = now.filter(c => c.status !== 'asking');
+  ui.sub(omens.length ? omens.map(c => `<b>${c.event.title}</b> ${c.status === 'announced' ? 'in ' + span(c.startsIn) : 'for ' + span(c.endsIn) + ' more'}`).join(' · ')
+    : people ? `${a.next} in ${span(a.left)}${!village && foodDays < 4 ? ` · <b class="warn">food for ${foodDays.toFixed(1)} days</b>` : ''}` : 'the hamlet stands empty: More, then new hamlet');
+  ui.ask(asking && ui.open !== 'build' ? { id: asking.event.id, html: `${asking.event.title}: ${asking.event.text}.`, choices: asking.event.choices, onChoose: c => happenings.choose(asking.event.id, c),
+                    note: `${cap(asking.event.choices.filter(c => c.text).map(c => c.label + ': ' + c.text).join('. '))}. An answer is wanted within ${span(asking.startsIn)}.` } : null);
+  const goal = progress.goal();
+  ui.goal(goal ? `<span class="k-dim">goal ${goal.n}/${goal.of}</span> ${goal.title}${meter(goal.progress.ratio)}` : '<span class="k-dim">every goal is met</span>', () => ui.show('goals'));
+  ui.hint(goal && String(goal.when?.stat ?? '').startsWith('built.') && !ui.fullOpen ? 'build' : null);
+  showCard();
+  ui.refresh();
+  if (frames % 240 === 1) {                                     // now and then: has something been walled in?
+    const toWell = sim.field[sim.actionIndex('drink')];
+    for (const b of world.buildings) if (b && (b.beds || b.prefab.jobs) && !b._cutNoted && toWell[b.ey * world.w + b.ex] === 65535 && !g.routesBusy) { b._cutNoted = true; note(`<b class="warn">a ${b.name} is cut off: nobody can walk from its door to a well</b>`, true); }
+  }
+}
+boot();
+</script>

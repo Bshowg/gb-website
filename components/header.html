@@ -1,10 +1,16 @@
+<style>
+    /* The links stay on one row on a phone: text and gaps shrink with the screen, up to their desktop size. */
+    .site-nav { gap: clamp(0.6rem, 3vw, 1.75rem); }
+    @media (max-width: 480px) { .site-nav { padding-left: 0.5rem; padding-right: 0.5rem; } .site-nav a { font-size: clamp(0.9rem, 4.3vw, 1.25rem); white-space: nowrap; } }
+</style>
 <header class="text-center py-8 hero bg-bottom bg-cover max-w-4xl mx-auto pb-8 flex items-center flex-col">
     <div class="m-auto">
         <h1 class="text-3xl md:text-5xl font-bold tracking-wide text-white tracking-tighter">GIANMARCHISSIMO</h1>
         <nav class="mt-4">
-            <ul class="flex flex-wrap justify-center px-4" style="gap: 1.75rem;">
+            <ul class="site-nav flex flex-wrap justify-center px-4">
                 <li><a href="/" class="hover:underline text-white text-xl font-semibold">Articoli</a></li>
                 <li><a href="/static/games/index.html" class="hover:underline text-white text-xl font-semibold">Ludoteca</a></li>
+                <li><a href="/static/simulone/index.html" class="hover:underline text-white text-xl font-semibold">Simulone</a></li>
                 <li><a href="/static/contacts.html" class="hover:underline text-white text-xl font-semibold">Contacts</a></li>
             </ul>
         </nav>
