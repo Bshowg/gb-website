@@ -16,19 +16,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Specify the recipient email address
     $recipient = "g.biscini@gmail.com";
-    $subject = "New contact from $name";
+    $sender = "info@gianmarcobiscini.it";
 
-    $email_content = "Name: $name\n";
-    $email_content .= "Email: $email\n\n";
-    $email_content .= "Message:\n$message\n";
+    // Encode non-ASCII (accented names) instead of sending raw 8-bit headers
+    $subject = mb_encode_mimeheader("Messaggio dal sito da $name", "UTF-8", "B");
 
-    // Enhanced headers
-    $email_headers = "From: info@gianmarcobiscini.it\r\n";
+    $email_content = "Ciao Gianmarco,\n\n";
+    $email_content .= "$name ti ha scritto dal modulo contatti di gianmarcobiscini.it.\n";
+    $email_content .= "Basta rispondere a questa email per continuare la conversazione.\n\n";
+    $email_content .= "----------------------------------------\n\n";
+    $email_content .= "$message\n\n";
+    $email_content .= "----------------------------------------\n";
+    $email_content .= "Nome:  $name\n";
+    $email_content .= "Email: $email\n";
+    $email_content .= "Data:  " . date("d/m/Y H:i") . "\n";
+
+    $email_headers = "From: Sito gianmarcobiscini.it <$sender>\r\n";
     $email_headers .= "Reply-To: $email\r\n";
     $email_headers .= "MIME-Version: 1.0\r\n";
     $email_headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
+    $email_headers .= "Content-Transfer-Encoding: 8bit\r\n";
 
-    if (mail($recipient, $subject, $email_content, $email_headers)) {
+    // -f sets the bounce address to the same domain as From
+    if (mail($recipient, $subject, $email_content, $email_headers, "-f$sender")) {
         header("Location: ../static/mailsendsuccess.html");
         exit;
     } else {
